@@ -1,0 +1,1581 @@
+<soap-env:Envelope
+	xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:aodb="urn:com.tsystems.ac.aodb"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soap-env:Header>
+		<aodb:control>
+			<aodb:message-id>localhost:-514e0982:195f7c390fc:-3b29</aodb:message-id>
+			<aodb:message-version>1.4</aodb:message-version>
+			<aodb:message-type>DATASET</aodb:message-type>
+			<aodb:correlation-id>pl_turn</aodb:correlation-id>
+			<aodb:timestamp>2025-04-02T21:32:36.932</aodb:timestamp>
+			<aodb:sender>aodb</aodb:sender>
+			<aodb:station>BLR</aodb:station>
+		</aodb:control>
+	</soap-env:Header>
+	<soap-env:Body>
+		<pl_turn id="1007201147">
+			<pt_idseq>1007201147</pt_idseq>
+			<pl_stand_list>
+				<pl_stand>
+					<pst_idseq>1005298139</pst_idseq>
+					<pst_beginactual>2025-04-02T20:10:00Z</pst_beginactual>
+					<pst_beginplan>2025-04-02T20:09:00Z</pst_beginplan>
+					<pst_comments xsi:nil="true"/>
+					<pst_createtime>2025-04-02T16:06:34Z</pst_createtime>
+					<pst_displaycode>I</pst_displaycode>
+					<pst_endactual xsi:nil="true"/>
+					<pst_endplan>2025-04-03T01:10:00Z</pst_endplan>
+					<pst_extraindicator xsi:nil="true"/>
+					<pst_gpuunits xsi:nil="true"/>
+					<pst_lockind>N</pst_lockind>
+					<pst_modtime>2025-04-02T20:10:28Z</pst_modtime>
+					<pst_moduser>AVD</pst_moduser>
+					<pst_note xsi:nil="true"/>
+					<pst_order>0</pst_order>
+					<pst_pt_turn>1007201147</pst_pt_turn>
+					<pst_rmsc_scenario>1</pst_rmsc_scenario>
+					<pst_rsta_laststand xsi:nil="true"/>
+					<pst_rsta_refstand>110@1</pst_rsta_refstand>
+					<pst_rsta_reftowstand xsi:nil="true"/>
+					<pst_rsta_stand>110</pst_rsta_stand>
+					<pst_towbarind xsi:nil="true"/>
+					<pst_towbeginactual xsi:nil="true"/>
+					<pst_towbeginearliest xsi:nil="true"/>
+					<pst_towbeginlatest xsi:nil="true"/>
+					<pst_towbeginplan xsi:nil="true"/>
+					<pst_towbeginproposed xsi:nil="true"/>
+					<pst_towcallsign xsi:nil="true"/>
+					<pst_towflightnumber xsi:nil="true"/>
+					<pst_towindicator xsi:nil="true"/>
+					<pst_towrequesttime xsi:nil="true"/>
+					<pst_towrestriction xsi:nil="true"/>
+				</pl_stand>
+			</pl_stand_list>
+			<pt_createtime>2025-04-02T16:06:34Z</pt_createtime>
+			<pt_modtime>2025-04-02T20:10:28Z</pt_modtime>
+			<pt_moduser>AVD</pt_moduser>
+			<pt_mttt>1</pt_mttt>
+			<pt_overallmodtime>2025-04-02T21:10:20Z</pt_overallmodtime>
+			<pt_pa_arrival>1009227000
+				<pl_arrival>
+					<pa_idseq>1009227000</pa_idseq>
+					<pa_additionalinfo xsi:nil="true"/>
+					<pa_aibt>2025-04-02T20:10:00Z</pa_aibt>
+					<pa_airbridges xsi:nil="true"/>
+					<pa_airtraffic xsi:nil="true"/>
+					<pa_aldt>2025-04-02T20:01:00Z</pa_aldt>
+					<pa_arrivalgates>T2DA</pa_arrivalgates>
+					<pa_assistingpax xsi:nil="true"/>
+					<pa_atccomment xsi:nil="true"/>
+					<pa_atcfplstatus>N</pa_atcfplstatus>
+					<pa_atotoutstation>2025-04-02T17:44:00Z</pa_atotoutstation>
+					<pa_baggagebelts>8A</pa_baggagebelts>
+					<pa_baggagecarousels>8</pa_baggagecarousels>
+					<pa_bibt>2025-04-02T20:10:00Z</pa_bibt>
+					<pa_bibtsent xsi:nil="true"/>
+					<pa_billingcomments xsi:nil="true"/>
+					<pa_billingstatus>I</pa_billingstatus>
+					<pa_busind>N</pa_busind>
+					<pa_callsign>AXB1326</pa_callsign>
+					<pa_cancellationtime xsi:nil="true"/>
+					<pa_cashamount xsi:nil="true"/>
+					<pa_cashind>N</pa_cashind>
+					<pa_cashlodgements xsi:nil="true"/>
+					<pa_cbpind>N</pa_cbpind>
+					<pa_chargeableexempt>N</pa_chargeableexempt>
+					<pa_chargeablepermit>NNNNN</pa_chargeablepermit>
+					<pa_chargeformno>1</pa_chargeformno>
+					<pa_checkpointprofile xsi:nil="true"/>
+					<pa_codeshareflightnumbers xsi:nil="true"/>
+					<pa_createreason xsi:nil="true"/>
+					<pa_createtime>2025-04-02T16:06:34Z</pa_createtime>
+					<pa_delayreasons xsi:nil="true"/>
+					<pa_displaycode>P</pa_displaycode>
+					<pa_diversiontime xsi:nil="true"/>
+					<pa_dooropentime xsi:nil="true"/>
+					<pa_doublegatewayind>N</pa_doublegatewayind>
+					<pa_eflt>145</pa_eflt>
+					<pa_eibt>2025-04-02T20:09:00Z</pa_eibt>
+					<pa_eldt>2025-04-02T20:01:00Z</pa_eldt>
+					<pa_enrc xsi:nil="true"/>
+					<pa_etotoutstation xsi:nil="true"/>
+					<pa_exit>8</pa_exit>
+					<pa_exitsent xsi:nil="true"/>
+					<pa_externalflightnumber xsi:nil="true"/>
+					<pa_externalsystemid xsi:nil="true"/>
+					<pa_failediatamessages>0</pa_failediatamessages>
+					<pa_firstbag>2025-04-02T20:21:00Z</pa_firstbag>
+					<pa_firt>2025-04-02T19:45:00Z</pa_firt>
+					<pa_flightnumber>IX1326</pa_flightnumber>
+					<pa_fnlt>2025-04-02T19:57:00Z</pa_fnlt>
+					<pa_fplactivationtime xsi:nil="true"/>
+					<pa_fuelrequired xsi:nil="true"/>
+					<pa_gpu xsi:nil="true"/>
+					<pa_gpuid>Y</pa_gpuid>
+					<pa_iatapriority>0</pa_iatapriority>
+					<pa_ifplid xsi:nil="true"/>
+					<pa_indicatorfield>A--X--------</pa_indicatorfield>
+					<pa_lastbag>2025-04-02T20:31:00Z</pa_lastbag>
+					<pa_lockind>N</pa_lockind>
+					<pa_milestoneindstring>______</pa_milestoneindstring>
+					<pa_modtime>2025-04-02T21:10:19Z</pa_modtime>
+					<pa_moduser>auto</pa_moduser>
+					<pa_nextinfotime xsi:nil="true"/>
+					<pa_onbridge xsi:nil="true"/>
+					<pa_operator>AXB</pa_operator>
+					<pa_operatorflightnumber>IX1326</pa_operatorflightnumber>
+					<pa_opscomment>sc</pa_opscomment>
+					<pa_pa_mainflight xsi:nil="true"/>
+					<pa_paymentmode>I</pa_paymentmode>
+					<pa_paymentreference xsi:nil="true"/>
+					<pa_pibt>2025-04-02T20:09:00Z</pa_pibt>
+					<pa_prioind>N</pa_prioind>
+					<pa_priorityfield>PaRegistration,U,50;PaAtotoutstation,I,70;PaEldt,I,98;PaFirt,I,98;PaTldt,I,50;PaAldt,I,98;PaAibt,I,98;</pa_priorityfield>
+					<pa_prmlevypax xsi:nil="true"/>
+					<pa_prmpax xsi:nil="true"/>
+					<pa_publiccomment xsi:nil="true"/>
+					<pa_rac_aircraft>1000041042
+						<ref_aircraft>
+							<rac_idseq>1000041042</rac_idseq>
+							<rac_bonus xsi:nil="true"/>
+							<rac_comment xsi:nil="true"/>
+							<rac_createtime>2025-03-04T10:07:09Z</rac_createtime>
+							<rac_firstlanding>2025-03-04T02:30:00Z</rac_firstlanding>
+							<rac_lastlanding>2025-04-02T20:01:00Z</rac_lastlanding>
+							<rac_modtime>2025-04-02T20:01:10Z</rac_modtime>
+							<rac_moduser>AVD</rac_moduser>
+							<rac_mtow>77000</rac_mtow>
+							<rac_nacelletreatmentind>N</rac_nacelletreatmentind>
+							<rac_name>Others</rac_name>
+							<rac_noisecategoryinternal xsi:nil="true"/>
+							<rac_opscreatedind>Y</rac_opscreatedind>
+							<rac_owner>AXB</rac_owner>
+							<rac_paxcargoind>P</rac_paxcargoind>
+							<rac_permit>NNNNN</rac_permit>
+							<rac_privatecommercialind>C</rac_privatecommercialind>
+							<rac_ract_aircrafttype>320
+								<ref_aircrafttype>
+									<ract_accessheight xsi:nil="true"/>
+									<ract_averageseatcapacity>180</ract_averageseatcapacity>
+									<ract_bonus xsi:nil="true"/>
+									<ract_bridgerequiredind>Y</ract_bridgerequiredind>
+									<ract_createtime>2021-10-14T20:50:18Z</ract_createtime>
+									<ract_description>Others</ract_description>
+									<ract_enginecount xsi:nil="true"/>
+									<ract_firstbag>2</ract_firstbag>
+									<ract_height>1208</ract_height>
+									<ract_iatasubtype xsi:nil="true"/>
+									<ract_iatatype>320</ract_iatatype>
+									<ract_icaotype>A320</ract_icaotype>
+									<ract_internalcode>320</ract_internalcode>
+									<ract_landingweight xsi:nil="true"/>
+									<ract_length>3757</ract_length>
+									<ract_manufacturer>Airbus</ract_manufacturer>
+									<ract_model>AIRBUS 320-100/200</ract_model>
+									<ract_modtime>2023-08-26T13:24:50Z</ract_modtime>
+									<ract_moduser>LokeshCP</ract_moduser>
+									<ract_mtow>73900</ract_mtow>
+									<ract_mtta xsi:nil="true"/>
+									<ract_mttd xsi:nil="true"/>
+									<ract_mttt xsi:nil="true"/>
+									<ract_noiseapproach xsi:nil="true"/>
+									<ract_noiseflyover xsi:nil="true"/>
+									<ract_noiselateral xsi:nil="true"/>
+									<ract_opscreatedind>N</ract_opscreatedind>
+									<ract_payload xsi:nil="true"/>
+									<ract_piercompatibleind xsi:nil="true"/>
+									<ract_propulsion xsi:nil="true"/>
+									<ract_ret_enginetype xsi:nil="true"/>
+									<ract_rnca_noisecategory xsi:nil="true"/>
+									<ract_shadow xsi:nil="true"/>
+									<ract_sizecategory>C</ract_sizecategory>
+									<ract_statisweightcategory>M</ract_statisweightcategory>
+									<ract_symbolname xsi:nil="true"/>
+									<ract_taxifuelperminute xsi:nil="true"/>
+									<ract_widebodyind>N</ract_widebodyind>
+									<ract_width>3580</ract_width>
+								</ref_aircrafttype>
+							</rac_ract_aircrafttype>
+							<rac_ral_lessee>IX</rac_ral_lessee>
+							<rac_ral_operator>IX</rac_ral_operator>
+							<rac_registration>VTEXC</rac_registration>
+							<rac_rnca_noisecategory xsi:nil="true"/>
+							<rac_seatcapacity>180</rac_seatcapacity>
+							<rac_serialnumber xsi:nil="true"/>
+							<rac_validfrom>2025-03-01T18:31:00Z</rac_validfrom>
+							<rac_validto xsi:nil="true"/>
+						</ref_aircraft>
+					</pa_rac_aircraft>
+					<pa_ract_aircrafttype>320
+						<ref_aircrafttype>
+							<ract_accessheight xsi:nil="true"/>
+							<ract_averageseatcapacity>180</ract_averageseatcapacity>
+							<ract_bonus xsi:nil="true"/>
+							<ract_bridgerequiredind>Y</ract_bridgerequiredind>
+							<ract_createtime>2021-10-14T20:50:18Z</ract_createtime>
+							<ract_description>Others</ract_description>
+							<ract_firstbag>2</ract_firstbag>
+							<ract_height>1208</ract_height>
+							<ract_iatatype>320</ract_iatatype>
+							<ract_icaotype>A320</ract_icaotype>
+							<ract_internalcode>320</ract_internalcode>
+							<ract_landingweight xsi:nil="true"/>
+							<ract_length>3757</ract_length>
+							<ract_manufacturer>Airbus</ract_manufacturer>
+							<ract_model>AIRBUS 320-100/200</ract_model>
+							<ract_modtime>2023-08-26T13:24:50Z</ract_modtime>
+							<ract_moduser>LokeshCP</ract_moduser>
+							<ract_mtow>73900</ract_mtow>
+							<ract_mtta xsi:nil="true"/>
+							<ract_mttd xsi:nil="true"/>
+							<ract_mttt xsi:nil="true"/>
+							<ract_opscreatedind>N</ract_opscreatedind>
+							<ract_payload xsi:nil="true"/>
+							<ract_piercompatibleind xsi:nil="true"/>
+							<ract_propulsion xsi:nil="true"/>
+							<ract_rnca_noisecategory xsi:nil="true"/>
+							<ract_shadow xsi:nil="true"/>
+							<ract_sizecategory>C</ract_sizecategory>
+							<ract_symbolname xsi:nil="true"/>
+							<ract_taxifuelperminute xsi:nil="true"/>
+							<ract_widebodyind>N</ract_widebodyind>
+							<ract_width>3580</ract_width>
+						</ref_aircrafttype>
+					</pa_ract_aircrafttype>
+					<pa_ract_plannedact xsi:nil="true"/>
+					<pa_ral_airline>IX
+						<ref_airline>
+							<ral_2lc>IX</ral_2lc>
+							<ral_3lc>AXB</ral_3lc>
+							<ral_alliance xsi:nil="true"/>
+							<ral_callsign>Express India</ral_callsign>
+							<ral_category>L</ral_category>
+							<ral_createtime>2021-10-25T11:21:40Z</ral_createtime>
+							<ral_description>Passenger/DCS-SITA LAISON</ral_description>
+							<ral_formatflightnumberind>Y</ral_formatflightnumberind>
+							<ral_ignorecreatedayind>N</ral_ignorecreatedayind>
+							<ral_ignorestatisticsind>N</ral_ignorestatisticsind>
+							<ral_internal>IX</ral_internal>
+							<ral_lpccode xsi:nil="true"/>
+							<ral_modtime>2021-10-25T11:21:40Z</ral_modtime>
+							<ral_moduser>loaded</ral_moduser>
+							<ral_name>AirIndia Express</ral_name>
+							<ral_opscreatedind>N</ral_opscreatedind>
+							<ral_paymentmode>I</ral_paymentmode>
+							<ral_rctr_country>IN</ral_rctr_country>
+							<ral_registrationcopyind>Y</ral_registrationcopyind>
+							<ral_rha_agentbag>AIS</ral_rha_agentbag>
+							<ral_rha_agentci>AIS</ral_rha_agentci>
+							<ral_rtrm_terminal>1</ral_rtrm_terminal>
+						</ref_airline>
+					</pa_ral_airline>
+					<pa_ramphandlingagent>AIS</pa_ramphandlingagent>
+					<pa_rap_diversionairport xsi:nil="true"/>
+					<pa_rap_originairport>LKO</pa_rap_originairport>
+					<pa_rap_previousairport>LKO</pa_rap_previousairport>
+					<pa_rap_refdiversionairport>
+						<ref_airport/>
+					</pa_rap_refdiversionairport>
+					<pa_rap_reforiginairport>LKO
+						<ref_airport>
+							<rap_city>Lucknow </rap_city>
+							<rap_city3lc>LKO</rap_city3lc>
+							<rap_createtime>2021-10-22T20:21:03Z</rap_createtime>
+							<rap_distance>145</rap_distance>
+							<rap_iata3lc>LKO</rap_iata3lc>
+							<rap_iataregion>ASA</rap_iataregion>
+							<rap_icao4lc>VILK</rap_icao4lc>
+							<rap_internalcode>LKO</rap_internalcode>
+							<rap_modtime>2022-08-02T07:02:34Z</rap_modtime>
+							<rap_moduser>bkranthi</rap_moduser>
+							<rap_name1>Lucknow </rap_name1>
+							<rap_name2>ಲಕ್ನೋ</rap_name2>
+							<rap_name3>Amausi Chaudhury Charan Singh Airport</rap_name3>
+							<rap_name4 xsi:nil="true"/>
+							<rap_name5 xsi:nil="true"/>
+							<rap_rctr_country>IN</rap_rctr_country>
+							<rap_rctt_countrytype>D</rap_rctt_countrytype>
+							<rap_safeind>Y</rap_safeind>
+							<rap_slg_additionallanguage xsi:nil="true"/>
+							<rap_syst_station>BLR</rap_syst_station>
+							<rap_timezone>IST</rap_timezone>
+							<ref_airportversion_list/>
+						</ref_airport>
+					</pa_rap_reforiginairport>
+					<pa_rap_refpreviousairport>LKO
+						<ref_airport>
+							<rap_city>Lucknow </rap_city>
+							<rap_city3lc>LKO</rap_city3lc>
+							<rap_createtime>2021-10-22T20:21:03Z</rap_createtime>
+							<rap_defaultarrivalroutepoint xsi:nil="true"/>
+							<rap_defaultdepartureroutepoint xsi:nil="true"/>
+							<rap_distance>145</rap_distance>
+							<rap_iata3lc>LKO</rap_iata3lc>
+							<rap_iataregion>ASA</rap_iataregion>
+							<rap_icao4lc>VILK</rap_icao4lc>
+							<rap_internalcode>LKO</rap_internalcode>
+							<rap_modtime>2022-08-02T07:02:34Z</rap_modtime>
+							<rap_moduser>bkranthi</rap_moduser>
+							<rap_name1>Lucknow </rap_name1>
+							<rap_name2>ಲಕ್ನೋ</rap_name2>
+							<rap_name3>Amausi Chaudhury Charan Singh Airport</rap_name3>
+							<rap_name4 xsi:nil="true"/>
+							<rap_name5 xsi:nil="true"/>
+							<rap_rctr_country>IN</rap_rctr_country>
+							<rap_rctt_countrytype>D</rap_rctt_countrytype>
+							<rap_safeind>Y</rap_safeind>
+							<rap_slg_additionallanguage xsi:nil="true"/>
+							<rap_syst_station>BLR</rap_syst_station>
+							<rap_timezone>IST</rap_timezone>
+							<ref_airportversion_list/>
+						</ref_airport>
+					</pa_rap_refpreviousairport>
+					<pa_rcdms_status>
+						<ref_cdmstatus/>
+					</pa_rcdms_status>
+					<pa_rco_concourse>2AD</pa_rco_concourse>
+					<pa_rco_refconcourse>2AD@1</pa_rco_refconcourse>
+					<pa_rctt_countrytype>D
+						<ref_countrytype>
+							<rctt_availableforcountryind>Y</rctt_availableforcountryind>
+							<rctt_code>D</rctt_code>
+							<rctt_createtime>2021-10-11T00:00:00Z</rctt_createtime>
+							<rctt_description>Domestic</rctt_description>
+							<rctt_internalcode>D</rctt_internalcode>
+							<rctt_modtime>2021-10-11T00:00:00Z</rctt_modtime>
+							<rctt_moduser>loaded</rctt_moduser>
+						</ref_countrytype>
+					</pa_rctt_countrytype>
+					<pa_registration>VTEXC</pa_registration>
+					<pa_rfst_flightstatus>N</pa_rfst_flightstatus>
+					<pa_rfst_refflightstatus>AN
+						<ref_flightstatus>
+							<rfst_arrdepind>A</rfst_arrdepind>
+							<rfst_code>N</rfst_code>
+							<rfst_code3l>IBK</rfst_code3l>
+							<rfst_createtime>2020-07-20T12:42:38Z</rfst_createtime>
+							<rfst_description>On-Block</rfst_description>
+							<rfst_idcode>AN</rfst_idcode>
+							<rfst_legacystatus>A</rfst_legacystatus>
+							<rfst_minimumturnorder xsi:nil="true"/>
+							<rfst_modtime>2020-07-20T12:42:38Z</rfst_modtime>
+							<rfst_moduser>loaded</rfst_moduser>
+							<rfst_order>39</rfst_order>
+							<rfst_rrmk_refremark xsi:nil="true"/>
+							<rfst_rrmk_remark xsi:nil="true"/>
+							<rfst_timestamp>PaAibt</rfst_timestamp>
+						</ref_flightstatus>
+					</pa_rfst_refflightstatus>
+					<pa_rha_agentbag xsi:nil="true"/>
+					<pa_rmsc_scenario>1</pa_rmsc_scenario>
+					<pa_rnc_naturecode>01</pa_rnc_naturecode>
+					<pa_rnc_refnaturecode>10151</pa_rnc_refnaturecode>
+					<pa_rrmk_refremark xsi:nil="true"/>
+					<pa_rrmk_remark xsi:nil="true"/>
+					<pa_rrwy_refrunway>09R@BLR
+						<ref_runway>
+							<rrwy_activeind>Y</rrwy_activeind>
+							<rrwy_code>09R</rrwy_code>
+							<rrwy_comment>Runway 09R</rrwy_comment>
+							<rrwy_createtime>2020-07-20T12:42:20Z</rrwy_createtime>
+							<rrwy_description>RWY 09R</rrwy_description>
+							<rrwy_idcode>09R@BLR</rrwy_idcode>
+							<rrwy_length>4000</rrwy_length>
+							<rrwy_modtime>2021-09-24T10:18:40Z</rrwy_modtime>
+							<rrwy_moduser>svaisakh</rrwy_moduser>
+							<rrwy_restriction>N</rrwy_restriction>
+							<rrwy_rrwy_refrunwaysystem xsi:nil="true"/>
+							<rrwy_rrwy_runwaysystem xsi:nil="true"/>
+							<rrwy_runwaytract>South</rrwy_runwaytract>
+							<rrwy_rwytype>R</rrwy_rwytype>
+							<rrwy_syst_station>BLR</rrwy_syst_station>
+							<rrwy_width>45</rrwy_width>
+						</ref_runway>
+					</pa_rrwy_refrunway>
+					<pa_rrwy_runway>09R</pa_rrwy_runway>
+					<pa_rsta_refstand>110@1
+						<ref_stand>
+							<rsta_angle>0</rsta_angle>
+							<rsta_capacity>1</rsta_capacity>
+							<rsta_cctvstream xsi:nil="true"/>
+							<rsta_code>110</rsta_code>
+							<rsta_createtime>2021-05-22T12:01:17Z</rsta_createtime>
+							<rsta_description>Code C (ALL Bus gates)</rsta_description>
+							<rsta_displaytext xsi:nil="true"/>
+							<rsta_dockingind>N</rsta_dockingind>
+							<rsta_elevatorind xsi:nil="true"/>
+							<rsta_eqconstraint>L</rsta_eqconstraint>
+							<rsta_externalid xsi:nil="true"/>
+							<rsta_fuelpitind>Y</rsta_fuelpitind>
+							<rsta_gpuind>N</rsta_gpuind>
+							<rsta_gpuname xsi:nil="true"/>
+							<rsta_idcode>110@1</rsta_idcode>
+							<rsta_latitude>131209.73</rsta_latitude>
+							<rsta_length>44.51</rsta_length>
+							<rsta_longitude>774322.4</rsta_longitude>
+							<rsta_marsind>C</rsta_marsind>
+							<rsta_modtime>2024-02-16T10:00:44Z</rsta_modtime>
+							<rsta_moduser>LokeshCP</rsta_moduser>
+							<rsta_owner xsi:nil="true"/>
+							<rsta_pdgs_status xsi:nil="true"/>
+							<rsta_ract_maximumaircrafttype>7M9</rsta_ract_maximumaircrafttype>
+							<rsta_ral_airline xsi:nil="true"/>
+							<rsta_rco_concourse>1A4</rsta_rco_concourse>
+							<rsta_rctt_countrytype>A</rsta_rctt_countrytype>
+							<rsta_rgt_gate xsi:nil="true"/>
+							<rsta_rgt_refgate xsi:nil="true"/>
+							<rsta_rmsc_scenario>1</rsta_rmsc_scenario>
+							<rsta_rsna_area xsi:nil="true"/>
+							<rsta_validfrom>2020-02-26T00:01:00Z</rsta_validfrom>
+							<rsta_validto xsi:nil="true"/>
+							<rsta_width>35.99</rsta_width>
+						</ref_stand>
+					</pa_rsta_refstand>
+					<pa_rsta_stand>110</pa_rsta_stand>
+					<pa_rsta_standardstand xsi:nil="true"/>
+					<pa_rstc_refservicetypecode>J@BLR
+						<ref_servicetypecode>
+							<rstc_arrivalbridgeopind>N</rstc_arrivalbridgeopind>
+							<rstc_arrivalbusind>N</rstc_arrivalbusind>
+							<rstc_arrivalgatetind>Y</rstc_arrivalgatetind>
+							<rstc_arrivaltractorind>N</rstc_arrivaltractorind>
+							<rstc_baggagebeltind>Y</rstc_baggagebeltind>
+							<rstc_checkcgoloadind>N</rstc_checkcgoloadind>
+							<rstc_checkincounterind>Y</rstc_checkincounterind>
+							<rstc_checkmailloadind>N</rstc_checkmailloadind>
+							<rstc_checkpaxloadind>N</rstc_checkpaxloadind>
+							<rstc_code>J</rstc_code>
+							<rstc_comment xsi:nil="true"/>
+							<rstc_createtime>2021-10-14T11:02:26Z</rstc_createtime>
+							<rstc_departurebeltind>Y</rstc_departurebeltind>
+							<rstc_departurebridgeopind>N</rstc_departurebridgeopind>
+							<rstc_departurebusind>N</rstc_departurebusind>
+							<rstc_departuregatetind>Y</rstc_departuregatetind>
+							<rstc_departureloungeind>Y</rstc_departureloungeind>
+							<rstc_departuresecurityind>N</rstc_departuresecurityind>
+							<rstc_departuretractorind>N</rstc_departuretractorind>
+							<rstc_description>Sked Passenger Normal Flight</rstc_description>
+							<rstc_displaycode>P</rstc_displaycode>
+							<rstc_exempt>N</rstc_exempt>
+							<rstc_iatadefault>N</rstc_iatadefault>
+							<rstc_ignorestatisticsind>N</rstc_ignorestatisticsind>
+							<rstc_infoserviceind>N</rstc_infoserviceind>
+							<rstc_modtime>2021-12-09T04:44:52Z</rstc_modtime>
+							<rstc_moduser>svaisakh</rstc_moduser>
+							<rstc_ristc_iatacode>J</rstc_ristc_iatacode>
+							<rstc_standind>Y</rstc_standind>
+							<rstc_statisticcode xsi:nil="true"/>
+						</ref_servicetypecode>
+					</pa_rstc_refservicetypecode>
+					<pa_rstc_servicetypecode>J</pa_rstc_servicetypecode>
+					<pa_rtrm_refterminal>2@1
+						<ref_terminal>
+							<rtrm_closedind>N</rtrm_closedind>
+							<rtrm_closurereason xsi:nil="true"/>
+							<rtrm_code>2</rtrm_code>
+							<rtrm_comment>Passenger Terminal 2</rtrm_comment>
+							<rtrm_createtime>2020-07-29T12:42:57Z</rtrm_createtime>
+							<rtrm_description>Terminal 2</rtrm_description>
+							<rtrm_idcode>2@1</rtrm_idcode>
+							<rtrm_modtime>2020-07-29T12:42:57Z</rtrm_modtime>
+							<rtrm_moduser>admin</rtrm_moduser>
+							<rtrm_rmsc_scenario>1</rtrm_rmsc_scenario>
+						</ref_terminal>
+					</pa_rtrm_refterminal>
+					<pa_rtrm_terminal>2</pa_rtrm_terminal>
+					<pa_runwayexittime xsi:nil="true"/>
+					<pa_runwayoccupancytime xsi:nil="true"/>
+					<pa_safeind>Y</pa_safeind>
+					<pa_salt_refcdmalarm xsi:nil="true"/>
+					<pa_seats>180</pa_seats>
+					<pa_sflt xsi:nil="true"/>
+					<pa_sibt>2025-04-02T20:45:00Z</pa_sibt>
+					<pa_standchangecnt>0</pa_standchangecnt>
+					<pa_standnote xsi:nil="true"/>
+					<pa_star xsi:nil="true"/>
+					<pa_stotoutstation xsi:nil="true"/>
+					<pa_tariffcode>BL</pa_tariffcode>
+					<pa_tldt>2025-04-02T19:59:00Z</pa_tldt>
+					<pa_totalbag>63</pa_totalbag>
+					<pa_totalbookpax>32</pa_totalbookpax>
+					<pa_totalcrew xsi:nil="true"/>
+					<pa_totalextracrew xsi:nil="true"/>
+					<pa_totalpax>104</pa_totalpax>
+					<pa_transferpax>15</pa_transferpax>
+					<pa_transitpax xsi:nil="true"/>
+					<pa_vipcomment xsi:nil="true"/>
+					<pa_vipind>N</pa_vipind>
+					<pa_zerofreightind>N</pa_zerofreightind>
+					<pa_zeromailind>N</pa_zeromailind>
+					<pa_zeropaxind>N</pa_zeropaxind>
+					<pa_zerototalweightind>N</pa_zerototalweightind>
+					<pl_api_list/>
+					<pl_arrival_list/>
+					<pl_arrivalgate_list>
+						<pl_arrivalgate>
+							<pag_idseq>1002254966</pag_idseq>
+							<pag_airbridgeind>Y</pag_airbridgeind>
+							<pag_beginactual>2025-04-02T20:10:00Z</pag_beginactual>
+							<pag_beginplan>2025-04-02T20:10:00Z</pag_beginplan>
+							<pag_createtime>2025-04-02T16:06:34Z</pag_createtime>
+							<pag_displaycode>I</pag_displaycode>
+							<pag_endactual>2025-04-02T20:30:00Z</pag_endactual>
+							<pag_endplan>2025-04-02T20:20:00Z</pag_endplan>
+							<pag_lockind>N</pag_lockind>
+							<pag_modtime>2025-04-02T20:30:55Z</pag_modtime>
+							<pag_moduser>auto</pag_moduser>
+							<pag_note xsi:nil="true"/>
+							<pag_pa_arrival>1009227000</pag_pa_arrival>
+							<pag_pa_flightnumber>IX1326</pag_pa_flightnumber>
+							<pag_publiccomment xsi:nil="true"/>
+							<pag_rgt_gate>T2DA</pag_rgt_gate>
+							<pag_rgt_lastgate xsi:nil="true"/>
+							<pag_rgt_refgate>T2DA@1
+								<ref_gate>
+									<rgt_arrdepind>A</rgt_arrdepind>
+									<rgt_capacity>40</rgt_capacity>
+									<rgt_cctvstream xsi:nil="true"/>
+									<rgt_code>T2DA</rgt_code>
+									<rgt_createtime>2022-11-24T07:47:56Z</rgt_createtime>
+									<rgt_description>T2-Arrival Domestic  Gate</rgt_description>
+									<rgt_displaytext xsi:nil="true"/>
+									<rgt_egateavailableind>N</rgt_egateavailableind>
+									<rgt_gatetype>B</rgt_gatetype>
+									<rgt_idcode>T2DA@1</rgt_idcode>
+									<rgt_modtime>2023-09-12T15:36:47Z</rgt_modtime>
+									<rgt_moduser>Ranjit</rgt_moduser>
+									<rgt_paxloadingbridgeind>N</rgt_paxloadingbridgeind>
+									<rgt_ral_airline xsi:nil="true"/>
+									<rgt_rco_concourse>T2</rgt_rco_concourse>
+									<rgt_rco_refconcourse>T2@1</rgt_rco_refconcourse>
+									<rgt_rcpa_areabordercontrol xsi:nil="true"/>
+									<rgt_rcpa_areasecurity xsi:nil="true"/>
+									<rgt_rctt_countrytype>D</rgt_rctt_countrytype>
+									<rgt_rdlg_refdeparturelounge>L01@1</rgt_rdlg_refdeparturelounge>
+									<rgt_rmsc_scenario>1</rgt_rmsc_scenario>
+									<rgt_validfrom>2022-11-24T00:00:00Z</rgt_validfrom>
+									<rgt_validto xsi:nil="true"/>
+								</ref_gate>
+							</pag_rgt_refgate>
+							<pag_rgt_standardgate xsi:nil="true"/>
+							<pag_rmsc_scenario>1</pag_rmsc_scenario>
+							<pag_seqno>1</pag_seqno>
+							<pag_status>E</pag_status>
+						</pl_arrivalgate>
+					</pl_arrivalgate_list>
+					<pl_atcarrival_list/>
+					<pl_baggagebelt_list>
+						<pl_baggagebelt>
+							<pbb_idseq>1003214711</pbb_idseq>
+							<pbb_beginactual>2025-04-02T20:10:00Z</pbb_beginactual>
+							<pbb_beginplan>2025-04-02T20:10:00Z</pbb_beginplan>
+							<pbb_checkinclassid>Y</pbb_checkinclassid>
+							<pbb_createtime>2025-04-02T16:06:34Z</pbb_createtime>
+							<pbb_displaycode>P</pbb_displaycode>
+							<pbb_endactual>2025-04-02T20:31:00Z</pbb_endactual>
+							<pbb_endplan>2025-04-02T20:30:00Z</pbb_endplan>
+							<pbb_firstbag>2025-04-02T20:21:00Z</pbb_firstbag>
+							<pbb_lastbag>2025-04-02T20:31:00Z</pbb_lastbag>
+							<pbb_loadstatus>S</pbb_loadstatus>
+							<pbb_lockind>N</pbb_lockind>
+							<pbb_modtime>2025-04-02T20:31:59Z</pbb_modtime>
+							<pbb_moduser>auto</pbb_moduser>
+							<pbb_note xsi:nil="true"/>
+							<pbb_pa_arrival>1009227000</pbb_pa_arrival>
+							<pbb_pa_flightnumber>IX1326</pbb_pa_flightnumber>
+							<pbb_publiccomment xsi:nil="true"/>
+							<pbb_rbb_baggagebelt>8A</pbb_rbb_baggagebelt>
+							<pbb_rbb_lastbaggagebelt>8B</pbb_rbb_lastbaggagebelt>
+							<pbb_rbb_refbaggagebelt>8A@1
+								<ref_baggagebelt>
+									<rbb_bcishostname>T2BELT8A</rbb_bcishostname>
+									<rbb_capacity>2</rbb_capacity>
+									<rbb_carousel>8</rbb_carousel>
+									<rbb_cctvstream xsi:nil="true"/>
+									<rbb_code>8A</rbb_code>
+									<rbb_createtime>2021-05-22T12:01:25Z</rbb_createtime>
+									<rbb_description>T2-Baggage Break-up Belt 8A</rbb_description>
+									<rbb_displaytext xsi:nil="true"/>
+									<rbb_idcode>8A@1</rbb_idcode>
+									<rbb_modtime>2023-09-08T04:18:04Z</rbb_modtime>
+									<rbb_moduser>LokeshCP</rbb_moduser>
+									<rbb_ral_airline xsi:nil="true"/>
+									<rbb_rbbc_carousel>8@1</rbb_rbbc_carousel>
+									<rbb_rco_concourse>2AD</rbb_rco_concourse>
+									<rbb_rco_refconcourse>2AD@1</rbb_rco_refconcourse>
+									<rbb_rcpa_areacustoms xsi:nil="true"/>
+									<rbb_rctt_countrytype>D</rbb_rctt_countrytype>
+									<rbb_rmsc_scenario>1</rbb_rmsc_scenario>
+									<rbb_validfrom>2022-01-01T00:00:00Z</rbb_validfrom>
+									<rbb_validto xsi:nil="true"/>
+								</ref_baggagebelt>
+							</pbb_rbb_refbaggagebelt>
+							<pbb_rbb_standardbelt xsi:nil="true"/>
+							<pbb_rdt_displaytext xsi:nil="true"/>
+							<pbb_rmsc_scenario>1</pbb_rmsc_scenario>
+							<pbb_seqno>1</pbb_seqno>
+							<pbb_status>E</pbb_status>
+						</pl_baggagebelt>
+					</pl_baggagebelt_list>
+					<pl_cdmstatus_list/>
+					<pl_containerinfo_list/>
+					<pl_delayreason_list/>
+					<pl_genericarrivalres_list/>
+					<pl_handlingagent_list>
+						<pl_handlingagent>
+							<pha_idseq>1026556726</pha_idseq>
+							<pha_createtime>2025-04-02T16:06:34Z</pha_createtime>
+							<pha_modtime>2025-04-02T16:06:34Z</pha_modtime>
+							<pha_moduser>JitendraS</pha_moduser>
+							<pha_pa_arrival>1009227000</pha_pa_arrival>
+							<pha_pd_departure xsi:nil="true"/>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>BA</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026556723</pha_idseq>
+							<pha_createtime>2025-04-02T16:06:34Z</pha_createtime>
+							<pha_modtime>2025-04-02T16:06:34Z</pha_modtime>
+							<pha_moduser>JitendraS</pha_moduser>
+							<pha_pa_arrival>1009227000</pha_pa_arrival>
+							<pha_pd_departure xsi:nil="true"/>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>LC</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026556724</pha_idseq>
+							<pha_createtime>2025-04-02T16:06:34Z</pha_createtime>
+							<pha_modtime>2025-04-02T16:06:34Z</pha_modtime>
+							<pha_moduser>JitendraS</pha_moduser>
+							<pha_pa_arrival>1009227000</pha_pa_arrival>
+							<pha_pd_departure xsi:nil="true"/>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>CM</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026556721</pha_idseq>
+							<pha_createtime>2025-04-02T16:06:34Z</pha_createtime>
+							<pha_modtime>2025-04-02T16:06:34Z</pha_modtime>
+							<pha_moduser>JitendraS</pha_moduser>
+							<pha_pa_arrival>1009227000</pha_pa_arrival>
+							<pha_pd_departure xsi:nil="true"/>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>PS</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026556725</pha_idseq>
+							<pha_createtime>2025-04-02T16:06:34Z</pha_createtime>
+							<pha_modtime>2025-04-02T16:06:34Z</pha_modtime>
+							<pha_moduser>JitendraS</pha_moduser>
+							<pha_pa_arrival>1009227000</pha_pa_arrival>
+							<pha_pd_departure xsi:nil="true"/>
+							<pha_rha_handlingagent>IOSTL</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>IOSTL@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>FS</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026556720</pha_idseq>
+							<pha_createtime>2025-04-02T16:06:34Z</pha_createtime>
+							<pha_modtime>2025-04-02T16:06:34Z</pha_modtime>
+							<pha_moduser>JitendraS</pha_moduser>
+							<pha_pa_arrival>1009227000</pha_pa_arrival>
+							<pha_pd_departure xsi:nil="true"/>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>SS</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026556722</pha_idseq>
+							<pha_createtime>2025-04-02T16:06:34Z</pha_createtime>
+							<pha_modtime>2025-04-02T16:06:34Z</pha_modtime>
+							<pha_moduser>JitendraS</pha_moduser>
+							<pha_pa_arrival>1009227000</pha_pa_arrival>
+							<pha_pd_departure xsi:nil="true"/>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>RAMP</pha_rht_handlingtype>
+						</pl_handlingagent>
+					</pl_handlingagent_list>
+					<pl_routing_list>
+						<pl_routing>
+							<prt_idseq>1006775228</prt_idseq>
+							<prt_createtime>2025-04-02T16:06:34Z</prt_createtime>
+							<prt_displaycode>P</prt_displaycode>
+							<prt_modtime>2025-04-02T16:06:34Z</prt_modtime>
+							<prt_moduser>JitendraS</prt_moduser>
+							<prt_numberinleg>1</prt_numberinleg>
+							<prt_pa_arrival>1009227000</prt_pa_arrival>
+							<prt_pd_departure xsi:nil="true"/>
+							<prt_rap_airport>LKO</prt_rap_airport>
+							<prt_rap_refairport>LKO
+								<ref_airport>
+									<rap_additionalinfo xsi:nil="true"/>
+									<rap_city>Lucknow </rap_city>
+									<rap_city3lc>LKO</rap_city3lc>
+									<rap_createtime>2021-10-22T20:21:03Z</rap_createtime>
+									<rap_distance>145</rap_distance>
+									<rap_federalstate>IN</rap_federalstate>
+									<rap_iata3lc>LKO</rap_iata3lc>
+									<rap_iataregion>ASA</rap_iataregion>
+									<rap_icao4lc>VILK</rap_icao4lc>
+									<rap_internalcode>LKO</rap_internalcode>
+									<rap_modtime>2022-08-02T07:02:34Z</rap_modtime>
+									<rap_moduser>bkranthi</rap_moduser>
+									<rap_name1>Lucknow </rap_name1>
+									<rap_name2>ಲಕ್ನೋ</rap_name2>
+									<rap_name3>Amausi Chaudhury Charan Singh Airport</rap_name3>
+									<rap_name4 xsi:nil="true"/>
+									<rap_name5 xsi:nil="true"/>
+									<rap_opscreatedind>N</rap_opscreatedind>
+									<rap_rctr_country>IN</rap_rctr_country>
+									<rap_rctt_countrytype>D</rap_rctt_countrytype>
+									<rap_safeind>Y</rap_safeind>
+									<rap_slg_additionallanguage xsi:nil="true"/>
+									<rap_timezone>IST</rap_timezone>
+								</ref_airport>
+							</prt_rap_refairport>
+							<prt_rtr_trafficrestriction xsi:nil="true"/>
+							<prt_stastation xsi:nil="true"/>
+							<prt_stdstation xsi:nil="true"/>
+						</pl_routing>
+					</pl_routing_list>
+					<pl_transferpax_list/>
+				</pl_arrival>
+			</pt_pa_arrival>
+			<pt_pd_departure>1009226025
+				<pl_departure>
+					<pd_idseq>1009226025</pd_idseq>
+					<pd_acgt>2025-04-02T20:10:00Z</pd_acgt>
+					<pd_aczt xsi:nil="true"/>
+					<pd_adc xsi:nil="true"/>
+					<pd_additionalinfo xsi:nil="true"/>
+					<pd_aebt xsi:nil="true"/>
+					<pd_aegt xsi:nil="true"/>
+					<pd_aezt xsi:nil="true"/>
+					<pd_aght xsi:nil="true"/>
+					<pd_airbridges xsi:nil="true"/>
+					<pd_airtraffic xsi:nil="true"/>
+					<pd_aldtnext xsi:nil="true"/>
+					<pd_aobt xsi:nil="true"/>
+					<pd_ardt xsi:nil="true"/>
+					<pd_arzt xsi:nil="true"/>
+					<pd_asat xsi:nil="true"/>
+					<pd_asbt xsi:nil="true"/>
+					<pd_asrt xsi:nil="true"/>
+					<pd_assistingpax xsi:nil="true"/>
+					<pd_atccomment xsi:nil="true"/>
+					<pd_atcfplstatus>N</pd_atcfplstatus>
+					<pd_atot xsi:nil="true"/>
+					<pd_billingcomments xsi:nil="true"/>
+					<pd_billingstatus>I</pd_billingstatus>
+					<pd_blockedind>N</pd_blockedind>
+					<pd_bobt>2025-04-03T01:10:00Z</pd_bobt>
+					<pd_busind>N</pd_busind>
+					<pd_callsign>AXB1331</pd_callsign>
+					<pd_cancellationtime xsi:nil="true"/>
+					<pd_cashamount xsi:nil="true"/>
+					<pd_cashind>N</pd_cashind>
+					<pd_cashlodgements xsi:nil="true"/>
+					<pd_cbpind>N</pd_cbpind>
+					<pd_chareablepermit>NNNNN</pd_chareablepermit>
+					<pd_chargeableexempt>N</pd_chargeableexempt>
+					<pd_chargeformno>0</pd_chargeformno>
+					<pd_checkpointprofile xsi:nil="true"/>
+					<pd_codeshareflightnumbers xsi:nil="true"/>
+					<pd_counterareas>ET2</pd_counterareas>
+					<pd_counters>E1-E11</pd_counters>
+					<pd_createreason>create day process</pd_createreason>
+					<pd_createtime>2025-04-01T14:04:36Z</pd_createtime>
+					<pd_ctot xsi:nil="true"/>
+					<pd_deicingcounter xsi:nil="true"/>
+					<pd_delay xsi:nil="true"/>
+					<pd_delayreasons xsi:nil="true"/>
+					<pd_departurebelts>2T2</pd_departurebelts>
+					<pd_departuregates>D27</pd_departuregates>
+					<pd_dir xsi:nil="true"/>
+					<pd_displaycode>P</pd_displaycode>
+					<pd_doorclosetime xsi:nil="true"/>
+					<pd_doublegatewayind>N</pd_doublegatewayind>
+					<pd_dpistatus xsi:nil="true"/>
+					<pd_dpitime xsi:nil="true"/>
+					<pd_eczt xsi:nil="true"/>
+					<pd_edit xsi:nil="true"/>
+					<pd_eezt xsi:nil="true"/>
+					<pd_egateind>N</pd_egateind>
+					<pd_enrc xsi:nil="true"/>
+					<pd_eobt>2025-04-03T01:10:00Z</pd_eobt>
+					<pd_eobtatc xsi:nil="true"/>
+					<pd_eobtatcchangecnt xsi:nil="true"/>
+					<pd_eobtlocal>2025-04-03T01:10:00Z</pd_eobtlocal>
+					<pd_erzt xsi:nil="true"/>
+					<pd_estimateddoorclosetime xsi:nil="true"/>
+					<pd_etot xsi:nil="true"/>
+					<pd_etotatc xsi:nil="true"/>
+					<pd_exot>10</pd_exot>
+					<pd_exotpad xsi:nil="true"/>
+					<pd_externalflightnumber>IX1331</pd_externalflightnumber>
+					<pd_externalsystemid xsi:nil="true"/>
+					<pd_failediatamessages>0</pd_failediatamessages>
+					<pd_fic xsi:nil="true"/>
+					<pd_flightnumber>IX1331</pd_flightnumber>
+					<pd_flightrule xsi:nil="true"/>
+					<pd_fplactivationtime xsi:nil="true"/>
+					<pd_freezeind xsi:nil="true"/>
+					<pd_fuelrequired xsi:nil="true"/>
+					<pd_gatedisplaycode xsi:nil="true"/>
+					<pd_gotogate xsi:nil="true"/>
+					<pd_gpu xsi:nil="true"/>
+					<pd_gpuind>Y</pd_gpuind>
+					<pd_iatapriority>0</pd_iatapriority>
+					<pd_ifplid xsi:nil="true"/>
+					<pd_indicatorfield>A-----------</pd_indicatorfield>
+					<pd_lineuptime xsi:nil="true"/>
+					<pd_lockind>N</pd_lockind>
+					<pd_milestoneindstring>____________</pd_milestoneindstring>
+					<pd_modtime>2025-04-02T20:10:28Z</pd_modtime>
+					<pd_moduser>AVD</pd_moduser>
+					<pd_nextinfotime xsi:nil="true"/>
+					<pd_offbridge xsi:nil="true"/>
+					<pd_operator>AXB</pd_operator>
+					<pd_operatorflightnumber>IX1331</pd_operatorflightnumber>
+					<pd_opscomment>SKED STD:0640//--</pd_opscomment>
+					<pd_paymentmode>I</pd_paymentmode>
+					<pd_paymentreference xsi:nil="true"/>
+					<pd_pd_mainflight xsi:nil="true"/>
+					<pd_pobt>2025-04-03T01:10:00Z</pd_pobt>
+					<pd_prioind>N</pd_prioind>
+					<pd_priorityfield>PdEobtlocal,U,50;PdRegistration,U,50;</pd_priorityfield>
+					<pd_prmlevypax xsi:nil="true"/>
+					<pd_prmpax xsi:nil="true"/>
+					<pd_profile xsi:nil="true"/>
+					<pd_publiccomment xsi:nil="true"/>
+					<pd_pushbacknecessaryind>N</pd_pushbacknecessaryind>
+					<pd_rac_aircraft>1000041042
+						<ref_aircraft>
+							<rac_idseq>1000041042</rac_idseq>
+							<rac_bonus xsi:nil="true"/>
+							<rac_comment xsi:nil="true"/>
+							<rac_createtime>2025-03-04T10:07:09Z</rac_createtime>
+							<rac_firstlanding>2025-03-04T02:30:00Z</rac_firstlanding>
+							<rac_lastlanding>2025-04-02T20:01:00Z</rac_lastlanding>
+							<rac_modtime>2025-04-02T20:01:10Z</rac_modtime>
+							<rac_moduser>AVD</rac_moduser>
+							<rac_mtow>77000</rac_mtow>
+							<rac_nacelletreatmentind>N</rac_nacelletreatmentind>
+							<rac_name>Others</rac_name>
+							<rac_noisecategoryinternal xsi:nil="true"/>
+							<rac_opscreatedind>Y</rac_opscreatedind>
+							<rac_owner>AXB</rac_owner>
+							<rac_paxcargoind>P</rac_paxcargoind>
+							<rac_permit>NNNNN</rac_permit>
+							<rac_privatecommercialind>C</rac_privatecommercialind>
+							<rac_ract_aircrafttype>320
+								<ref_aircrafttype>
+									<ract_accessheight xsi:nil="true"/>
+									<ract_averageseatcapacity>180</ract_averageseatcapacity>
+									<ract_bonus xsi:nil="true"/>
+									<ract_bridgerequiredind>Y</ract_bridgerequiredind>
+									<ract_createtime>2021-10-14T20:50:18Z</ract_createtime>
+									<ract_description>Others</ract_description>
+									<ract_enginecount xsi:nil="true"/>
+									<ract_firstbag>2</ract_firstbag>
+									<ract_height>1208</ract_height>
+									<ract_iatasubtype xsi:nil="true"/>
+									<ract_iatatype>320</ract_iatatype>
+									<ract_icaotype>A320</ract_icaotype>
+									<ract_internalcode>320</ract_internalcode>
+									<ract_landingweight xsi:nil="true"/>
+									<ract_length>3757</ract_length>
+									<ract_manufacturer>Airbus</ract_manufacturer>
+									<ract_model>AIRBUS 320-100/200</ract_model>
+									<ract_modtime>2023-08-26T13:24:50Z</ract_modtime>
+									<ract_moduser>LokeshCP</ract_moduser>
+									<ract_mtow>73900</ract_mtow>
+									<ract_mtta xsi:nil="true"/>
+									<ract_mttd xsi:nil="true"/>
+									<ract_mttt xsi:nil="true"/>
+									<ract_noiseapproach xsi:nil="true"/>
+									<ract_noiseflyover xsi:nil="true"/>
+									<ract_noiselateral xsi:nil="true"/>
+									<ract_opscreatedind>N</ract_opscreatedind>
+									<ract_payload xsi:nil="true"/>
+									<ract_piercompatibleind xsi:nil="true"/>
+									<ract_propulsion xsi:nil="true"/>
+									<ract_ret_enginetype xsi:nil="true"/>
+									<ract_rnca_noisecategory xsi:nil="true"/>
+									<ract_shadow xsi:nil="true"/>
+									<ract_sizecategory>C</ract_sizecategory>
+									<ract_statisweightcategory>M</ract_statisweightcategory>
+									<ract_symbolname xsi:nil="true"/>
+									<ract_taxifuelperminute xsi:nil="true"/>
+									<ract_widebodyind>N</ract_widebodyind>
+									<ract_width>3580</ract_width>
+								</ref_aircrafttype>
+							</rac_ract_aircrafttype>
+							<rac_ral_lessee>IX</rac_ral_lessee>
+							<rac_ral_operator>IX</rac_ral_operator>
+							<rac_registration>VTEXC</rac_registration>
+							<rac_rnca_noisecategory xsi:nil="true"/>
+							<rac_seatcapacity>180</rac_seatcapacity>
+							<rac_serialnumber xsi:nil="true"/>
+							<rac_validfrom>2025-03-01T18:31:00Z</rac_validfrom>
+							<rac_validto xsi:nil="true"/>
+						</ref_aircraft>
+					</pd_rac_aircraft>
+					<pd_ract_aircrafttype>320
+						<ref_aircrafttype>
+							<ract_accessheight xsi:nil="true"/>
+							<ract_averageseatcapacity>180</ract_averageseatcapacity>
+							<ract_bonus xsi:nil="true"/>
+							<ract_bridgerequiredind>Y</ract_bridgerequiredind>
+							<ract_createtime>2021-10-14T20:50:18Z</ract_createtime>
+							<ract_description>Others</ract_description>
+							<ract_firstbag>2</ract_firstbag>
+							<ract_height>1208</ract_height>
+							<ract_iatatype>320</ract_iatatype>
+							<ract_icaotype>A320</ract_icaotype>
+							<ract_internalcode>320</ract_internalcode>
+							<ract_landingweight xsi:nil="true"/>
+							<ract_length>3757</ract_length>
+							<ract_manufacturer>Airbus</ract_manufacturer>
+							<ract_model>AIRBUS 320-100/200</ract_model>
+							<ract_modtime>2023-08-26T13:24:50Z</ract_modtime>
+							<ract_moduser>LokeshCP</ract_moduser>
+							<ract_mtow>73900</ract_mtow>
+							<ract_mtta xsi:nil="true"/>
+							<ract_mttd xsi:nil="true"/>
+							<ract_mttt xsi:nil="true"/>
+							<ract_opscreatedind>N</ract_opscreatedind>
+							<ract_payload xsi:nil="true"/>
+							<ract_piercompatibleind xsi:nil="true"/>
+							<ract_propulsion xsi:nil="true"/>
+							<ract_rnca_noisecategory xsi:nil="true"/>
+							<ract_shadow xsi:nil="true"/>
+							<ract_sizecategory>C</ract_sizecategory>
+							<ract_symbolname xsi:nil="true"/>
+							<ract_taxifuelperminute xsi:nil="true"/>
+							<ract_widebodyind>N</ract_widebodyind>
+							<ract_width>3580</ract_width>
+						</ref_aircrafttype>
+					</pd_ract_aircrafttype>
+					<pd_ract_plannedact>32N</pd_ract_plannedact>
+					<pd_ral_airline>IX
+						<ref_airline>
+							<ral_2lc>IX</ral_2lc>
+							<ral_3lc>AXB</ral_3lc>
+							<ral_alliance xsi:nil="true"/>
+							<ral_callsign>Express India</ral_callsign>
+							<ral_category>L</ral_category>
+							<ral_createtime>2021-10-25T11:21:40Z</ral_createtime>
+							<ral_description>Passenger/DCS-SITA LAISON</ral_description>
+							<ral_formatflightnumberind>Y</ral_formatflightnumberind>
+							<ral_ignorecreatedayind>N</ral_ignorecreatedayind>
+							<ral_ignorestatisticsind>N</ral_ignorestatisticsind>
+							<ral_internal>IX</ral_internal>
+							<ral_lpccode xsi:nil="true"/>
+							<ral_modtime>2021-10-25T11:21:40Z</ral_modtime>
+							<ral_moduser>loaded</ral_moduser>
+							<ral_name>AirIndia Express</ral_name>
+							<ral_opscreatedind>N</ral_opscreatedind>
+							<ral_paymentmode>I</ral_paymentmode>
+							<ral_rctr_country>IN</ral_rctr_country>
+							<ral_registrationcopyind>Y</ral_registrationcopyind>
+							<ral_rha_agentbag>AIS</ral_rha_agentbag>
+							<ral_rha_agentci>AIS</ral_rha_agentci>
+							<ral_rtrm_terminal>1</ral_rtrm_terminal>
+						</ref_airline>
+					</pd_ral_airline>
+					<pd_ramp_handlingagent>AIS</pd_ramp_handlingagent>
+					<pd_rap_destinationairport>PNQ</pd_rap_destinationairport>
+					<pd_rap_nextairport>PNQ</pd_rap_nextairport>
+					<pd_rap_refdestinationairport>PNQ
+						<ref_airport>
+							<rap_city>Pune</rap_city>
+							<rap_city3lc>PNQ</rap_city3lc>
+							<rap_createtime>2021-10-22T20:26:16Z</rap_createtime>
+							<rap_distance>84</rap_distance>
+							<rap_iata3lc>PNQ</rap_iata3lc>
+							<rap_iataregion>ASA</rap_iataregion>
+							<rap_icao4lc>VAPO</rap_icao4lc>
+							<rap_internalcode>PNQ</rap_internalcode>
+							<rap_modtime>2022-08-02T06:52:35Z</rap_modtime>
+							<rap_moduser>bkranthi</rap_moduser>
+							<rap_name1>Pune</rap_name1>
+							<rap_name2>ಪುಣೆ</rap_name2>
+							<rap_name3>Pune Airport</rap_name3>
+							<rap_name4 xsi:nil="true"/>
+							<rap_name5 xsi:nil="true"/>
+							<rap_rctr_country>IN</rap_rctr_country>
+							<rap_rctt_countrytype>D</rap_rctt_countrytype>
+							<rap_safeind>Y</rap_safeind>
+							<rap_slg_additionallanguage xsi:nil="true"/>
+							<rap_syst_station>BLR</rap_syst_station>
+							<rap_timezone>IST</rap_timezone>
+							<ref_airportversion_list/>
+						</ref_airport>
+					</pd_rap_refdestinationairport>
+					<pd_rap_refnextairport>PNQ
+						<ref_airport>
+							<rap_city>Pune</rap_city>
+							<rap_city3lc>PNQ</rap_city3lc>
+							<rap_createtime>2021-10-22T20:26:16Z</rap_createtime>
+							<rap_defaultarrivalroutepoint xsi:nil="true"/>
+							<rap_defaultdepartureroutepoint xsi:nil="true"/>
+							<rap_distance>84</rap_distance>
+							<rap_iata3lc>PNQ</rap_iata3lc>
+							<rap_iataregion>ASA</rap_iataregion>
+							<rap_icao4lc>VAPO</rap_icao4lc>
+							<rap_internalcode>PNQ</rap_internalcode>
+							<rap_modtime>2022-08-02T06:52:35Z</rap_modtime>
+							<rap_moduser>bkranthi</rap_moduser>
+							<rap_name1>Pune</rap_name1>
+							<rap_name2>ಪುಣೆ</rap_name2>
+							<rap_name3>Pune Airport</rap_name3>
+							<rap_name4 xsi:nil="true"/>
+							<rap_name5 xsi:nil="true"/>
+							<rap_rctr_country>IN</rap_rctr_country>
+							<rap_rctt_countrytype>D</rap_rctt_countrytype>
+							<rap_safeind>Y</rap_safeind>
+							<rap_slg_additionallanguage xsi:nil="true"/>
+							<rap_syst_station>BLR</rap_syst_station>
+							<rap_timezone>IST</rap_timezone>
+							<ref_airportversion_list/>
+						</ref_airport>
+					</pd_rap_refnextairport>
+					<pd_rcdms_status>
+						<ref_cdmstatus/>
+					</pd_rcdms_status>
+					<pd_rco_concourse>T2</pd_rco_concourse>
+					<pd_rco_refconcourse>T2@1</pd_rco_refconcourse>
+					<pd_rctt_countrytype>D
+						<ref_countrytype>
+							<rctt_availableforcountryind>Y</rctt_availableforcountryind>
+							<rctt_code>D</rctt_code>
+							<rctt_createtime>2021-10-11T00:00:00Z</rctt_createtime>
+							<rctt_description>Domestic</rctt_description>
+							<rctt_internalcode>D</rctt_internalcode>
+							<rctt_modtime>2021-10-11T00:00:00Z</rctt_modtime>
+							<rctt_moduser>loaded</rctt_moduser>
+						</ref_countrytype>
+					</pd_rctt_countrytype>
+					<pd_registration>VTEXC</pd_registration>
+					<pd_rfst_flightstatus>H</pd_rfst_flightstatus>
+					<pd_rfst_refflightstatus>DH
+						<ref_flightstatus>
+							<rfst_arrdepind>D</rfst_arrdepind>
+							<rfst_code>H</rfst_code>
+							<rfst_code3l>GHS</rfst_code3l>
+							<rfst_createtime>2020-07-20T12:42:38Z</rfst_createtime>
+							<rfst_description>Actual Ground Handling Started (no separte CDM status)</rfst_description>
+							<rfst_idcode>DH</rfst_idcode>
+							<rfst_legacystatus>S</rfst_legacystatus>
+							<rfst_minimumturnorder xsi:nil="true"/>
+							<rfst_modtime>2020-07-20T12:42:38Z</rfst_modtime>
+							<rfst_moduser>loaded</rfst_moduser>
+							<rfst_order>60</rfst_order>
+							<rfst_rrmk_refremark xsi:nil="true"/>
+							<rfst_rrmk_remark xsi:nil="true"/>
+							<rfst_timestamp>PdAcgt</rfst_timestamp>
+						</ref_flightstatus>
+					</pd_rfst_refflightstatus>
+					<pd_rha_agentbag xsi:nil="true"/>
+					<pd_rha_agentci>AIS</pd_rha_agentci>
+					<pd_rha_refagentbag xsi:nil="true"/>
+					<pd_rha_refagentci>AIS@BLR</pd_rha_refagentci>
+					<pd_rmsc_scenario>1</pd_rmsc_scenario>
+					<pd_rnc_naturecode>01</pd_rnc_naturecode>
+					<pd_rnc_refnaturecode>10151</pd_rnc_refnaturecode>
+					<pd_rrmk_refremark xsi:nil="true"/>
+					<pd_rrmk_remark xsi:nil="true"/>
+					<pd_rrwy_refrunway>
+						<ref_runway/>
+					</pd_rrwy_refrunway>
+					<pd_rrwy_runway xsi:nil="true"/>
+					<pd_rsta_refstand>110@1
+						<ref_stand>
+							<rsta_angle>0</rsta_angle>
+							<rsta_capacity>1</rsta_capacity>
+							<rsta_cctvstream xsi:nil="true"/>
+							<rsta_code>110</rsta_code>
+							<rsta_createtime>2021-05-22T12:01:17Z</rsta_createtime>
+							<rsta_description>Code C (ALL Bus gates)</rsta_description>
+							<rsta_displaytext xsi:nil="true"/>
+							<rsta_dockingind>N</rsta_dockingind>
+							<rsta_elevatorind xsi:nil="true"/>
+							<rsta_eqconstraint>L</rsta_eqconstraint>
+							<rsta_externalid xsi:nil="true"/>
+							<rsta_fuelpitind>Y</rsta_fuelpitind>
+							<rsta_gpuind>N</rsta_gpuind>
+							<rsta_gpuname xsi:nil="true"/>
+							<rsta_idcode>110@1</rsta_idcode>
+							<rsta_latitude>131209.73</rsta_latitude>
+							<rsta_length>44.51</rsta_length>
+							<rsta_longitude>774322.4</rsta_longitude>
+							<rsta_marsind>C</rsta_marsind>
+							<rsta_modtime>2024-02-16T10:00:44Z</rsta_modtime>
+							<rsta_moduser>LokeshCP</rsta_moduser>
+							<rsta_owner xsi:nil="true"/>
+							<rsta_pdgs_status xsi:nil="true"/>
+							<rsta_ract_maximumaircrafttype>7M9</rsta_ract_maximumaircrafttype>
+							<rsta_ral_airline xsi:nil="true"/>
+							<rsta_rco_concourse>1A4</rsta_rco_concourse>
+							<rsta_rctt_countrytype>A</rsta_rctt_countrytype>
+							<rsta_rgt_gate xsi:nil="true"/>
+							<rsta_rgt_refgate xsi:nil="true"/>
+							<rsta_rmsc_scenario>1</rsta_rmsc_scenario>
+							<rsta_rsna_area xsi:nil="true"/>
+							<rsta_validfrom>2020-02-26T00:01:00Z</rsta_validfrom>
+							<rsta_validto xsi:nil="true"/>
+							<rsta_width>35.99</rsta_width>
+						</ref_stand>
+					</pd_rsta_refstand>
+					<pd_rsta_stand>110</pd_rsta_stand>
+					<pd_rsta_standardstand xsi:nil="true"/>
+					<pd_rstc_refservicetypecode>J@BLR
+						<ref_servicetypecode>
+							<rstc_arrivalbridgeopind>N</rstc_arrivalbridgeopind>
+							<rstc_arrivalbusind>N</rstc_arrivalbusind>
+							<rstc_arrivalgatetind>Y</rstc_arrivalgatetind>
+							<rstc_arrivaltractorind>N</rstc_arrivaltractorind>
+							<rstc_baggagebeltind>Y</rstc_baggagebeltind>
+							<rstc_checkcgoloadind>N</rstc_checkcgoloadind>
+							<rstc_checkincounterind>Y</rstc_checkincounterind>
+							<rstc_checkmailloadind>N</rstc_checkmailloadind>
+							<rstc_checkpaxloadind>N</rstc_checkpaxloadind>
+							<rstc_code>J</rstc_code>
+							<rstc_comment xsi:nil="true"/>
+							<rstc_createtime>2021-10-14T11:02:26Z</rstc_createtime>
+							<rstc_departurebeltind>Y</rstc_departurebeltind>
+							<rstc_departurebridgeopind>N</rstc_departurebridgeopind>
+							<rstc_departurebusind>N</rstc_departurebusind>
+							<rstc_departuregatetind>Y</rstc_departuregatetind>
+							<rstc_departureloungeind>Y</rstc_departureloungeind>
+							<rstc_departuresecurityind>N</rstc_departuresecurityind>
+							<rstc_departuretractorind>N</rstc_departuretractorind>
+							<rstc_description>Sked Passenger Normal Flight</rstc_description>
+							<rstc_displaycode>P</rstc_displaycode>
+							<rstc_exempt>N</rstc_exempt>
+							<rstc_iatadefault>N</rstc_iatadefault>
+							<rstc_ignorestatisticsind>N</rstc_ignorestatisticsind>
+							<rstc_infoserviceind>N</rstc_infoserviceind>
+							<rstc_modtime>2021-12-09T04:44:52Z</rstc_modtime>
+							<rstc_moduser>svaisakh</rstc_moduser>
+							<rstc_ristc_iatacode>J</rstc_ristc_iatacode>
+							<rstc_standind>Y</rstc_standind>
+							<rstc_statisticcode xsi:nil="true"/>
+						</ref_servicetypecode>
+					</pd_rstc_refservicetypecode>
+					<pd_rstc_servicetypecode>J</pd_rstc_servicetypecode>
+					<pd_rtot xsi:nil="true"/>
+					<pd_rtrm_terminal>2</pd_rtrm_terminal>
+					<pd_runwayoccupancytime xsi:nil="true"/>
+					<pd_safeind>Y</pd_safeind>
+					<pd_salt_cdmalarm xsi:nil="true"/>
+					<pd_salt_refcdmalarm xsi:nil="true"/>
+					<pd_seats>180</pd_seats>
+					<pd_secondcall xsi:nil="true"/>
+					<pd_sequencerprio xsi:nil="true"/>
+					<pd_sid xsi:nil="true"/>
+					<pd_slotmsg xsi:nil="true"/>
+					<pd_sobt>2025-04-03T01:25:00Z</pd_sobt>
+					<pd_standchangecnt>1</pd_standchangecnt>
+					<pd_standnote xsi:nil="true"/>
+					<pd_stb xsi:nil="true"/>
+					<pd_ste xsi:nil="true"/>
+					<pd_stot xsi:nil="true"/>
+					<pd_sts xsi:nil="true"/>
+					<pd_susind xsi:nil="true"/>
+					<pd_tariffcode>EF</pd_tariffcode>
+					<pd_taxitime>10</pd_taxitime>
+					<pd_tobt xsi:nil="true"/>
+					<pd_tobtchanges>0</pd_tobtchanges>
+					<pd_tobtconfirmationtime xsi:nil="true"/>
+					<pd_tobtstatus xsi:nil="true"/>
+					<pd_totalbag xsi:nil="true"/>
+					<pd_totalbookpax>174</pd_totalbookpax>
+					<pd_totalcrew xsi:nil="true"/>
+					<pd_totalextracrew xsi:nil="true"/>
+					<pd_totalpax>0</pd_totalpax>
+					<pd_transferpax xsi:nil="true"/>
+					<pd_transitpax xsi:nil="true"/>
+					<pd_tsat xsi:nil="true"/>
+					<pd_tsatreason xsi:nil="true"/>
+					<pd_ttot xsi:nil="true"/>
+					<pd_ttotsent xsi:nil="true"/>
+					<pd_vipcomment xsi:nil="true"/>
+					<pd_vipind>N</pd_vipind>
+					<pd_zerofreightind>N</pd_zerofreightind>
+					<pd_zeromailind>N</pd_zeromailind>
+					<pd_zeropaxind>N</pd_zeropaxind>
+					<pd_zerototalweightind>N</pd_zerototalweightind>
+					<pl_atcdeparture_list/>
+					<pl_cdmstatus_list/>
+					<pl_containerinfo_list/>
+					<pl_delayreason_list/>
+					<pl_departure_list/>
+					<pl_departureaddinfo_list/>
+					<pl_departurebelt_list>
+						<pl_departurebelt>
+							<pdb_idseq>1003852594</pdb_idseq>
+							<pdb_beginactual>2025-04-02T20:26:00Z</pdb_beginactual>
+							<pdb_beginplan>2025-04-02T20:26:00Z</pdb_beginplan>
+							<pdb_checkinclassid xsi:nil="true"/>
+							<pdb_createtime>2025-04-02T12:32:34Z</pdb_createtime>
+							<pdb_displaycode>P</pdb_displaycode>
+							<pdb_endactual xsi:nil="true"/>
+							<pdb_endplan>2025-04-03T01:09:00Z</pdb_endplan>
+							<pdb_lockind>N</pdb_lockind>
+							<pdb_modtime>2025-04-02T20:26:42Z</pdb_modtime>
+							<pdb_moduser>auto</pdb_moduser>
+							<pdb_note xsi:nil="true"/>
+							<pdb_pd_departure>1009226025</pdb_pd_departure>
+							<pdb_pd_flightnumber>IX1331</pdb_pd_flightnumber>
+							<pdb_publiccomment xsi:nil="true"/>
+							<pdb_rdb_departurebelt>2T2</pdb_rdb_departurebelt>
+							<pdb_rdb_lastdeparturebelt xsi:nil="true"/>
+							<pdb_rdb_refdeparturebelt>2T2@1
+								<ref_departurebelt>
+									<rdb_capacity>20</rdb_capacity>
+									<rdb_cctvstream xsi:nil="true"/>
+									<rdb_code>2T2</rdb_code>
+									<rdb_createtime>2021-05-22T12:01:25Z</rdb_createtime>
+									<rdb_description>T2-Baggage Make-up Belt 2</rdb_description>
+									<rdb_displaytext xsi:nil="true"/>
+									<rdb_idcode>2T2@1</rdb_idcode>
+									<rdb_leasedind>N</rdb_leasedind>
+									<rdb_modtime>2022-06-08T05:15:39Z</rdb_modtime>
+									<rdb_moduser>bkranthi</rdb_moduser>
+									<rdb_ral_airline xsi:nil="true"/>
+									<rdb_rco_concourse>T2</rdb_rco_concourse>
+									<rdb_rco_refconcourse>T2@1</rdb_rco_refconcourse>
+									<rdb_rctt_countrytype>A</rdb_rctt_countrytype>
+									<rdb_rmsc_scenario>1</rdb_rmsc_scenario>
+									<rdb_validfrom>2022-01-01T00:00:00Z</rdb_validfrom>
+									<rdb_validto xsi:nil="true"/>
+								</ref_departurebelt>
+							</pdb_rdb_refdeparturebelt>
+							<pdb_rdb_standardbelt xsi:nil="true"/>
+							<pdb_rmsc_scenario>1</pdb_rmsc_scenario>
+							<pdb_seqno>2</pdb_seqno>
+							<pdb_status>B</pdb_status>
+							<pdb_transfer>N</pdb_transfer>
+						</pl_departurebelt>
+					</pl_departurebelt_list>
+					<pl_departuregate_list>
+						<pl_departuregate>
+							<pdg_idseq>1003110388</pdg_idseq>
+							<pdg_airbridgeind>Y</pdg_airbridgeind>
+							<pdg_beginactual xsi:nil="true"/>
+							<pdg_begingateactual xsi:nil="true"/>
+							<pdg_begingateplan>2025-04-03T00:40:00Z</pdg_begingateplan>
+							<pdg_beginplan>2025-04-03T00:40:00Z</pdg_beginplan>
+							<pdg_createtime>2025-04-01T14:04:36Z</pdg_createtime>
+							<pdg_displaycode>P</pdg_displaycode>
+							<pdg_endactual xsi:nil="true"/>
+							<pdg_endplan>2025-04-03T01:10:00Z</pdg_endplan>
+							<pdg_lockind>N</pdg_lockind>
+							<pdg_modtime>2025-04-02T12:31:16Z</pdg_modtime>
+							<pdg_moduser>narendraK</pdg_moduser>
+							<pdg_note xsi:nil="true"/>
+							<pdg_pd_departure>1009226025</pdg_pd_departure>
+							<pdg_pd_flightnumber>IX1331</pdg_pd_flightnumber>
+							<pdg_publiccomment xsi:nil="true"/>
+							<pdg_rdo_displayobject xsi:nil="true"/>
+							<pdg_rdt_displaytext xsi:nil="true"/>
+							<pdg_rgt_gate>D27</pdg_rgt_gate>
+							<pdg_rgt_lastgate>D18</pdg_rgt_lastgate>
+							<pdg_rgt_refgate>D27@1
+								<ref_gate>
+									<rgt_arrdepind>D</rgt_arrdepind>
+									<rgt_capacity>1</rgt_capacity>
+									<rgt_cctvstream xsi:nil="true"/>
+									<rgt_code>D27</rgt_code>
+									<rgt_createtime>2021-05-22T12:01:16Z</rgt_createtime>
+									<rgt_description>T2-Gate D27</rgt_description>
+									<rgt_displaytext xsi:nil="true"/>
+									<rgt_egateavailableind>N</rgt_egateavailableind>
+									<rgt_gatetype>B</rgt_gatetype>
+									<rgt_idcode>D27@1</rgt_idcode>
+									<rgt_modtime>2022-03-22T08:44:53Z</rgt_modtime>
+									<rgt_moduser>lokesh</rgt_moduser>
+									<rgt_paxloadingbridgeind>N</rgt_paxloadingbridgeind>
+									<rgt_ral_airline xsi:nil="true"/>
+									<rgt_rco_concourse>T2</rgt_rco_concourse>
+									<rgt_rco_refconcourse>T2@1</rgt_rco_refconcourse>
+									<rgt_rcpa_areabordercontrol xsi:nil="true"/>
+									<rgt_rcpa_areasecurity xsi:nil="true"/>
+									<rgt_rctt_countrytype>D</rgt_rctt_countrytype>
+									<rgt_rdlg_refdeparturelounge>L01@1</rgt_rdlg_refdeparturelounge>
+									<rgt_rmsc_scenario>1</rgt_rmsc_scenario>
+									<rgt_validfrom>2008-02-29T00:00:00Z</rgt_validfrom>
+									<rgt_validto xsi:nil="true"/>
+								</ref_gate>
+							</pdg_rgt_refgate>
+							<pdg_rgt_standardgate xsi:nil="true"/>
+							<pdg_rmsc_scenario>1</pdg_rmsc_scenario>
+							<pdg_seqno>1</pdg_seqno>
+							<pdg_status>S</pdg_status>
+						</pl_departuregate>
+					</pl_departuregate_list>
+					<pl_desk_list>
+						<pl_desk>
+							<pdk_idseq>1006108070</pdk_idseq>
+							<pdk_beginactual xsi:nil="true"/>
+							<pdk_beginplan>2025-04-02T23:25:00Z</pdk_beginplan>
+							<pdk_cciind>N</pdk_cciind>
+							<pdk_checkinclassid>Y</pdk_checkinclassid>
+							<pdk_checkintype>R</pdk_checkintype>
+							<pdk_createtime>2025-04-01T14:04:36Z</pdk_createtime>
+							<pdk_displaycode>P</pdk_displaycode>
+							<pdk_endactual xsi:nil="true"/>
+							<pdk_endplan>2025-04-03T00:40:00Z</pdk_endplan>
+							<pdk_lockind>N</pdk_lockind>
+							<pdk_modtime>2025-04-01T14:04:36Z</pdk_modtime>
+							<pdk_moduser>day</pdk_moduser>
+							<pdk_note xsi:nil="true"/>
+							<pdk_pd_departure>1009226025</pdk_pd_departure>
+							<pdk_pd_flightnumber>IX1331</pdk_pd_flightnumber>
+							<pdk_pday_day xsi:nil="true"/>
+							<pdk_publiccomment xsi:nil="true"/>
+							<pdk_rcnt_counter>IX_CCI_T2</pdk_rcnt_counter>
+							<pdk_rcnt_lastcounter xsi:nil="true"/>
+							<pdk_rcnt_mastercci xsi:nil="true"/>
+							<pdk_rcnt_refcounter>IX_CCI_T2@1
+								<ref_counter>
+									<rcnt_baggagebeltind>N</rcnt_baggagebeltind>
+									<rcnt_baggagebeltlocation xsi:nil="true"/>
+									<rcnt_baggagetagprinterind>N</rcnt_baggagetagprinterind>
+									<rcnt_capacity>20</rcnt_capacity>
+									<rcnt_ccialternatetext xsi:nil="true"/>
+									<rcnt_cctvstream xsi:nil="true"/>
+									<rcnt_code>IX_CCI_T2</rcnt_code>
+									<rcnt_countergroup xsi:nil="true"/>
+									<rcnt_createtime>2023-10-03T12:17:34Z</rcnt_createtime>
+									<rcnt_cuteequipmentind>N</rcnt_cuteequipmentind>
+									<rcnt_description>IX_CCI_T2</rcnt_description>
+									<rcnt_displaytext xsi:nil="true"/>
+									<rcnt_externalcode xsi:nil="true"/>
+									<rcnt_idcode>IX_CCI_T2@1</rcnt_idcode>
+									<rcnt_leasedind>N</rcnt_leasedind>
+									<rcnt_modtime>2023-10-03T12:17:34Z</rcnt_modtime>
+									<rcnt_moduser>ashwin</rcnt_moduser>
+									<rcnt_ownerofcheckinset xsi:nil="true"/>
+									<rcnt_phone xsi:nil="true"/>
+									<rcnt_publiccomment xsi:nil="true"/>
+									<rcnt_ral_airline>IX</rcnt_ral_airline>
+									<rcnt_rbhs_area xsi:nil="true"/>
+									<rcnt_rcna_area xsi:nil="true"/>
+									<rcnt_rco_concourse>T2</rcnt_rco_concourse>
+									<rcnt_rco_refconcourse>T2@1</rcnt_rco_refconcourse>
+									<rcnt_rcpa_areasecurity xsi:nil="true"/>
+									<rcnt_rctt_countrytype>M</rcnt_rctt_countrytype>
+									<rcnt_renter xsi:nil="true"/>
+									<rcnt_rmsc_scenario>1</rcnt_rmsc_scenario>
+									<rcnt_schedulecharterind xsi:nil="true"/>
+									<rcnt_ticketprinterind>N</rcnt_ticketprinterind>
+									<rcnt_type>C</rcnt_type>
+									<rcnt_validfrom>2023-10-03T00:00:00Z</rcnt_validfrom>
+									<rcnt_validto xsi:nil="true"/>
+								</ref_counter>
+							</pdk_rcnt_refcounter>
+							<pdk_rcnt_refmastercci xsi:nil="true"/>
+							<pdk_rdo_displayobject>
+								<ref_displayobject/>
+							</pdk_rdo_displayobject>
+							<pdk_rdt_displaytext xsi:nil="true"/>
+							<pdk_rmsc_scenario>1</pdk_rmsc_scenario>
+							<pdk_seqno>1</pdk_seqno>
+							<pdk_status>S</pdk_status>
+						</pl_desk>
+					</pl_desk_list>
+					<pl_dpi_list/>
+					<pl_genericdepartureres_list/>
+					<pl_handlingagent_list>
+						<pl_handlingagent>
+							<pha_idseq>1026537200</pha_idseq>
+							<pha_createtime>2025-04-01T14:04:36Z</pha_createtime>
+							<pha_modtime>2025-04-01T14:04:36Z</pha_modtime>
+							<pha_moduser>day</pha_moduser>
+							<pha_pa_arrival xsi:nil="true"/>
+							<pha_pd_departure>1009226025</pha_pd_departure>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>RAMP</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026537202</pha_idseq>
+							<pha_createtime>2025-04-01T14:04:36Z</pha_createtime>
+							<pha_modtime>2025-04-01T14:04:36Z</pha_modtime>
+							<pha_moduser>day</pha_moduser>
+							<pha_pa_arrival xsi:nil="true"/>
+							<pha_pd_departure>1009226025</pha_pd_departure>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>LC</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026537198</pha_idseq>
+							<pha_createtime>2025-04-01T14:04:36Z</pha_createtime>
+							<pha_modtime>2025-04-01T14:04:36Z</pha_modtime>
+							<pha_moduser>day</pha_moduser>
+							<pha_pa_arrival xsi:nil="true"/>
+							<pha_pd_departure>1009226025</pha_pd_departure>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>BD</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026537199</pha_idseq>
+							<pha_createtime>2025-04-01T14:04:36Z</pha_createtime>
+							<pha_modtime>2025-04-01T14:04:36Z</pha_modtime>
+							<pha_moduser>day</pha_moduser>
+							<pha_pa_arrival xsi:nil="true"/>
+							<pha_pd_departure>1009226025</pha_pd_departure>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>PS</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026537201</pha_idseq>
+							<pha_createtime>2025-04-01T14:04:36Z</pha_createtime>
+							<pha_modtime>2025-04-01T14:04:36Z</pha_modtime>
+							<pha_moduser>day</pha_moduser>
+							<pha_pa_arrival xsi:nil="true"/>
+							<pha_pd_departure>1009226025</pha_pd_departure>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>CI</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026537204</pha_idseq>
+							<pha_createtime>2025-04-01T14:04:36Z</pha_createtime>
+							<pha_modtime>2025-04-01T14:04:36Z</pha_modtime>
+							<pha_moduser>day</pha_moduser>
+							<pha_pa_arrival xsi:nil="true"/>
+							<pha_pd_departure>1009226025</pha_pd_departure>
+							<pha_rha_handlingagent>IOSTL</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>IOSTL@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>FS</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026537197</pha_idseq>
+							<pha_createtime>2025-04-01T14:04:36Z</pha_createtime>
+							<pha_modtime>2025-04-01T14:04:36Z</pha_modtime>
+							<pha_moduser>day</pha_moduser>
+							<pha_pa_arrival xsi:nil="true"/>
+							<pha_pd_departure>1009226025</pha_pd_departure>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>SS</pha_rht_handlingtype>
+						</pl_handlingagent>
+						<pl_handlingagent>
+							<pha_idseq>1026537203</pha_idseq>
+							<pha_createtime>2025-04-01T14:04:36Z</pha_createtime>
+							<pha_modtime>2025-04-01T14:04:36Z</pha_modtime>
+							<pha_moduser>day</pha_moduser>
+							<pha_pa_arrival xsi:nil="true"/>
+							<pha_pd_departure>1009226025</pha_pd_departure>
+							<pha_rha_handlingagent>AIS</pha_rha_handlingagent>
+							<pha_rha_refhandlingagent>AIS@BLR</pha_rha_refhandlingagent>
+							<pha_rht_handlingtype>CM</pha_rht_handlingtype>
+						</pl_handlingagent>
+					</pl_handlingagent_list>
+					<pl_routing_list>
+						<pl_routing>
+							<prt_idseq>1006772613</prt_idseq>
+							<prt_createtime>2025-04-01T14:04:36Z</prt_createtime>
+							<prt_displaycode>P</prt_displaycode>
+							<prt_modtime>2025-04-01T14:04:36Z</prt_modtime>
+							<prt_moduser>day</prt_moduser>
+							<prt_numberinleg>99</prt_numberinleg>
+							<prt_pa_arrival xsi:nil="true"/>
+							<prt_pd_departure>1009226025</prt_pd_departure>
+							<prt_rap_airport>PNQ</prt_rap_airport>
+							<prt_rap_refairport>PNQ
+								<ref_airport>
+									<rap_additionalinfo xsi:nil="true"/>
+									<rap_city>Pune</rap_city>
+									<rap_city3lc>PNQ</rap_city3lc>
+									<rap_createtime>2021-10-22T20:26:16Z</rap_createtime>
+									<rap_distance>84</rap_distance>
+									<rap_federalstate>IN</rap_federalstate>
+									<rap_iata3lc>PNQ</rap_iata3lc>
+									<rap_iataregion>ASA</rap_iataregion>
+									<rap_icao4lc>VAPO</rap_icao4lc>
+									<rap_internalcode>PNQ</rap_internalcode>
+									<rap_modtime>2022-08-02T06:52:35Z</rap_modtime>
+									<rap_moduser>bkranthi</rap_moduser>
+									<rap_name1>Pune</rap_name1>
+									<rap_name2>ಪುಣೆ</rap_name2>
+									<rap_name3>Pune Airport</rap_name3>
+									<rap_name4 xsi:nil="true"/>
+									<rap_name5 xsi:nil="true"/>
+									<rap_opscreatedind>N</rap_opscreatedind>
+									<rap_rctr_country>IN</rap_rctr_country>
+									<rap_rctt_countrytype>D</rap_rctt_countrytype>
+									<rap_safeind>Y</rap_safeind>
+									<rap_slg_additionallanguage xsi:nil="true"/>
+									<rap_timezone>IST</rap_timezone>
+								</ref_airport>
+							</prt_rap_refairport>
+							<prt_rtr_trafficrestriction xsi:nil="true"/>
+							<prt_stastation xsi:nil="true"/>
+							<prt_stdstation xsi:nil="true"/>
+						</pl_routing>
+					</pl_routing_list>
+					<pl_transferpax_list/>
+				</pl_departure>
+			</pt_pd_departure>
+			<pt_refuelingind>N</pt_refuelingind>
+			<pt_rmsc_scenario>1</pt_rmsc_scenario>
+			<pt_routing>LKO-BLR-PNQ</pt_routing>
+			<pt_routingiata3lc>LKO-BLR-PNQ</pt_routingiata3lc>
+			<pt_rsta_currentstand>110</pt_rsta_currentstand>
+			<pt_rsta_refcurrentstand>110@1
+				<ref_stand>
+					<rsta_angle>0</rsta_angle>
+					<rsta_capacity>1</rsta_capacity>
+					<rsta_cctvstream xsi:nil="true"/>
+					<rsta_code>110</rsta_code>
+					<rsta_createtime>2021-05-22T12:01:17Z</rsta_createtime>
+					<rsta_description>Code C (ALL Bus gates)</rsta_description>
+					<rsta_displaytext xsi:nil="true"/>
+					<rsta_dockingind>N</rsta_dockingind>
+					<rsta_elevatorind xsi:nil="true"/>
+					<rsta_eqconstraint>L</rsta_eqconstraint>
+					<rsta_externalid xsi:nil="true"/>
+					<rsta_fuelpitind>Y</rsta_fuelpitind>
+					<rsta_gpuind>N</rsta_gpuind>
+					<rsta_gpuname xsi:nil="true"/>
+					<rsta_idcode>110@1</rsta_idcode>
+					<rsta_latitude>131209.73</rsta_latitude>
+					<rsta_length>44.51</rsta_length>
+					<rsta_longitude>774322.4</rsta_longitude>
+					<rsta_marsind>C</rsta_marsind>
+					<rsta_modtime>2024-02-16T10:00:44Z</rsta_modtime>
+					<rsta_moduser>LokeshCP</rsta_moduser>
+					<rsta_owner xsi:nil="true"/>
+					<rsta_pdgs_status xsi:nil="true"/>
+					<rsta_ract_maximumaircrafttype>7M9</rsta_ract_maximumaircrafttype>
+					<rsta_ral_airline xsi:nil="true"/>
+					<rsta_rco_concourse>1A4</rsta_rco_concourse>
+					<rsta_rctt_countrytype>A</rsta_rctt_countrytype>
+					<rsta_rgt_gate xsi:nil="true"/>
+					<rsta_rgt_refgate xsi:nil="true"/>
+					<rsta_rmsc_scenario>1</rsta_rmsc_scenario>
+					<rsta_rsna_area xsi:nil="true"/>
+					<rsta_validfrom>2020-02-26T00:01:00Z</rsta_validfrom>
+					<rsta_validto xsi:nil="true"/>
+					<rsta_width>35.99</rsta_width>
+				</ref_stand>
+			</pt_rsta_refcurrentstand>
+			<pt_sibt>2025-04-02T20:45:00Z</pt_sibt>
+			<pt_sobt>2025-04-03T01:25:00Z</pt_sobt>
+		</pl_turn>
+	</soap-env:Body>
+</soap-env:Envelope>

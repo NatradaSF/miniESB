@@ -1,0 +1,1278 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<soap-env:Envelope xmlns:aodb="urn:com.tsystems.ac.aodb" xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap-env:Header>
+        <aodb:control>
+            <aodb:message-id>appintegration:-22b8ee9f:19715094e59:4b9d</aodb:message-id>
+            <aodb:message-version>1.4</aodb:message-version>
+            <aodb:message-type>UPDATE</aodb:message-type>
+            <aodb:originator>PROCESS[auto]</aodb:originator>
+            <aodb:timestamp>2025-06-03T07:07:29.287</aodb:timestamp>
+            <aodb:sender>aodb</aodb:sender>
+            <aodb:station>BKK</aodb:station>
+        </aodb:control>
+    </soap-env:Header>
+    <soap-env:Body>
+        <pl_turn action="update" id="1005406380">
+            <pt_createtime>2025-06-02T16:40:42Z</pt_createtime>
+            <pt_idseq>1005406380</pt_idseq>
+            <pt_modtime>2025-06-02T16:40:42Z</pt_modtime>
+            <pt_moduser>day</pt_moduser>
+            <pt_mttt>1</pt_mttt>
+            <pt_overallmodtime old="2025-06-03T06:48:00Z" action="update">2025-06-03T07:07:20Z</pt_overallmodtime>
+            <pt_refuelingind>N</pt_refuelingind>
+            <pt_routing>PNQ-BKK-PNQ</pt_routing>
+            <pt_routingiata3lc>PNQ-BKK-PNQ</pt_routingiata3lc>
+            <pt_rsta_currentstand xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+            <pt_sibt>2025-06-03T07:25:00Z</pt_sibt>
+            <pt_sobt>2025-06-03T08:35:00Z</pt_sobt>
+            <pt_pa_arrival>1006778082
+                <pl_arrival action="update">
+                    <pa_additionalinfo xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_aibt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_airbridges xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_airtraffic xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_aldt old="" action="update">2025-06-03T07:07:00Z</pa_aldt>
+                    <pa_arrivalgates>HOLD</pa_arrivalgates>
+                    <pa_assistingpax xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_atccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_atcfplstatus>N</pa_atcfplstatus>
+                    <pa_atotoutstation>2025-06-03T05:25:00Z</pa_atotoutstation>
+                    <pa_baggagebelts>HOLD</pa_baggagebelts>
+                    <pa_baggagecarousels xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_bibt old="2025-06-03T07:07:00Z" action="update">2025-06-03T07:17:00Z</pa_bibt>
+                    <pa_bibtsent xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_billingcomments xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_billingstatus>I</pa_billingstatus>
+                    <pa_busind>N</pa_busind>
+                    <pa_callsign>AXB242</pa_callsign>
+                    <pa_cancellationtime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_cashamount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_cashind>N</pa_cashind>
+                    <pa_cashlodgements xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_cbpind>N</pa_cbpind>
+                    <pa_chargeableexempt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_chargeablepermit xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_chargeformno>0</pa_chargeformno>
+                    <pa_checkpointprofile xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_codeshareflightnumbers xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_createreason>create day process</pa_createreason>
+                    <pa_createtime>2025-06-02T16:40:42Z</pa_createtime>
+                    <pa_delayreasons xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_displaycode>P</pa_displaycode>
+                    <pa_diversiontime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_dooropentime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_doublegatewayind>N</pa_doublegatewayind>
+                    <pa_eflt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_eibt old="2025-06-03T07:07:00Z" action="update">2025-06-03T07:17:00Z</pa_eibt>
+                    <pa_eldt>2025-06-03T06:57:00Z</pa_eldt>
+                    <pa_enrc xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_etotoutstation xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_exit>10</pa_exit>
+                    <pa_exitsent xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_externalflightnumber>IX242</pa_externalflightnumber>
+                    <pa_externalsystemid xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_failediatamessages>0</pa_failediatamessages>
+                    <pa_firstbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_firt>2025-06-03T06:27:00Z</pa_firt>
+                    <pa_flightnumber>IX242</pa_flightnumber>
+                    <pa_fnlt>2025-06-03T06:47:00Z</pa_fnlt>
+                    <pa_fplactivationtime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_fuelrequired xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_gpu xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_gpuid>Y</pa_gpuid>
+                    <pa_iatapriority xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_idseq>1006778082</pa_idseq>
+                    <pa_ifplid xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_indicatorfield>------------</pa_indicatorfield>
+                    <pa_lastbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_lockind>N</pa_lockind>
+                    <pa_milestoneindstring>______</pa_milestoneindstring>
+                    <pa_modtime old="2025-06-03T06:47:59Z" action="update">2025-06-03T07:07:19Z</pa_modtime>
+                    <pa_moduser>auto</pa_moduser>
+                    <pa_nextinfotime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_onbridge xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_operator>AXB</pa_operator>
+                    <pa_operatorflightnumber>IX242</pa_operatorflightnumber>
+                    <pa_opscomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_paymentmode>I</pa_paymentmode>
+                    <pa_paymentreference xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_pibt old="2025-06-03T07:07:00Z" action="update">2025-06-03T07:25:00Z</pa_pibt>
+                    <pa_prioind>N</pa_prioind>
+                    <pa_priorityfield xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_prmlevypax xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_prmpax xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_publiccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_ramphandlingagent xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_rap_diversionairport xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_rap_originairport>PNQ</pa_rap_originairport>
+                    <pa_rap_previousairport>PNQ</pa_rap_previousairport>
+                    <pa_rco_concourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_registration xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_rfst_flightstatus old="+" action="update">L</pa_rfst_flightstatus>
+                    <pa_rha_agentbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_rnc_naturecode>08</pa_rnc_naturecode>
+                    <pa_rnc_refnaturecode>10162</pa_rnc_refnaturecode>
+                    <pa_rrmk_remark xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_rrwy_runway>01</pa_rrwy_runway>
+                    <pa_rsta_stand>HOLD</pa_rsta_stand>
+                    <pa_rsta_standardstand xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_rstc_servicetypecode>J</pa_rstc_servicetypecode>
+                    <pa_rtrm_terminal>1</pa_rtrm_terminal>
+                    <pa_runwayexittime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_runwayoccupancytime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_safeind>Y</pa_safeind>
+                    <pa_seats>189</pa_seats>
+                    <pa_sflt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_sibt>2025-06-03T07:25:00Z</pa_sibt>
+                    <pa_standchangecnt>0</pa_standchangecnt>
+                    <pa_standnote xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_star xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_stotoutstation xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_tariffcode>BL</pa_tariffcode>
+                    <pa_tldt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_totalbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_totalcrew xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_totalextracrew xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_totalpax>0</pa_totalpax>
+                    <pa_transferpax xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_transitpax xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_vipcomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_vipind>N</pa_vipind>
+                    <pa_zerofreightind>N</pa_zerofreightind>
+                    <pa_zeromailind>N</pa_zeromailind>
+                    <pa_zeropaxind>N</pa_zeropaxind>
+                    <pa_zerototalweightind>N</pa_zerototalweightind>
+                    <pa_pa_mainflight xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_ract_aircrafttype>B38M
+                        <ref_aircrafttype>
+                            <ract_accessheight xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_averageseatcapacity xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_bonus>N</ract_bonus>
+                            <ract_bridgerequiredind>N</ract_bridgerequiredind>
+                            <ract_createtime>2025-04-25T13:52:24Z</ract_createtime>
+                            <ract_description>Boeing 737 Max 8</ract_description>
+                            <ract_firstbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_height>1230</ract_height>
+                            <ract_iatatype>7M8</ract_iatatype>
+                            <ract_icaotype>B38M</ract_icaotype>
+                            <ract_internalcode>B38M</ract_internalcode>
+                            <ract_landingweight xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_length>3947</ract_length>
+                            <ract_manufacturer xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_model xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_modtime>2025-04-28T13:18:36Z</ract_modtime>
+                            <ract_moduser>loaded</ract_moduser>
+                            <ract_mtow xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_mtta xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_mttd xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_mttt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_opscreatedind>N</ract_opscreatedind>
+                            <ract_payload xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_piercompatibleind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_propulsion xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_shadow xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_sizecategory>C</ract_sizecategory>
+                            <ract_symbolname xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_taxifuelperminute xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_widebodyind>N</ract_widebodyind>
+                            <ract_width>3592</ract_width>
+                            <ract_rnca_noisecategory xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        </ref_aircrafttype>
+                    </pa_ract_aircrafttype>
+                    <pa_ract_plannedact>B38M</pa_ract_plannedact>
+                    <pa_rac_aircraft>
+                        <ref_aircraft/>
+                    </pa_rac_aircraft>
+                    <pa_ral_airline>IX
+                        <ref_airline>
+                            <ral_2lc>IX</ral_2lc>
+                            <ral_3lc>AXB</ral_3lc>
+                            <ral_alliance xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ral_callsign>EXPRESS IND</ral_callsign>
+                            <ral_category xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ral_createtime>2025-04-16T09:19:45Z</ral_createtime>
+                            <ral_description>DOC8585 EDT185/RT</ral_description>
+                            <ral_formatflightnumberind>Y</ral_formatflightnumberind>
+                            <ral_ignorecreatedayind>N</ral_ignorecreatedayind>
+                            <ral_ignorestatisticsind>N</ral_ignorestatisticsind>
+                            <ral_internal>IX</ral_internal>
+                            <ral_lpccode>&#13;</ral_lpccode>
+                            <ral_modtime>2025-04-16T09:19:45Z</ral_modtime>
+                            <ral_moduser>loaded</ral_moduser>
+                            <ral_name>AIR INDIA EXPRESS</ral_name>
+                            <ral_opscreatedind>N</ral_opscreatedind>
+                            <ral_paymentmode>I</ral_paymentmode>
+                            <ral_registrationcopyind>Y</ral_registrationcopyind>
+                            <ral_rha_agentbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ral_rha_agentci xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ral_rtrm_terminal xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ral_rctr_country>IN</ral_rctr_country>
+                        </ref_airline>
+                    </pa_ral_airline>
+                    <pa_rap_refdiversionairport>
+                        <ref_airport/>
+                    </pa_rap_refdiversionairport>
+                    <pa_rap_reforiginairport>PNQ
+                        <ref_airport>
+                            <rap_city xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_city3lc xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
+                            <rap_distance xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_iata3lc>PNQ</rap_iata3lc>
+                            <rap_iataregion xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_icao4lc>VAPO</rap_icao4lc>
+                            <rap_internalcode>PNQ</rap_internalcode>
+                            <rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
+                            <rap_moduser>loaded</rap_moduser>
+                            <rap_name1>PUNE (IAF)</rap_name1>
+                            <rap_name2>PUNE</rap_name2>
+                            <rap_name3>DOC7910 168 /JOON</rap_name3>
+                            <rap_name4 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_name5 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_safeind>Y</rap_safeind>
+                            <rap_timezone xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_rctr_country>IN</rap_rctr_country>
+                            <rap_rctt_countrytype>I</rap_rctt_countrytype>
+                            <rap_slg_additionallanguage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_syst_station xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ref_airportversion_list/>
+                        </ref_airport>
+                    </pa_rap_reforiginairport>
+                    <pa_rap_refpreviousairport>PNQ
+                        <ref_airport>
+                            <rap_city xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_city3lc xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
+                            <rap_defaultarrivalroutepoint xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_defaultdepartureroutepoint xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_distance xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_iata3lc>PNQ</rap_iata3lc>
+                            <rap_iataregion xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_icao4lc>VAPO</rap_icao4lc>
+                            <rap_internalcode>PNQ</rap_internalcode>
+                            <rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
+                            <rap_moduser>loaded</rap_moduser>
+                            <rap_name1>PUNE (IAF)</rap_name1>
+                            <rap_name2>PUNE</rap_name2>
+                            <rap_name3>DOC7910 168 /JOON</rap_name3>
+                            <rap_name4 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_name5 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_safeind>Y</rap_safeind>
+                            <rap_timezone xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_rctr_country>IN</rap_rctr_country>
+                            <rap_rctt_countrytype>I</rap_rctt_countrytype>
+                            <rap_slg_additionallanguage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_syst_station xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ref_airportversion_list/>
+                        </ref_airport>
+                    </pa_rap_refpreviousairport>
+                    <pa_rcdms_status>
+                        <ref_cdmstatus/>
+                    </pa_rcdms_status>
+                    <pa_rco_refconcourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_rctt_countrytype>I
+                        <ref_countrytype>
+                            <rctt_availableforcountryind>Y</rctt_availableforcountryind>
+                            <rctt_code>I</rctt_code>
+                            <rctt_createtime>2025-04-18T00:00:00Z</rctt_createtime>
+                            <rctt_description>International</rctt_description>
+                            <rctt_internalcode>T</rctt_internalcode>
+                            <rctt_modtime>2025-04-18T00:00:00Z</rctt_modtime>
+                            <rctt_moduser>loaded</rctt_moduser>
+                        </ref_countrytype>
+                    </pa_rctt_countrytype>
+                    <pa_rfst_refflightstatus old="A+" action="update">AL
+                        <ref_flightstatus action="update">
+                            <rfst_arrdepind>A</rfst_arrdepind>
+                            <rfst_code old="+" action="update">L</rfst_code>
+                            <rfst_code3l old="FNL" action="update">ARR</rfst_code3l>
+                            <rfst_createtime>2025-04-17T13:14:48Z</rfst_createtime>
+                            <rfst_description old="Final Approach" action="update">Touch down/Landed</rfst_description>
+                            <rfst_idcode old="A+" action="update">AL</rfst_idcode>
+                            <rfst_legacystatus old="F" action="update">L</rfst_legacystatus>
+                            <rfst_minimumturnorder xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rfst_modtime>2025-04-17T13:14:48Z</rfst_modtime>
+                            <rfst_moduser>loaded</rfst_moduser>
+                            <rfst_order old="25" action="update">30</rfst_order>
+                            <rfst_rrmk_remark xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rfst_timestamp old="PaFnlt" action="update">PaAldt</rfst_timestamp>
+                            <rfst_rrmk_refremark xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        </ref_flightstatus>
+                    </pa_rfst_refflightstatus>
+                    <pa_rmsc_scenario>1</pa_rmsc_scenario>
+                    <pa_rrmk_refremark xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pa_rrwy_refrunway>01@BKK
+                        <ref_runway>
+                            <rrwy_activeind>Y</rrwy_activeind>
+                            <rrwy_code>01</rrwy_code>
+                            <rrwy_comment>Runway 01</rrwy_comment>
+                            <rrwy_createtime>2025-05-03T11:49:02Z</rrwy_createtime>
+                            <rrwy_description>Runway 01</rrwy_description>
+                            <rrwy_idcode>01@BKK</rrwy_idcode>
+                            <rrwy_length xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_modtime>2025-05-03T12:04:55Z</rrwy_modtime>
+                            <rrwy_moduser>admin</rrwy_moduser>
+                            <rrwy_restriction xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_rrwy_runwaysystem xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_runwaytract xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_rwytype>R</rrwy_rwytype>
+                            <rrwy_width xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_rrwy_refrunwaysystem xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_syst_station>BKK</rrwy_syst_station>
+                        </ref_runway>
+                    </pa_rrwy_refrunway>
+                    <pa_rsta_refstand>HOLD@1
+                        <ref_stand>
+                            <rsta_angle xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_capacity>-1</rsta_capacity>
+                            <rsta_cctvstream xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_code>HOLD</rsta_code>
+                            <rsta_createtime>2025-03-30T00:00:00Z</rsta_createtime>
+                            <rsta_description>Stand HOLD</rsta_description>
+                            <rsta_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_dockingind>N</rsta_dockingind>
+                            <rsta_elevatorind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_eqconstraint>A</rsta_eqconstraint>
+                            <rsta_externalid xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_fuelpitind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_gpuind>N</rsta_gpuind>
+                            <rsta_gpuname xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_idcode>HOLD@1</rsta_idcode>
+                            <rsta_latitude xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_length xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_longitude xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_marsind>N</rsta_marsind>
+                            <rsta_modtime>2025-03-30T00:00:00Z</rsta_modtime>
+                            <rsta_moduser>bkranthi</rsta_moduser>
+                            <rsta_owner xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_rco_concourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_rgt_gate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_validfrom xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_validto xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_width xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_pdgs_status xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_ract_maximumaircrafttype xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_ral_airline xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_rctt_countrytype>A</rsta_rctt_countrytype>
+                            <rsta_rgt_refgate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_rmsc_scenario>1</rsta_rmsc_scenario>
+                            <rsta_rsna_area xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        </ref_stand>
+                    </pa_rsta_refstand>
+                    <pa_rstc_refservicetypecode>J@BKK
+                        <ref_servicetypecode>
+                            <rstc_arrivalbridgeopind>N</rstc_arrivalbridgeopind>
+                            <rstc_arrivalbusind>N</rstc_arrivalbusind>
+                            <rstc_arrivalgatetind>Y</rstc_arrivalgatetind>
+                            <rstc_arrivaltractorind>N</rstc_arrivaltractorind>
+                            <rstc_baggagebeltind>Y</rstc_baggagebeltind>
+                            <rstc_checkcgoloadind>N</rstc_checkcgoloadind>
+                            <rstc_checkincounterind>Y</rstc_checkincounterind>
+                            <rstc_checkmailloadind>N</rstc_checkmailloadind>
+                            <rstc_checkpaxloadind>N</rstc_checkpaxloadind>
+                            <rstc_code>J</rstc_code>
+                            <rstc_comment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rstc_createtime>2025-04-17T11:34:16Z</rstc_createtime>
+                            <rstc_departurebeltind>N</rstc_departurebeltind>
+                            <rstc_departurebridgeopind>N</rstc_departurebridgeopind>
+                            <rstc_departurebusind>N</rstc_departurebusind>
+                            <rstc_departuregatetind>Y</rstc_departuregatetind>
+                            <rstc_departureloungeind>N</rstc_departureloungeind>
+                            <rstc_departuresecurityind>N</rstc_departuresecurityind>
+                            <rstc_departuretractorind>N</rstc_departuretractorind>
+                            <rstc_description>Passenger Scheduled</rstc_description>
+                            <rstc_displaycode>P</rstc_displaycode>
+                            <rstc_exempt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rstc_iatadefault>N</rstc_iatadefault>
+                            <rstc_ignorestatisticsind>Y</rstc_ignorestatisticsind>
+                            <rstc_infoserviceind>N</rstc_infoserviceind>
+                            <rstc_modtime>2025-05-08T15:34:27Z</rstc_modtime>
+                            <rstc_moduser>sfis</rstc_moduser>
+                            <rstc_standind>Y</rstc_standind>
+                            <rstc_statisticcode xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rstc_ristc_iatacode>J</rstc_ristc_iatacode>
+                        </ref_servicetypecode>
+                    </pa_rstc_refservicetypecode>
+                    <pa_rtrm_refterminal>1@1
+                        <ref_terminal>
+                            <rtrm_closedind>N</rtrm_closedind>
+                            <rtrm_closurereason xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rtrm_code>1</rtrm_code>
+                            <rtrm_comment>Terminal 1</rtrm_comment>
+                            <rtrm_createtime>2025-04-29T13:50:36Z</rtrm_createtime>
+                            <rtrm_description>Terminal 1</rtrm_description>
+                            <rtrm_idcode>1@1</rtrm_idcode>
+                            <rtrm_modtime>2025-04-29T13:50:36Z</rtrm_modtime>
+                            <rtrm_moduser>admin</rtrm_moduser>
+                            <rtrm_rmsc_scenario>1</rtrm_rmsc_scenario>
+                        </ref_terminal>
+                    </pa_rtrm_refterminal>
+                    <pa_salt_refcdmalarm xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pl_atcarrival_list/>
+                    <pl_arrivalgate_list>
+                        <pl_arrivalgate action="update">
+                            <pag_airbridgeind>N</pag_airbridgeind>
+                            <pag_beginactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pag_beginplan old="2025-06-03T07:07:00Z" action="update">2025-06-03T07:17:00Z</pag_beginplan>
+                            <pag_createtime>2025-06-02T16:40:42Z</pag_createtime>
+                            <pag_displaycode>I</pag_displaycode>
+                            <pag_endactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pag_endplan old="2025-06-03T07:27:00Z" action="update">2025-06-03T07:37:00Z</pag_endplan>
+                            <pag_idseq>1001163904</pag_idseq>
+                            <pag_lockind>N</pag_lockind>
+                            <pag_modtime old="2025-06-03T05:25:37Z" action="update">2025-06-03T07:07:19Z</pag_modtime>
+                            <pag_moduser>auto</pag_moduser>
+                            <pag_note xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pag_pa_flightnumber>IX242</pag_pa_flightnumber>
+                            <pag_publiccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pag_rgt_gate>HOLD</pag_rgt_gate>
+                            <pag_rgt_lastgate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pag_rgt_standardgate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pag_seqno>1</pag_seqno>
+                            <pag_status>S</pag_status>
+                            <pag_pa_arrival>1006778082</pag_pa_arrival>
+                            <pag_rgt_refgate>HOLD@1
+                                <ref_gate>
+                                    <rgt_arrdepind>B</rgt_arrdepind>
+                                    <rgt_capacity>-1</rgt_capacity>
+                                    <rgt_cctvstream xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_code>HOLD</rgt_code>
+                                    <rgt_createtime>2025-03-30T00:00:00Z</rgt_createtime>
+                                    <rgt_description>Gate HOLD</rgt_description>
+                                    <rgt_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_egateavailableind>N</rgt_egateavailableind>
+                                    <rgt_gatetype>T</rgt_gatetype>
+                                    <rgt_idcode>HOLD@1</rgt_idcode>
+                                    <rgt_modtime>2025-03-30T00:00:00Z</rgt_modtime>
+                                    <rgt_moduser>bkranthi</rgt_moduser>
+                                    <rgt_paxloadingbridgeind>N</rgt_paxloadingbridgeind>
+                                    <rgt_ral_airline xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rco_concourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_validfrom xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_validto xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rco_refconcourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rcpa_areabordercontrol xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rcpa_areasecurity xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rctt_countrytype>A</rgt_rctt_countrytype>
+                                    <rgt_rdlg_refdeparturelounge xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rmsc_scenario>1</rgt_rmsc_scenario>
+                                </ref_gate>
+                            </pag_rgt_refgate>
+                            <pag_rmsc_scenario>1</pag_rmsc_scenario>
+                        </pl_arrivalgate>
+                    </pl_arrivalgate_list>
+                    <pl_api_list/>
+                    <pl_transferpax_list/>
+                    <pl_arrival_list/>
+                    <pl_baggagebelt_list>
+                        <pl_baggagebelt action="update">
+                            <pbb_beginactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pbb_beginplan old="2025-06-03T07:07:00Z" action="update">2025-06-03T07:17:00Z</pbb_beginplan>
+                            <pbb_checkinclassid xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pbb_createtime>2025-06-02T16:40:42Z</pbb_createtime>
+                            <pbb_displaycode>P</pbb_displaycode>
+                            <pbb_endactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pbb_endplan old="2025-06-03T07:52:00Z" action="update">2025-06-03T08:02:00Z</pbb_endplan>
+                            <pbb_firstbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pbb_idseq>1002055807</pbb_idseq>
+                            <pbb_lastbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pbb_loadstatus>S</pbb_loadstatus>
+                            <pbb_lockind>N</pbb_lockind>
+                            <pbb_modtime old="2025-06-03T05:25:37Z" action="update">2025-06-03T07:07:19Z</pbb_modtime>
+                            <pbb_moduser>auto</pbb_moduser>
+                            <pbb_note xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pbb_pa_flightnumber>IX242</pbb_pa_flightnumber>
+                            <pbb_publiccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pbb_rbb_baggagebelt>HOLD</pbb_rbb_baggagebelt>
+                            <pbb_rbb_lastbaggagebelt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pbb_rbb_standardbelt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pbb_seqno>1</pbb_seqno>
+                            <pbb_status>S</pbb_status>
+                            <pbb_pa_arrival>1006778082</pbb_pa_arrival>
+                            <pbb_rbb_refbaggagebelt>HOLD@1
+                                <ref_baggagebelt>
+                                    <rbb_bcishostname xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_capacity>-1</rbb_capacity>
+                                    <rbb_carousel xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_cctvstream xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_code>HOLD</rbb_code>
+                                    <rbb_createtime>2025-03-30T00:00:00Z</rbb_createtime>
+                                    <rbb_description>Baggage Bay HOLD</rbb_description>
+                                    <rbb_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_idcode>HOLD@1</rbb_idcode>
+                                    <rbb_modtime>2025-03-30T00:00:00Z</rbb_modtime>
+                                    <rbb_moduser>bkranthi</rbb_moduser>
+                                    <rbb_rco_concourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_validfrom xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_validto xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_ral_airline xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_rbbc_carousel xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_rco_refconcourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_rcpa_areacustoms xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rbb_rctt_countrytype>A</rbb_rctt_countrytype>
+                                    <rbb_rmsc_scenario>1</rbb_rmsc_scenario>
+                                </ref_baggagebelt>
+                            </pbb_rbb_refbaggagebelt>
+                            <pbb_rdt_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pbb_rmsc_scenario>1</pbb_rmsc_scenario>
+                        </pl_baggagebelt>
+                    </pl_baggagebelt_list>
+                    <pl_cdmstatus_list/>
+                    <pl_containerinfo_list/>
+                    <pl_delayreason_list/>
+                    <pl_genericarrivalres_list/>
+                    <pl_handlingagent_list/>
+                    <pl_routing_list>
+                        <pl_routing>
+                            <prt_createtime>2025-06-02T16:40:42Z</prt_createtime>
+                            <prt_displaycode>P</prt_displaycode>
+                            <prt_idseq>1004390809</prt_idseq>
+                            <prt_modtime>2025-06-02T16:40:42Z</prt_modtime>
+                            <prt_moduser>day</prt_moduser>
+                            <prt_numberinleg>1</prt_numberinleg>
+                            <prt_rap_airport>PNQ</prt_rap_airport>
+                            <prt_rtr_trafficrestriction xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <prt_stastation xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <prt_stdstation xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <prt_pa_arrival>1006778082</prt_pa_arrival>
+                            <prt_pd_departure xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <prt_rap_refairport>PNQ
+                                <ref_airport>
+                                    <rap_additionalinfo xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_city xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_city3lc xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
+                                    <rap_distance xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_federalstate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_iata3lc>PNQ</rap_iata3lc>
+                                    <rap_iataregion xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_icao4lc>VAPO</rap_icao4lc>
+                                    <rap_internalcode>PNQ</rap_internalcode>
+                                    <rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
+                                    <rap_moduser>loaded</rap_moduser>
+                                    <rap_name1>PUNE (IAF)</rap_name1>
+                                    <rap_name2>PUNE</rap_name2>
+                                    <rap_name3>DOC7910 168 /JOON</rap_name3>
+                                    <rap_name4 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_name5 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_opscreatedind>N</rap_opscreatedind>
+                                    <rap_safeind>Y</rap_safeind>
+                                    <rap_timezone xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_rctr_country>IN</rap_rctr_country>
+                                    <rap_rctt_countrytype>I</rap_rctt_countrytype>
+                                    <rap_slg_additionallanguage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                </ref_airport>
+                            </prt_rap_refairport>
+                        </pl_routing>
+                    </pl_routing_list>
+                    <pl_specialservice_list/>
+                </pl_arrival>
+            </pt_pa_arrival>
+            <pt_pd_departure>1006778083
+                <pl_departure>
+                    <pd_acgt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_aczt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_adc xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_additionalinfo xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_aebt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_aegt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_aezt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_aght xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_airbridges xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_airtraffic xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_aldtnext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_aobt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_ardt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_arzt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_asat xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_asbt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_asrt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_assistingpax xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_atccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_atcfplstatus>N</pd_atcfplstatus>
+                    <pd_atot xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_billingcomments xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_billingstatus>I</pd_billingstatus>
+                    <pd_blockedind>N</pd_blockedind>
+                    <pd_bobt>2025-06-03T08:35:00Z</pd_bobt>
+                    <pd_busind>N</pd_busind>
+                    <pd_callsign>AXB241</pd_callsign>
+                    <pd_cancellationtime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_cashamount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_cashind>N</pd_cashind>
+                    <pd_cashlodgements xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_cbpind>N</pd_cbpind>
+                    <pd_chareablepermit xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_chargeableexempt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_chargeformno>0</pd_chargeformno>
+                    <pd_checkpointprofile xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_codeshareflightnumbers xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_counterareas xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_counters xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_createreason>create day process</pd_createreason>
+                    <pd_createtime>2025-06-02T16:40:42Z</pd_createtime>
+                    <pd_ctot xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_deicingcounter xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_delay xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_delayreasons xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_departurebelts xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_departuregates>HOLD</pd_departuregates>
+                    <pd_dir xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_displaycode>P</pd_displaycode>
+                    <pd_doorclosetime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_doublegatewayind>N</pd_doublegatewayind>
+                    <pd_dpistatus xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_dpitime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_eczt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_edit xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_eezt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_egateind>N</pd_egateind>
+                    <pd_enrc xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_eobt>2025-06-03T08:35:00Z</pd_eobt>
+                    <pd_eobtatc xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_eobtatcchangecnt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_eobtlocal>2025-06-03T08:28:00Z</pd_eobtlocal>
+                    <pd_erzt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_estimateddoorclosetime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_etot xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_exot>10</pd_exot>
+                    <pd_exotpad xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_externalflightnumber>IX241</pd_externalflightnumber>
+                    <pd_externalsystemid xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_failediatamessages>0</pd_failediatamessages>
+                    <pd_fic xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_flightnumber>IX241</pd_flightnumber>
+                    <pd_flightrule xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_fplactivationtime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_freezeind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_fuelrequired xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_gatedisplaycode xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_gatesuspendind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_gotogate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_gpu xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_gpuind>Y</pd_gpuind>
+                    <pd_iatapriority xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_idseq>1006778083</pd_idseq>
+                    <pd_ifplid xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_indicatorfield>------------</pd_indicatorfield>
+                    <pd_lineuptime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_lockind>N</pd_lockind>
+                    <pd_milestoneindstring>____________</pd_milestoneindstring>
+                    <pd_modtime>2025-06-03T06:35:47Z</pd_modtime>
+                    <pd_moduser>auto</pd_moduser>
+                    <pd_nextinfotime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_offbridge xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_operator>AXB</pd_operator>
+                    <pd_operatorflightnumber>IX241</pd_operatorflightnumber>
+                    <pd_opscomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_paymentmode>I</pd_paymentmode>
+                    <pd_paymentreference xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_pobt>2025-06-03T08:35:00Z</pd_pobt>
+                    <pd_prioind>N</pd_prioind>
+                    <pd_priorityfield xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_prmlevypax xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_prmpax xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_profile xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_publiccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_pushbacknecessaryind>N</pd_pushbacknecessaryind>
+                    <pd_ramp_handlingagent xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rap_destinationairport>PNQ</pd_rap_destinationairport>
+                    <pd_rap_nextairport>PNQ</pd_rap_nextairport>
+                    <pd_rco_concourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_registration xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rfst_flightstatus>S</pd_rfst_flightstatus>
+                    <pd_rha_agentbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rha_agentci xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rnc_naturecode>08</pd_rnc_naturecode>
+                    <pd_rnc_refnaturecode>10162</pd_rnc_refnaturecode>
+                    <pd_rrmk_remark xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rrwy_runway>01</pd_rrwy_runway>
+                    <pd_rsta_stand>HOLD</pd_rsta_stand>
+                    <pd_rsta_standardstand xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rstc_servicetypecode>J</pd_rstc_servicetypecode>
+                    <pd_rtot xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rtrm_terminal>1</pd_rtrm_terminal>
+                    <pd_runwayoccupancytime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_safeind>Y</pd_safeind>
+                    <pd_salt_cdmalarm xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_seats>189</pd_seats>
+                    <pd_secondcall xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_sequencerprio xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_sid xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_slotmsg xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_sobt>2025-06-03T08:35:00Z</pd_sobt>
+                    <pd_standchangecnt>0</pd_standchangecnt>
+                    <pd_standnote xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_stb xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_ste xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_stot xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_sts xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_susind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_tariffcode>BL</pd_tariffcode>
+                    <pd_taxitime>10</pd_taxitime>
+                    <pd_tobt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_tobtchanges>0</pd_tobtchanges>
+                    <pd_tobtconfirmationtime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_tobtstatus xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_totalcrew xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_totalextracrew xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_totalpax>0</pd_totalpax>
+                    <pd_transferpax xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_transitpax xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_tsat xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_tsatreason xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_ttot xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_ttotsent xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_vipcomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_vipind>N</pd_vipind>
+                    <pd_zerofreightind>N</pd_zerofreightind>
+                    <pd_zeromailind>N</pd_zeromailind>
+                    <pd_zeropaxind>N</pd_zeropaxind>
+                    <pd_zerototalweightind>N</pd_zerototalweightind>
+                    <pd_pd_mainflight xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_ract_aircrafttype>B38M
+                        <ref_aircrafttype>
+                            <ract_accessheight xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_averageseatcapacity xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_bonus>N</ract_bonus>
+                            <ract_bridgerequiredind>N</ract_bridgerequiredind>
+                            <ract_createtime>2025-04-25T13:52:24Z</ract_createtime>
+                            <ract_description>Boeing 737 Max 8</ract_description>
+                            <ract_firstbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_height>1230</ract_height>
+                            <ract_iatatype>7M8</ract_iatatype>
+                            <ract_icaotype>B38M</ract_icaotype>
+                            <ract_internalcode>B38M</ract_internalcode>
+                            <ract_landingweight xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_length>3947</ract_length>
+                            <ract_manufacturer xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_model xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_modtime>2025-04-28T13:18:36Z</ract_modtime>
+                            <ract_moduser>loaded</ract_moduser>
+                            <ract_mtow xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_mtta xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_mttd xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_mttt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_opscreatedind>N</ract_opscreatedind>
+                            <ract_payload xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_piercompatibleind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_propulsion xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_shadow xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_sizecategory>C</ract_sizecategory>
+                            <ract_symbolname xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_taxifuelperminute xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ract_widebodyind>N</ract_widebodyind>
+                            <ract_width>3592</ract_width>
+                            <ract_rnca_noisecategory xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        </ref_aircrafttype>
+                    </pd_ract_aircrafttype>
+                    <pd_ract_plannedact>B38M</pd_ract_plannedact>
+                    <pd_rac_aircraft>
+                        <ref_aircraft/>
+                    </pd_rac_aircraft>
+                    <pd_ral_airline>IX
+                        <ref_airline>
+                            <ral_2lc>IX</ral_2lc>
+                            <ral_3lc>AXB</ral_3lc>
+                            <ral_alliance xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ral_callsign>EXPRESS IND</ral_callsign>
+                            <ral_category xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ral_createtime>2025-04-16T09:19:45Z</ral_createtime>
+                            <ral_description>DOC8585 EDT185/RT</ral_description>
+                            <ral_formatflightnumberind>Y</ral_formatflightnumberind>
+                            <ral_ignorecreatedayind>N</ral_ignorecreatedayind>
+                            <ral_ignorestatisticsind>N</ral_ignorestatisticsind>
+                            <ral_internal>IX</ral_internal>
+                            <ral_lpccode>&#13;</ral_lpccode>
+                            <ral_modtime>2025-04-16T09:19:45Z</ral_modtime>
+                            <ral_moduser>loaded</ral_moduser>
+                            <ral_name>AIR INDIA EXPRESS</ral_name>
+                            <ral_opscreatedind>N</ral_opscreatedind>
+                            <ral_paymentmode>I</ral_paymentmode>
+                            <ral_registrationcopyind>Y</ral_registrationcopyind>
+                            <ral_rha_agentbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ral_rha_agentci xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ral_rtrm_terminal xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ral_rctr_country>IN</ral_rctr_country>
+                        </ref_airline>
+                    </pd_ral_airline>
+                    <pd_rap_refdestinationairport>PNQ
+                        <ref_airport>
+                            <rap_city xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_city3lc xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
+                            <rap_distance xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_iata3lc>PNQ</rap_iata3lc>
+                            <rap_iataregion xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_icao4lc>VAPO</rap_icao4lc>
+                            <rap_internalcode>PNQ</rap_internalcode>
+                            <rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
+                            <rap_moduser>loaded</rap_moduser>
+                            <rap_name1>PUNE (IAF)</rap_name1>
+                            <rap_name2>PUNE</rap_name2>
+                            <rap_name3>DOC7910 168 /JOON</rap_name3>
+                            <rap_name4 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_name5 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_safeind>Y</rap_safeind>
+                            <rap_timezone xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_rctr_country>IN</rap_rctr_country>
+                            <rap_rctt_countrytype>I</rap_rctt_countrytype>
+                            <rap_slg_additionallanguage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_syst_station xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ref_airportversion_list/>
+                        </ref_airport>
+                    </pd_rap_refdestinationairport>
+                    <pd_rap_refnextairport>PNQ
+                        <ref_airport>
+                            <rap_city xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_city3lc xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
+                            <rap_defaultarrivalroutepoint xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_defaultdepartureroutepoint xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_distance xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_iata3lc>PNQ</rap_iata3lc>
+                            <rap_iataregion xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_icao4lc>VAPO</rap_icao4lc>
+                            <rap_internalcode>PNQ</rap_internalcode>
+                            <rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
+                            <rap_moduser>loaded</rap_moduser>
+                            <rap_name1>PUNE (IAF)</rap_name1>
+                            <rap_name2>PUNE</rap_name2>
+                            <rap_name3>DOC7910 168 /JOON</rap_name3>
+                            <rap_name4 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_name5 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_safeind>Y</rap_safeind>
+                            <rap_timezone xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_rctr_country>IN</rap_rctr_country>
+                            <rap_rctt_countrytype>I</rap_rctt_countrytype>
+                            <rap_slg_additionallanguage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rap_syst_station xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <ref_airportversion_list/>
+                        </ref_airport>
+                    </pd_rap_refnextairport>
+                    <pd_rcdms_status>
+                        <ref_cdmstatus/>
+                    </pd_rcdms_status>
+                    <pd_rco_refconcourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rctt_countrytype>I
+                        <ref_countrytype>
+                            <rctt_availableforcountryind>Y</rctt_availableforcountryind>
+                            <rctt_code>I</rctt_code>
+                            <rctt_createtime>2025-04-18T00:00:00Z</rctt_createtime>
+                            <rctt_description>International</rctt_description>
+                            <rctt_internalcode>T</rctt_internalcode>
+                            <rctt_modtime>2025-04-18T00:00:00Z</rctt_modtime>
+                            <rctt_moduser>loaded</rctt_moduser>
+                        </ref_countrytype>
+                    </pd_rctt_countrytype>
+                    <pd_rfst_refflightstatus>DS
+                        <ref_flightstatus>
+                            <rfst_arrdepind>D</rfst_arrdepind>
+                            <rfst_code>S</rfst_code>
+                            <rfst_code3l>PLN</rfst_code3l>
+                            <rfst_createtime>2025-04-17T13:14:48Z</rfst_createtime>
+                            <rfst_description>Scheduled, initial status after flight was created</rfst_description>
+                            <rfst_idcode>DS</rfst_idcode>
+                            <rfst_legacystatus>S</rfst_legacystatus>
+                            <rfst_minimumturnorder xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rfst_modtime>2025-04-17T13:14:48Z</rfst_modtime>
+                            <rfst_moduser>loaded</rfst_moduser>
+                            <rfst_order>0</rfst_order>
+                            <rfst_rrmk_remark xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rfst_timestamp>PdSobt</rfst_timestamp>
+                            <rfst_rrmk_refremark xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        </ref_flightstatus>
+                    </pd_rfst_refflightstatus>
+                    <pd_rha_refagentbag xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rha_refagentci xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rmsc_scenario>1</pd_rmsc_scenario>
+                    <pd_rrmk_refremark xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pd_rrwy_refrunway>01@BKK
+                        <ref_runway>
+                            <rrwy_activeind>Y</rrwy_activeind>
+                            <rrwy_code>01</rrwy_code>
+                            <rrwy_comment>Runway 01</rrwy_comment>
+                            <rrwy_createtime>2025-05-03T11:49:02Z</rrwy_createtime>
+                            <rrwy_description>Runway 01</rrwy_description>
+                            <rrwy_idcode>01@BKK</rrwy_idcode>
+                            <rrwy_length xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_modtime>2025-05-03T12:04:55Z</rrwy_modtime>
+                            <rrwy_moduser>admin</rrwy_moduser>
+                            <rrwy_restriction xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_rrwy_runwaysystem xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_runwaytract xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_rwytype>R</rrwy_rwytype>
+                            <rrwy_width xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_rrwy_refrunwaysystem xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rrwy_syst_station>BKK</rrwy_syst_station>
+                        </ref_runway>
+                    </pd_rrwy_refrunway>
+                    <pd_rsta_refstand>HOLD@1
+                        <ref_stand>
+                            <rsta_angle xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_capacity>-1</rsta_capacity>
+                            <rsta_cctvstream xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_code>HOLD</rsta_code>
+                            <rsta_createtime>2025-03-30T00:00:00Z</rsta_createtime>
+                            <rsta_description>Stand HOLD</rsta_description>
+                            <rsta_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_dockingind>N</rsta_dockingind>
+                            <rsta_elevatorind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_eqconstraint>A</rsta_eqconstraint>
+                            <rsta_externalid xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_fuelpitind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_gpuind>N</rsta_gpuind>
+                            <rsta_gpuname xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_idcode>HOLD@1</rsta_idcode>
+                            <rsta_latitude xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_length xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_longitude xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_marsind>N</rsta_marsind>
+                            <rsta_modtime>2025-03-30T00:00:00Z</rsta_modtime>
+                            <rsta_moduser>bkranthi</rsta_moduser>
+                            <rsta_owner xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_rco_concourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_rgt_gate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_validfrom xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_validto xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_width xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_pdgs_status xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_ract_maximumaircrafttype xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_ral_airline xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_rctt_countrytype>A</rsta_rctt_countrytype>
+                            <rsta_rgt_refgate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rsta_rmsc_scenario>1</rsta_rmsc_scenario>
+                            <rsta_rsna_area xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        </ref_stand>
+                    </pd_rsta_refstand>
+                    <pd_rstc_refservicetypecode>J@BKK
+                        <ref_servicetypecode>
+                            <rstc_arrivalbridgeopind>N</rstc_arrivalbridgeopind>
+                            <rstc_arrivalbusind>N</rstc_arrivalbusind>
+                            <rstc_arrivalgatetind>Y</rstc_arrivalgatetind>
+                            <rstc_arrivaltractorind>N</rstc_arrivaltractorind>
+                            <rstc_baggagebeltind>Y</rstc_baggagebeltind>
+                            <rstc_checkcgoloadind>N</rstc_checkcgoloadind>
+                            <rstc_checkincounterind>Y</rstc_checkincounterind>
+                            <rstc_checkmailloadind>N</rstc_checkmailloadind>
+                            <rstc_checkpaxloadind>N</rstc_checkpaxloadind>
+                            <rstc_code>J</rstc_code>
+                            <rstc_comment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rstc_createtime>2025-04-17T11:34:16Z</rstc_createtime>
+                            <rstc_departurebeltind>N</rstc_departurebeltind>
+                            <rstc_departurebridgeopind>N</rstc_departurebridgeopind>
+                            <rstc_departurebusind>N</rstc_departurebusind>
+                            <rstc_departuregatetind>Y</rstc_departuregatetind>
+                            <rstc_departureloungeind>N</rstc_departureloungeind>
+                            <rstc_departuresecurityind>N</rstc_departuresecurityind>
+                            <rstc_departuretractorind>N</rstc_departuretractorind>
+                            <rstc_description>Passenger Scheduled</rstc_description>
+                            <rstc_displaycode>P</rstc_displaycode>
+                            <rstc_exempt xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rstc_iatadefault>N</rstc_iatadefault>
+                            <rstc_ignorestatisticsind>Y</rstc_ignorestatisticsind>
+                            <rstc_infoserviceind>N</rstc_infoserviceind>
+                            <rstc_modtime>2025-05-08T15:34:27Z</rstc_modtime>
+                            <rstc_moduser>sfis</rstc_moduser>
+                            <rstc_standind>Y</rstc_standind>
+                            <rstc_statisticcode xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <rstc_ristc_iatacode>J</rstc_ristc_iatacode>
+                        </ref_servicetypecode>
+                    </pd_rstc_refservicetypecode>
+                    <pd_salt_refcdmalarm xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pl_atcdeparture_list/>
+                    <pl_transferpax_list/>
+                    <pl_cdmstatus_list/>
+                    <pl_containerinfo_list/>
+                    <pl_departureaddinfo_list/>
+                    <pl_departurebelt_list/>
+                    <pl_departuregate_list>
+                        <pl_departuregate>
+                            <pdg_airbridgeind>N</pdg_airbridgeind>
+                            <pdg_beginactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdg_begingateactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdg_begingateplan>2025-06-03T07:55:00Z</pdg_begingateplan>
+                            <pdg_beginplan>2025-06-03T07:55:00Z</pdg_beginplan>
+                            <pdg_createtime>2025-06-02T16:40:42Z</pdg_createtime>
+                            <pdg_displaycode>I</pdg_displaycode>
+                            <pdg_endactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdg_endplan>2025-06-03T08:35:00Z</pdg_endplan>
+                            <pdg_idseq>1001992250</pdg_idseq>
+                            <pdg_lockind>N</pdg_lockind>
+                            <pdg_modtime>2025-06-02T16:40:42Z</pdg_modtime>
+                            <pdg_moduser>day</pdg_moduser>
+                            <pdg_note xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdg_pd_flightnumber>IX241</pdg_pd_flightnumber>
+                            <pdg_publiccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdg_rgt_gate>HOLD</pdg_rgt_gate>
+                            <pdg_rgt_lastgate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdg_rgt_standardgate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdg_seqno>1</pdg_seqno>
+                            <pdg_status>S</pdg_status>
+                            <pdg_pd_departure>1006778083</pdg_pd_departure>
+                            <pdg_rdo_displayobject xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdg_rdt_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdg_rgt_refgate>HOLD@1
+                                <ref_gate>
+                                    <rgt_arrdepind>B</rgt_arrdepind>
+                                    <rgt_capacity>-1</rgt_capacity>
+                                    <rgt_cctvstream xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_code>HOLD</rgt_code>
+                                    <rgt_createtime>2025-03-30T00:00:00Z</rgt_createtime>
+                                    <rgt_description>Gate HOLD</rgt_description>
+                                    <rgt_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_egateavailableind>N</rgt_egateavailableind>
+                                    <rgt_gatetype>T</rgt_gatetype>
+                                    <rgt_idcode>HOLD@1</rgt_idcode>
+                                    <rgt_modtime>2025-03-30T00:00:00Z</rgt_modtime>
+                                    <rgt_moduser>bkranthi</rgt_moduser>
+                                    <rgt_paxloadingbridgeind>N</rgt_paxloadingbridgeind>
+                                    <rgt_ral_airline xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rco_concourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_validfrom xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_validto xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rco_refconcourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rcpa_areabordercontrol xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rcpa_areasecurity xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rctt_countrytype>A</rgt_rctt_countrytype>
+                                    <rgt_rdlg_refdeparturelounge xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rgt_rmsc_scenario>1</rgt_rmsc_scenario>
+                                </ref_gate>
+                            </pdg_rgt_refgate>
+                            <pdg_rmsc_scenario>1</pdg_rmsc_scenario>
+                        </pl_departuregate>
+                    </pl_departuregate_list>
+                    <pl_desk_list>
+                        <pl_desk>
+                            <pdk_beginactual>2025-06-03T05:05:00Z</pdk_beginactual>
+                            <pdk_beginplan>2025-06-03T05:05:00Z</pdk_beginplan>
+                            <pdk_cciind>N</pdk_cciind>
+                            <pdk_checkinclassid xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_checkintype>R</pdk_checkintype>
+                            <pdk_createtime>2025-06-02T16:40:42Z</pdk_createtime>
+                            <pdk_displaycode>P</pdk_displaycode>
+                            <pdk_endactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_endplan>2025-06-03T07:35:00Z</pdk_endplan>
+                            <pdk_idseq>1004021348</pdk_idseq>
+                            <pdk_lockind>N</pdk_lockind>
+                            <pdk_modtime>2025-06-03T05:05:17Z</pdk_modtime>
+                            <pdk_moduser>auto</pdk_moduser>
+                            <pdk_note xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_pday_day xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_pd_flightnumber>IX241</pdk_pd_flightnumber>
+                            <pdk_publiccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_rcnt_counter>HOLD</pdk_rcnt_counter>
+                            <pdk_rcnt_lastcounter xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_rcnt_mastercci xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_seqno>1</pdk_seqno>
+                            <pdk_status>B</pdk_status>
+                            <pdk_pd_departure>1006778083</pdk_pd_departure>
+                            <pdk_rcnt_refcounter>HOLD@1
+                                <ref_counter>
+                                    <rcnt_baggagebeltind>N</rcnt_baggagebeltind>
+                                    <rcnt_baggagebeltlocation xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_baggagetagprinterind>N</rcnt_baggagetagprinterind>
+                                    <rcnt_capacity>-1</rcnt_capacity>
+                                    <rcnt_ccialternatetext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_cctvstream xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_code>HOLD</rcnt_code>
+                                    <rcnt_countergroup xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_createtime>2025-03-30T00:00:00Z</rcnt_createtime>
+                                    <rcnt_cuteequipmentind>N</rcnt_cuteequipmentind>
+                                    <rcnt_description>Counter/Desk HOLD</rcnt_description>
+                                    <rcnt_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_externalcode xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_idcode>HOLD@1</rcnt_idcode>
+                                    <rcnt_leasedind>N</rcnt_leasedind>
+                                    <rcnt_modtime>2025-03-30T00:00:00Z</rcnt_modtime>
+                                    <rcnt_moduser>bkranthi</rcnt_moduser>
+                                    <rcnt_ownerofcheckinset xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_phone xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_publiccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rco_concourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_renter xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_schedulecharterind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_ticketprinterind>N</rcnt_ticketprinterind>
+                                    <rcnt_type>R</rcnt_type>
+                                    <rcnt_validfrom xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_validto xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_ral_airline xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rbhs_area xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rcna_area xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rco_refconcourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rcpa_areasecurity xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rctt_countrytype>A</rcnt_rctt_countrytype>
+                                    <rcnt_rmsc_scenario>1</rcnt_rmsc_scenario>
+                                </ref_counter>
+                            </pdk_rcnt_refcounter>
+                            <pdk_rcnt_refmastercci xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_rdo_displayobject>
+                                <ref_displayobject/>
+                            </pdk_rdo_displayobject>
+                            <pdk_rdt_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_rmsc_scenario>1</pdk_rmsc_scenario>
+                        </pl_desk>
+                        <pl_desk>
+                            <pdk_beginactual>2025-06-03T05:05:00Z</pdk_beginactual>
+                            <pdk_beginplan>2025-06-03T05:05:00Z</pdk_beginplan>
+                            <pdk_cciind>N</pdk_cciind>
+                            <pdk_checkinclassid xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_checkintype>R</pdk_checkintype>
+                            <pdk_createtime>2025-06-02T16:40:42Z</pdk_createtime>
+                            <pdk_displaycode>P</pdk_displaycode>
+                            <pdk_endactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_endplan>2025-06-03T07:35:00Z</pdk_endplan>
+                            <pdk_idseq>1004021349</pdk_idseq>
+                            <pdk_lockind>N</pdk_lockind>
+                            <pdk_modtime>2025-06-03T05:05:17Z</pdk_modtime>
+                            <pdk_moduser>auto</pdk_moduser>
+                            <pdk_note xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_pday_day xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_pd_flightnumber>IX241</pdk_pd_flightnumber>
+                            <pdk_publiccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_rcnt_counter>HOLD</pdk_rcnt_counter>
+                            <pdk_rcnt_lastcounter xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_rcnt_mastercci xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_seqno>2</pdk_seqno>
+                            <pdk_status>B</pdk_status>
+                            <pdk_pd_departure>1006778083</pdk_pd_departure>
+                            <pdk_rcnt_refcounter>HOLD@1
+                                <ref_counter>
+                                    <rcnt_baggagebeltind>N</rcnt_baggagebeltind>
+                                    <rcnt_baggagebeltlocation xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_baggagetagprinterind>N</rcnt_baggagetagprinterind>
+                                    <rcnt_capacity>-1</rcnt_capacity>
+                                    <rcnt_ccialternatetext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_cctvstream xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_code>HOLD</rcnt_code>
+                                    <rcnt_countergroup xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_createtime>2025-03-30T00:00:00Z</rcnt_createtime>
+                                    <rcnt_cuteequipmentind>N</rcnt_cuteequipmentind>
+                                    <rcnt_description>Counter/Desk HOLD</rcnt_description>
+                                    <rcnt_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_externalcode xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_idcode>HOLD@1</rcnt_idcode>
+                                    <rcnt_leasedind>N</rcnt_leasedind>
+                                    <rcnt_modtime>2025-03-30T00:00:00Z</rcnt_modtime>
+                                    <rcnt_moduser>bkranthi</rcnt_moduser>
+                                    <rcnt_ownerofcheckinset xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_phone xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_publiccomment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rco_concourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_renter xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_schedulecharterind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_ticketprinterind>N</rcnt_ticketprinterind>
+                                    <rcnt_type>R</rcnt_type>
+                                    <rcnt_validfrom xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_validto xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_ral_airline xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rbhs_area xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rcna_area xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rco_refconcourse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rcpa_areasecurity xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rcnt_rctt_countrytype>A</rcnt_rctt_countrytype>
+                                    <rcnt_rmsc_scenario>1</rcnt_rmsc_scenario>
+                                </ref_counter>
+                            </pdk_rcnt_refcounter>
+                            <pdk_rcnt_refmastercci xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_rdo_displayobject>
+                                <ref_displayobject/>
+                            </pdk_rdo_displayobject>
+                            <pdk_rdt_displaytext xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <pdk_rmsc_scenario>1</pdk_rmsc_scenario>
+                        </pl_desk>
+                    </pl_desk_list>
+                    <pl_delayreason_list/>
+                    <pl_dpi_list/>
+                    <pl_departure_list/>
+                    <pl_genericdepartureres_list/>
+                    <pl_handlingagent_list/>
+                    <pl_routing_list>
+                        <pl_routing>
+                            <prt_createtime>2025-06-02T16:40:42Z</prt_createtime>
+                            <prt_displaycode>P</prt_displaycode>
+                            <prt_idseq>1004390808</prt_idseq>
+                            <prt_modtime>2025-06-02T16:40:42Z</prt_modtime>
+                            <prt_moduser>day</prt_moduser>
+                            <prt_numberinleg>99</prt_numberinleg>
+                            <prt_rap_airport>PNQ</prt_rap_airport>
+                            <prt_rtr_trafficrestriction xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <prt_stastation xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <prt_stdstation xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <prt_pa_arrival xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <prt_pd_departure>1006778083</prt_pd_departure>
+                            <prt_rap_refairport>PNQ
+                                <ref_airport>
+                                    <rap_additionalinfo xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_city xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_city3lc xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
+                                    <rap_distance xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_federalstate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_iata3lc>PNQ</rap_iata3lc>
+                                    <rap_iataregion xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_icao4lc>VAPO</rap_icao4lc>
+                                    <rap_internalcode>PNQ</rap_internalcode>
+                                    <rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
+                                    <rap_moduser>loaded</rap_moduser>
+                                    <rap_name1>PUNE (IAF)</rap_name1>
+                                    <rap_name2>PUNE</rap_name2>
+                                    <rap_name3>DOC7910 168 /JOON</rap_name3>
+                                    <rap_name4 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_name5 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_opscreatedind>N</rap_opscreatedind>
+                                    <rap_safeind>Y</rap_safeind>
+                                    <rap_timezone xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    <rap_rctr_country>IN</rap_rctr_country>
+                                    <rap_rctt_countrytype>I</rap_rctt_countrytype>
+                                    <rap_slg_additionallanguage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                </ref_airport>
+                            </prt_rap_refairport>
+                        </pl_routing>
+                    </pl_routing_list>
+                    <pl_specialservice_list/>
+                </pl_departure>
+            </pt_pd_departure>
+            <pt_rmsc_scenario>1</pt_rmsc_scenario>
+            <pt_rsta_refcurrentstand>
+                <ref_stand/>
+            </pt_rsta_refcurrentstand>
+            <pl_stand_list>
+                <pl_stand action="update">
+                    <pst_beginactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_beginplan old="2025-06-03T07:07:00Z" action="update">2025-06-03T07:17:00Z</pst_beginplan>
+                    <pst_comments xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_createtime>2025-06-02T16:40:42Z</pst_createtime>
+                    <pst_displaycode>I</pst_displaycode>
+                    <pst_endactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_endplan>2025-06-03T08:35:00Z</pst_endplan>
+                    <pst_extraindicator xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_gpuunits xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_idseq>1003528979</pst_idseq>
+                    <pst_lockind>N</pst_lockind>
+                    <pst_modtime old="2025-06-03T05:25:37Z" action="update">2025-06-03T07:07:19Z</pst_modtime>
+                    <pst_moduser>auto</pst_moduser>
+                    <pst_note xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_order>0</pst_order>
+                    <pst_rsta_laststand xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_rsta_reftowstand xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_rsta_stand>HOLD</pst_rsta_stand>
+                    <pst_towbarind xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_towbeginactual xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_towbeginearliest xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_towbeginlatest xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_towbeginplan xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_towbeginproposed xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_towcallsign xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_towflightnumber xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_towindicator xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_towrequesttime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_towrestriction xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <pst_pt_turn>1005406380</pst_pt_turn>
+                    <pst_rmsc_scenario>1</pst_rmsc_scenario>
+                    <pst_rsta_refstand>HOLD@1</pst_rsta_refstand>
+                </pl_stand>
+            </pl_stand_list>
+        </pl_turn>
+    </soap-env:Body>
+</soap-env:Envelope>
