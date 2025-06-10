@@ -6,9 +6,20 @@
     <!-- 🔹 INFO + DEBUG + WARN log -->
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/app.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- วันที่ + index (สำหรับหลายไฟล์ในวันเดียวกัน) -->
+	        <fileNamePattern>logs/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	
+	        <!-- หมายถึงใช้การ split ตามขนาด + เวลา -->
+	        <timeBasedFileNamingAndTriggeringPolicy
+	            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP" />
+	
+	        <!-- กำหนดขนาดสูงสุดของแต่ละไฟล์ -->
+	        <maxFileSize>10MB</maxFileSize>
+	
+	        <!-- เก็บไฟล์ย้อนหลัง 10 วัน -->
             <maxHistory>10</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
@@ -23,9 +34,19 @@
     <!-- 🔴 ERROR log -->
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/error.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            
+            <!-- หมายถึงใช้การ split ตามขนาด + เวลา -->
+	        <timeBasedFileNamingAndTriggeringPolicy
+	            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP" />
+	
+	        <!-- กำหนดขนาดสูงสุดของแต่ละไฟล์ -->
+	        <maxFileSize>10MB</maxFileSize>
+	
+	        <!-- เก็บไฟล์ย้อนหลัง 10 วัน -->
             <maxHistory>10</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
