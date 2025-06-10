@@ -7,8 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -17,7 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import sf.sfis.miniesb.service.RedisService;
 
-@RestController
+//@RestController
+@Component
 @RequiredArgsConstructor
 public class RedisController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedisController.class);
@@ -32,7 +32,7 @@ public class RedisController {
 	// ✅ API ใส่ข้อมูลใน Redis (แทนค่าตัวเก่าทุกครั้ง)
 //    @PostMapping("/cache-data")
 //    public ResponseEntity<String> cacheData(@RequestParam String hopo) {
-	public String saveData(@RequestParam String hopo) {
+	public String saveData(String hopo) {
 		try {
 //            String ds = ds.toUpperCase();
 			List<String> lstDatasource = Arrays.asList("DEP", "ARR", "GATE", "BELT", "COUNTER");
