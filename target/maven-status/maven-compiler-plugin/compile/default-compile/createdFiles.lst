@@ -12,6 +12,7 @@ sf\sfis\miniesb\esb\realtimeoutbound\MSG$MSGSTREAMOUT$INFOBJCOUNTER.class
 sf\sfis\miniesb\esb\realtimeinbound\RealTimeMessageIN$MSG$MSGSTREAMIN$MSGOBJECTS$STATIC$RESOURCES$COUNTERS$STATICCOUNTER.class
 sf\sfis\miniesb\repository\FidsFinalcallHistoryRepository.class
 sf\sfis\miniesb\aodb\PlTurn$PtPdDeparture$PlDeparture$PlAtcdepartureList$PlAtcdeparture.class
+sf\sfis\miniesb\model\FidsCcatabId.class
 sf\sfis\miniesb\aodb\PlTurn$PtPdDeparture$PlDeparture$PdRstcRefservicetypecode.class
 sf\sfis\miniesb\esb\realtimeinbound\MSG$MSGSTREAMIN$MSGOBJECTS$INFOBJVDGS$VDGSARR.class
 sf\sfis\miniesb\esb\realtimeinbound\MSG$MSGSTREAMIN$MSGOBJECTS$BULKDATA.class

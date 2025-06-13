@@ -91,8 +91,8 @@ public class ESBResponseService {
 			if (fidsAfttab != null) {
 				fidsAfttab.setHopo(hopo);
 				FieldInspector.replaceHoldWithEmpty(fidsAfttab);
-				fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
 				fidsCcatabService.updateCcatab(fidsAfttab);
+				fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
 				if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
 					fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
 				}

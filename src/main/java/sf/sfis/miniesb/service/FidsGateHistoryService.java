@@ -2,6 +2,8 @@ package sf.sfis.miniesb.service;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -15,13 +17,11 @@ import sf.sfis.miniesb.model.FidsAfttab;
 import sf.sfis.miniesb.model.FidsGateHistory;
 import sf.sfis.miniesb.repository.FidsAfttabRepository;
 import sf.sfis.miniesb.repository.FidsGateHistoryRepository;
-import sf.sfis.miniesb.utility.DateTimeFormatHelper;
 
 @Service
 @RequiredArgsConstructor
 public class FidsGateHistoryService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FidsGateHistoryService.class);
-	private final DateTimeFormatHelper dateTimeFormatHelper;
 	private final FidsGateHistoryRepository fidsGateHistoryRepository;
 	private final FidsAfttabRepository fidsAfttabRepository;
 	
@@ -102,8 +102,8 @@ public class FidsGateHistoryService {
 		}
 		
 		boolean result = false;
-		fidsAfttab.setGtd1(fidsAfttab.getGtd1().trim().length()>0?fidsAfttab.getGtd1():"     ");
-		fidsAfttab.setGtd2(fidsAfttab.getGtd2().trim().length()>0?fidsAfttab.getGtd2():"     ");
+		fidsAfttab.setGtd1(fidsAfttab.getGtd1()!=null&&fidsAfttab.getGtd1().trim().length()>0?fidsAfttab.getGtd1():"     ");
+		fidsAfttab.setGtd2(fidsAfttab.getGtd2()!=null&&fidsAfttab.getGtd2().trim().length()>0?fidsAfttab.getGtd2():"     ");
 		
 		FidsGateHistory fidsGateHistory = new FidsGateHistory();
 		fidsGateHistory.setUrno(fidsAfttab.getUrno().toString());
@@ -111,20 +111,20 @@ public class FidsGateHistoryService {
 			deleteFidsGateHistory(fidsGateHistory);
 		}
 		
-		Optional<FidsAfttab> queryFidsAfttab = fidsAfttabRepository.findById(fidsAfttab.getUrno());
-		if (queryFidsAfttab.isPresent()) {
-		    FidsAfttab oldFidsAfttab = queryFidsAfttab.get();
-		    if(oldFidsAfttab.getGtd1()!=null&&oldFidsAfttab.getGtd1().trim().equals(fidsAfttab.getGtd1().trim()) && oldFidsAfttab.getGtd2()!=null&&oldFidsAfttab.getGtd2().trim().equals(fidsAfttab.getGtd2().trim())) {
+		Optional<FidsGateHistory> queryFidsGateHistory = fidsGateHistoryRepository.findById(fidsAfttab.getUrno().toString());
+		if (queryFidsGateHistory.isPresent()) {
+			FidsGateHistory oldFidsGateHistory = queryFidsGateHistory.get();
+		    if(oldFidsGateHistory.getNewgate1()!=null&&oldFidsGateHistory.getNewgate1().trim().equals(fidsAfttab.getGtd1().trim()) && oldFidsGateHistory.getNewgate2()!=null&&oldFidsGateHistory.getNewgate2().trim().equals(fidsAfttab.getGtd2().trim())) {
 				//No Change
-			}else if(oldFidsAfttab.getGtd1().trim().length()<=0 && oldFidsAfttab.getGtd2().trim().length()<=0) {
+			}else if(oldFidsGateHistory.getNewgate1()!=null&&oldFidsGateHistory.getNewgate1().trim().length()<=0 && oldFidsGateHistory.getNewgate2()!=null&&oldFidsGateHistory.getNewgate2().trim().length()<=0) {
 				//Just Add
 			}else {
-				LOGGER.info("Gate change detected!! URNO="+fidsAfttab.getUrno()+" GTD1 "+fidsAfttab.getGtd1()+" GTD2 "+fidsAfttab.getGtd2());
-				fidsGateHistory.setUpdateTime(dateTimeFormatHelper.getTimestamp());
+				LOGGER.info("Gate change detected!! URNO="+fidsAfttab.getUrno()+" New GTD1 "+fidsAfttab.getGtd1()+"("+oldFidsGateHistory.getNewgate1()+") , New GTD2 "+fidsAfttab.getGtd2()+"("+oldFidsGateHistory.getNewgate2()+")");
+				fidsGateHistory.setUpdateTime(OffsetDateTime.now(ZoneOffset.UTC));
 				fidsGateHistory.setNewgate1(fidsAfttab.getGtd1());
 				fidsGateHistory.setNewgate2(fidsAfttab.getGtd2());
-				fidsGateHistory.setOldgate1(oldFidsAfttab.getGtd1());
-				fidsGateHistory.setOldgate2(oldFidsAfttab.getGtd2());
+				fidsGateHistory.setOldgate1(oldFidsGateHistory.getNewgate1());
+				fidsGateHistory.setOldgate2(oldFidsGateHistory.getNewgate2());
 				fidsGateHistory.setFlno(fidsAfttab.getFlno());
 				fidsGateHistory.setHopo(fidsAfttab.getHopo());
 				fidsGateHistory.setSobt(fidsAfttab.getSobt());

@@ -1,6 +1,8 @@
 package sf.sfis.miniesb.service;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -12,13 +14,11 @@ import lombok.RequiredArgsConstructor;
 import sf.sfis.miniesb.model.FidsAfttab;
 import sf.sfis.miniesb.model.FidsFinalcallHistory;
 import sf.sfis.miniesb.repository.FidsFinalcallHistoryRepository;
-import sf.sfis.miniesb.utility.DateTimeFormatHelper;
 
 @Service
 @RequiredArgsConstructor
 public class FidsFinalcallHistoryService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FidsFinalcallHistoryService.class);
-	private final DateTimeFormatHelper dateTimeFormatHelper;
 	private final FidsFinalcallHistoryRepository fidsFinalcallHistoryRepository;
 	
 	@Transactional
@@ -52,7 +52,7 @@ public class FidsFinalcallHistoryService {
 		}else {
 			if(fidsAfttab.getRemp().equals("FNC")) {//Reset FNC 
 				LOGGER.info("Reset Final Call for URNO "+fidsFinalcallHistory.getUrno());
-				fidsFinalcallHistory.setUpdateTime(dateTimeFormatHelper.getTimestamp());
+				fidsFinalcallHistory.setUpdateTime(Timestamp.from(Instant.now()));
 				saveFidsFinalcallHistory(fidsFinalcallHistory);
 			}
 		}

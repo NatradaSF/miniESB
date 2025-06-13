@@ -2,24 +2,28 @@ package sf.sfis.miniesb.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
+@IdClass(FidsCcatabId.class)
 @Data
 @Table(name = "FIDS_CCATAB")
 public class FidsCcatab implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@Column(name = "FLNU")
 	private BigDecimal flnu;
+	
+	@Id
+	@Column(name = "CKIC", length = 5)
+	private String ckic;
 	
 	@Column(name = "ACT3", length = 20)
 	private String act3;
@@ -41,9 +45,6 @@ public class FidsCcatab implements Serializable {
 	
 	@Column(name = "CKES", length = 14)
 	private String ckes;
-	
-	@Column(name = "CKIC", length = 5)
-	private String ckic;
 	
 	@Column(name = "CKIF", length = 1)
 	private String ckif;

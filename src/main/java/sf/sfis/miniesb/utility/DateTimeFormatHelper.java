@@ -10,30 +10,41 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DateTimeFormatHelper {
-	ZonedDateTime nowUtc = ZonedDateTime.now(ZoneOffset.UTC);
+	ZoneId utcZone = ZoneOffset.UTC;
+	ZoneId localZone = ZoneId.of("Asia/Bangkok");
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     
-	public String getTimestamp() {
-        String formattedUtc = nowUtc.format(formatter);
-        return formattedUtc;
-	}
-	
-	public String convertFormatUTC(String dateTimeStr) {
-		ZonedDateTime zdt = ZonedDateTime.parse(dateTimeStr);
-		String formattedUtc = zdt.format(formatter);
-		return formattedUtc;
+//	public String getTimestamp() {
+//		ZonedDateTime nowUtc = ZonedDateTime.now(utcZone);
+//        String formattedUtc = nowUtc.format(formatter);
+//        return formattedUtc;
+//	}
+//	
+//	public String convertFormatUTC(String dateTimeStr) {
+//		ZonedDateTime zdt = ZonedDateTime.parse(dateTimeStr);
+//		String formattedUtc = zdt.format(formatter);
+//		return formattedUtc;
+//	}
+
+	public String convertUTCToLocal(String utcDateTimeStr) {
+		// แปลงเป็น LocalDateTime
+		LocalDateTime utcDateTime = LocalDateTime.parse(utcDateTimeStr, formatter);
+		// ผูกกับโซนเวลา
+		ZonedDateTime utcZoned = utcDateTime.atZone(utcZone);
+		// แปลงเป็นเวลา UTC
+		ZonedDateTime zonedLocal = utcZoned.withZoneSameInstant(localZone);
+		String formattedLocal = formatter.format(zonedLocal);
+		return formattedLocal;
 	}
 
 	public String convertLocalToUTC(String localDateTimeStr) {
-		// สมมติว่า local time เป็นเวลาประเทศไทย
-		ZoneId localZone = ZoneId.of("Asia/Bangkok");
 		// แปลงเป็น LocalDateTime
 		LocalDateTime localDateTime = LocalDateTime.parse(localDateTimeStr);
 		// ผูกกับโซนเวลา
 		ZonedDateTime localZoned = localDateTime.atZone(localZone);
 		// แปลงเป็นเวลา UTC
-		ZonedDateTime nowUtc = localZoned.withZoneSameInstant(ZoneOffset.UTC);
-		String formattedUtc = nowUtc.format(formatter);
+		ZonedDateTime zonedUtc = localZoned.withZoneSameInstant(utcZone);
+		String formattedUtc = zonedUtc.format(formatter);
 		return formattedUtc;
 	}
 }

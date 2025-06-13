@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,12 +39,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import lombok.RequiredArgsConstructor;
 import sf.sfis.miniesb.model.FidsAfttab;
 import sf.sfis.miniesb.model.FidsCcatab;
 
 @Component
+@RequiredArgsConstructor
 public class TranformFidsAfttab {
 	private final Logger LOGGER = LoggerFactory.getLogger(TranformFidsAfttab.class);
+	private final DateTimeFormatHelper dateTimeFormatHelper;
 	FidsAfttab fidsAfttab = null;
 	Document doc = null;
 	XPath xpath = XPathFactory.newInstance().newXPath();
@@ -186,7 +189,7 @@ public class TranformFidsAfttab {
 	/* Get value for list of fields ex.Belt data, Gate data*/
 	/* Get value for shared fields ex.VIA3=ORG3, LAND=ALDT, AIRB=ATOT, ONBL=AIBT, OFBL=AOBT */
 	private void fixPaths(Element element, String adid) {
-		Set<String> bigDecimalFields = new HashSet<>(
+		Set<String> bigDecimalFields = new LinkedHashSet<>(
 				Arrays.asList("/pl_departure/pd_idseq", "/pl_arrival/pa_idseq",
 						"/pl_turn/pt_pd_departure", "/pl_turn/pt_pa_arrival"));
 		Map<String, BiConsumer<FidsAfttab, BigDecimal>> pathMapBigDecimal = adid.equalsIgnoreCase("A")
@@ -213,7 +216,7 @@ public class TranformFidsAfttab {
 			}
 		}
 		
-		Set<String> stringFields = new HashSet<>(Arrays.asList("/pl_departure/pd_sobt", "/pl_arrival/pa_sibt",
+		Set<String> stringFields = new LinkedHashSet<>(Arrays.asList("/pl_departure/pd_sobt", "/pl_arrival/pa_sibt",
 				"/pl_departure/pd_flightnumber", "/pl_arrival/pa_flightnumber",
 				"/pl_departure/pd_callsign", "/pl_arrival/pa_callsign",
 				"/pl_departure/pd_rctt_countrytype", "/pl_arrival/pa_rctt_countrytype",
@@ -313,6 +316,13 @@ public class TranformFidsAfttab {
 			}
 		}
 		
+		String gts = adid.equalsIgnoreCase("A")?element.getElementsByTagName("pa_arrivalgates").item(0).getTextContent():element.getElementsByTagName("pd_departuregates").item(0).getTextContent();
+		Set<String> gates = !gts.equals("")?new LinkedHashSet<>(List.of(gts.split(","))):new LinkedHashSet<>();
+		List<String> lstGates = new ArrayList<>(gates);
+		for (int i = 0; i < lstGates.size(); i++) {
+			setDynamicValue(fidsAfttab, "gt"+(adid.equalsIgnoreCase("A")?"a":"d"), i, "", lstGates.get(i));
+		}
+		
 		NodeList gateNodes = adid.equalsIgnoreCase("A")?element.getElementsByTagName("pl_arrivalgate"):element.getElementsByTagName("pl_departuregate");
 		for (int i = 0; i < gateNodes.getLength(); i++) {
 			Node gateNode = gateNodes.item(i);
@@ -363,33 +373,48 @@ public class TranformFidsAfttab {
 				Node counterNode = counterNodes.item(i);
 				try {
 				    String ckic = convertDateStringIfNeeded(xpath.evaluate("pdk_rcnt_counter", counterNode));
-				    String common = convertDateStringIfNeeded(xpath.evaluate("pdk_cciind", counterNode));
 				    String ckbs = convertDateStringIfNeeded(xpath.evaluate("pdk_beginplan", counterNode));
 				    String ckes = convertDateStringIfNeeded(xpath.evaluate("pdk_endplan", counterNode));
 				    String ckba = convertDateStringIfNeeded(xpath.evaluate("pdk_beginactual", counterNode));
 				    String ckea = convertDateStringIfNeeded(xpath.evaluate("pdk_endactual", counterNode));
-
-					LOGGER.info("ckic : "+ckic);
 				    if(!ckic.equals("HOLD")) {
-					    fidsCcatab.setCkic(ckic);
-					    fidsCcatab.setCtyp(common.equals("Y")?"C":" ");
-					    fidsCcatab.setCkbs(ckbs);
-					    fidsCcatab.setCkes(ckes);
-					    fidsCcatab.setCkba(ckba);
-					    fidsCcatab.setCkea(ckea);
-					    lstFidsCcatab.add(fidsCcatab);
+						LOGGER.info("ckic : "+ckic);
+					    String cnts = element.getElementsByTagName("pd_counters").item(0).getTextContent();
+					    Set<String> counters = !cnts.equals("")?new LinkedHashSet<>(List.of(cnts.split(","))):new LinkedHashSet<>();
+					    LOGGER.info("counters : "+counters);
+					    String ctyp = counters.contains(ckic)?" ":"C";
+					    if(ctyp.equals(" ")) {
+						    LOGGER.info(flno+" is Dedicated.");
+						    fidsCcatab.setCkic(ckic);
+						    fidsCcatab.setCtyp(ctyp);
+						    fidsCcatab.setCkbs(ckbs);
+						    fidsCcatab.setCkes(ckes);
+						    fidsCcatab.setCkba(ckba);
+						    fidsCcatab.setCkea(ckea);
+						    lstFidsCcatab.add(fidsCcatab);
+					    }else {
+						    LOGGER.info(flno+" is Common.");
+					    	for (String counter : counters) {
+								fidsCcatab = new FidsCcatab();
+							    fidsCcatab.setCkic(counter);
+							    fidsCcatab.setCtyp(ctyp);
+							    fidsCcatab.setCkbs(ckbs);
+							    fidsCcatab.setCkes(ckes);
+							    fidsCcatab.setCkba(ckba);
+							    fidsCcatab.setCkea(ckea);
+							    lstFidsCcatab.add(fidsCcatab);
+					    	}
+					    }
 				    }
 				} catch (XPathExpressionException e) {
 					LOGGER.error("XPath error for counterNode: ", e);
 //					e.printStackTrace();
 				}
 			}
-			LOGGER.info("lstFidsCcatab : "+lstFidsCcatab.size());
+//			LOGGER.info("lstFidsCcatab : "+lstFidsCcatab.size());
 			fidsAfttab.setLstFidsCcatab(lstFidsCcatab);
 		}
 		
-		fidsAfttab.setStoa(fidsAfttab.getSibt());
-		fidsAfttab.setStod(fidsAfttab.getSobt());
 		fidsAfttab.setAurn(fidsAfttab.getRkey().toString());
 		fidsAfttab.setBags(fidsAfttab.getBagn());
 		fidsAfttab.setBlt2(fidsAfttab.getBlt1());
@@ -397,19 +422,23 @@ public class TranformFidsAfttab {
 		if(adid.equalsIgnoreCase("A")) {
 			fidsAfttab.setOrg3(fidsAfttab.getVia3());
 			fidsAfttab.setOrg4(fidsAfttab.getVia4());
+			fidsAfttab.setStoa(fidsAfttab.getSibt());
+			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSibt()).substring(0, 8));
 		}else {
 			fidsAfttab.setDes3(fidsAfttab.getVia3());
 			fidsAfttab.setDes4(fidsAfttab.getVia4());
+			fidsAfttab.setStod(fidsAfttab.getSobt());
+			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSobt()).substring(0, 8));
 		}
 		fidsAfttab.setDtd2(fidsAfttab.getDtd1());
 		fidsAfttab.setEtai(fidsAfttab.getEibt());
 		fidsAfttab.setEtoa(fidsAfttab.getEibt());
 		fidsAfttab.setEtdi(fidsAfttab.getEobt());
 		fidsAfttab.setEtod(fidsAfttab.getEobt());
-		fidsAfttab.setGta2(fidsAfttab.getGta1());
-		fidsAfttab.setTga1(fidsAfttab.getGta1());
-		fidsAfttab.setGtd2(fidsAfttab.getGtd1());
-		fidsAfttab.setTgd1(fidsAfttab.getGtd1());
+//		fidsAfttab.setGta2(fidsAfttab.getGta1());
+//		fidsAfttab.setTga1(fidsAfttab.getGta1());
+//		fidsAfttab.setGtd2(fidsAfttab.getGtd1());
+//		fidsAfttab.setTgd1(fidsAfttab.getGtd1());
 		fidsAfttab.setLand(fidsAfttab.getAldt());
 		fidsAfttab.setAirb(fidsAfttab.getAtot());
 		fidsAfttab.setAxit(fidsAfttab.getExit());

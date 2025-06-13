@@ -27,7 +27,7 @@ public class ArtemisConsumer {
 //            	ESBResponseService receiverService = new ESBResponseService();
             	receiverService.convertXMLtoObject(textMessage.getText());
             } else {
-                System.out.println("Received non-text message");
+            	LOGGER.error("Received non-text message");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,7 +42,7 @@ public class ArtemisConsumer {
 //            	ESBResponseService receiverService = new ESBResponseService();
             	receiverService.convertXMLtoObject(textMessage.getText());
             } else {
-                System.out.println("Received non-text message");
+            	LOGGER.error("Received non-text message");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,11 +53,11 @@ public class ArtemisConsumer {
     public void listenQueueSita(Message message) {
         try {
             if (message instanceof TextMessage textMessage) {
-                System.out.println("📥 [SITA] Received: " + textMessage.getText());
+//            	LOGGER.info("📥 [SITA] Received: " + textMessage.getText());
 ////            	ESBResponseService receiverService = new ESBResponseService();
-//            	receiverService.convertXMLtoObject(textMessage.getText());
+            	receiverService.convertXMLtoObject(textMessage.getText());
             } else {
-                System.out.println("Received non-text message");
+            	LOGGER.error("Received non-text message");
             }
         } catch (Exception e) {
             e.printStackTrace();

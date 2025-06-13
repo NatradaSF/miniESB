@@ -98,7 +98,7 @@ public class ESBRequestService {
 			INFOBJFLIGHT infobjflight = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJFLIGHT();
 			INFOBJVDGS infobjvdgs = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJVDGS();
 			if (bulkdata != null) {
-				String message = bulkdata.getAFTN().getCONTENT();
+				String message = systemType.equals("AFTN")?bulkdata.getAFTN().getCONTENT():bulkdata.getSITA().getCONTENT();
 				body = setBulkData(body, message);
 			} else if (infobjflight != null) {
 				infobjflight.setSTOA(stdt);

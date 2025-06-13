@@ -2066,10 +2066,10 @@ public class FidsAfttab implements Serializable {
 				FidsAfttab::setFtyp);
 		departurePathToSetterMap.put("/pl_departure/pd_rfst_flightstatus",
 				FidsAfttab::setFtyp);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_arrivalgates", FidsAfttab::setGta1);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_arrivalgates", FidsAfttab::setGta2);
-		departurePathToSetterMap.put("/pl_departure/pd_departuregates", FidsAfttab::setGtd1);
-		departurePathToSetterMap.put("/pl_departure/pd_departuregates", FidsAfttab::setGtd2);
+//		arrivalPathToSetterMap.put("/pl_arrival/pa_arrivalgates", FidsAfttab::setGta1);
+//		arrivalPathToSetterMap.put("/pl_arrival/pa_arrivalgates", FidsAfttab::setGta2);
+//		departurePathToSetterMap.put("/pl_departure/pd_departuregates", FidsAfttab::setGtd1);
+//		departurePathToSetterMap.put("/pl_departure/pd_departuregates", FidsAfttab::setGtd2);
 		arrivalPathToSetterMap.put("/pl_arrival/pl_handlingagent_list/pl_handlingagent/pha_rha_handlingagent",
 				FidsAfttab::setHdll);
 		departurePathToSetterMap.put("/pl_departure/pl_handlingagent_list/pl_handlingagent/pha_rha_handlingagent",
@@ -2139,11 +2139,11 @@ public class FidsAfttab implements Serializable {
 				FidsAfttab::setStyp);
 		departurePathToSetterMap.put("/pl_departure/pd_rstc_refservicetypecode/ref_servicetypecode/rstc_ristc_iatacode",
 				FidsAfttab::setStyp);
-		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate/pag_rgt_gate", FidsAfttab::setTga1);
-		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate", FidsAfttab::setTga2);
-		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate/pdg_rgt_gate",
-				FidsAfttab::setTgd1);
-		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate", FidsAfttab::setTgd2);
+//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate/pag_rgt_gate", FidsAfttab::setTga1);
+//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate", FidsAfttab::setTga2);
+//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate/pdg_rgt_gate",
+//				FidsAfttab::setTgd1);
+//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate", FidsAfttab::setTgd2);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_bibt", FidsAfttab::setTifd);
 		departurePathToSetterMap.put("/pl_departure/pd_bobt", FidsAfttab::setTifd);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_firt", FidsAfttab::setTmoa);

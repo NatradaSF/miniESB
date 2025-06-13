@@ -1,6 +1,7 @@
 package sf.sfis.miniesb.model;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +19,7 @@ public class FidsGateHistory implements Serializable {
 	private String urno;
 	
 	@Column(name = "UPDATE_TIME", length = 6)
-	private String updateTime;
+	private OffsetDateTime updateTime;
 
 	@Column(name = "NEWGATE1", length = 20)
 	private String newgate1;
