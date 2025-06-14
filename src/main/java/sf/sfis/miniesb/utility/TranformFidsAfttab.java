@@ -72,7 +72,6 @@ public class TranformFidsAfttab {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			doc = builder.parse(new InputSource(new StringReader(xmlString)));
 
-			// ตรวจสอบ RTYP จาก tag pl_arrival และ pl_departure
 			String plTurn = (String) xpath.evaluate("//pl_turn", doc, XPathConstants.STRING);
 			NodeList arrivalList = doc.getElementsByTagName("pl_arrival");
 			NodeList departureList = doc.getElementsByTagName("pl_departure");
@@ -81,6 +80,7 @@ public class TranformFidsAfttab {
 			boolean hasArrival = !urnoArr.equals("");
 			boolean hasDeparture = !urnoDep.equals("");
 
+//			LOGGER.info("plTurn : "+plTurn);
 			if(!plTurn.equals("")) {//Flight
 				if (adid.equalsIgnoreCase("A") && hasArrival) {
 					Element arrivalElement = (Element) arrivalList.item(0);
@@ -118,6 +118,7 @@ public class TranformFidsAfttab {
 					return null;
 				}
 				
+				// ตรวจสอบ RTYP จาก tag pl_arrival และ pl_departure
 				if(fidsAfttab!=null) {
 					if (hasArrival && hasDeparture) {
 						fidsAfttab.setRtyp("J");
@@ -126,11 +127,15 @@ public class TranformFidsAfttab {
 					}
 				}
 			}else {//Common Counter
-				fidsAfttab = new FidsAfttab();
-				Element element = doc.getElementsByTagName("pl_desk").getLength()>0?(Element)doc.getElementsByTagName("pl_desk").item(0):null;
-				List<FidsCcatab> lstFidsCcatab = getCounters(element, true);
-//				LOGGER.info("lstFidsCcatab : "+lstFidsCcatab.size());
-				fidsAfttab.setLstFidsCcatab(lstFidsCcatab);
+				if(adid.equalsIgnoreCase("D")) {
+					fidsAfttab = new FidsAfttab();
+					NodeList counterList = doc.getElementsByTagName("pl_desk");
+					Element counterElement = (Element) counterList.item(0);
+//					Element element = doc.getElementsByTagName("pl_desk").getLength()>0?(Element)doc.getElementsByTagName("pl_desk").item(0):null;
+					List<FidsCcatab> lstFidsCcatab = getCounters(counterElement, true);
+//					LOGGER.info("lstFidsCcatab : "+lstFidsCcatab.size());
+					fidsAfttab.setLstFidsCcatab(lstFidsCcatab);
+				}
 			}
 			return fidsAfttab;
 		} catch (Exception e) {
@@ -430,52 +435,55 @@ public class TranformFidsAfttab {
 	
 	private List<FidsCcatab> getCounters(Element element, boolean isCommon) {
 		List<FidsCcatab> lstFidsCcatab = new ArrayList<FidsCcatab>();
-		if (element!=null) {
-			NodeList counterNodes = element.getElementsByTagName("pl_desk");
-			LOGGER.info("counterNodes : "+counterNodes.getLength()+"");
-			for (int i = 0; i < counterNodes.getLength(); i++) {
-				FidsCcatab fidsCcatab = new FidsCcatab();
-				Node counterNode = counterNodes.item(i);
-				try {
-				    String ckic = convertDateStringIfNeeded(xpath.evaluate("pdk_rcnt_counter", counterNode));
-				    String ckbs = convertDateStringIfNeeded(xpath.evaluate("pdk_beginplan", counterNode));
-				    String ckes = convertDateStringIfNeeded(xpath.evaluate("pdk_endplan", counterNode));
-				    String ckba = convertDateStringIfNeeded(xpath.evaluate("pdk_beginactual", counterNode));
-				    String ckea = convertDateStringIfNeeded(xpath.evaluate("pdk_endactual", counterNode));
-				    LOGGER.info("ckic : "+ckic);
-				    if(!ckic.equals("HOLD")) {
-					    if(!isCommon) {
-						    String cnts = element.getElementsByTagName("pd_counters").item(0).getTextContent();
-						    Set<String> counters = !cnts.equals("")?new LinkedHashSet<>(List.of(cnts.split(","))):new LinkedHashSet<>();
-						    LOGGER.info("counters : "+counters);
-						    String ctyp = counters.contains(ckic)?" ":"C";
-						    if(ctyp.equals(" ")) {
-							    fidsCcatab.setCkic(ckic);
-							    fidsCcatab.setCtyp(ctyp);
-							    fidsCcatab.setCkbs(ckbs);
-							    fidsCcatab.setCkes(ckes);
-							    fidsCcatab.setCkba(ckba);
-							    fidsCcatab.setCkea(ckea);
-							    lstFidsCcatab.add(fidsCcatab);
-						    }
-					    }else {
-					    	String flnu = convertDateStringIfNeeded(xpath.evaluate("pdk_idseq", counterNode));
-					    	String flno = convertDateStringIfNeeded(xpath.evaluate("pdk_rcnt_refmastercci/ref_counter/rcnt_ral_airline", counterNode));
-					    	fidsCcatab.setFlnu(new BigDecimal(flnu));
-					    	fidsCcatab.setFlno(String.format("%-9s", flno));
+		NodeList counterNodes = element.getElementsByTagName("pl_desk");
+		if(isCommon) {
+			Node counterNode = element;
+			counterNodes = new ImplementNodeList(Arrays.asList(counterNode));
+		}
+		
+//		LOGGER.info("counterNodes : "+counterNodes.getLength());
+		for (int i = 0; i < counterNodes.getLength(); i++) {
+			FidsCcatab fidsCcatab = new FidsCcatab();
+			Node counterNode = counterNodes.item(i);
+			try {
+			    String ckic = convertDateStringIfNeeded(xpath.evaluate("pdk_rcnt_counter", counterNode));
+			    String ckbs = convertDateStringIfNeeded(xpath.evaluate("pdk_beginplan", counterNode));
+			    String ckes = convertDateStringIfNeeded(xpath.evaluate("pdk_endplan", counterNode));
+			    String ckba = convertDateStringIfNeeded(xpath.evaluate("pdk_beginactual", counterNode));
+			    String ckea = convertDateStringIfNeeded(xpath.evaluate("pdk_endactual", counterNode));
+			    if(!ckic.equals("HOLD")) {
+				    if(!isCommon) {
+					    String cnts = element.getElementsByTagName("pd_counters").item(0).getTextContent();
+					    Set<String> counters = !cnts.equals("")?new LinkedHashSet<>(List.of(cnts.split(","))):new LinkedHashSet<>();
+					    LOGGER.info("ckic : "+ckic);
+					    LOGGER.info("counters : "+counters);
+					    String ctyp = counters.contains(ckic)?" ":"C";
+					    if(ctyp.equals(" ")) {
 						    fidsCcatab.setCkic(ckic);
-						    fidsCcatab.setCtyp("C");
+						    fidsCcatab.setCtyp(ctyp);
 						    fidsCcatab.setCkbs(ckbs);
 						    fidsCcatab.setCkes(ckes);
 						    fidsCcatab.setCkba(ckba);
 						    fidsCcatab.setCkea(ckea);
 						    lstFidsCcatab.add(fidsCcatab);
 					    }
+				    }else {
+				    	String flnu = convertDateStringIfNeeded(xpath.evaluate("pdk_idseq", counterNode));
+				    	String flno = convertDateStringIfNeeded(xpath.evaluate("pdk_rcnt_refmastercci/ref_counter/rcnt_ral_airline/ref_airline/ral_2lc", counterNode));
+				    	fidsCcatab.setFlnu(new BigDecimal(flnu));
+				    	fidsCcatab.setFlno(String.format("%-9s", flno));
+					    fidsCcatab.setCkic(ckic);
+					    fidsCcatab.setCtyp("C");
+					    fidsCcatab.setCkbs(ckbs);
+					    fidsCcatab.setCkes(ckes);
+					    fidsCcatab.setCkba(ckba);
+					    fidsCcatab.setCkea(ckea);
+					    lstFidsCcatab.add(fidsCcatab);
 				    }
-				} catch (XPathExpressionException e) {
-					LOGGER.error("XPath error for counterNode: ", e);
-	//				e.printStackTrace();
-				}
+			    }
+			} catch (XPathExpressionException e) {
+				LOGGER.error("XPath error for counterNode: ", e);
+//				e.printStackTrace();
 			}
 		}
 		return lstFidsCcatab;

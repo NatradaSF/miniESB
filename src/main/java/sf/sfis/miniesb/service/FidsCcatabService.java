@@ -32,30 +32,24 @@ public class FidsCcatabService {
 		return fidsCcatab;
 	}
 	
-	@Transactional
-	public void deleteCcatab(FidsCcatab fidsCcatab) {
-		try {
-			LOGGER.info("delete fidsCcatab: "+ fidsCcatab.getFlnu()+", "+fidsCcatab.getCkic());
-			FidsCcatabId id = new FidsCcatabId();
-			id.setFlnu(fidsCcatab.getFlnu());
-			id.setCkic(fidsCcatab.getCkic());
-			LOGGER.info("Record exists? " + fidsCcatabRepository.findById(id).isPresent());
-//	        Optional<FidsCcatab> entity = fidsCcatabRepository.findById(id);
-//	        entity.ifPresent(fidsCcatabRepository::delete);
-			fidsCcatabRepository.delete(fidsCcatab);
-		} catch (Exception e) {
-			LOGGER.error("deleteCcatab: ", e);
-		}
-	}
+//	@Transactional
+//	public void deleteCcatab(FidsCcatab fidsCcatab) {
+//		try {
+//			LOGGER.info("delete fidsCcatab: "+ fidsCcatab.getFlnu()+", "+fidsCcatab.getCkic());
+//			fidsCcatabRepository.delete(fidsCcatab);
+//		} catch (Exception e) {
+//			LOGGER.error("deleteCcatab: ", e);
+//		}
+//	}
 	
 	public void updateCcatab(FidsAfttab fidsAfttab) throws SQLException {
 		if(fidsAfttab.getLstFidsCcatab() != null) {
 			for(FidsCcatab ccatab : fidsAfttab.getLstFidsCcatab()) {
 				FidsCcatab fidsCcatab = new FidsCcatab();
 				fidsCcatab.setFlnu(ccatab.getFlnu()!=null?ccatab.getFlnu():fidsAfttab.getUrno());
-				fidsCcatab.setCkic(ccatab.getCkic());
+				fidsCcatab.setCkic(String.format("%-5s", ccatab.getCkic()));
 				LOGGER.info("CKIC : "+ccatab.getCkic());
-				deleteCcatab(fidsCcatab);
+//				deleteCcatab(fidsCcatab);
 				
 				fidsCcatab.setFlno(ccatab.getFlno()!=null?ccatab.getFlno():fidsAfttab.getFlno());
 				fidsCcatab.setHopo(fidsAfttab.getHopo());

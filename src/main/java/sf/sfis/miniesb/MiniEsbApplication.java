@@ -1,5 +1,11 @@
 package sf.sfis.miniesb;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +14,10 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import sf.sfis.miniesb.service.ESBResponseService;
 
 @SpringBootApplication
 @EnableJms
@@ -26,19 +32,19 @@ public class MiniEsbApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
     	ApplicationContext context = SpringApplication.run(MiniEsbApplication.class, args);
         
-//        File xmlFile = new File("update_new.xml");
-//		String xmlContent;
-//		try {
-//			xmlContent = new String(Files.readAllBytes(Paths.get(xmlFile.getPath())), "UTF-8");
-//			ESBResponseService esbResponseService = context.getBean(ESBResponseService.class);
-//			esbResponseService.convertXMLtoObject(xmlContent);
-//		} catch (UnsupportedEncodingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+        File xmlFile = new File("dataset.xml");
+		String xmlContent;
+		try {
+			xmlContent = new String(Files.readAllBytes(Paths.get(xmlFile.getPath())), "UTF-8");
+			ESBResponseService esbResponseService = context.getBean(ESBResponseService.class);
+			esbResponseService.convertXMLtoObject(xmlContent);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     @Override
