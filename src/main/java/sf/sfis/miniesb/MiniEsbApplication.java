@@ -32,7 +32,7 @@ public class MiniEsbApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
     	ApplicationContext context = SpringApplication.run(MiniEsbApplication.class, args);
         
-        File xmlFile = new File("dataset.xml");
+        File xmlFile = new File("update_new.xml");
 		String xmlContent;
 		try {
 			xmlContent = new String(Files.readAllBytes(Paths.get(xmlFile.getPath())), "UTF-8");

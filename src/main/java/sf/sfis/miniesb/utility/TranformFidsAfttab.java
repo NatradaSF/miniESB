@@ -334,6 +334,7 @@ public class TranformFidsAfttab {
 		Set<String> gates = !gts.equals("")?new LinkedHashSet<>(List.of(gts.split(","))):new LinkedHashSet<>();
 		List<String> lstGates = new ArrayList<>(gates);
 		for (int i = 0; i < lstGates.size(); i++) {
+			LOGGER.info(lstGates.get(i));
 			setDynamicValue(fidsAfttab, "gt"+(adid.equalsIgnoreCase("A")?"a":"d"), i, "", lstGates.get(i));
 		}
 		
@@ -347,13 +348,13 @@ public class TranformFidsAfttab {
 			    String gab = convertDateStringIfNeeded(xpath.evaluate(prefix + "beginplan", gateNode));
 			    String gay = convertDateStringIfNeeded(xpath.evaluate(prefix + "endactual", gateNode));
 			    String gae = convertDateStringIfNeeded(xpath.evaluate(prefix + "endplan", gateNode));
-			    String gt = convertDateStringIfNeeded(xpath.evaluate(prefix + "rgt_gate", gateNode));
+//			    String gt = convertDateStringIfNeeded(xpath.evaluate(prefix + "rgt_gate", gateNode));
 			    
 			    setDynamicValue(fidsAfttab, "g"+(adid.equalsIgnoreCase("A")?"a":"d"), i, "b", gab);
 			    setDynamicValue(fidsAfttab, "g"+(adid.equalsIgnoreCase("A")?"a":"d"), i, "x", gax);
 			    setDynamicValue(fidsAfttab, "g"+(adid.equalsIgnoreCase("A")?"a":"d"), i, "y", gay);
 			    setDynamicValue(fidsAfttab, "g"+(adid.equalsIgnoreCase("A")?"a":"d"), i, "e", gae);
-			    setDynamicValue(fidsAfttab, "gt"+(adid.equalsIgnoreCase("A")?"a":"d"), i, "", gt);
+//			    setDynamicValue(fidsAfttab, "gt"+(adid.equalsIgnoreCase("A")?"a":"d"), i, "", gt);
 			} catch (XPathExpressionException e) {
 				LOGGER.error("XPath error for gateNode: ", e);
 //				e.printStackTrace();
@@ -553,6 +554,7 @@ public class TranformFidsAfttab {
 	        Field field = FidsAfttab.class.getDeclaredField(fieldName);
 	        field.setAccessible(true);
 	        field.set(obj, value);  // ต้องเป็น String
+//	        LOGGER.info(fieldName+" : "+value);
 	    } catch (Exception e) {
 			LOGGER.error("setDynamicValue: ", e);
 //	        System.err.println("Error setting field: " + e.getMessage());

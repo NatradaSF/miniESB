@@ -114,12 +114,17 @@ public class FidsGateHistoryService {
 		Optional<FidsGateHistory> queryFidsGateHistory = fidsGateHistoryRepository.findById(fidsAfttab.getUrno().toString());
 		if (queryFidsGateHistory.isPresent()) {
 			FidsGateHistory oldFidsGateHistory = queryFidsGateHistory.get();
-		    if(oldFidsGateHistory.getNewgate1()!=null&&oldFidsGateHistory.getNewgate1().trim().equals(fidsAfttab.getGtd1().trim()) && oldFidsGateHistory.getNewgate2()!=null&&oldFidsGateHistory.getNewgate2().trim().equals(fidsAfttab.getGtd2().trim())) {
+//			LOGGER.info(oldFidsGateHistory.toString());
+//			LOGGER.info(fidsAfttab.toString());
+			if(oldFidsGateHistory.getNewgate1()!=null&&oldFidsGateHistory.getNewgate1().trim().equals(fidsAfttab.getGtd1().trim()) && oldFidsGateHistory.getNewgate2()!=null&&oldFidsGateHistory.getNewgate2().trim().equals(fidsAfttab.getGtd2().trim())) {
 				//No Change
-			}else if(oldFidsGateHistory.getNewgate1()!=null&&oldFidsGateHistory.getNewgate1().trim().length()<=0 && oldFidsGateHistory.getNewgate2()!=null&&oldFidsGateHistory.getNewgate2().trim().length()<=0) {
-				//Just Add
-			}else {
-				LOGGER.info("Gate change detected!! URNO="+fidsAfttab.getUrno()+" New GTD1 "+fidsAfttab.getGtd1()+"("+oldFidsGateHistory.getNewgate1()+") , New GTD2 "+fidsAfttab.getGtd2()+"("+oldFidsGateHistory.getNewgate2()+")");
+			}
+//			else if(oldFidsGateHistory.getNewgate1()!=null&&oldFidsGateHistory.getNewgate1().trim().length()<=0 && oldFidsGateHistory.getNewgate2()!=null&&oldFidsGateHistory.getNewgate2().trim().length()<=0) {
+//				//Just Add
+//				LOGGER.info("2");
+//			}
+			else {
+//				LOGGER.info("Gate change detected!! URNO="+fidsAfttab.getUrno()+" New GTD1 "+fidsAfttab.getGtd1()+"("+oldFidsGateHistory.getNewgate1()+") , New GTD2 "+fidsAfttab.getGtd2()+"("+oldFidsGateHistory.getNewgate2()+")");
 				fidsGateHistory.setUpdateTime(OffsetDateTime.now(ZoneOffset.UTC));
 				fidsGateHistory.setNewgate1(fidsAfttab.getGtd1());
 				fidsGateHistory.setNewgate2(fidsAfttab.getGtd2());
@@ -128,6 +133,7 @@ public class FidsGateHistoryService {
 				fidsGateHistory.setFlno(fidsAfttab.getFlno());
 				fidsGateHistory.setHopo(fidsAfttab.getHopo());
 				fidsGateHistory.setSobt(fidsAfttab.getSobt());
+				LOGGER.info(fidsGateHistory.toString());
 				fidsGateHistory = saveFidsGateHistory(fidsGateHistory);
 				result = fidsGateHistory!=null?true:false;
 			}
