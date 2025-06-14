@@ -73,6 +73,7 @@ public class TranformFidsAfttab {
 			doc = builder.parse(new InputSource(new StringReader(xmlString)));
 
 			// ตรวจสอบ RTYP จาก tag pl_arrival และ pl_departure
+			String plTurn = (String) xpath.evaluate("//pl_turn", doc, XPathConstants.STRING);
 			NodeList arrivalList = doc.getElementsByTagName("pl_arrival");
 			NodeList departureList = doc.getElementsByTagName("pl_departure");
 			String urnoArr = (String) xpath.evaluate("//pa_idseq", doc, XPathConstants.STRING);
@@ -80,48 +81,56 @@ public class TranformFidsAfttab {
 			boolean hasArrival = !urnoArr.equals("");
 			boolean hasDeparture = !urnoDep.equals("");
 
-			if (adid.equalsIgnoreCase("A") && hasArrival) {
-				Element arrivalElement = (Element) arrivalList.item(0);
-				if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(arrivalElement.getAttribute("action")))) {
-					fidsAfttab = new FidsAfttab();
-					fidsAfttab.setAdid("A");
-					processPaths(adid,actionType);
-//					LOGGER.info("Old : "+fidsAfttab.getEtot());
-					fidsAfttab.setEtot(fidsAfttab.getEtot()!=null?fidsAfttab.getEtot():" ");
-//					LOGGER.info("New : "+fidsAfttab.getEtot());
-					
-					if(actionType.equalsIgnoreCase("UPDATE")) {
-						fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
-						System.out.println("Fields arrival updated : "+fidsAfttab.getFieldsNotNull());
+			if(!plTurn.equals("")) {//Flight
+				if (adid.equalsIgnoreCase("A") && hasArrival) {
+					Element arrivalElement = (Element) arrivalList.item(0);
+					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(arrivalElement.getAttribute("action")))) {
+						fidsAfttab = new FidsAfttab();
+						fidsAfttab.setAdid("A");
+						processPaths(adid,actionType);
+	//					LOGGER.info("Old : "+fidsAfttab.getEtot());
+						fidsAfttab.setEtot(fidsAfttab.getEtot()!=null?fidsAfttab.getEtot():" ");
+	//					LOGGER.info("New : "+fidsAfttab.getEtot());
+						
+						if(actionType.equalsIgnoreCase("UPDATE")) {
+							fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
+							System.out.println("Fields arrival updated : "+fidsAfttab.getFieldsNotNull());
+						}
+						
+						fixPaths(arrivalElement,adid);
 					}
-					
-					fixPaths(arrivalElement,adid);
-				}
-			} else if (adid.equalsIgnoreCase("D") && hasDeparture) {
-				Element departureElement = (Element) departureList.item(0);
-				if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(departureElement.getAttribute("action")))) {
-					fidsAfttab = new FidsAfttab();
-					fidsAfttab.setAdid("D");
-					processPaths(adid,actionType);
-					fidsAfttab.setAtot(fidsAfttab.getAtot()!=null?fidsAfttab.getAtot():" ");
-					
-					if(actionType.equalsIgnoreCase("UPDATE")) {
-						fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
-						System.out.println("Fields departure updated : "+fidsAfttab.getFieldsNotNull());
+				} else if (adid.equalsIgnoreCase("D") && hasDeparture) {
+					Element departureElement = (Element) departureList.item(0);
+					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(departureElement.getAttribute("action")))) {
+						fidsAfttab = new FidsAfttab();
+						fidsAfttab.setAdid("D");
+						processPaths(adid,actionType);
+						fidsAfttab.setAtot(fidsAfttab.getAtot()!=null?fidsAfttab.getAtot():" ");
+						
+						if(actionType.equalsIgnoreCase("UPDATE")) {
+							fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
+							System.out.println("Fields departure updated : "+fidsAfttab.getFieldsNotNull());
+						}
+						
+						fixPaths(departureElement,adid);
 					}
-					
-					fixPaths(departureElement,adid);
+				} else {
+					return null;
 				}
-			} else {
-				return null;
-			}
-			
-			if(fidsAfttab!=null) {
-				if (hasArrival && hasDeparture) {
-					fidsAfttab.setRtyp("J");
-				} else if (hasArrival || hasDeparture) {
-					fidsAfttab.setRtyp("S");
+				
+				if(fidsAfttab!=null) {
+					if (hasArrival && hasDeparture) {
+						fidsAfttab.setRtyp("J");
+					} else if (hasArrival || hasDeparture) {
+						fidsAfttab.setRtyp("S");
+					}
 				}
+			}else {//Common Counter
+				fidsAfttab = new FidsAfttab();
+				Element element = doc.getElementsByTagName("pl_desk").getLength()>0?(Element)doc.getElementsByTagName("pl_desk").item(0):null;
+				List<FidsCcatab> lstFidsCcatab = getCounters(element, true);
+//				LOGGER.info("lstFidsCcatab : "+lstFidsCcatab.size());
+				fidsAfttab.setLstFidsCcatab(lstFidsCcatab);
 			}
 			return fidsAfttab;
 		} catch (Exception e) {
@@ -169,7 +178,7 @@ public class TranformFidsAfttab {
 				String fixedPath = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
 				String textValue = (String) xpath.evaluate(fixedPath + "/text()[1])", doc, XPathConstants.STRING);
 				String actionValue = (String) xpath.evaluate(fixedPath + "/@action)", doc, XPathConstants.STRING);
-				if ((actionType.equalsIgnoreCase("DATASET") || (actionValue.equalsIgnoreCase("UPDATE") && actionValue.equalsIgnoreCase("UPDATE"))) && textValue != null && !textValue.trim().isEmpty()) {
+				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(actionValue))) && textValue != null && !textValue.trim().isEmpty()) {
 					String value = textValue.trim();
 					Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMap, path);
 					String convertedText = convertDateStringIfNeeded(value);
@@ -365,52 +374,7 @@ public class TranformFidsAfttab {
 		}
 		
 		if(adid.equalsIgnoreCase("D")) {
-			NodeList counterNodes = element.getElementsByTagName("pl_desk");
-			LOGGER.info("counterNodes : "+counterNodes.getLength()+"");
-			List<FidsCcatab> lstFidsCcatab = new ArrayList<FidsCcatab>();
-			for (int i = 0; i < counterNodes.getLength(); i++) {
-				FidsCcatab fidsCcatab = new FidsCcatab();
-				Node counterNode = counterNodes.item(i);
-				try {
-				    String ckic = convertDateStringIfNeeded(xpath.evaluate("pdk_rcnt_counter", counterNode));
-				    String ckbs = convertDateStringIfNeeded(xpath.evaluate("pdk_beginplan", counterNode));
-				    String ckes = convertDateStringIfNeeded(xpath.evaluate("pdk_endplan", counterNode));
-				    String ckba = convertDateStringIfNeeded(xpath.evaluate("pdk_beginactual", counterNode));
-				    String ckea = convertDateStringIfNeeded(xpath.evaluate("pdk_endactual", counterNode));
-				    if(!ckic.equals("HOLD")) {
-						LOGGER.info("ckic : "+ckic);
-					    String cnts = element.getElementsByTagName("pd_counters").item(0).getTextContent();
-					    Set<String> counters = !cnts.equals("")?new LinkedHashSet<>(List.of(cnts.split(","))):new LinkedHashSet<>();
-					    LOGGER.info("counters : "+counters);
-					    String ctyp = counters.contains(ckic)?" ":"C";
-					    if(ctyp.equals(" ")) {
-						    LOGGER.info(flno+" is Dedicated.");
-						    fidsCcatab.setCkic(ckic);
-						    fidsCcatab.setCtyp(ctyp);
-						    fidsCcatab.setCkbs(ckbs);
-						    fidsCcatab.setCkes(ckes);
-						    fidsCcatab.setCkba(ckba);
-						    fidsCcatab.setCkea(ckea);
-						    lstFidsCcatab.add(fidsCcatab);
-					    }else {
-						    LOGGER.info(flno+" is Common.");
-					    	for (String counter : counters) {
-								fidsCcatab = new FidsCcatab();
-							    fidsCcatab.setCkic(counter);
-							    fidsCcatab.setCtyp(ctyp);
-							    fidsCcatab.setCkbs(ckbs);
-							    fidsCcatab.setCkes(ckes);
-							    fidsCcatab.setCkba(ckba);
-							    fidsCcatab.setCkea(ckea);
-							    lstFidsCcatab.add(fidsCcatab);
-					    	}
-					    }
-				    }
-				} catch (XPathExpressionException e) {
-					LOGGER.error("XPath error for counterNode: ", e);
-//					e.printStackTrace();
-				}
-			}
+			List<FidsCcatab> lstFidsCcatab = getCounters(element, false);
 //			LOGGER.info("lstFidsCcatab : "+lstFidsCcatab.size());
 			fidsAfttab.setLstFidsCcatab(lstFidsCcatab);
 		}
@@ -462,6 +426,59 @@ public class TranformFidsAfttab {
 	        DayOfWeek dayOfWeekUTC = utcDateTime.getDayOfWeek();
 	        fidsAfttab.setDood(Integer.toString(dayOfWeekUTC.getValue()));
 		}
+	}
+	
+	private List<FidsCcatab> getCounters(Element element, boolean isCommon) {
+		List<FidsCcatab> lstFidsCcatab = new ArrayList<FidsCcatab>();
+		if (element!=null) {
+			NodeList counterNodes = element.getElementsByTagName("pl_desk");
+			LOGGER.info("counterNodes : "+counterNodes.getLength()+"");
+			for (int i = 0; i < counterNodes.getLength(); i++) {
+				FidsCcatab fidsCcatab = new FidsCcatab();
+				Node counterNode = counterNodes.item(i);
+				try {
+				    String ckic = convertDateStringIfNeeded(xpath.evaluate("pdk_rcnt_counter", counterNode));
+				    String ckbs = convertDateStringIfNeeded(xpath.evaluate("pdk_beginplan", counterNode));
+				    String ckes = convertDateStringIfNeeded(xpath.evaluate("pdk_endplan", counterNode));
+				    String ckba = convertDateStringIfNeeded(xpath.evaluate("pdk_beginactual", counterNode));
+				    String ckea = convertDateStringIfNeeded(xpath.evaluate("pdk_endactual", counterNode));
+				    LOGGER.info("ckic : "+ckic);
+				    if(!ckic.equals("HOLD")) {
+					    if(!isCommon) {
+						    String cnts = element.getElementsByTagName("pd_counters").item(0).getTextContent();
+						    Set<String> counters = !cnts.equals("")?new LinkedHashSet<>(List.of(cnts.split(","))):new LinkedHashSet<>();
+						    LOGGER.info("counters : "+counters);
+						    String ctyp = counters.contains(ckic)?" ":"C";
+						    if(ctyp.equals(" ")) {
+							    fidsCcatab.setCkic(ckic);
+							    fidsCcatab.setCtyp(ctyp);
+							    fidsCcatab.setCkbs(ckbs);
+							    fidsCcatab.setCkes(ckes);
+							    fidsCcatab.setCkba(ckba);
+							    fidsCcatab.setCkea(ckea);
+							    lstFidsCcatab.add(fidsCcatab);
+						    }
+					    }else {
+					    	String flnu = convertDateStringIfNeeded(xpath.evaluate("pdk_idseq", counterNode));
+					    	String flno = convertDateStringIfNeeded(xpath.evaluate("pdk_rcnt_refmastercci/ref_counter/rcnt_ral_airline", counterNode));
+					    	fidsCcatab.setFlnu(new BigDecimal(flnu));
+					    	fidsCcatab.setFlno(String.format("%-9s", flno));
+						    fidsCcatab.setCkic(ckic);
+						    fidsCcatab.setCtyp("C");
+						    fidsCcatab.setCkbs(ckbs);
+						    fidsCcatab.setCkes(ckes);
+						    fidsCcatab.setCkba(ckba);
+						    fidsCcatab.setCkea(ckea);
+						    lstFidsCcatab.add(fidsCcatab);
+					    }
+				    }
+				} catch (XPathExpressionException e) {
+					LOGGER.error("XPath error for counterNode: ", e);
+	//				e.printStackTrace();
+				}
+			}
+		}
+		return lstFidsCcatab;
 	}
 
 	public String getVial(String via3, String via4) {

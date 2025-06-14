@@ -28,7 +28,7 @@ public class SubscribeRequestService {
 	private final ArtemisProducer artemisProducer;
 
 	@WebMethod
-	public void subscribe(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime) {
+	public void subscribe(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime, @WebParam(name = "dataType") String dataType) {
 		try {
 			Header header = new Header();
 			Control control = new Control();
@@ -38,7 +38,7 @@ public class SubscribeRequestService {
 			control.setSender("FIDS");
 			control.setTimestamp("2025-04-01T21:32:00");
 			Request request = new Request();
-			request.setDatatype("pl_turn");
+			request.setDatatype(dataType);//"pl_turn","pl_desk"
 //	        request.setStartTime("2025-05-09T00:00:00");
 //	        request.setEndTime("2025-05-09T23:59:59");
 			request.setStartTime(starttime);
@@ -58,7 +58,7 @@ public class SubscribeRequestService {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(envelope, writer);
 
-			LOGGER.info("Subscribe from "+starttime+" to "+endtime);
+			LOGGER.info("Subscribe "+dataType+" from "+starttime+" to "+endtime);
 			LOGGER.info(writer.toString());
 			artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", writer.toString());
 			
@@ -69,8 +69,8 @@ public class SubscribeRequestService {
 	
 	@WebMethod
 //	public void requestDataset(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime) {
-	public void requestDataset() {
-		LOGGER.info("request Dataset...");
+	public void requestDataset(@WebParam(name = "dataType") String dataType) {
+		LOGGER.info("Request Dataset...");
 		try {
 			Header header = new Header();
 			Control control = new Control();
@@ -80,7 +80,8 @@ public class SubscribeRequestService {
 			control.setSender("FIDS");
 			control.setTimestamp("2025-04-01T21:32:00");
 			Request request = new Request();
-			request.setDatatype("pl_turn");
+//			request.setDatatype("pl_turn");
+			request.setDatatype(dataType);//"pl_turn","pl_desk"
 			request.setKeepSubscription("y");
 //	        request.setStartTime("2025-05-09T00:00:00");
 //	        request.setEndTime("2025-05-09T23:59:59");

@@ -79,12 +79,14 @@ public class ESBResponseService {
 			if (fidsAfttab != null) {
 				fidsAfttab.setHopo(hopo);
 				FieldInspector.replaceHoldWithEmpty(fidsAfttab);
-				fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
-				if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
-					fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
-				}
-				if(fidsAfttab.getRemp()!=null && fidsAfttab.getRemp().length()>0) {
-					fidsFinalcallHistoryService.updateFinalCallHistory(fidsAfttab);
+				if(fidsAfttab.getUrno()!=null) {
+					fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
+					if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
+						fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
+					}
+					if(fidsAfttab.getRemp()!=null && fidsAfttab.getRemp().length()>0) {
+						fidsFinalcallHistoryService.updateFinalCallHistory(fidsAfttab);
+					}
 				}
 			}
 			fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", "D");
@@ -92,12 +94,14 @@ public class ESBResponseService {
 				fidsAfttab.setHopo(hopo);
 				FieldInspector.replaceHoldWithEmpty(fidsAfttab);
 				fidsCcatabService.updateCcatab(fidsAfttab);
-				fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
-				if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
-					fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
-				}
-				if(fidsAfttab.getRemp()!=null && fidsAfttab.getRemp().length()>0) {
-					fidsFinalcallHistoryService.updateFinalCallHistory(fidsAfttab);
+				if(fidsAfttab.getUrno()!=null) {
+					fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
+					if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
+						fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
+					}
+					if(fidsAfttab.getRemp()!=null && fidsAfttab.getRemp().length()>0) {
+						fidsFinalcallHistoryService.updateFinalCallHistory(fidsAfttab);
+					}
 				}
 			}
 			
