@@ -1995,6 +1995,10 @@ public class FidsAfttab implements Serializable {
 	// --- map สำหรับ BigDecimal
 	public static final Map<String, BiConsumer<FidsAfttab, BigDecimal>> arrivalPathToSetterMapBigDecimal = new LinkedHashMap<>();
 	public static final Map<String, BiConsumer<FidsAfttab, BigDecimal>> departurePathToSetterMapBigDecimal = new LinkedHashMap<>();
+	
+	// --- map สำหรับ Date
+	public static final Map<String, BiConsumer<FidsAfttab, String>> arrivalPathToSetterMapDate = new LinkedHashMap<>();
+	public static final Map<String, BiConsumer<FidsAfttab, String>> departurePathToSetterMapDate = new LinkedHashMap<>();
 
 	@Transient
 	private List<String> fieldsNotNull = new ArrayList<String>();
@@ -2020,8 +2024,8 @@ public class FidsAfttab implements Serializable {
 		departurePathToSetterMap.put("/pl_departure/pd_ral_airline/ref_airline/ral_2lc", FidsAfttab::setAlc2);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_ral_airline/ref_airline/ral_3lc", FidsAfttab::setAlc3);
 		departurePathToSetterMap.put("/pl_departure/pd_ral_airline/ref_airline/ral_3lc", FidsAfttab::setAlc3);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_fplactivationtime", FidsAfttab::setFpla);
-		departurePathToSetterMap.put("/pl_departure/pd_fplactivationtime", FidsAfttab::setFpld);
+		arrivalPathToSetterMapDate.put("/pl_arrival/pa_fplactivationtime", FidsAfttab::setFpla);
+		departurePathToSetterMapDate.put("/pl_departure/pd_fplactivationtime", FidsAfttab::setFpld);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_registration", FidsAfttab::setRegn);
 		departurePathToSetterMap.put("/pl_departure/pd_registration", FidsAfttab::setRegn);
 		arrivalPathToSetterMap.put(
@@ -2055,9 +2059,9 @@ public class FidsAfttab implements Serializable {
 		departurePathToSetterMap.put("/pl_departure/pd_delayreasons", FidsAfttab::setDcd2);
 		departurePathToSetterMap.put("/pl_departure/pd_delay", FidsAfttab::setDeld);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_diversiontime", FidsAfttab::setDivr);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_eibt", FidsAfttab::setEtai);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_eibt", FidsAfttab::setEtoa);
-		departurePathToSetterMap.put("/pl_departure/pd_secondcall", FidsAfttab::setFcal);
+//		arrivalPathToSetterMap.put("/pl_arrival/pa_eibt", FidsAfttab::setEtai);
+//		arrivalPathToSetterMap.put("/pl_arrival/pa_eibt", FidsAfttab::setEtoa);
+		departurePathToSetterMapDate.put("/pl_departure/pd_secondcall", FidsAfttab::setFcal);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_flightnumber", FidsAfttab::setFlno);
 		departurePathToSetterMap.put("/pl_departure/pd_flightnumber", FidsAfttab::setFlno);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rctt_countrytype", FidsAfttab::setFlti);
@@ -2125,8 +2129,8 @@ public class FidsAfttab implements Serializable {
 				FidsAfttab::setRaco);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_opscomment", FidsAfttab::setRem1);
 		departurePathToSetterMap.put("/pl_departure/pd_opscomment", FidsAfttab::setRem1);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_publiccomment", FidsAfttab::setRemp);
-		departurePathToSetterMap.put("/pl_departure/pd_publiccomment", FidsAfttab::setRemp);
+		arrivalPathToSetterMap.put("/pa_rfst_refflightstatus/ref_flightstatus/rfst_code3l", FidsAfttab::setRemp);
+		departurePathToSetterMap.put("/pd_rfst_refflightstatus/ref_flightstatus/rfst_code3l", FidsAfttab::setRemp);
 		departurePathToSetterMapBigDecimal.put("/pl_turn/pt_pd_departure", FidsAfttab::setRkey);
 		arrivalPathToSetterMapBigDecimal.put("/pl_turn/pt_pa_arrival", FidsAfttab::setRkey);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rrwy_runway", FidsAfttab::setRwya);
@@ -2146,8 +2150,8 @@ public class FidsAfttab implements Serializable {
 //		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate", FidsAfttab::setTgd2);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_bibt", FidsAfttab::setTifd);
 		departurePathToSetterMap.put("/pl_departure/pd_bobt", FidsAfttab::setTifd);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_firt", FidsAfttab::setTmoa);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_fnlt", FidsAfttab::setTmoa);
+		arrivalPathToSetterMapDate.put("/pl_arrival/pa_firt", FidsAfttab::setTmoa);
+		arrivalPathToSetterMapDate.put("/pl_arrival/pa_fnlt", FidsAfttab::setTmoa);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_externalflightnumber", FidsAfttab::setTrkn);
 		departurePathToSetterMap.put("/pl_departure/pd_externalflightnumber", FidsAfttab::setTrkn);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rnc_naturecode", FidsAfttab::setTtyp);
@@ -2192,32 +2196,32 @@ public class FidsAfttab implements Serializable {
 				FidsAfttab::setB3es);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_vipind", FidsAfttab::setVipa);
 		departurePathToSetterMap.put("/pl_departure/pd_vipind", FidsAfttab::setVipd);
-		departurePathToSetterMap.put("/pl_departure/pd_acgt", FidsAfttab::setAcgt);
+		departurePathToSetterMapDate.put("/pl_departure/pd_acgt", FidsAfttab::setAcgt);
 		arrivalPathToSetterMap.put("/pl_arrival/pl_atcarrival/paa_firstcontact", FidsAfttab::setAcor);
 		departurePathToSetterMap.put("/pl_departure/pd_aczt", FidsAfttab::setAczt);
-		departurePathToSetterMap.put("/pl_departure/pd_aegt", FidsAfttab::setAegt);
+		departurePathToSetterMapDate.put("/pl_departure/pd_aegt", FidsAfttab::setAegt);
 		departurePathToSetterMap.put("/pl_departure/pd_aezt", FidsAfttab::setAezt);
 		departurePathToSetterMapBigDecimal.put("/pl_departure/pd_aght", FidsAfttab::setAght);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_aibt", FidsAfttab::setAibt);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_aldt", FidsAfttab::setAldt);
-		departurePathToSetterMap.put("/pl_departure/pd_aobt", FidsAfttab::setAobt);
+		arrivalPathToSetterMapDate.put("/pl_arrival/pa_aibt", FidsAfttab::setAibt);
+		arrivalPathToSetterMapDate.put("/pl_arrival/pa_aldt", FidsAfttab::setAldt);
+		departurePathToSetterMapDate.put("/pl_departure/pd_aobt", FidsAfttab::setAobt);
 		departurePathToSetterMapBigDecimal.put("/pl_departure/pd_aght", FidsAfttab::setAght);
-		departurePathToSetterMap.put("/pl_departure/pd_ardt", FidsAfttab::setArdt);
+		departurePathToSetterMapDate.put("/pl_departure/pd_ardt", FidsAfttab::setArdt);
 		departurePathToSetterMap.put("/pl_departure/pd_arzt", FidsAfttab::setArzt);
-		departurePathToSetterMap.put("/pl_departure/pd_asat", FidsAfttab::setAsat);
-		departurePathToSetterMap.put("/pl_departure/pd_asbt", FidsAfttab::setAsbt);
-		departurePathToSetterMap.put("/pl_departure/pd_asrt", FidsAfttab::setAsrt);
-		departurePathToSetterMap.put("/pl_departure/pd_atot", FidsAfttab::setAtot);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_atotoutstation", FidsAfttab::setEtot);
-		arrivalPathToSetterMapBigDecimal.put("/pl_arrival/pa_exit", FidsAfttab::setAxit);
-		departurePathToSetterMapBigDecimal.put("/pl_departure/pd_exot", FidsAfttab::setAxot);
+		departurePathToSetterMapDate.put("/pl_departure/pd_asat", FidsAfttab::setAsat);
+		departurePathToSetterMapDate.put("/pl_departure/pd_asbt", FidsAfttab::setAsbt);
+		departurePathToSetterMapDate.put("/pl_departure/pd_asrt", FidsAfttab::setAsrt);
+		departurePathToSetterMapDate.put("/pl_departure/pd_atot", FidsAfttab::setAtot);
+		arrivalPathToSetterMapDate.put("/pl_arrival/pa_atotoutstation", FidsAfttab::setEtot);
+//		arrivalPathToSetterMapBigDecimal.put("/pl_arrival/pa_exit", FidsAfttab::setAxit);
+//		departurePathToSetterMapBigDecimal.put("/pl_departure/pd_exot", FidsAfttab::setAxot);
 		departurePathToSetterMap.put("/pl_departure/pd_eczt", FidsAfttab::setEczt);
 		departurePathToSetterMap.put("/pl_departure/pd_eezt", FidsAfttab::setEezt);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_eibt", FidsAfttab::setEibt);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_eldt", FidsAfttab::setEldt);
-		departurePathToSetterMap.put("/pl_departure/pd_eobt", FidsAfttab::setEobt);
+		arrivalPathToSetterMapDate.put("/pl_arrival/pa_eibt", FidsAfttab::setEibt);
+		arrivalPathToSetterMapDate.put("/pl_arrival/pa_eldt", FidsAfttab::setEldt);
+		departurePathToSetterMapDate.put("/pl_departure/pd_eobt", FidsAfttab::setEobt);
 		departurePathToSetterMap.put("/pl_departure/pd_erzt", FidsAfttab::setErzt);
-		departurePathToSetterMap.put("/pl_departure/pd_etot", FidsAfttab::setEtot);
+		departurePathToSetterMapDate.put("/pl_departure/pd_etot", FidsAfttab::setEtot);
 		arrivalPathToSetterMapBigDecimal.put("/pl_arrival/pa_exit", FidsAfttab::setExit);
 		departurePathToSetterMapBigDecimal.put("/pl_departure/pd_exot", FidsAfttab::setExot);
 		departurePathToSetterMap.put("/pl_departure/pd_rtot", FidsAfttab::setRtot);
@@ -2225,13 +2229,13 @@ public class FidsAfttab implements Serializable {
 		departurePathToSetterMap.put("/pl_departure/pd_sobt", FidsAfttab::setSobt);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_star", FidsAfttab::setStar);
 		departurePathToSetterMap.put("/pl_departure/pd_stot", FidsAfttab::setStot);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_tldt", FidsAfttab::setTldt);
+		arrivalPathToSetterMapDate.put("/pl_arrival/pa_tldt", FidsAfttab::setTldt);
 		departurePathToSetterMapBigDecimal.put("/pl_departure/pd_tobtchanges", FidsAfttab::setTobc);
-		departurePathToSetterMap.put("/pl_departure/pd_tobt", FidsAfttab::setTobt);
+		departurePathToSetterMapDate.put("/pl_departure/pd_tobt", FidsAfttab::setTobt);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rtrm_terminal", FidsAfttab::setTrma);
 		departurePathToSetterMap.put("/pl_departure/pd_rtrm_terminal", FidsAfttab::setTrmd);
-		departurePathToSetterMap.put("/pl_departure/pd_tsat", FidsAfttab::setTsat);
-		departurePathToSetterMap.put("/pl_departure/pd_ttot", FidsAfttab::setTtot);
+		departurePathToSetterMapDate.put("/pl_departure/pd_tsat", FidsAfttab::setTsat);
+		departurePathToSetterMapDate.put("/pl_departure/pd_ttot", FidsAfttab::setTtot);
 		departurePathToSetterMap.put("/pl_departure/pd_eczt", FidsAfttab::setEczt);
 		departurePathToSetterMap.put("/pl_departure/pd_aezt", FidsAfttab::setAezt);
 		departurePathToSetterMap.put("/pl_departure/pd_eezt", FidsAfttab::setEezt);

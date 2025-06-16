@@ -88,13 +88,10 @@ public class TranformFidsAfttab {
 						fidsAfttab = new FidsAfttab();
 						fidsAfttab.setAdid("A");
 						processPaths(adid,actionType);
-	//					LOGGER.info("Old : "+fidsAfttab.getEtot());
-						fidsAfttab.setEtot(fidsAfttab.getEtot()!=null?fidsAfttab.getEtot():" ");
-	//					LOGGER.info("New : "+fidsAfttab.getEtot());
 						
 						if(actionType.equalsIgnoreCase("UPDATE")) {
 							fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
-							System.out.println("Fields arrival updated : "+fidsAfttab.getFieldsNotNull());
+							LOGGER.info("Fields arrival updated : "+fidsAfttab.getFieldsNotNull());
 						}
 						
 						fixPaths(arrivalElement,adid);
@@ -105,11 +102,11 @@ public class TranformFidsAfttab {
 						fidsAfttab = new FidsAfttab();
 						fidsAfttab.setAdid("D");
 						processPaths(adid,actionType);
-						fidsAfttab.setAtot(fidsAfttab.getAtot()!=null?fidsAfttab.getAtot():" ");
+//						fidsAfttab.setAtot(fidsAfttab.getAtot()!=null?fidsAfttab.getAtot():" ");
 						
 						if(actionType.equalsIgnoreCase("UPDATE")) {
 							fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
-							System.out.println("Fields departure updated : "+fidsAfttab.getFieldsNotNull());
+							LOGGER.info("Fields departure updated : "+fidsAfttab.getFieldsNotNull());
 						}
 						
 						fixPaths(departureElement,adid);
@@ -147,8 +144,7 @@ public class TranformFidsAfttab {
 
 	/* Get value of all paths on DATASET */
 	/* Get value of update paths on UPDATE */
-	private List<String> processPaths(String adid, String actionType) {
-		List<String> updatedFields = new ArrayList<String>();
+	private void processPaths(String adid, String actionType) {
 		Map<String, BiConsumer<FidsAfttab, BigDecimal>> pathMapBigDecimal = adid.equalsIgnoreCase("A")
 				? FidsAfttab.arrivalPathToSetterMapBigDecimal
 				: FidsAfttab.departurePathToSetterMapBigDecimal;
@@ -188,7 +184,7 @@ public class TranformFidsAfttab {
 					Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMap, path);
 					String convertedText = convertDateStringIfNeeded(value);
 					setterOpt.ifPresent(setter -> setter.accept(fidsAfttab, convertedText));
-				}else {}
+				}
 			} catch (XPathExpressionException e) {
 //				System.err.println("XPath error for path: " + path);
 				LOGGER.error("XPath error for path: " + path, e);
@@ -196,7 +192,42 @@ public class TranformFidsAfttab {
 			}
 		}
 		
-		return updatedFields;
+		Map<String, BiConsumer<FidsAfttab, String>> pathMapDate = adid.equalsIgnoreCase("A") ? FidsAfttab.arrivalPathToSetterMapDate
+				: FidsAfttab.departurePathToSetterMapDate;
+		for (Map.Entry<String, BiConsumer<FidsAfttab, String>> entry : pathMapDate.entrySet()) {
+			String path = entry.getKey();
+			try {
+				String fixedPath = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
+				String textValue = (String) xpath.evaluate(fixedPath + "/text()[1])", doc, XPathConstants.STRING);
+				String actionValue = (String) xpath.evaluate(fixedPath + "/@action)", doc, XPathConstants.STRING);
+				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(actionValue))) && textValue != null && !textValue.trim().isEmpty()) {
+					String value = textValue.trim();
+					Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMapDate, path);
+					String convertedText = convertDateStringIfNeeded(value);
+					setterOpt.ifPresent(setter -> setter.accept(fidsAfttab, convertedText));
+				}else if((actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(actionValue)) && (textValue == null || textValue.trim().isEmpty())) {
+					String value = " ";
+					Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMapDate, path);
+					String convertedText = convertDateStringIfNeeded(value);
+					setterOpt.ifPresent(setter -> setter.accept(fidsAfttab, convertedText));
+				}
+			} catch (XPathExpressionException e) {
+//				System.err.println("XPath error for path: " + path);
+				LOGGER.error("XPath error for path: " + path, e);
+//				e.printStackTrace();
+			}
+		}
+		
+		fidsAfttab.setEtai(fidsAfttab.getEibt());
+		fidsAfttab.setEtoa(fidsAfttab.getEibt());
+		fidsAfttab.setEtdi(fidsAfttab.getEobt());
+		fidsAfttab.setEtod(fidsAfttab.getEobt());
+		fidsAfttab.setLand(fidsAfttab.getAldt());
+		fidsAfttab.setAirb(fidsAfttab.getAtot());
+		fidsAfttab.setAxit(fidsAfttab.getExit());
+		fidsAfttab.setAxot(fidsAfttab.getExot());
+		fidsAfttab.setOnbl(fidsAfttab.getAibt());
+		fidsAfttab.setOfbl(fidsAfttab.getAobt());
 	}
 	
 	/* Get value for fix fields ex.URNO, RKEY, SOBT, SIBT, FLNO, CSGN, ALC2, ALC3 */
@@ -334,7 +365,7 @@ public class TranformFidsAfttab {
 		Set<String> gates = !gts.equals("")?new LinkedHashSet<>(List.of(gts.split(","))):new LinkedHashSet<>();
 		List<String> lstGates = new ArrayList<>(gates);
 		for (int i = 0; i < lstGates.size(); i++) {
-			LOGGER.info(lstGates.get(i));
+//			LOGGER.info(lstGates.get(i));
 			setDynamicValue(fidsAfttab, "gt"+(adid.equalsIgnoreCase("A")?"a":"d"), i, "", lstGates.get(i));
 		}
 		
@@ -401,20 +432,10 @@ public class TranformFidsAfttab {
 			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSobt()).substring(0, 8));
 		}
 		fidsAfttab.setDtd2(fidsAfttab.getDtd1());
-		fidsAfttab.setEtai(fidsAfttab.getEibt());
-		fidsAfttab.setEtoa(fidsAfttab.getEibt());
-		fidsAfttab.setEtdi(fidsAfttab.getEobt());
-		fidsAfttab.setEtod(fidsAfttab.getEobt());
 //		fidsAfttab.setGta2(fidsAfttab.getGta1());
 //		fidsAfttab.setTga1(fidsAfttab.getGta1());
 //		fidsAfttab.setGtd2(fidsAfttab.getGtd1());
 //		fidsAfttab.setTgd1(fidsAfttab.getGtd1());
-		fidsAfttab.setLand(fidsAfttab.getAldt());
-		fidsAfttab.setAirb(fidsAfttab.getAtot());
-		fidsAfttab.setAxit(fidsAfttab.getExit());
-		fidsAfttab.setAxot(fidsAfttab.getExot());
-		fidsAfttab.setOnbl(fidsAfttab.getAibt());
-		fidsAfttab.setOfbl(fidsAfttab.getAobt());
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime localDateTime = null;
@@ -436,10 +457,12 @@ public class TranformFidsAfttab {
 	
 	private List<FidsCcatab> getCounters(Element element, boolean isCommon) {
 		List<FidsCcatab> lstFidsCcatab = new ArrayList<FidsCcatab>();
-		NodeList counterNodes = element.getElementsByTagName("pl_desk");
+		NodeList counterNodes = null;
 		if(isCommon) {
 			Node counterNode = element;
 			counterNodes = new ImplementNodeList(Arrays.asList(counterNode));
+		}else {
+			counterNodes = element.getElementsByTagName("pl_desk");
 		}
 		
 //		LOGGER.info("counterNodes : "+counterNodes.getLength());

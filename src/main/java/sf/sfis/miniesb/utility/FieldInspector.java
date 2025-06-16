@@ -38,7 +38,7 @@ public class FieldInspector {
             try {
                 field.setAccessible(true); // เปิดให้เข้าถึง private fields ได้
                 Object value = field.get(obj);
-                if (value != null && !value.toString().trim().equals("")) {
+                if (value != null && !value.toString().equals("")) {
                     return false; // เจอ field ที่ไม่ null
                 }
             } catch (IllegalAccessException e) {
