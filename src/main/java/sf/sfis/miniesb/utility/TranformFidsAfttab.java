@@ -127,11 +127,13 @@ public class TranformFidsAfttab {
 				if(adid.equalsIgnoreCase("D")) {
 					fidsAfttab = new FidsAfttab();
 					NodeList counterList = doc.getElementsByTagName("pl_desk");
-					Element counterElement = (Element) counterList.item(0);
-//					Element element = doc.getElementsByTagName("pl_desk").getLength()>0?(Element)doc.getElementsByTagName("pl_desk").item(0):null;
-					List<FidsCcatab> lstFidsCcatab = getCounters(counterElement, true);
-//					LOGGER.info("lstFidsCcatab : "+lstFidsCcatab.size());
-					fidsAfttab.setLstFidsCcatab(lstFidsCcatab);
+					if (counterList.getLength() > 0) {
+						Element counterElement = (Element) counterList.item(0);
+	//					Element element = doc.getElementsByTagName("pl_desk").getLength()>0?(Element)doc.getElementsByTagName("pl_desk").item(0):null;
+						List<FidsCcatab> lstFidsCcatab = getCounters(counterElement, true);
+	//					LOGGER.info("lstFidsCcatab : "+lstFidsCcatab.size());
+						fidsAfttab.setLstFidsCcatab(lstFidsCcatab);
+					}
 				}
 			}
 			return fidsAfttab;
