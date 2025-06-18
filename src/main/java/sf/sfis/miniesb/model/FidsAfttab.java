@@ -2160,18 +2160,18 @@ public class FidsAfttab implements Serializable {
 		departurePathToSetterMap.put("/pl_departure/pd_moduser", FidsAfttab::setUseu);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_refpreviousairport/ref_airport/rap_iata3lc",
 				FidsAfttab::setVia3);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_reforiginairport/ref_airport/rap_iata3lc", FidsAfttab::setVia3);
+		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_reforiginairport/ref_airport/rap_iata3lc", FidsAfttab::setOrg3);
 		departurePathToSetterMap.put("/pl_departure/pd_rap_refnextairport/ref_airport/rap_iata3lc",
 				FidsAfttab::setVia3);
 		departurePathToSetterMap.put("/pl_departure/pd_rap_refdestinationairport/ref_airport/rap_iata3lc",
-				FidsAfttab::setVia3);
+				FidsAfttab::setDes3);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_refpreviousairport/ref_airport/rap_icao4lc",
 				FidsAfttab::setVia4);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_reforiginairport/ref_airport/rap_icao4lc", FidsAfttab::setVia4);
+		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_reforiginairport/ref_airport/rap_icao4lc", FidsAfttab::setOrg4);
 		departurePathToSetterMap.put("/pl_departure/pd_rap_refnextairport/ref_airport/rap_icao4lc",
 				FidsAfttab::setVia4);
 		departurePathToSetterMap.put("/pl_departure/pd_rap_refdestinationairport/ref_airport/rap_icao4lc",
-				FidsAfttab::setVia4);
+				FidsAfttab::setDes4);
 		arrivalPathToSetterMap.put(
 				"/pl_arrival/pl_arrivalloadstatistics_list/pl_arrivalloadstatistics/pals_baggagecount",
 				FidsAfttab::setBags);

@@ -422,15 +422,15 @@ public class TranformFidsAfttab {
 		fidsAfttab.setBags(fidsAfttab.getBagn());
 		fidsAfttab.setBlt2(fidsAfttab.getBlt1());
 		fidsAfttab.setDcd2(fidsAfttab.getDcd1());
+//		fidsAfttab.setOrg3(fidsAfttab.getVia3());
+//		fidsAfttab.setOrg4(fidsAfttab.getVia4());
+		fidsAfttab.setStoa(fidsAfttab.getSibt());
+//		fidsAfttab.setDes3(fidsAfttab.getVia3());
+//		fidsAfttab.setDes4(fidsAfttab.getVia4());
+		fidsAfttab.setStod(fidsAfttab.getSobt());
 		if(adid.equalsIgnoreCase("A")) {
-			fidsAfttab.setOrg3(fidsAfttab.getVia3());
-			fidsAfttab.setOrg4(fidsAfttab.getVia4());
-			fidsAfttab.setStoa(fidsAfttab.getSibt());
 			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSibt()).substring(0, 8));
 		}else {
-			fidsAfttab.setDes3(fidsAfttab.getVia3());
-			fidsAfttab.setDes4(fidsAfttab.getVia4());
-			fidsAfttab.setStod(fidsAfttab.getSobt());
 			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSobt()).substring(0, 8));
 		}
 		fidsAfttab.setDtd2(fidsAfttab.getDtd1());
@@ -447,13 +447,20 @@ public class TranformFidsAfttab {
 	        OffsetDateTime utcDateTime = localDateTime.atOffset(ZoneOffset.UTC);
 	        DayOfWeek dayOfWeekUTC = utcDateTime.getDayOfWeek();
 	        fidsAfttab.setDooa(Integer.toString(dayOfWeekUTC.getValue()));
+		}else {
+			fidsAfttab.setSibt(" ");
+			fidsAfttab.setStoa(" ");
 		}
+		
 		if(fidsAfttab.getStod()!=null) {
 			localDateTime = LocalDateTime.parse(fidsAfttab.getStod(), formatter);
 	        // บอกว่าเวลานี้เป็น UTC
 	        OffsetDateTime utcDateTime = localDateTime.atOffset(ZoneOffset.UTC);
 	        DayOfWeek dayOfWeekUTC = utcDateTime.getDayOfWeek();
 	        fidsAfttab.setDood(Integer.toString(dayOfWeekUTC.getValue()));
+		}else {
+			fidsAfttab.setSobt(" ");
+			fidsAfttab.setStod(" ");
 		}
 	}
 	
