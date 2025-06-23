@@ -2008,6 +2008,8 @@ public class FidsAfttab implements Serializable {
 		// ชั้นแรกของ pl_arrival และ pl_departure
 		arrivalPathToSetterMapBigDecimal.put("/pl_arrival/pa_idseq", FidsAfttab::setUrno);
 		departurePathToSetterMapBigDecimal.put("/pl_departure/pd_idseq", FidsAfttab::setUrno);
+		departurePathToSetterMapBigDecimal.put("/pl_turn/pt_idseq", FidsAfttab::setRkey);
+		arrivalPathToSetterMapBigDecimal.put("/pl_turn/pt_idseq", FidsAfttab::setRkey);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_ract_aircrafttype/ref_aircrafttype/ract_iatatype",
 				FidsAfttab::setAct3);
 		departurePathToSetterMap.put("/pl_departure/pd_ract_aircrafttype/ref_aircrafttype/ract_iatatype",
@@ -2131,8 +2133,6 @@ public class FidsAfttab implements Serializable {
 		departurePathToSetterMap.put("/pl_departure/pd_opscomment", FidsAfttab::setRem1);
 		arrivalPathToSetterMap.put("/pa_rfst_refflightstatus/ref_flightstatus/rfst_code3l", FidsAfttab::setRemp);
 		departurePathToSetterMap.put("/pd_rfst_refflightstatus/ref_flightstatus/rfst_code3l", FidsAfttab::setRemp);
-		departurePathToSetterMapBigDecimal.put("/pl_turn/pt_pd_departure", FidsAfttab::setRkey);
-		arrivalPathToSetterMapBigDecimal.put("/pl_turn/pt_pa_arrival", FidsAfttab::setRkey);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rrwy_runway", FidsAfttab::setRwya);
 		arrivalPathToSetterMap.put("/pl_arrival/pl_atcarrival_list/pl_atcarrival/paa_runway", FidsAfttab::setRwya);
 		departurePathToSetterMap.put("/pl_departure/pd_rrwy_runway", FidsAfttab::setRwyd);
@@ -2160,16 +2160,16 @@ public class FidsAfttab implements Serializable {
 		departurePathToSetterMap.put("/pl_departure/pd_moduser", FidsAfttab::setUseu);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_refpreviousairport/ref_airport/rap_iata3lc",
 				FidsAfttab::setVia3);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_reforiginairport/ref_airport/rap_iata3lc", FidsAfttab::setOrg3);
 		departurePathToSetterMap.put("/pl_departure/pd_rap_refnextairport/ref_airport/rap_iata3lc",
 				FidsAfttab::setVia3);
-		departurePathToSetterMap.put("/pl_departure/pd_rap_refdestinationairport/ref_airport/rap_iata3lc",
-				FidsAfttab::setDes3);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_refpreviousairport/ref_airport/rap_icao4lc",
 				FidsAfttab::setVia4);
-		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_reforiginairport/ref_airport/rap_icao4lc", FidsAfttab::setOrg4);
 		departurePathToSetterMap.put("/pl_departure/pd_rap_refnextairport/ref_airport/rap_icao4lc",
 				FidsAfttab::setVia4);
+		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_reforiginairport/ref_airport/rap_iata3lc", FidsAfttab::setOrg3);
+		departurePathToSetterMap.put("/pl_departure/pd_rap_refdestinationairport/ref_airport/rap_iata3lc",
+				FidsAfttab::setDes3);
+		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_reforiginairport/ref_airport/rap_icao4lc", FidsAfttab::setOrg4);
 		departurePathToSetterMap.put("/pl_departure/pd_rap_refdestinationairport/ref_airport/rap_icao4lc",
 				FidsAfttab::setDes4);
 		arrivalPathToSetterMap.put(

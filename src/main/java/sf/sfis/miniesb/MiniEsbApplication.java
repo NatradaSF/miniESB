@@ -45,13 +45,6 @@ public class MiniEsbApplication extends SpringBootServletInitializer {
     }
     
     @Bean
-    public WebClient webClient() {
-    	return WebClient.builder()
-//                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
-    }
-    
-    @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory(redisHost, redisPort);
     }

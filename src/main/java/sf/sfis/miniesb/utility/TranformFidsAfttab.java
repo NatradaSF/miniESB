@@ -77,6 +77,8 @@ public class TranformFidsAfttab {
 			NodeList departureList = doc.getElementsByTagName("pl_departure");
 			String urnoArr = (String) xpath.evaluate("//pa_idseq", doc, XPathConstants.STRING);
 			String urnoDep = (String) xpath.evaluate("//pd_idseq", doc, XPathConstants.STRING);
+			String flnoArr = (String) xpath.evaluate("//pa_flightnumber", doc, XPathConstants.STRING);
+			String flnoDep = (String) xpath.evaluate("//pd_flightnumber", doc, XPathConstants.STRING);
 			boolean hasArrival = !urnoArr.equals("");
 			boolean hasDeparture = !urnoDep.equals("");
 
@@ -121,6 +123,10 @@ public class TranformFidsAfttab {
 						fidsAfttab.setRtyp("J");
 					} else if (hasArrival || hasDeparture) {
 						fidsAfttab.setRtyp("S");
+					}
+					if(flnoArr.equals(flnoDep)) {
+						fidsAfttab.setVia3(" ");
+						fidsAfttab.setVia4(" ");
 					}
 				}
 			}else {//Common Counter
@@ -238,7 +244,7 @@ public class TranformFidsAfttab {
 	private void fixPaths(Element element, String adid) {
 		Set<String> bigDecimalFields = new LinkedHashSet<>(
 				Arrays.asList("/pl_departure/pd_idseq", "/pl_arrival/pa_idseq",
-						"/pl_turn/pt_pd_departure", "/pl_turn/pt_pa_arrival"));
+						"/pl_turn/pt_idseq"));
 		Map<String, BiConsumer<FidsAfttab, BigDecimal>> pathMapBigDecimal = adid.equalsIgnoreCase("A")
 				? FidsAfttab.arrivalPathToSetterMapBigDecimal
 				: FidsAfttab.departurePathToSetterMapBigDecimal;
@@ -429,6 +435,7 @@ public class TranformFidsAfttab {
 //		fidsAfttab.setDes4(fidsAfttab.getVia4());
 		fidsAfttab.setStod(fidsAfttab.getSobt());
 		if(adid.equalsIgnoreCase("A")) {
+			fidsAfttab.setDes3(fidsAfttab.getVia3());
 			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSibt()).substring(0, 8));
 		}else {
 			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSobt()).substring(0, 8));

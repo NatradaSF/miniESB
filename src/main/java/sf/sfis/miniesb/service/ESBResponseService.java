@@ -4,6 +4,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,8 @@ import sf.sfis.miniesb.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJFLIGHT;
 import sf.sfis.miniesb.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJGENERIC;
 import sf.sfis.miniesb.esb.realtimeoutbound.TIMEID;
 import sf.sfis.miniesb.model.FidsAfttab;
+import sf.sfis.miniesb.model.FidsAirport;
+import sf.sfis.miniesb.repository.FidsAirportRepository;
 import sf.sfis.miniesb.utility.DateTimeFormatHelper;
 import sf.sfis.miniesb.utility.FieldInspector;
 import sf.sfis.miniesb.utility.GetterAccess;
@@ -53,6 +56,7 @@ public class ESBResponseService {
 	private final FidsCcatabService fidsCcatabService;
 	private final FidsGateHistoryService fidsGateHistoryService;
 	private final FidsFinalcallHistoryService fidsFinalcallHistoryService;
+	private final FidsAirportRepository fidsAirportRepository;
 	private final RedisController redisController;
 
 	public void convertXMLtoObject(String xml) {
@@ -66,6 +70,11 @@ public class ESBResponseService {
 			String type = envelope.getHeader().getControl().getMessageType();
 			String timestamp = dateTimeFormatHelper.convertLocalToUTC(envelope.getHeader().getControl().getTimestamp());
 			String hopo = envelope.getHeader().getControl().getStation();
+			String airport4 = "";
+			Optional<FidsAirport> queryFidsAirport = fidsAirportRepository.findById(hopo);
+			if (queryFidsAirport.isPresent()) {
+				airport4 = queryFidsAirport.get().getApc4();
+			}
 
 			LOGGER.info("Message Type: " + type);
 			StringWriter writer = new StringWriter();
@@ -80,6 +89,8 @@ public class ESBResponseService {
 				fidsAfttab.setHopo(hopo);
 				FieldInspector.replaceHoldWithEmpty(fidsAfttab);
 				if(fidsAfttab.getUrno()!=null) {
+					fidsAfttab.setDes3(hopo);
+					fidsAfttab.setDes4(airport4);
 					fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
 					if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
 						fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
@@ -95,6 +106,8 @@ public class ESBResponseService {
 				FieldInspector.replaceHoldWithEmpty(fidsAfttab);
 				fidsCcatabService.updateCcatab(fidsAfttab);
 				if(fidsAfttab.getUrno()!=null) {
+					fidsAfttab.setOrg3(hopo);
+					fidsAfttab.setOrg4(airport4);
 					fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
 					if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
 						fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
