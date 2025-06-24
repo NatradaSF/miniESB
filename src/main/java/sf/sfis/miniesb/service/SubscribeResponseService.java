@@ -52,7 +52,7 @@ public class SubscribeResponseService {
 			marshaller.marshal(envelope, writer);
 
 //	        FidsAfttab fidsAfttab = convertPlTurntoAfttab(envelope);
-	        FidsAfttab fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", "A");
+	        FidsAfttab fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", hopo, "A");
 	        
 	    } catch (JAXBException e) {
         	LOGGER.error("convertXMLtoObject: ", e);

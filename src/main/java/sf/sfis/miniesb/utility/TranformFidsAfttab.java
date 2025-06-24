@@ -41,13 +41,16 @@ import org.xml.sax.InputSource;
 
 import lombok.RequiredArgsConstructor;
 import sf.sfis.miniesb.model.FidsAfttab;
+import sf.sfis.miniesb.model.FidsAirport;
 import sf.sfis.miniesb.model.FidsCcatab;
+import sf.sfis.miniesb.repository.FidsAirportRepository;
 
 @Component
 @RequiredArgsConstructor
 public class TranformFidsAfttab {
 	private final Logger LOGGER = LoggerFactory.getLogger(TranformFidsAfttab.class);
 	private final DateTimeFormatHelper dateTimeFormatHelper;
+	private final FidsAirportRepository fidsAirportRepository;
 	FidsAfttab fidsAfttab = null;
 	Document doc = null;
 	XPath xpath = XPathFactory.newInstance().newXPath();
@@ -62,7 +65,7 @@ public class TranformFidsAfttab {
 		return input;
 	}
 
-	public FidsAfttab convertPlTurntoAfftab(String xmlString, String actionType, String adid) {
+	public FidsAfttab convertPlTurntoAfftab(String xmlString, String actionType, String hopo, String adid) {
 		try {
 //			LOGGER.info("convertPlTurntoAfftab");
 //			LOGGER.info(xmlString);
@@ -77,8 +80,6 @@ public class TranformFidsAfttab {
 			NodeList departureList = doc.getElementsByTagName("pl_departure");
 			String urnoArr = (String) xpath.evaluate("//pa_idseq", doc, XPathConstants.STRING);
 			String urnoDep = (String) xpath.evaluate("//pd_idseq", doc, XPathConstants.STRING);
-			String flnoArr = (String) xpath.evaluate("//pa_flightnumber", doc, XPathConstants.STRING);
-			String flnoDep = (String) xpath.evaluate("//pd_flightnumber", doc, XPathConstants.STRING);
 			boolean hasArrival = !urnoArr.equals("");
 			boolean hasDeparture = !urnoDep.equals("");
 
@@ -90,6 +91,7 @@ public class TranformFidsAfttab {
 						fidsAfttab = new FidsAfttab();
 						fidsAfttab.setAdid("A");
 						processPaths(adid,actionType);
+						defineVial(arrivalElement,hopo,adid,actionType);
 						
 						if(actionType.equalsIgnoreCase("UPDATE")) {
 							fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
@@ -97,6 +99,13 @@ public class TranformFidsAfttab {
 						}
 						
 						fixPaths(arrivalElement,adid);
+						String airport4 = "";
+						Optional<FidsAirport> queryFidsAirport = fidsAirportRepository.findById(hopo);
+						if (queryFidsAirport.isPresent()) {
+							airport4 = queryFidsAirport.get().getApc4();
+						}
+						fidsAfttab.setDes3(hopo);
+						fidsAfttab.setDes4(airport4);
 					}
 				} else if (adid.equalsIgnoreCase("D") && hasDeparture) {
 					Element departureElement = (Element) departureList.item(0);
@@ -104,7 +113,7 @@ public class TranformFidsAfttab {
 						fidsAfttab = new FidsAfttab();
 						fidsAfttab.setAdid("D");
 						processPaths(adid,actionType);
-//						fidsAfttab.setAtot(fidsAfttab.getAtot()!=null?fidsAfttab.getAtot():" ");
+						defineVial(departureElement,hopo,adid,actionType);
 						
 						if(actionType.equalsIgnoreCase("UPDATE")) {
 							fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
@@ -112,6 +121,13 @@ public class TranformFidsAfttab {
 						}
 						
 						fixPaths(departureElement,adid);
+						String airport4 = "";
+						Optional<FidsAirport> queryFidsAirport = fidsAirportRepository.findById(hopo);
+						if (queryFidsAirport.isPresent()) {
+							airport4 = queryFidsAirport.get().getApc4();
+						}
+						fidsAfttab.setOrg3(hopo);
+						fidsAfttab.setOrg4(airport4);
 					}
 				} else {
 					return null;
@@ -119,14 +135,18 @@ public class TranformFidsAfttab {
 				
 				// ตรวจสอบ RTYP จาก tag pl_arrival และ pl_departure
 				if(fidsAfttab!=null) {
+					fidsAfttab.setHopo(hopo);
+					FieldInspector.replaceHoldWithEmpty(fidsAfttab);
 					if (hasArrival && hasDeparture) {
 						fidsAfttab.setRtyp("J");
 					} else if (hasArrival || hasDeparture) {
 						fidsAfttab.setRtyp("S");
 					}
-					if(flnoArr.equals(flnoDep)) {
-						fidsAfttab.setVia3(" ");
-						fidsAfttab.setVia4(" ");
+					if(fidsAfttab.getMtow()!=null&&!fidsAfttab.getMtow().trim().equals("")) {
+						String mtow = fidsAfttab.getMtow();
+						int number = Integer.parseInt(mtow);
+						int result = (int) Math.ceil((double) number / 1000);
+						fidsAfttab.setMtow(Integer.toString(result));
 					}
 				}
 			}else {//Common Counter
@@ -318,25 +338,6 @@ public class TranformFidsAfttab {
 			trkn = trkn.substring(2); // ตัดสองตัวแรกออก
 			fidsAfttab.setTrkn(trkn);
 		}
-		
-		NodeList routingNodes = element.getElementsByTagName("pl_routing");
-		String vial = "";
-		for (int i = 0; i < routingNodes.getLength(); i++) {
-			Node routingNode = routingNodes.item(i);
-			try {
-				String rapIata3lc = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc", routingNode);
-				String rapIcao4lc = xpath.evaluate("prt_rap_refairport/ref_airport/rap_icao4lc", routingNode);
-				if (rapIata3lc != null && !rapIata3lc.isEmpty() && rapIcao4lc != null
-						&& !rapIcao4lc.isEmpty()) {
-					vial = vial + getVial(rapIata3lc, rapIcao4lc);
-				}
-			} catch (XPathExpressionException e) {
-				LOGGER.error("XPath error for routingNode: ", e);
-//				e.printStackTrace();
-			}
-		}
-		fidsAfttab.setVial(vial);
-		fidsAfttab.setVian(Integer.toString(routingNodes.getLength()));
 
 		NodeList beltNodes = adid.equalsIgnoreCase("A")?element.getElementsByTagName("pl_baggagebelt"):element.getElementsByTagName("pl_departurebelt");
 		for (int i = 0; i < beltNodes.getLength(); i++) {
@@ -435,7 +436,6 @@ public class TranformFidsAfttab {
 //		fidsAfttab.setDes4(fidsAfttab.getVia4());
 		fidsAfttab.setStod(fidsAfttab.getSobt());
 		if(adid.equalsIgnoreCase("A")) {
-			fidsAfttab.setDes3(fidsAfttab.getVia3());
 			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSibt()).substring(0, 8));
 		}else {
 			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSobt()).substring(0, 8));
@@ -468,6 +468,59 @@ public class TranformFidsAfttab {
 		}else {
 			fidsAfttab.setSobt(" ");
 			fidsAfttab.setStod(" ");
+		}
+	}
+	
+	private void defineVial(Element element, String hopo, String adid, String actionType) {
+		try {
+			String route = (String) xpath.evaluate("//pt_routing", doc, XPathConstants.STRING);
+//			LOGGER.info("==========="+route);
+			String[] airports = route.split("-");
+			String via3 = "";
+			for (int i = 0; i < airports.length; i++) {
+	            if (hopo.equals(airports[i])) {
+	            	if(adid.equalsIgnoreCase("A")){
+	            		if (i > 1) { // มากกว่า 1 airport ด้านหน้า BKK
+		            		via3 = airports[i-1];
+	                    }
+	            	}else {
+	            		if(i < airports.length - 2) {
+		            		via3 = airports[i+1];
+	            		}
+	            	}
+//        			LOGGER.info("==========="+adid+" : "+via3);
+	                break; // ถ้าเจอ BKK แล้ว ไม่ต้อง loop ต่อ
+	            }
+	        }
+			
+			NodeList routingNodes = element.getElementsByTagName("pl_routing");
+			String vial = null;
+			for (int i = 0; i < routingNodes.getLength(); i++) {
+//			Node routingNode = routingNodes.getLength()>0 ? routingNodes.item(0) : null;
+//			if(adid.equalsIgnoreCase("A") && routingNodes.getLength()>1) {
+				Node routingNode = routingNodes.item(i);
+//			}
+				if(routingNode!=null) {
+					String actionValue = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc/@action", routingNode);
+					if(actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(actionValue))) {
+						String rapIata3lc = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc", routingNode);
+						String rapIcao4lc = xpath.evaluate("prt_rap_refairport/ref_airport/rap_icao4lc", routingNode);
+						if (rapIata3lc != null && !rapIata3lc.isEmpty() && rapIcao4lc != null
+								&& !rapIcao4lc.isEmpty() && rapIata3lc.equals(via3)) {
+							vial = getVial(rapIata3lc, rapIcao4lc);
+							
+							fidsAfttab.setVia3(rapIata3lc);
+							fidsAfttab.setVia4(rapIcao4lc);
+							fidsAfttab.setVial(vial);
+							fidsAfttab.setVian(routingNodes.getLength()>0? "1":"0");
+//		        			LOGGER.info("==========="+vial);
+							break;
+						}
+					}
+				}
+			}
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
 		}
 	}
 	

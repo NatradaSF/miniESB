@@ -56,7 +56,6 @@ public class ESBResponseService {
 	private final FidsCcatabService fidsCcatabService;
 	private final FidsGateHistoryService fidsGateHistoryService;
 	private final FidsFinalcallHistoryService fidsFinalcallHistoryService;
-	private final FidsAirportRepository fidsAirportRepository;
 	private final RedisController redisController;
 
 	public void convertXMLtoObject(String xml) {
@@ -70,11 +69,6 @@ public class ESBResponseService {
 			String type = envelope.getHeader().getControl().getMessageType();
 			String timestamp = dateTimeFormatHelper.convertLocalToUTC(envelope.getHeader().getControl().getTimestamp());
 			String hopo = envelope.getHeader().getControl().getStation();
-			String airport4 = "";
-			Optional<FidsAirport> queryFidsAirport = fidsAirportRepository.findById(hopo);
-			if (queryFidsAirport.isPresent()) {
-				airport4 = queryFidsAirport.get().getApc4();
-			}
 
 			LOGGER.info("Message Type: " + type);
 			StringWriter writer = new StringWriter();
@@ -84,13 +78,9 @@ public class ESBResponseService {
 
 //			TranformFidsAfttab tranformFidsAfttab = new TranformFidsAfttab();
 			//Insert or Update all fields on FidsAfttab.
-			FidsAfttab fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", "A");
+			FidsAfttab fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", hopo, "A");
 			if (fidsAfttab != null) {
-				fidsAfttab.setHopo(hopo);
-				FieldInspector.replaceHoldWithEmpty(fidsAfttab);
 				if(fidsAfttab.getUrno()!=null) {
-					fidsAfttab.setDes3(hopo);
-					fidsAfttab.setDes4(airport4);
 					fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
 					if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
 						fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
@@ -100,14 +90,10 @@ public class ESBResponseService {
 					}
 				}
 			}
-			fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", "D");
-			if (fidsAfttab != null) {
-				fidsAfttab.setHopo(hopo);
-				FieldInspector.replaceHoldWithEmpty(fidsAfttab);
+			fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", hopo, "D");
+			if (fidsAfttab != null) {;
 				fidsCcatabService.updateCcatab(fidsAfttab);
 				if(fidsAfttab.getUrno()!=null) {
-					fidsAfttab.setOrg3(hopo);
-					fidsAfttab.setOrg4(airport4);
 					fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
 					if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
 						fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
@@ -119,9 +105,8 @@ public class ESBResponseService {
 			}
 			
 			if (type.equalsIgnoreCase("UPDATE")) {//Send update fields to ESB by Web service.
-				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, "A");
+				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "A");
 				if (fidsAfttab != null) {
-					fidsAfttab.setHopo(hopo);
 					String xmlEsb = convertFidsAfftabtoEsb(timestamp, fidsAfttab);
 					if(xmlEsb!=null) {
 						LOGGER.info("Call Web service update arrival flight...");
@@ -131,9 +116,8 @@ public class ESBResponseService {
 						LOGGER.info("No data found for ESB update.");
 					}
 				}
-				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, "D");
+				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "D");
 				if (fidsAfttab != null) {
-					fidsAfttab.setHopo(hopo);
 					String xmlEsb = convertFidsAfftabtoEsb(timestamp, fidsAfttab);
 					if(xmlEsb!=null) {
 						LOGGER.info("Call Web service update departure flight...");
