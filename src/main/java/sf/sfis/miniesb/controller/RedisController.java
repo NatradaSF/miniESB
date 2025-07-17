@@ -7,7 +7,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -28,6 +33,7 @@ public class RedisController {
 	private final WebClient webClient;
 	private final ObjectMapper objectMapper;
 	private final RedisService redisService; // Inject RedisService
+	private final StringRedisTemplate redisTemplate;
 
 	// ✅ API ใส่ข้อมูลใน Redis (แทนค่าตัวเก่าทุกครั้ง)
 //    @PostMapping("/cache-data")
@@ -74,46 +80,49 @@ public class RedisController {
 	}
 
 //	@GetMapping("/data")
-//	public ResponseEntity<?> getData(@RequestParam String ds, @RequestParam String hopo) {
-//		try {
-//			ds = ds.toUpperCase();
-//			hopo = hopo.toUpperCase();
-//
-//			String key = hopo + "/" + ds;
-//			String jsonData = redisTemplate.opsForValue().get(key);
-//			if (jsonData == null) {
-//				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//						.body("❌ No cached data found for HOPO=" + hopo + ", DS=" + ds);
-//			}
-//
-//			return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(jsonData);
-//
-//		} catch (Exception e) {
-//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//					.body("❌ Failed to get cached data: " + e.getMessage());
-//		}
-//	}
+	public ResponseEntity<?> getData(@RequestParam String ds, @RequestParam String hopo) {
+		try {
+			ds = ds.toUpperCase();
+			hopo = hopo.toUpperCase();
+
+			String key = hopo + "/" + ds;
+//			LOGGER.info(key);
+			String jsonData = redisTemplate.opsForValue().get(key);
+//			LOGGER.info(jsonData);
+			if (jsonData == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body("❌ No cached data found for HOPO=" + hopo + ", DS=" + ds);
+			}
+
+			return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(jsonData);
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("❌ Failed to get cached data: " + e.getMessage());
+		}
+	}
 //
 //	@GetMapping("/timestamp")
-//	public ResponseEntity<String> getTimestamp(@RequestParam String hopo) {
-//		try {
-//			hopo = hopo.toUpperCase();
-//
-//			String key = hopo + "/timestamp";
-//			String timestamp = redisTemplate.opsForValue().get(key);
-//
-//			if (timestamp == null) {
-//				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//						.body("❌ No timestamp found for HOPO=" + hopo);
-//			}
-//
-//			return ResponseEntity.ok(timestamp);
-//
-//		} catch (Exception e) {
-//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//					.body("❌ Failed to get timestamp: " + e.getMessage());
-//		}
-//	}
+	public ResponseEntity<String> getTimestamp(@RequestParam String hopo) {
+		try {
+			hopo = hopo.toUpperCase();
+
+			String key = hopo + "/timestamp";
+			String timestamp = redisTemplate.opsForValue().get(key);
+
+//			LOGGER.info(timestamp);
+			if (timestamp == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body("❌ No timestamp found for HOPO=" + hopo);
+			}
+
+			return ResponseEntity.ok(timestamp);
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("❌ Failed to get timestamp: " + e.getMessage());
+		}
+	}
 
 //    @DeleteMapping("/delete-data")
 //    public ResponseEntity<String> deleteData(

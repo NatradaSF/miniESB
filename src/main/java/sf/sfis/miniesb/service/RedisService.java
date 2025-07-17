@@ -46,6 +46,7 @@ public class RedisService {
 
             String jsonData = objectMapper.writeValueAsString(dataList);
 
+//            LOGGER.info(jsonData);
             redisTemplate.opsForValue().set(key, jsonData);
             redisTemplate.opsForValue().set(keyTime, timestamp);
 

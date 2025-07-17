@@ -87,12 +87,12 @@ public class TranformFidsAfttab {
 			if(!plTurn.equals("")) {//Flight
 				if (adid.equalsIgnoreCase("A") && hasArrival) {
 					Element arrivalElement = (Element) arrivalList.item(0);
-					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(arrivalElement.getAttribute("action")))) {
+					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && ("update".equalsIgnoreCase(arrivalElement.getAttribute("action")) || "insert".equalsIgnoreCase(arrivalElement.getAttribute("action"))))) {
 						fidsAfttab = new FidsAfttab();
 						fidsAfttab.setAdid("A");
 						processPaths(adid,actionType);
 						defineVial(arrivalElement,hopo,adid,actionType);
-						
+
 						if(actionType.equalsIgnoreCase("UPDATE")) {
 							fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
 							LOGGER.info("Fields arrival updated : "+fidsAfttab.getFieldsNotNull());
@@ -109,7 +109,7 @@ public class TranformFidsAfttab {
 					}
 				} else if (adid.equalsIgnoreCase("D") && hasDeparture) {
 					Element departureElement = (Element) departureList.item(0);
-					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(departureElement.getAttribute("action")))) {
+					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && ("update".equalsIgnoreCase(departureElement.getAttribute("action")) || "insert".equalsIgnoreCase(departureElement.getAttribute("action"))))) {
 						fidsAfttab = new FidsAfttab();
 						fidsAfttab.setAdid("D");
 						processPaths(adid,actionType);
@@ -350,6 +350,7 @@ public class TranformFidsAfttab {
 			    String ea = convertDateStringIfNeeded(xpath.evaluate(prefix + "endactual", beltNode));
 			    String es = convertDateStringIfNeeded(xpath.evaluate(prefix + "endplan", beltNode));
 			    String blt = convertDateStringIfNeeded(xpath.evaluate(prefix + (adid.equalsIgnoreCase("A")?"rbb_baggagebelt":"rdb_departurebelt"), beltNode));
+			    String tmb = convertDateStringIfNeeded(xpath.evaluate(prefix + (adid.equalsIgnoreCase("A")?"rbb_refbaggagebelt/ref_baggagebelt/rbb_rctt_countrytype":"rdb_refbaggagebelt/ref_baggagebelt/rdb_rctt_countrytype"), beltNode));
 			    String bast = convertDateStringIfNeeded(xpath.evaluate(prefix + "status", beltNode));
 			    
 			    setDynamicValue(fidsAfttab, "b", i, "ba", ba);
@@ -362,6 +363,7 @@ public class TranformFidsAfttab {
 			    setDynamicValue(fidsAfttab, "bae", i, "", ea);
 			    setDynamicValue(fidsAfttab, "bac", i, "", es);
 			    setDynamicValue(fidsAfttab, "blt", i, "", blt);
+			    setDynamicValue(fidsAfttab, "tmb", i, "", tmb);
 			    setDynamicValue(fidsAfttab, "baz", i, "", blt);
 			    fidsAfttab.setBast(bast);
 			} catch (XPathExpressionException e) {
@@ -427,7 +429,7 @@ public class TranformFidsAfttab {
 		
 		fidsAfttab.setAurn(fidsAfttab.getRkey().toString());
 		fidsAfttab.setBags(fidsAfttab.getBagn());
-		fidsAfttab.setBlt2(fidsAfttab.getBlt1());
+//		fidsAfttab.setBlt2(fidsAfttab.getBlt1());
 		fidsAfttab.setDcd2(fidsAfttab.getDcd1());
 //		fidsAfttab.setOrg3(fidsAfttab.getVia3());
 //		fidsAfttab.setOrg4(fidsAfttab.getVia4());
