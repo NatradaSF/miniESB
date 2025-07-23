@@ -317,6 +317,12 @@ public class TranformFidsAfttab {
 			Map<String, String> parts = parseFlightNumber(flno, fidsAfttab.getAlc3(), fidsAfttab.getAlc2());
 			fidsAfttab.setFlno(parts.isEmpty()?flno:parts.get("prefix")+parts.get("number")+parts.get("suffix"));
 			fidsAfttab.setFlns(parts.get("suffix")!=null?parts.get("suffix"):"");
+//			String[] lstJfno = fidsAfttab.getJfno() != null ? fidsAfttab.getJfno().split(",") : new String[0];
+//			for (int i = 0; i < lstJfno.length; i++) {
+//				parts = parseFlightNumber(flno, fidsAfttab.getAlc3(), fidsAfttab.getAlc2());
+//	            System.out.println(lstJfno[i].trim());  // trim() เอาช่องว่างรอบๆ ออก
+//	        }
+			fidsAfttab.setJfno(fidsAfttab.getJfno() != null ? fidsAfttab.getJfno().replace(",", " ") : null);
 			fidsAfttab.setCsgn(fidsAfttab.getCsgn() + fidsAfttab.getFlns().trim());
 			fidsAfttab.setFltn(parts.get("number"));
 			System.out.println("==================");
