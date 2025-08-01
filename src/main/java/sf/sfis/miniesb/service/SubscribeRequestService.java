@@ -74,8 +74,7 @@ public class SubscribeRequestService {
 	}
 	
 	@WebMethod
-//	public void requestDataset(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime) {
-	public void requestDataset(@WebParam(name = "dataType") String dataType) {
+	public void requestDataset(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime, @WebParam(name = "dataType") String dataType) {
 		LOGGER.info("Request Dataset...");
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
@@ -90,13 +89,10 @@ public class SubscribeRequestService {
 			control.setSender("FIDS");
 			control.setTimestamp(currentDate);
 			Request request = new Request();
-//			request.setDatatype("pl_turn");
 			request.setDatatype(dataType);//"pl_turn","pl_desk"
 			request.setKeepSubscription("y");
-//	        request.setStartTime("2025-05-09T00:00:00");
-//	        request.setEndTime("2025-05-09T23:59:59");
-//			request.setStartTime(starttime);
-//			request.setEndTime(endtime);
+			request.setStartTime(starttime);
+			request.setEndTime(endtime);
 			control.setRequest(request);
 			header.setControl(control);
 			Body body = new Body();

@@ -62,8 +62,8 @@ public class MiniEsbApplication extends SpringBootServletInitializer {
 //        redisController.getTimestamp(hopo);
 //        redisController.getData(ds, hopo);
 		
-//		SubscribeScheduledService subscribeAndRequestCcatab = context.getBean(SubscribeScheduledService.class);
-//		subscribeAndRequestCcatab.subscribeAndRequestCcatab();
+//		SubscribeScheduledService subscribeAndRequest = context.getBean(SubscribeScheduledService.class);
+//		subscribeAndRequest.subscribeAndRequestAfttab();
 	}
 
 	@Override
