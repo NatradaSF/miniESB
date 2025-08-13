@@ -2217,9 +2217,9 @@ public class FidsAfttab implements Serializable {
 //		departurePathToSetterMapBigDecimal.put("/pl_departure/pd_exot", FidsAfttab::setAxot);
 		departurePathToSetterMap.put("/pl_departure/pd_eczt", FidsAfttab::setEczt);
 		departurePathToSetterMap.put("/pl_departure/pd_eezt", FidsAfttab::setEezt);
-		arrivalPathToSetterMapDate.put("/pl_arrival/pa_eibt", FidsAfttab::setEibt);
+		arrivalPathToSetterMapDate.put("/pl_arrival/pa_pibt", FidsAfttab::setEibt);
 		arrivalPathToSetterMapDate.put("/pl_arrival/pa_eldt", FidsAfttab::setEldt);
-		departurePathToSetterMapDate.put("/pl_departure/pd_eobt", FidsAfttab::setEobt);
+		departurePathToSetterMapDate.put("/pl_departure/pd_pobt", FidsAfttab::setEobt);
 		departurePathToSetterMap.put("/pl_departure/pd_erzt", FidsAfttab::setErzt);
 		departurePathToSetterMapDate.put("/pl_departure/pd_etot", FidsAfttab::setEtot);
 		arrivalPathToSetterMapBigDecimal.put("/pl_arrival/pa_exit", FidsAfttab::setExit);

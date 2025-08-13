@@ -246,6 +246,12 @@ public class TranformFidsAfttab {
 			}
 		}
 		
+		if(fidsAfttab.getAldt()!=null) {
+			fidsAfttab.setEibt(fidsAfttab.getAldt());
+		}else {
+			fidsAfttab.setRemp(fidsAfttab.getEibt()!=null?"EAR":fidsAfttab.getRemp());//EAR=CONFIRMED
+		}
+		
 		fidsAfttab.setEtai(fidsAfttab.getEibt());
 		fidsAfttab.setEtoa(fidsAfttab.getEibt());
 		fidsAfttab.setEtdi(fidsAfttab.getEobt());
@@ -345,36 +351,40 @@ public class TranformFidsAfttab {
 			fidsAfttab.setTrkn(trkn);
 		}
 
+//		String actionValue = (String) xpath.evaluate(fixedPath + "/@action)", doc, XPathConstants.STRING);
 		NodeList beltNodes = adid.equalsIgnoreCase("A")?element.getElementsByTagName("pl_baggagebelt"):element.getElementsByTagName("pl_departurebelt");
 		for (int i = 0; i < beltNodes.getLength(); i++) {
 			Node beltNode = beltNodes.item(i);
-			try {
-				String prefix = adid.equalsIgnoreCase("A") ? "pbb_" : "pdb_";
+			String action = ((Element) beltNode).getAttribute("action");
+			if(!"delete".equalsIgnoreCase(action)) {
+				try {
+					String prefix = adid.equalsIgnoreCase("A") ? "pbb_" : "pdb_";
 
-			    String ba = convertDateStringIfNeeded(xpath.evaluate(prefix + "beginactual", beltNode));
-			    String bs = convertDateStringIfNeeded(xpath.evaluate(prefix + "beginplan", beltNode));
-			    String ea = convertDateStringIfNeeded(xpath.evaluate(prefix + "endactual", beltNode));
-			    String es = convertDateStringIfNeeded(xpath.evaluate(prefix + "endplan", beltNode));
-			    String blt = convertDateStringIfNeeded(xpath.evaluate(prefix + (adid.equalsIgnoreCase("A")?"rbb_baggagebelt":"rdb_departurebelt"), beltNode));
-			    String tmb = convertDateStringIfNeeded(xpath.evaluate(prefix + (adid.equalsIgnoreCase("A")?"rbb_refbaggagebelt/ref_baggagebelt/rbb_rctt_countrytype":"rdb_refbaggagebelt/ref_baggagebelt/rdb_rctt_countrytype"), beltNode));
-			    String bast = convertDateStringIfNeeded(xpath.evaluate(prefix + "status", beltNode));
-			    
-			    setDynamicValue(fidsAfttab, "b", i, "ba", ba);
-			    setDynamicValue(fidsAfttab, "b", i, "bs", bs);
-			    setDynamicValue(fidsAfttab, "b", i, "ea", ea);
-			    setDynamicValue(fidsAfttab, "b", i, "es", es);
-			    
-			    setDynamicValue(fidsAfttab, "bas", i, "", ba);
-			    setDynamicValue(fidsAfttab, "bao", i, "", bs);
-			    setDynamicValue(fidsAfttab, "bae", i, "", ea);
-			    setDynamicValue(fidsAfttab, "bac", i, "", es);
-			    setDynamicValue(fidsAfttab, "blt", i, "", blt);
-			    setDynamicValue(fidsAfttab, "tmb", i, "", tmb);
-			    setDynamicValue(fidsAfttab, "baz", i, "", blt);
-			    fidsAfttab.setBast(bast);
-			} catch (XPathExpressionException e) {
-				LOGGER.error("XPath error for beltNode: ", e);
-//				e.printStackTrace();
+				    String ba = convertDateStringIfNeeded(xpath.evaluate(prefix + "beginactual", beltNode));
+				    String bs = convertDateStringIfNeeded(xpath.evaluate(prefix + "beginplan", beltNode));
+				    String ea = convertDateStringIfNeeded(xpath.evaluate(prefix + "endactual", beltNode));
+				    String es = convertDateStringIfNeeded(xpath.evaluate(prefix + "endplan", beltNode));
+				    String blt = convertDateStringIfNeeded(xpath.evaluate(prefix + (adid.equalsIgnoreCase("A")?"rbb_baggagebelt":"rdb_departurebelt"), beltNode));
+				    String tmb = convertDateStringIfNeeded(xpath.evaluate(prefix + (adid.equalsIgnoreCase("A")?"rbb_refbaggagebelt/ref_baggagebelt/rbb_rctt_countrytype":"rdb_refbaggagebelt/ref_baggagebelt/rdb_rctt_countrytype"), beltNode));
+				    String bast = convertDateStringIfNeeded(xpath.evaluate(prefix + "status", beltNode));
+				    
+				    setDynamicValue(fidsAfttab, "b", i, "ba", ba);
+				    setDynamicValue(fidsAfttab, "b", i, "bs", bs);
+				    setDynamicValue(fidsAfttab, "b", i, "ea", ea);
+				    setDynamicValue(fidsAfttab, "b", i, "es", es);
+				    
+				    setDynamicValue(fidsAfttab, "bas", i, "", ba);
+				    setDynamicValue(fidsAfttab, "bao", i, "", bs);
+				    setDynamicValue(fidsAfttab, "bae", i, "", ea);
+				    setDynamicValue(fidsAfttab, "bac", i, "", es);
+				    setDynamicValue(fidsAfttab, "blt", i, "", blt);
+				    setDynamicValue(fidsAfttab, "tmb", i, "", tmb);
+				    setDynamicValue(fidsAfttab, "baz", i, "", blt);
+				    fidsAfttab.setBast(bast);
+				} catch (XPathExpressionException e) {
+					LOGGER.error("XPath error for beltNode: ", e);
+//					e.printStackTrace();
+				}
 			}
 		}
 		

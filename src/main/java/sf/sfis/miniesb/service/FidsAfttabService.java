@@ -18,8 +18,8 @@ public class FidsAfttabService {
 	@Transactional
 	public FidsAfttab saveFidsAfttab(FidsAfttab fidsAfttab) {
 		try {
-			fidsAfttab = fidsAfttabRepository.save(fidsAfttab);
 			LOGGER.info(fidsAfttab.toString());
+			fidsAfttab = fidsAfttabRepository.save(fidsAfttab);
 		} catch (Exception e) {
 			LOGGER.error("saveFidsAfttab: ", e);
 		}

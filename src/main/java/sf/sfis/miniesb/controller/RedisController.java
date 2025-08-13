@@ -1,6 +1,8 @@
 package sf.sfis.miniesb.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -21,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import sf.sfis.miniesb.service.RedisService;
 
-//@RestController
+@RestController
 @Component
 @RequiredArgsConstructor
 public class RedisController {
@@ -79,19 +83,19 @@ public class RedisController {
 		}
 	}
 
-//	@GetMapping("/data")
-	public ResponseEntity<?> getData(@RequestParam String ds, @RequestParam String hopo) {
+	@GetMapping("/getDataByDSName")
+	public ResponseEntity<?> getData(@RequestParam String DS, @RequestParam String HOPO) {
 		try {
-			ds = ds.toUpperCase();
-			hopo = hopo.toUpperCase();
+			DS = DS.toUpperCase();
+			HOPO = HOPO.toUpperCase();
 
-			String key = hopo + "/" + ds;
+			String key = HOPO + "/" + DS;
 //			LOGGER.info(key);
 			String jsonData = redisTemplate.opsForValue().get(key);
 //			LOGGER.info(jsonData);
 			if (jsonData == null) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body("❌ No cached data found for HOPO=" + hopo + ", DS=" + ds);
+						.body("❌ No cached data found for HOPO=" + HOPO + ", DS=" + DS);
 			}
 
 			return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(jsonData);
@@ -102,21 +106,26 @@ public class RedisController {
 		}
 	}
 //
-//	@GetMapping("/timestamp")
-	public ResponseEntity<String> getTimestamp(@RequestParam String hopo) {
+	@GetMapping("/getTimestamp")
+	public ResponseEntity<String> getTimestamp(@RequestParam String HOPO) {
 		try {
-			hopo = hopo.toUpperCase();
+			HOPO = HOPO.toUpperCase();
 
-			String key = hopo + "/timestamp";
+			String key = HOPO + "/timestamp";
 			String timestamp = redisTemplate.opsForValue().get(key);
 
 //			LOGGER.info(timestamp);
 			if (timestamp == null) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body("❌ No timestamp found for HOPO=" + hopo);
+						.body("❌ No timestamp found for HOPO=" + HOPO);
 			}
 
-			return ResponseEntity.ok(timestamp);
+			SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = inputFormat.parse(timestamp);
+            timestamp = outputFormat.format(date);
+			
+			return ResponseEntity.ok("Current Timestamp : "+timestamp);
 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
