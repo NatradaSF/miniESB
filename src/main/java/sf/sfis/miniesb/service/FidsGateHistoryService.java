@@ -2,8 +2,8 @@ package sf.sfis.miniesb.service;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -24,7 +24,7 @@ public class FidsGateHistoryService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FidsGateHistoryService.class);
 	private final FidsGateHistoryRepository fidsGateHistoryRepository;
 	private final FidsAfttabRepository fidsAfttabRepository;
-	
+
 	@Transactional
 	public FidsGateHistory saveFidsGateHistory(FidsGateHistory fidsGateHistory) {
 		try {
@@ -34,7 +34,7 @@ public class FidsGateHistoryService {
 		}
 		return fidsGateHistory;
 	}
-	
+
 	@Transactional
 	public void deleteFidsGateHistory(FidsGateHistory fidsGateHistory) {
 		try {
@@ -43,7 +43,7 @@ public class FidsGateHistoryService {
 			LOGGER.error("deleteFidsGateHistory: ", e);
 		}
 	}
-	
+
 	public boolean updateGateChangeHistory(FidsAfttab fidsAfttab) throws ClassNotFoundException, SQLException {
 //		String DOMINT = "I";
 //		String[] DOM_TTYP = {"05","06","50","51","56","58","59","60","61","62","63","64","65","66","68","76"};
@@ -79,65 +79,76 @@ public class FidsGateHistoryService {
 //    	CounterOpenMap.put("BKK_EK_D", 210);
 //    	CounterOpenMap.put("BKK_EK_I", 210);
 //    	CounterOpenMap.put("BKK_VZ_D", 120);
-    	
-    	int countopen = 180;//Default
+
+		int countopen = 180;// Default
 //    	if(CounterOpenMap.get(index)!=null) {
 //    		countopen=CounterOpenMap.get(index);
 //    	}
-    	
+
 		try {
 			Calendar current = Calendar.getInstance();
 			Calendar counteropen_local = Calendar.getInstance();
-			SimpleDateFormat sp = new SimpleDateFormat("yyyyMMddHHmmss");			
+			SimpleDateFormat sp = new SimpleDateFormat("yyyyMMddHHmmss");
 			counteropen_local.setTime(sp.parse(fidsAfttab.getSobt()));
 			counteropen_local.add(Calendar.HOUR, 7);
-			counteropen_local.add(Calendar.MINUTE, countopen*-1);
-			if(current.before(counteropen_local)) {//Update comes before counter open
+			counteropen_local.add(Calendar.MINUTE, countopen * -1);
+			if (current.before(counteropen_local)) {// Update comes before counter open
 				System.out.println("Ignore Update Before Counter Open !!");
 				return false;
 			}
-		}catch(Exception ex) {
+		} catch (Exception ex) {
 			LOGGER.error("SOBT format error!!");
 			return false;
 		}
-		
+
 		boolean result = false;
-		fidsAfttab.setGtd1(fidsAfttab.getGtd1()!=null&&fidsAfttab.getGtd1().trim().length()>0?fidsAfttab.getGtd1():"     ");
-		fidsAfttab.setGtd2(fidsAfttab.getGtd2()!=null&&fidsAfttab.getGtd2().trim().length()>0?fidsAfttab.getGtd2():"     ");
-		
+		fidsAfttab
+				.setGtd1(fidsAfttab.getGtd1() != null && fidsAfttab.getGtd1().trim().length() > 0 ? fidsAfttab.getGtd1()
+						: "     ");
+		fidsAfttab
+				.setGtd2(fidsAfttab.getGtd2() != null && fidsAfttab.getGtd2().trim().length() > 0 ? fidsAfttab.getGtd2()
+						: "     ");
+
 		FidsGateHistory fidsGateHistory = new FidsGateHistory();
 		fidsGateHistory.setUrno(fidsAfttab.getUrno().toString());
-		if(fidsAfttab.getAtot()!=null && fidsAfttab.getAtot().trim().length()>0) {
+		if (fidsAfttab.getAtot() != null && fidsAfttab.getAtot().trim().length() > 0) {
 			deleteFidsGateHistory(fidsGateHistory);
-		}
-		
-		Optional<FidsGateHistory> queryFidsGateHistory = fidsGateHistoryRepository.findById(fidsAfttab.getUrno().toString());
-		if (queryFidsGateHistory.isPresent()) {
-			FidsGateHistory oldFidsGateHistory = queryFidsGateHistory.get();
-//			LOGGER.info(oldFidsGateHistory.toString());
-//			LOGGER.info(fidsAfttab.toString());
-			if(oldFidsGateHistory.getNewgate1()!=null&&oldFidsGateHistory.getNewgate1().trim().equals(fidsAfttab.getGtd1().trim()) && oldFidsGateHistory.getNewgate2()!=null&&oldFidsGateHistory.getNewgate2().trim().equals(fidsAfttab.getGtd2().trim())) {
-				//No Change
+		} else {
+			ZonedDateTime localTime = ZonedDateTime.now(ZoneId.of("Asia/Bangkok"));
+			fidsGateHistory.setUpdateTime(localTime.toOffsetDateTime());
+			fidsGateHistory.setNewgate1(fidsAfttab.getGtd1());
+			fidsGateHistory.setNewgate2(fidsAfttab.getGtd2());
+			fidsGateHistory.setFlno(fidsAfttab.getFlno());
+			fidsGateHistory.setHopo(fidsAfttab.getHopo());
+			fidsGateHistory.setSobt(fidsAfttab.getSobt());
+
+			Optional<FidsGateHistory> queryFidsGateHistory = fidsGateHistoryRepository
+					.findById(fidsAfttab.getUrno().toString());
+			if (queryFidsGateHistory.isPresent()) {
+				FidsGateHistory oldFidsGateHistory = queryFidsGateHistory.get();
+//				LOGGER.info(oldFidsGateHistory.toString());
+//				LOGGER.info(fidsAfttab.toString());
+				if (oldFidsGateHistory.getNewgate1() != null
+						&& oldFidsGateHistory.getNewgate1().trim().equals(fidsAfttab.getGtd1().trim())
+						&& oldFidsGateHistory.getNewgate2() != null
+						&& oldFidsGateHistory.getNewgate2().trim().equals(fidsAfttab.getGtd2().trim())) {
+					// No Change
+				}
+//				else if(oldFidsGateHistory.getNewgate1()!=null&&oldFidsGateHistory.getNewgate1().trim().length()<=0 && oldFidsGateHistory.getNewgate2()!=null&&oldFidsGateHistory.getNewgate2().trim().length()<=0) {
+//					//Just Add
+//					LOGGER.info("2");
+//				}
+				else {
+//					LOGGER.info("Gate change detected!! URNO="+fidsAfttab.getUrno()+" New GTD1 "+fidsAfttab.getGtd1()+"("+oldFidsGateHistory.getNewgate1()+") , New GTD2 "+fidsAfttab.getGtd2()+"("+oldFidsGateHistory.getNewgate2()+")");
+					fidsGateHistory.setOldgate1(oldFidsGateHistory.getNewgate1());
+					fidsGateHistory.setOldgate2(oldFidsGateHistory.getNewgate2());
+				}
 			}
-//			else if(oldFidsGateHistory.getNewgate1()!=null&&oldFidsGateHistory.getNewgate1().trim().length()<=0 && oldFidsGateHistory.getNewgate2()!=null&&oldFidsGateHistory.getNewgate2().trim().length()<=0) {
-//				//Just Add
-//				LOGGER.info("2");
-//			}
-			else {
-//				LOGGER.info("Gate change detected!! URNO="+fidsAfttab.getUrno()+" New GTD1 "+fidsAfttab.getGtd1()+"("+oldFidsGateHistory.getNewgate1()+") , New GTD2 "+fidsAfttab.getGtd2()+"("+oldFidsGateHistory.getNewgate2()+")");
-				fidsGateHistory.setUpdateTime(OffsetDateTime.now(ZoneOffset.UTC));
-				fidsGateHistory.setNewgate1(fidsAfttab.getGtd1());
-				fidsGateHistory.setNewgate2(fidsAfttab.getGtd2());
-				fidsGateHistory.setOldgate1(oldFidsGateHistory.getNewgate1());
-				fidsGateHistory.setOldgate2(oldFidsGateHistory.getNewgate2());
-				fidsGateHistory.setFlno(fidsAfttab.getFlno());
-				fidsGateHistory.setHopo(fidsAfttab.getHopo());
-				fidsGateHistory.setSobt(fidsAfttab.getSobt());
-				LOGGER.info(fidsGateHistory.toString());
-				fidsGateHistory = saveFidsGateHistory(fidsGateHistory);
-				result = fidsGateHistory!=null?true:false;
-			}
+
+			LOGGER.info(fidsGateHistory.toString());
+			fidsGateHistory = saveFidsGateHistory(fidsGateHistory);
 		}
+		result = fidsGateHistory != null ? true : false;
 		return result;
 	}
 
