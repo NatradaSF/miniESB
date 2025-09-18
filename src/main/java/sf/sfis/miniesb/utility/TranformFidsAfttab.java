@@ -152,6 +152,7 @@ public class TranformFidsAfttab {
 			}else {//Common Counter
 				if(adid.equalsIgnoreCase("D")) {
 					fidsAfttab = new FidsAfttab();
+					fidsAfttab.setHopo(hopo);
 					NodeList counterList = doc.getElementsByTagName("pl_desk");
 					if (counterList.getLength() > 0) {
 						Element counterElement = (Element) counterList.item(0);
