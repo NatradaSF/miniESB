@@ -28,7 +28,8 @@ import sf.sfis.miniesb.utility.TranformFidsAfttab;
 
 @Service
 @RequiredArgsConstructor
-public class SubscribeResponseService {
+@Deprecated
+class SubscribeResponseService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SubscribeResponseService.class);
 	private final DateTimeFormatHelper dateTimeFormatHelper;
 	private final TranformFidsAfttab tranformFidsAfttab;
