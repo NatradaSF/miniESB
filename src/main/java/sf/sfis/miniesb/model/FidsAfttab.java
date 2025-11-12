@@ -2002,6 +2002,9 @@ public class FidsAfttab implements Serializable {
 
 	@Transient
 	private List<String> fieldsNotNull = new ArrayList<String>();
+	
+	@Transient
+	private String action;
 
 	static {
 

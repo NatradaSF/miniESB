@@ -4,7 +4,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +38,6 @@ import sf.sfis.miniesb.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJFLIGHT;
 import sf.sfis.miniesb.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJGENERIC;
 import sf.sfis.miniesb.esb.realtimeoutbound.TIMEID;
 import sf.sfis.miniesb.model.FidsAfttab;
-import sf.sfis.miniesb.model.FidsAirport;
-import sf.sfis.miniesb.repository.FidsAirportRepository;
 import sf.sfis.miniesb.utility.DateTimeFormatHelper;
 import sf.sfis.miniesb.utility.FieldInspector;
 import sf.sfis.miniesb.utility.GetterAccess;
@@ -77,59 +74,62 @@ public class ESBResponseService {
 			marshaller.marshal(envelope, writer);
 
 //			TranformFidsAfttab tranformFidsAfttab = new TranformFidsAfttab();
-			//Insert or Update all fields on FidsAfttab.
+			// Insert or Update all fields on FidsAfttab.
 			FidsAfttab fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", hopo, "A");
 			if (fidsAfttab != null) {
-				if(fidsAfttab.getUrno()!=null) {
+				if (fidsAfttab.getUrno() != null) {
 					fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
-					if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
+					if ((fidsAfttab.getGtd1() != null && fidsAfttab.getGtd1().length() > 0)
+							|| (fidsAfttab.getGtd2() != null && fidsAfttab.getGtd2().length() > 0)) {
 						fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
 					}
-					if(fidsAfttab.getRemp()!=null && fidsAfttab.getRemp().length()>0) {
+					if (fidsAfttab.getRemp() != null && fidsAfttab.getRemp().length() > 0) {
 						fidsFinalcallHistoryService.updateFinalCallHistory(fidsAfttab);
 					}
 				}
 			}
 			fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", hopo, "D");
-			if (fidsAfttab != null) {;
+			if (fidsAfttab != null) {
+				;
 				fidsCcatabService.updateCcatab(fidsAfttab);
-				if(fidsAfttab.getUrno()!=null) {
+				if (fidsAfttab.getUrno() != null) {
 					fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
-					if((fidsAfttab.getGtd1()!=null && fidsAfttab.getGtd1().length()>0)||(fidsAfttab.getGtd2()!=null && fidsAfttab.getGtd2().length()>0)) {
+					if ((fidsAfttab.getGtd1() != null && fidsAfttab.getGtd1().length() > 0)
+							|| (fidsAfttab.getGtd2() != null && fidsAfttab.getGtd2().length() > 0)) {
 						fidsGateHistoryService.updateGateChangeHistory(fidsAfttab);
 					}
-					if(fidsAfttab.getRemp()!=null && fidsAfttab.getRemp().length()>0) {
+					if (fidsAfttab.getRemp() != null && fidsAfttab.getRemp().length() > 0) {
 						fidsFinalcallHistoryService.updateFinalCallHistory(fidsAfttab);
 					}
 				}
 			}
-			
-			if (type.equalsIgnoreCase("UPDATE")) {//Send update fields to ESB by Web service.
+
+			if (type.equalsIgnoreCase("UPDATE")) {// Send update fields to ESB by Web service.
 				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "A");
 				if (fidsAfttab != null) {
 					String xmlEsb = convertFidsAfftabtoEsb(timestamp, fidsAfttab);
-					if(xmlEsb!=null) {
+					if (xmlEsb != null) {
 						LOGGER.info("Call Web service update arrival flight...");
 						LOGGER.info(xmlEsb);
 						callWebserviceUpdate(xmlEsb);
-					}else {
+					} else {
 						LOGGER.info("No data found for ESB update.");
 					}
 				}
 				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "D");
 				if (fidsAfttab != null) {
 					String xmlEsb = convertFidsAfftabtoEsb(timestamp, fidsAfttab);
-					if(xmlEsb!=null) {
+					if (xmlEsb != null) {
 						LOGGER.info("Call Web service update departure flight...");
 						LOGGER.info(xmlEsb);
 						callWebserviceUpdate(xmlEsb);
-					}else {
+					} else {
 						LOGGER.info("No data found for ESB update.");
 					}
 				}
-				//Save data to Redis.
+				// Save data to Redis.
 				redisController.saveData(hopo);
-			}else if (!type.equalsIgnoreCase("DATASET")) {//Send ACK or NACK to ESB by Web service.
+			} else if (!type.equalsIgnoreCase("DATASET")) {// Send ACK or NACK to ESB by Web service.
 				String contentBody = getContentBody(writer.toString());
 				String xmlEsb = convertResponseMessagetoEsb(timestamp, envelope, contentBody);
 				LOGGER.info("Call Web service response...");
@@ -198,7 +198,7 @@ public class ESBResponseService {
 		infobjgeneric.setMESSAGEORIGIN("UFIS");
 		infobjgeneric.setTIMEID(TIMEID.UTC);
 		infobjgeneric.setTIMESTAMP(updateTime);
-		infobjgeneric.setACTIONTYPE(ACTIONTYPE.U);
+		infobjgeneric.setACTIONTYPE(fidsAfttab.getAction().equalsIgnoreCase("insert") ? ACTIONTYPE.I : ACTIONTYPE.U);
 		infobjgeneric.setHOPO(fidsAfttab.getHopo());
 		infobjgeneric.setURNO(fidsAfttab.getUrno() != null ? fidsAfttab.getUrno().toString() : null);
 		infobjgeneric.setADID(ADID.valueOf(fidsAfttab.getAdid()));
@@ -214,15 +214,15 @@ public class ESBResponseService {
 //				"rwya", "rwyd", "land", "airb", "ifra", "ifrd", "onbl", "ofbl", "acgt", "ttot", "tobt", "tsat", "asbt",
 //				"remp", "ardt", "asrt", "asat"));
 		copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, infobjflight);
-		
-		if(!FieldInspector.allFieldsAreNull(infobjflight)){
+
+		if (!FieldInspector.allFieldsAreNull(infobjflight)) {
 			// Fix field for ESB
 			infobjflight.setFLTI(FLTI.valueOf(fidsAfttab.getFlti()));
 			infobjflight.setRKEY(fidsAfttab.getRkey().toString());
 			infobjflight.setRTYP(fidsAfttab.getRtyp());
-			
-			infobjflight.setFLNO(infobjflight.getFLNO()!=null?infobjflight.getFLNO().trim():null);
-			infobjflight.setFLTN(infobjflight.getFLTN()!=null?infobjflight.getFLTN().trim():null);
+
+			infobjflight.setFLNO(infobjflight.getFLNO() != null ? infobjflight.getFLNO().trim() : null);
+			infobjflight.setFLTN(infobjflight.getFLTN() != null ? infobjflight.getFLTN().trim() : null);
 
 			// Different field between FIDS and ESB
 			infobjflight.setSLOT(fidsAfttab.getCtot());
@@ -346,7 +346,7 @@ public class ESBResponseService {
 			sourceField.setAccessible(true);
 			try {
 				Object value = sourceField.get(source);
-				if (value != null  && !value.toString().equals("") && updateFields.contains(sourceField.getName())) {
+				if (value != null && !value.toString().equals("") && updateFields.contains(sourceField.getName())) {
 //					 หา field ชื่อเดียวกันใน target
 					try {
 						Field targetField = targetClass.getDeclaredField(sourceField.getName());

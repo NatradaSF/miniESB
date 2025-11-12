@@ -90,6 +90,7 @@ public class TranformFidsAfttab {
 					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && ("update".equalsIgnoreCase(arrivalElement.getAttribute("action")) || "insert".equalsIgnoreCase(arrivalElement.getAttribute("action"))))) {
 						fidsAfttab = new FidsAfttab();
 						fidsAfttab.setAdid("A");
+						fidsAfttab.setAction(arrivalElement.getAttribute("action"));
 						processPaths(adid,actionType);
 						defineVial(arrivalElement,hopo,adid,actionType);
 
@@ -112,6 +113,7 @@ public class TranformFidsAfttab {
 					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && ("update".equalsIgnoreCase(departureElement.getAttribute("action")) || "insert".equalsIgnoreCase(departureElement.getAttribute("action"))))) {
 						fidsAfttab = new FidsAfttab();
 						fidsAfttab.setAdid("D");
+						fidsAfttab.setAction(departureElement.getAttribute("action"));
 						processPaths(adid,actionType);
 						defineVial(departureElement,hopo,adid,actionType);
 						
@@ -172,7 +174,7 @@ public class TranformFidsAfttab {
 	}
 
 	/* Get value of all paths on DATASET */
-	/* Get value of update paths on UPDATE */
+	/* Get value of update paths on UPDATE, INSERT */
 	private void processPaths(String adid, String actionType) {
 		Map<String, BiConsumer<FidsAfttab, BigDecimal>> pathMapBigDecimal = adid.equalsIgnoreCase("A")
 				? FidsAfttab.arrivalPathToSetterMapBigDecimal
@@ -183,7 +185,7 @@ public class TranformFidsAfttab {
 				String fixedPath = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
 				String textValue = (String) xpath.evaluate(fixedPath + "/text()[1])", doc, XPathConstants.STRING);
 				String actionValue = (String) xpath.evaluate(fixedPath + "/@action)", doc, XPathConstants.STRING);
-				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(actionValue))) && textValue != null && !textValue.trim().isEmpty()) {
+				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && ("update".equalsIgnoreCase(actionValue) || "insert".equalsIgnoreCase(actionValue)))) && textValue != null && !textValue.trim().isEmpty()) {
 					String value = textValue.trim();
 					try {
 						Optional<BiConsumer<FidsAfttab, BigDecimal>> setterOpt = FidsAfttab
@@ -208,7 +210,7 @@ public class TranformFidsAfttab {
 				String fixedPath = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
 				String textValue = (String) xpath.evaluate(fixedPath + "/text()[1])", doc, XPathConstants.STRING);
 				String actionValue = (String) xpath.evaluate(fixedPath + "/@action)", doc, XPathConstants.STRING);
-				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(actionValue))) && textValue != null && !textValue.trim().isEmpty()) {
+				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && ("update".equalsIgnoreCase(actionValue) || "insert".equalsIgnoreCase(actionValue)))) && textValue != null && !textValue.trim().isEmpty()) {
 					String value = textValue.trim();
 					Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMap, path);
 					String convertedText = convertDateStringIfNeeded(value);
@@ -229,12 +231,12 @@ public class TranformFidsAfttab {
 				String fixedPath = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
 				String textValue = (String) xpath.evaluate(fixedPath + "/text()[1])", doc, XPathConstants.STRING);
 				String actionValue = (String) xpath.evaluate(fixedPath + "/@action)", doc, XPathConstants.STRING);
-				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(actionValue))) && textValue != null && !textValue.trim().isEmpty()) {
+				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && ("update".equalsIgnoreCase(actionValue) || "insert".equalsIgnoreCase(actionValue)))) && textValue != null && !textValue.trim().isEmpty()) {
 					String value = textValue.trim();
 					Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMapDate, path);
 					String convertedText = convertDateStringIfNeeded(value);
 					setterOpt.ifPresent(setter -> setter.accept(fidsAfttab, convertedText));
-				}else if((actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(actionValue)) && (textValue == null || textValue.trim().isEmpty())) {
+				}else if((actionType.equalsIgnoreCase("UPDATE") && ("update".equalsIgnoreCase(actionValue) || "insert".equalsIgnoreCase(actionValue))) && (textValue == null || textValue.trim().isEmpty())) {
 					String value = " ";
 					Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMapDate, path);
 					String convertedText = convertDateStringIfNeeded(value);
@@ -521,7 +523,7 @@ public class TranformFidsAfttab {
 //			}
 				if(routingNode!=null) {
 					String actionValue = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc/@action", routingNode);
-					if(actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && "update".equalsIgnoreCase(actionValue))) {
+					if(actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE") && ("update".equalsIgnoreCase(actionValue) || "insert".equalsIgnoreCase(actionValue)))) {
 						String rapIata3lc = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc", routingNode);
 						String rapIcao4lc = xpath.evaluate("prt_rap_refairport/ref_airport/rap_icao4lc", routingNode);
 						if (rapIata3lc != null && !rapIata3lc.isEmpty() && rapIcao4lc != null
