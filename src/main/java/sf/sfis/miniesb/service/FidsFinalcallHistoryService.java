@@ -46,13 +46,13 @@ public class FidsFinalcallHistoryService {
 		Optional<FidsFinalcallHistory> queryFidsFinalcallHistory = fidsFinalcallHistoryRepository.findById(fidsFinalcallHistory.getUrno());
 		if (queryFidsFinalcallHistory.isPresent()) {
 //			if(!fidsAfttab.getRemp().equals("FNC")) {//Reset FNC 
-			if(!fidsAfttab.getRemp().equals("2ND")) {//Reset 2ND 
+			if(!fidsAfttab.getRemp().equals("FNC")) {//Reset 2ND 
 				LOGGER.info("Reset Final Call for URNO "+fidsFinalcallHistory.getUrno());
 				deleteFidsFinalcallHistory(fidsFinalcallHistory);
 			}
 		}else {
 //			if(fidsAfttab.getRemp().equals("FNC")) {//Reset FNC 
-			if(fidsAfttab.getRemp().equals("2ND")) {//Reset 2ND 
+			if(fidsAfttab.getRemp().equals("FNC")) {//Reset 2ND 
 				LOGGER.info("Reset Final Call for URNO "+fidsFinalcallHistory.getUrno());
 				fidsFinalcallHistory.setUpdateTime(Timestamp.from(Instant.now()));
 				saveFidsFinalcallHistory(fidsFinalcallHistory);

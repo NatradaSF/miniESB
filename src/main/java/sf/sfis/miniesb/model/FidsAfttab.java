@@ -14,7 +14,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 @Entity
 @Data
@@ -632,6 +634,7 @@ public class FidsAfttab implements Serializable {
 	private String rem2;
 
 	@Column(name = "REMP", length = 4)
+	@Setter(AccessLevel.NONE)
 	private String remp;
 
 	@Column(name = "RKEY")
@@ -2005,6 +2008,16 @@ public class FidsAfttab implements Serializable {
 	
 	@Transient
 	private String action;
+	
+	public void setRemp(String remp) {
+		if(remp.equalsIgnoreCase("BRD")) {
+			this.remp = "BOA";
+		}else if(remp.equalsIgnoreCase("2ND")) {
+			this.remp = "FNC";
+		}else {
+			this.remp = remp;
+		}
+	}
 
 	static {
 
