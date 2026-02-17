@@ -2010,10 +2010,14 @@ public class FidsAfttab implements Serializable {
 	private String action;
 	
 	public void setRemp(String remp) {
-		if(remp.equalsIgnoreCase("BRD")) {
-			this.remp = "BOA";
-		}else if(remp.equalsIgnoreCase("2ND")) {
-			this.remp = "FNC";
+		if(remp!=null) {
+			if(remp.equalsIgnoreCase("BRD")) {
+				this.remp = "BOA";
+			}else if(remp.equalsIgnoreCase("2ND")) {
+				this.remp = "FNC";
+			}else {
+				this.remp = remp;
+			}
 		}else {
 			this.remp = remp;
 		}
