@@ -47,4 +47,12 @@ public class DateTimeFormatHelper {
 		String formattedUtc = zonedUtc.format(formatter);
 		return formattedUtc;
 	}
+
+	public String calculateTime(String utcDateTimeStr, int minutes) {
+		// แปลงเป็น LocalDateTime
+		LocalDateTime utcDateTime = LocalDateTime.parse(utcDateTimeStr, formatter);
+		utcDateTime = utcDateTime.plusMinutes(minutes);
+		String result = utcDateTime.format(formatter);
+		return result;
+	}
 }

@@ -407,6 +407,7 @@ public class TranformFidsAfttab {
 					setDynamicValue(fidsAfttab, "tmb", i, "", tmb);
 					setDynamicValue(fidsAfttab, "baz", i, "", blt);
 					fidsAfttab.setBast(bast);
+					fidsAfttab.setB1ba(fidsAfttab.getAibt());
 				} catch (XPathExpressionException e) {
 					LOGGER.error("XPath error for beltNode: ", e);
 //					e.printStackTrace();
