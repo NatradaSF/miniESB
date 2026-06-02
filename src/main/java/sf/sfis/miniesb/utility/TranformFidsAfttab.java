@@ -1,11 +1,11 @@
 package sf.sfis.miniesb.utility;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -19,19 +19,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -39,612 +37,555 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmAtomicValue;
+import net.sf.saxon.s9api.XdmValue;
+import net.sf.saxon.s9api.Xslt30Transformer;
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.s9api.XsltExecutable;
 import sf.sfis.miniesb.model.FidsAfttab;
 import sf.sfis.miniesb.model.FidsAirport;
 import sf.sfis.miniesb.model.FidsCcatab;
 import sf.sfis.miniesb.repository.FidsAirportRepository;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TranformFidsAfttab {
-	private final Logger LOGGER = LoggerFactory.getLogger(TranformFidsAfttab.class);
+
+	private static final String XSL_PATH = "src/main/resources/fids_afttab.xsl";
+	private static final Pattern ISO_8601_Z = Pattern.compile("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z");
+	private static final DateTimeFormatter YMD_HMS = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
 	private final DateTimeFormatHelper dateTimeFormatHelper;
 	private final FidsAirportRepository fidsAirportRepository;
-	FidsAfttab fidsAfttab = null;
-	Document doc = null;
-	XPath xpath = XPathFactory.newInstance().newXPath();
 
-	private String convertDateStringIfNeeded(String input) {
-		if (input == null)
-			return null;
-		// ตรวจสอบ pattern แบบ ISO 8601 เบื้องต้น เช่น 2024-03-28T11:36:00Z
-		if (input.matches("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z")) {
-			return input.replaceAll("[-:TZ]", "");
-		}
-		return input;
-	}
-
+	// ─── ENTRY POINT ───────────────────────────────────────────────────────
 	public FidsAfttab convertPlTurntoAfftab(String xmlString, String actionType, String hopo, String adid) {
 		try {
-//			LOGGER.info("convertPlTurntoAfftab");
-//			LOGGER.info(xmlString);
-			fidsAfttab = null;
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			factory.setNamespaceAware(true);
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			doc = builder.parse(new InputSource(new StringReader(xmlString)));
+			Document doc = parseDocument(xmlString);
+			XPath xpath = XPathFactory.newInstance().newXPath();
 
 			String plTurn = (String) xpath.evaluate("//pl_turn", doc, XPathConstants.STRING);
-			NodeList arrivalList = doc.getElementsByTagName("pl_arrival");
-			NodeList departureList = doc.getElementsByTagName("pl_departure");
-			String urnoArr = (String) xpath.evaluate("//pa_idseq", doc, XPathConstants.STRING);
-			String urnoDep = (String) xpath.evaluate("//pd_idseq", doc, XPathConstants.STRING);
-			boolean hasArrival = !urnoArr.equals("");
-			boolean hasDeparture = !urnoDep.equals("");
+			boolean hasArrival = !((String) xpath.evaluate("//pa_idseq", doc, XPathConstants.STRING)).isEmpty();
+			boolean hasDeparture = !((String) xpath.evaluate("//pd_idseq", doc, XPathConstants.STRING)).isEmpty();
 
-//			LOGGER.info("plTurn : "+plTurn);
-			if (!plTurn.equals("")) {// Flight
-				if (adid.equalsIgnoreCase("A") && hasArrival) {
-					Element arrivalElement = (Element) arrivalList.item(0);
-					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE")
-							&& ("update".equalsIgnoreCase(arrivalElement.getAttribute("action"))
-									|| "insert".equalsIgnoreCase(arrivalElement.getAttribute("action"))))) {
-						fidsAfttab = new FidsAfttab();
-						fidsAfttab.setAdid("A");
-						fidsAfttab.setAction(arrivalElement.getAttribute("action"));
-						processPaths(adid, actionType);
-						defineVial(arrivalElement, hopo, adid, actionType);
-
-						if (actionType.equalsIgnoreCase("UPDATE")) {
-							fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
-							LOGGER.info("Fields arrival updated : " + fidsAfttab.getFieldsNotNull());
-						}
-
-						fixPaths(arrivalElement, adid);
-						String airport4 = "";
-						Optional<FidsAirport> queryFidsAirport = fidsAirportRepository.findById(hopo);
-						if (queryFidsAirport.isPresent()) {
-							airport4 = queryFidsAirport.get().getApc4();
-						}
-						fidsAfttab.setDes3(hopo);
-						fidsAfttab.setDes4(airport4);
-					}
-				} else if (adid.equalsIgnoreCase("D") && hasDeparture) {
-					Element departureElement = (Element) departureList.item(0);
-					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE")
-							&& ("update".equalsIgnoreCase(departureElement.getAttribute("action"))
-									|| "insert".equalsIgnoreCase(departureElement.getAttribute("action"))))) {
-						fidsAfttab = new FidsAfttab();
-						fidsAfttab.setAdid("D");
-						fidsAfttab.setAction(departureElement.getAttribute("action"));
-						processPaths(adid, actionType);
-						defineVial(departureElement, hopo, adid, actionType);
-
-						if (actionType.equalsIgnoreCase("UPDATE")) {
-							fidsAfttab.setFieldsNotNull(FieldInspector.getNonNullFields(fidsAfttab));
-							LOGGER.info("Fields departure updated : " + fidsAfttab.getFieldsNotNull());
-						}
-
-						fixPaths(departureElement, adid);
-						String airport4 = "";
-						Optional<FidsAirport> queryFidsAirport = fidsAirportRepository.findById(hopo);
-						if (queryFidsAirport.isPresent()) {
-							airport4 = queryFidsAirport.get().getApc4();
-						}
-						fidsAfttab.setOrg3(hopo);
-						fidsAfttab.setOrg4(airport4);
-					}
-				} else {
-					return null;
-				}
-
-				// ตรวจสอบ RTYP จาก tag pl_arrival และ pl_departure
-				if (fidsAfttab != null) {
-					fidsAfttab.setHopo(hopo);
-					FieldInspector.replaceHoldWithEmpty(fidsAfttab);
-					if (hasArrival && hasDeparture) {
-						fidsAfttab.setRtyp("J");
-					} else if (hasArrival || hasDeparture) {
-						fidsAfttab.setRtyp("S");
-					}
-					if (fidsAfttab.getMtow() != null && !fidsAfttab.getMtow().trim().equals("")) {
-						String mtow = fidsAfttab.getMtow();
-						int number = Integer.parseInt(mtow);
-						int result = (int) Math.ceil((double) number / 1000);
-						fidsAfttab.setMtow(Integer.toString(result));
-					}
-				}
-			} else {// Common Counter
-				if (adid.equalsIgnoreCase("D")) {
-					fidsAfttab = new FidsAfttab();
-					fidsAfttab.setHopo(hopo);
-					NodeList counterList = doc.getElementsByTagName("pl_desk");
-					if (counterList.getLength() > 0) {
-						Element counterElement = (Element) counterList.item(0);
-						// Element element =
-						// doc.getElementsByTagName("pl_desk").getLength()>0?(Element)doc.getElementsByTagName("pl_desk").item(0):null;
-						List<FidsCcatab> lstFidsCcatab = getCounters(counterElement, true);
-						// LOGGER.info("lstFidsCcatab : "+lstFidsCcatab.size());
-						fidsAfttab.setLstFidsCcatab(lstFidsCcatab);
-					}
-				}
+			if (plTurn.isEmpty()) {
+				return buildCommonCounter(doc, hopo, adid);
 			}
-			return fidsAfttab;
+			return buildFlight(xmlString, doc, xpath, actionType, hopo, adid, hasArrival, hasDeparture);
 		} catch (Exception e) {
-			LOGGER.error("Log : ", e);
-//			e.printStackTrace();
+			log.error("convertPlTurntoAfftab error: ", e);
+			return null;
 		}
-		return null;
 	}
 
-	/* Get value of all paths on DATASET */
-	/* Get value of update paths on UPDATE, INSERT */
-	private void processPaths(String adid, String actionType) {
-		Map<String, BiConsumer<FidsAfttab, BigDecimal>> pathMapBigDecimal = adid.equalsIgnoreCase("A")
-				? FidsAfttab.arrivalPathToSetterMapBigDecimal
-				: FidsAfttab.departurePathToSetterMapBigDecimal;
-		for (Map.Entry<String, BiConsumer<FidsAfttab, BigDecimal>> entry : pathMapBigDecimal.entrySet()) {
-			String path = entry.getKey();
-			try {
-				String fixedPath = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
-				String textValue = (String) xpath.evaluate(fixedPath + "/text()[1])", doc, XPathConstants.STRING);
-				String actionValue = (String) xpath.evaluate(fixedPath + "/@action)", doc, XPathConstants.STRING);
-				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE")
-						&& ("update".equalsIgnoreCase(actionValue) || "insert".equalsIgnoreCase(actionValue))))
-						&& textValue != null && !textValue.trim().isEmpty()) {
-					String value = textValue.trim();
-					try {
-						Optional<BiConsumer<FidsAfttab, BigDecimal>> setterOpt = FidsAfttab
-								.getSetterByPathBigDecimal(pathMapBigDecimal, path);
-						setterOpt.ifPresent(setter -> setter.accept(fidsAfttab, new BigDecimal(value)));
-					} catch (NumberFormatException e) {
-						LOGGER.error(path + " is not BigDecimal. ");
-					}
-				}
-			} catch (XPathExpressionException e) {
-//				System.err.println("XPath error for path: " + path);
-				LOGGER.error("XPath error for path: " + path, e);
-//				e.printStackTrace();
-			}
+	// ─── COMMON COUNTER (XML without pl_turn) ──────────────────────────────
+	private FidsAfttab buildCommonCounter(Document doc, String hopo, String adid) {
+		if (!"D".equalsIgnoreCase(adid)) return null;
+		FidsAfttab f = new FidsAfttab();
+		f.setHopo(hopo);
+		NodeList counterList = doc.getElementsByTagName("pl_desk");
+		if (counterList.getLength() > 0) {
+			f.setLstFidsCcatab(getCounters((Element) counterList.item(0), true));
 		}
-
-		Map<String, BiConsumer<FidsAfttab, String>> pathMap = adid.equalsIgnoreCase("A")
-				? FidsAfttab.arrivalPathToSetterMap
-				: FidsAfttab.departurePathToSetterMap;
-		for (Map.Entry<String, BiConsumer<FidsAfttab, String>> entry : pathMap.entrySet()) {
-			String path = entry.getKey();
-			try {
-				String fixedPath = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
-				String textValue = (String) xpath.evaluate(fixedPath + "/text()[1])", doc, XPathConstants.STRING);
-				String actionValue = (String) xpath.evaluate(fixedPath + "/@action)", doc, XPathConstants.STRING);
-				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE")
-						&& ("update".equalsIgnoreCase(actionValue) || "insert".equalsIgnoreCase(actionValue))))
-						&& textValue != null && !textValue.trim().isEmpty()) {
-					String value = textValue.trim();
-					Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMap, path);
-					String convertedText = convertDateStringIfNeeded(value);
-					setterOpt.ifPresent(setter -> setter.accept(fidsAfttab, convertedText));
-				}
-			} catch (XPathExpressionException e) {
-//				System.err.println("XPath error for path: " + path);
-				LOGGER.error("XPath error for path: " + path, e);
-//				e.printStackTrace();
-			}
-		}
-
-		Map<String, BiConsumer<FidsAfttab, String>> pathMapDate = adid.equalsIgnoreCase("A")
-				? FidsAfttab.arrivalPathToSetterMapDate
-				: FidsAfttab.departurePathToSetterMapDate;
-		for (Map.Entry<String, BiConsumer<FidsAfttab, String>> entry : pathMapDate.entrySet()) {
-			String path = entry.getKey();
-			try {
-				String fixedPath = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
-				String textValue = (String) xpath.evaluate(fixedPath + "/text()[1])", doc, XPathConstants.STRING);
-				String actionValue = (String) xpath.evaluate(fixedPath + "/@action)", doc, XPathConstants.STRING);
-				if ((actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE")
-						&& ("update".equalsIgnoreCase(actionValue) || "insert".equalsIgnoreCase(actionValue))))
-						&& textValue != null && !textValue.trim().isEmpty()) {
-					String value = textValue.trim();
-					Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMapDate, path);
-					String convertedText = convertDateStringIfNeeded(value);
-					setterOpt.ifPresent(setter -> setter.accept(fidsAfttab, convertedText));
-				} else if ((actionType.equalsIgnoreCase("UPDATE")
-						&& ("update".equalsIgnoreCase(actionValue) || "insert".equalsIgnoreCase(actionValue)))
-						&& (textValue == null || textValue.trim().isEmpty())) {
-					String value = " ";
-					Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMapDate, path);
-					String convertedText = convertDateStringIfNeeded(value);
-					setterOpt.ifPresent(setter -> setter.accept(fidsAfttab, convertedText));
-				}
-			} catch (XPathExpressionException e) {
-//				System.err.println("XPath error for path: " + path);
-				LOGGER.error("XPath error for path: " + path, e);
-//				e.printStackTrace();
-			}
-		}
-
-		if (fidsAfttab.getAldt() != null) {
-			fidsAfttab.setEibt(fidsAfttab.getAldt());
-		} else {
-			fidsAfttab.setRemp(fidsAfttab.getEibt() != null ? "    " : fidsAfttab.getRemp()); //Show CONFIRMED
-		}
-
-		fidsAfttab.setEtai(fidsAfttab.getEibt());
-		fidsAfttab.setEtoa(fidsAfttab.getEibt());
-		fidsAfttab.setEtdi(fidsAfttab.getEobt());
-		fidsAfttab.setEtod(fidsAfttab.getEobt());
-		fidsAfttab.setLand(fidsAfttab.getAldt());
-		fidsAfttab.setAirb(fidsAfttab.getAtot());
-		fidsAfttab.setAxit(fidsAfttab.getExit());
-		fidsAfttab.setAxot(fidsAfttab.getExot());
-		fidsAfttab.setOnbl(fidsAfttab.getAibt());
-		fidsAfttab.setOfbl(fidsAfttab.getAobt());
+		return f;
 	}
 
-	/* Get value for fix fields ex.URNO, RKEY, SOBT, SIBT, FLNO, CSGN, ALC2, ALC3 */
-	/* Get value for list of fields ex.Belt data, Gate data */
-	/*
-	 * Get value for shared fields ex.VIA3=ORG3, LAND=ALDT, AIRB=ATOT, ONBL=AIBT,
-	 * OFBL=AOBT
+	// ─── FLIGHT MODE ───────────────────────────────────────────────────────
+	private FidsAfttab buildFlight(String xmlString, Document doc, XPath xpath,
+								   String actionType, String hopo, String adid,
+								   boolean hasArrival, boolean hasDeparture) throws Exception {
+		boolean isArrival = "A".equalsIgnoreCase(adid);
+		if (isArrival && !hasArrival) return null;
+		if (!isArrival && !hasDeparture) return null;
+
+		Element flightElement = isArrival
+			? (Element) doc.getElementsByTagName("pl_arrival").item(0)
+			: (Element) doc.getElementsByTagName("pl_departure").item(0);
+		String action = flightElement.getAttribute("action");
+
+		if (!"DATASET".equalsIgnoreCase(actionType)
+			&& !"update".equalsIgnoreCase(action) && !"insert".equalsIgnoreCase(action)) {
+			return null;
+		}
+
+		// 1. XSL transform → action-filtered path mappings deserialised into FidsAfttab.
+		FidsAfttab f = transformUsingSaxon(xmlString, actionType, adid);
+		if (f == null) return null;
+		f.setAdid(isArrival ? "A" : "D");
+		f.setAction(action);
+
+		// 2. Derived time fields (EIBT/ETAI/ETOA/LAND/AIRB/AXIT/AXOT/ONBL/OFBL/REMP)
+		applyDerivedTimes(f);
+
+		// 3. VIA from routing
+		applyVial(f, xpath, doc, flightElement, hopo, isArrival, actionType);
+
+		// 4. fieldsNotNull — captured before unconditional fixed paths so that
+		//    URNO/RKEY/SIBT/SOBT/FLNO/CSGN/FLTI/ALC2/ALC3 are only tracked when
+		//    they were set via the action-filtered XSL pass (matches legacy behaviour).
+		if ("UPDATE".equalsIgnoreCase(actionType)) {
+			f.setFieldsNotNull(FieldInspector.getNonNullFields(f));
+			log.info("Fields " + (isArrival ? "arrival" : "departure") + " updated : " + f.getFieldsNotNull());
+		}
+
+		// 5. Unconditional fixed identity fields (set even when action attribute did not change)
+		applyFixedPaths(f, doc, xpath, isArrival);
+
+		// 6. Business derivations on fixed paths
+		applyFlightNumber(f);
+		applyFtyp(f);
+		applyTrkn(f);
+
+		// 7. Indexed nested structures
+		applyBeltDetails(f, flightElement, isArrival);
+		applyGateDetails(f, flightElement, isArrival);
+		applyDelayReasons(f, flightElement);
+		if (!isArrival) {
+			f.setLstFidsCcatab(getCounters(flightElement, false));
+		}
+
+		// 8. Shared derivations (AURN, BAGS, DCD2, STOA, STOD, FLDA, DTD2, DOOA, DOOD)
+		applySharedDerivations(f, isArrival);
+
+		// 9. Airport lookup
+		applyAirportLookup(f, hopo, isArrival);
+
+		// 10. Outside per-adid: HOPO, HOLD→empty, RTYP, MTOW ceiling
+		f.setHopo(hopo);
+		FieldInspector.replaceHoldWithEmpty(f);
+		if (hasArrival && hasDeparture) {
+			f.setRtyp("J");
+		} else if (hasArrival || hasDeparture) {
+			f.setRtyp("S");
+		}
+		applyMtow(f);
+
+		return f;
+	}
+
+	// ─── XSL TRANSFORMATION ────────────────────────────────────────────────
+	public static FidsAfttab transformUsingSaxon(String xmlString, String actionType, String adid) throws Exception {
+		Processor proc = new Processor(false);
+		XsltCompiler comp = proc.newXsltCompiler();
+		XsltExecutable exp = comp.compile(new StreamSource(new File(XSL_PATH)));
+
+		StringWriter sw = new StringWriter();
+		Serializer out = proc.newSerializer(sw);
+		out.setOutputProperty(Serializer.Property.METHOD, "xml");
+		out.setOutputProperty(Serializer.Property.INDENT, "yes");
+		out.setOutputProperty(Serializer.Property.OMIT_XML_DECLARATION, "yes");
+
+		Xslt30Transformer trans = exp.load30();
+		Map<QName, XdmValue> params = new HashMap<>();
+		params.put(new QName("syncMode"), new XdmAtomicValue(actionType));
+		params.put(new QName("adidMode"), new XdmAtomicValue(adid));
+		trans.setStylesheetParameters(params);
+		trans.transform(new StreamSource(new StringReader(xmlString)), out);
+
+		XmlMapper xmlMapper = new XmlMapper();
+		xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		SimpleModule module = new SimpleModule();
+		module.addDeserializer(String.class, new JsonDeserializer<String>() {
+			@Override
+			public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+				return convertDateStringIfNeeded(p.getText());
+			}
+		});
+		xmlMapper.registerModule(module);
+		return xmlMapper.readValue(sw.toString(), FidsAfttab.class);
+	}
+
+	// ─── UNCONDITIONAL FIXED IDENTITY FIELDS ───────────────────────────────
+	/**
+	 * Sets URNO/RKEY/SIBT/SOBT/FLNO/CSGN/FLTI/ALC2/ALC3 without applying the
+	 * descendant @action filter. These identity fields are required even when
+	 * an UPDATE message did not flag them as insert/update, so downstream code
+	 * (e.g. lookups by URNO, display formatting) keeps working.
 	 */
-	private void fixPaths(Element element, String adid) {
-		Set<String> bigDecimalFields = new LinkedHashSet<>(
-				Arrays.asList("/pl_departure/pd_idseq", "/pl_arrival/pa_idseq", "/pl_turn/pt_idseq"));
-		Map<String, BiConsumer<FidsAfttab, BigDecimal>> pathMapBigDecimal = adid.equalsIgnoreCase("A")
-				? FidsAfttab.arrivalPathToSetterMapBigDecimal
-				: FidsAfttab.departurePathToSetterMapBigDecimal;
-		for (String path : bigDecimalFields) {
+	private void applyFixedPaths(FidsAfttab f, Document doc, XPath xpath, boolean isArrival) {
+		String idseq = isArrival ? "/pl_arrival/pa_idseq" : "/pl_departure/pd_idseq";
+		evaluateRawText(doc, xpath, idseq).ifPresent(v -> {
 			try {
-				String fixedPath = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
-				String textValue = (String) xpath.evaluate(fixedPath + "/text()[1])", doc, XPathConstants.STRING);
-				if (textValue != null) {
-					String value = textValue.trim();
-					try {
-						Optional<BiConsumer<FidsAfttab, BigDecimal>> setterOpt = FidsAfttab
-								.getSetterByPathBigDecimal(pathMapBigDecimal, path);
-						setterOpt.ifPresent(setter -> setter.accept(fidsAfttab, new BigDecimal(value)));
-					} catch (NumberFormatException e) {
-						LOGGER.error(path + " is not BigDecimal. ");
-					}
-				}
-			} catch (XPathExpressionException e) {
-//				System.err.println("XPath error for path: " + path);
-				LOGGER.error("XPath error for path: " + path, e);
-//				e.printStackTrace();
+				f.setUrno(new BigDecimal(v));
+			} catch (NumberFormatException e) {
+				log.error(idseq + " is not BigDecimal.");
 			}
-		}
-
-		Set<String> stringFields = new LinkedHashSet<>(Arrays.asList("/pl_departure/pd_sobt", "/pl_arrival/pa_sibt",
-				"/pl_departure/pd_flightnumber", "/pl_arrival/pa_flightnumber", "/pl_departure/pd_callsign",
-				"/pl_arrival/pa_callsign", "/pl_departure/pd_rctt_countrytype", "/pl_arrival/pa_rctt_countrytype",
-				"/pl_arrival/pa_ral_airline/ref_airline/ral_2lc", "/pl_departure/pd_ral_airline/ref_airline/ral_2lc",
-				"/pl_arrival/pa_ral_airline/ref_airline/ral_3lc", "/pl_departure/pd_ral_airline/ref_airline/ral_3lc"));
-		Map<String, BiConsumer<FidsAfttab, String>> pathMap = adid.equalsIgnoreCase("A")
-				? FidsAfttab.arrivalPathToSetterMap
-				: FidsAfttab.departurePathToSetterMap;
-		for (String path : stringFields) {
+		});
+		evaluateRawText(doc, xpath, "/pl_turn/pt_idseq").ifPresent(v -> {
 			try {
-				String fixedPath = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
-				String textValue = (String) xpath.evaluate(fixedPath + "/text()[1])", doc, XPathConstants.STRING);
-				String value = textValue.trim();
-				Optional<BiConsumer<FidsAfttab, String>> setterOpt = FidsAfttab.getSetterByPath(pathMap, path);
-				String convertedText = convertDateStringIfNeeded(value);
-				setterOpt.ifPresent(setter -> setter.accept(fidsAfttab, convertedText));
-			} catch (XPathExpressionException e) {
-//				System.err.println("XPath error for path: " + path);
-				LOGGER.error("XPath error for path: " + path, e);
-//				e.printStackTrace();
+				f.setRkey(new BigDecimal(v));
+			} catch (NumberFormatException e) {
+				log.error("/pl_turn/pt_idseq is not BigDecimal.");
 			}
-		}
+		});
 
-		String flno = fidsAfttab.getFlno();
-		if (flno != null && !flno.equals("")) {
-			Map<String, String> parts = parseFlightNumber(flno, fidsAfttab.getAlc3(), fidsAfttab.getAlc2());
-			fidsAfttab
-					.setFlno(parts.isEmpty() ? flno : parts.get("prefix") + parts.get("number") + parts.get("suffix"));
-			fidsAfttab.setFlns(parts.get("suffix") != null ? parts.get("suffix") : "");
-//			String[] lstJfno = fidsAfttab.getJfno() != null ? fidsAfttab.getJfno().split(",") : new String[0];
-//			for (int i = 0; i < lstJfno.length; i++) {
-//				parts = parseFlightNumber(flno, fidsAfttab.getAlc3(), fidsAfttab.getAlc2());
-//	            System.out.println(lstJfno[i].trim());  // trim() เอาช่องว่างรอบๆ ออก
-//	        }
-			fidsAfttab.setJfno(fidsAfttab.getJfno() != null ? fidsAfttab.getJfno().replace(",", " ") : null);
-			fidsAfttab.setCsgn(fidsAfttab.getCsgn() + fidsAfttab.getFlns().trim());
-			fidsAfttab.setFltn(parts.get("number"));
-			System.out.println("==================");
-			System.out.println(fidsAfttab.getFlno());
-		}
-
-		String ftyp = fidsAfttab.getFtyp();
-		if (ftyp != null) {
-			if (ftyp.equalsIgnoreCase("V")) {
-				ftyp = "D";
-			} else if (!ftyp.equalsIgnoreCase("X")) {
-				ftyp = "O";
-			}
-			fidsAfttab.setFtyp(ftyp);
-		}
-
-		String trkn = fidsAfttab.getTrkn();
-		if (trkn != null && !trkn.equals("") && trkn.length() > 4) {
-			trkn = trkn.substring(2); // ตัดสองตัวแรกออก
-			fidsAfttab.setTrkn(trkn);
-		}
-
-//		String actionValue = (String) xpath.evaluate(fixedPath + "/@action)", doc, XPathConstants.STRING);
-		NodeList beltNodes = adid.equalsIgnoreCase("A") ? element.getElementsByTagName("pl_baggagebelt")
-				: element.getElementsByTagName("pl_departurebelt");
-		for (int i = 0; i < beltNodes.getLength(); i++) {
-			Node beltNode = beltNodes.item(i);
-			String action = ((Element) beltNode).getAttribute("action");
-			if (!"delete".equalsIgnoreCase(action)) {
-				try {
-					String prefix = adid.equalsIgnoreCase("A") ? "pbb_" : "pdb_";
-
-					String ba = convertDateStringIfNeeded(xpath.evaluate(prefix + "beginactual", beltNode));
-					String bs = convertDateStringIfNeeded(xpath.evaluate(prefix + "beginplan", beltNode));
-					String ea = convertDateStringIfNeeded(xpath.evaluate(prefix + "endactual", beltNode));
-					String es = convertDateStringIfNeeded(xpath.evaluate(prefix + "endplan", beltNode));
-					String blt = convertDateStringIfNeeded(xpath.evaluate(
-							prefix + (adid.equalsIgnoreCase("A") ? "rbb_baggagebelt" : "rdb_departurebelt"), beltNode));
-					String tmb = convertDateStringIfNeeded(xpath.evaluate(prefix
-							+ (adid.equalsIgnoreCase("A") ? "rbb_refbaggagebelt/ref_baggagebelt/rbb_rctt_countrytype"
-									: "rdb_refbaggagebelt/ref_baggagebelt/rdb_rctt_countrytype"),
-							beltNode));
-					String bast = convertDateStringIfNeeded(xpath.evaluate(prefix + "status", beltNode));
-
-					setDynamicValue(fidsAfttab, "b", i, "ba", ba);
-					setDynamicValue(fidsAfttab, "b", i, "bs", bs);
-					setDynamicValue(fidsAfttab, "b", i, "ea", ea);
-					setDynamicValue(fidsAfttab, "b", i, "es", es);
-
-					setDynamicValue(fidsAfttab, "bas", i, "", ba);
-					setDynamicValue(fidsAfttab, "bao", i, "", bs);
-					setDynamicValue(fidsAfttab, "bae", i, "", ea);
-					setDynamicValue(fidsAfttab, "bac", i, "", es);
-					setDynamicValue(fidsAfttab, "blt", i, "", blt);
-					setDynamicValue(fidsAfttab, "tmb", i, "", tmb);
-					setDynamicValue(fidsAfttab, "baz", i, "", blt);
-					fidsAfttab.setBast(bast);
-					fidsAfttab.setB1ba(fidsAfttab.getAibt());
-				} catch (XPathExpressionException e) {
-					LOGGER.error("XPath error for beltNode: ", e);
-//					e.printStackTrace();
-				}
-			}
-		}
-
-		String gts = adid.equalsIgnoreCase("A")
-				? element.getElementsByTagName("pa_arrivalgates").item(0).getTextContent()
-				: element.getElementsByTagName("pd_departuregates").item(0).getTextContent();
-		Set<String> gates = !gts.equals("") ? new LinkedHashSet<>(List.of(gts.split(","))) : new LinkedHashSet<>();
-		List<String> lstGates = new ArrayList<>(gates);
-		for (int i = 0; i < lstGates.size(); i++) {
-//			LOGGER.info(lstGates.get(i));
-			setDynamicValue(fidsAfttab, "gt" + (adid.equalsIgnoreCase("A") ? "a" : "d"), i, "", lstGates.get(i));
-		}
-
-		NodeList gateNodes = adid.equalsIgnoreCase("A") ? element.getElementsByTagName("pl_arrivalgate")
-				: element.getElementsByTagName("pl_departuregate");
-		for (int i = 0; i < gateNodes.getLength(); i++) {
-			Node gateNode = gateNodes.item(i);
-			try {
-				String prefix = adid.equalsIgnoreCase("A") ? "pag_" : "pdg_";
-
-				String gax = convertDateStringIfNeeded(xpath.evaluate(prefix + "beginactual", gateNode));
-				String gab = convertDateStringIfNeeded(xpath.evaluate(prefix + "beginplan", gateNode));
-				String gay = convertDateStringIfNeeded(xpath.evaluate(prefix + "endactual", gateNode));
-				String gae = convertDateStringIfNeeded(xpath.evaluate(prefix + "endplan", gateNode));
-//			    String gt = convertDateStringIfNeeded(xpath.evaluate(prefix + "rgt_gate", gateNode));
-
-				setDynamicValue(fidsAfttab, "g" + (adid.equalsIgnoreCase("A") ? "a" : "d"), i, "b", gab);
-				setDynamicValue(fidsAfttab, "g" + (adid.equalsIgnoreCase("A") ? "a" : "d"), i, "x", gax);
-				setDynamicValue(fidsAfttab, "g" + (adid.equalsIgnoreCase("A") ? "a" : "d"), i, "y", gay);
-				setDynamicValue(fidsAfttab, "g" + (adid.equalsIgnoreCase("A") ? "a" : "d"), i, "e", gae);
-//			    setDynamicValue(fidsAfttab, "gt"+(adid.equalsIgnoreCase("A")?"a":"d"), i, "", gt);
-			} catch (XPathExpressionException e) {
-				LOGGER.error("XPath error for gateNode: ", e);
-//				e.printStackTrace();
-			}
-		}
-
-		NodeList delayreasonNodes = adid.equalsIgnoreCase("A") ? element.getElementsByTagName("pl_delayreason")
-				: element.getElementsByTagName("pl_delayreason");
-		for (int i = 0; i < delayreasonNodes.getLength(); i++) {
-			Node delayreasonNode = delayreasonNodes.item(i);
-			try {
-				String prefix = adid.equalsIgnoreCase("A") ? "pdlr_" : "pdlr_";
-
-				String dcd = convertDateStringIfNeeded(xpath.evaluate(prefix + "rdlr_delayreason", delayreasonNode));
-				String dela = convertDateStringIfNeeded(xpath.evaluate(prefix + "delay", delayreasonNode));
-
-				setDynamicValue(fidsAfttab, "dcd", i, "", dcd);
-				setDynamicValue(fidsAfttab, "dtd", i, "", dela);
-				fidsAfttab.setDela(dela);
-			} catch (XPathExpressionException e) {
-				LOGGER.error("XPath error for delayreasonNode: ", e);
-//				e.printStackTrace();
-			}
-		}
-
-		if (adid.equalsIgnoreCase("D")) {
-			List<FidsCcatab> lstFidsCcatab = getCounters(element, false);
-//			LOGGER.info("lstFidsCcatab : "+lstFidsCcatab.size());
-			fidsAfttab.setLstFidsCcatab(lstFidsCcatab);
-		}
-
-		fidsAfttab.setAurn(fidsAfttab.getRkey().toString());
-		fidsAfttab.setBags(fidsAfttab.getBagn());
-//		fidsAfttab.setBlt2(fidsAfttab.getBlt1());
-		fidsAfttab.setDcd2(fidsAfttab.getDcd1());
-//		fidsAfttab.setOrg3(fidsAfttab.getVia3());
-//		fidsAfttab.setOrg4(fidsAfttab.getVia4());
-		fidsAfttab.setStoa(fidsAfttab.getSibt());
-//		fidsAfttab.setDes3(fidsAfttab.getVia3());
-//		fidsAfttab.setDes4(fidsAfttab.getVia4());
-		fidsAfttab.setStod(fidsAfttab.getSobt());
-		if (adid.equalsIgnoreCase("A")) {
-			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSibt()).substring(0, 8));
+		if (isArrival) {
+			evaluateRawText(doc, xpath, "/pl_arrival/pa_sibt").ifPresent(v -> f.setSibt(convertDateStringIfNeeded(v)));
+			evaluateRawText(doc, xpath, "/pl_arrival/pa_flightnumber").ifPresent(v -> f.setFlno(convertDateStringIfNeeded(v)));
+			evaluateRawText(doc, xpath, "/pl_arrival/pa_callsign").ifPresent(v -> f.setCsgn(convertDateStringIfNeeded(v)));
+			evaluateRawText(doc, xpath, "/pl_arrival/pa_rctt_countrytype").ifPresent(v -> f.setFlti(convertDateStringIfNeeded(v)));
+			evaluateRawText(doc, xpath, "/pl_arrival/pa_ral_airline/ref_airline/ral_2lc").ifPresent(v -> f.setAlc2(convertDateStringIfNeeded(v)));
+			evaluateRawText(doc, xpath, "/pl_arrival/pa_ral_airline/ref_airline/ral_3lc").ifPresent(v -> f.setAlc3(convertDateStringIfNeeded(v)));
 		} else {
-			fidsAfttab.setFlda(dateTimeFormatHelper.convertUTCToLocal(fidsAfttab.getSobt()).substring(0, 8));
-		}
-		fidsAfttab.setDtd2(fidsAfttab.getDtd1());
-//		fidsAfttab.setGta2(fidsAfttab.getGta1());
-//		fidsAfttab.setTga1(fidsAfttab.getGta1());
-//		fidsAfttab.setGtd2(fidsAfttab.getGtd1());
-//		fidsAfttab.setTgd1(fidsAfttab.getGtd1());
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-		LocalDateTime localDateTime = null;
-		if (fidsAfttab.getStoa() != null) {
-			localDateTime = LocalDateTime.parse(fidsAfttab.getStoa(), formatter);
-			// บอกว่าเวลานี้เป็น UTC
-			OffsetDateTime utcDateTime = localDateTime.atOffset(ZoneOffset.UTC);
-			DayOfWeek dayOfWeekUTC = utcDateTime.getDayOfWeek();
-			fidsAfttab.setDooa(Integer.toString(dayOfWeekUTC.getValue()));
-		} else {
-			fidsAfttab.setSibt(" ");
-			fidsAfttab.setStoa(" ");
-		}
-
-		if (fidsAfttab.getStod() != null) {
-			localDateTime = LocalDateTime.parse(fidsAfttab.getStod(), formatter);
-			// บอกว่าเวลานี้เป็น UTC
-			OffsetDateTime utcDateTime = localDateTime.atOffset(ZoneOffset.UTC);
-			DayOfWeek dayOfWeekUTC = utcDateTime.getDayOfWeek();
-			fidsAfttab.setDood(Integer.toString(dayOfWeekUTC.getValue()));
-		} else {
-			fidsAfttab.setSobt(" ");
-			fidsAfttab.setStod(" ");
+			evaluateRawText(doc, xpath, "/pl_departure/pd_sobt").ifPresent(v -> f.setSobt(convertDateStringIfNeeded(v)));
+			evaluateRawText(doc, xpath, "/pl_departure/pd_flightnumber").ifPresent(v -> f.setFlno(convertDateStringIfNeeded(v)));
+			evaluateRawText(doc, xpath, "/pl_departure/pd_callsign").ifPresent(v -> f.setCsgn(convertDateStringIfNeeded(v)));
+			evaluateRawText(doc, xpath, "/pl_departure/pd_rctt_countrytype").ifPresent(v -> f.setFlti(convertDateStringIfNeeded(v)));
+			evaluateRawText(doc, xpath, "/pl_departure/pd_ral_airline/ref_airline/ral_2lc").ifPresent(v -> f.setAlc2(convertDateStringIfNeeded(v)));
+			evaluateRawText(doc, xpath, "/pl_departure/pd_ral_airline/ref_airline/ral_3lc").ifPresent(v -> f.setAlc3(convertDateStringIfNeeded(v)));
 		}
 	}
 
-	private void defineVial(Element element, String hopo, String adid, String actionType) {
+	private Optional<String> evaluateRawText(Document doc, XPath xpath, String path) {
+		try {
+			String fixed = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
+			String textValue = (String) xpath.evaluate(fixed + "/text()[1])", doc, XPathConstants.STRING);
+			if (textValue == null) return Optional.empty();
+			String trimmed = textValue.trim();
+			return trimmed.isEmpty() ? Optional.empty() : Optional.of(trimmed);
+		} catch (XPathExpressionException e) {
+			log.error("XPath error for path: " + path, e);
+			return Optional.empty();
+		}
+	}
+
+	// ─── DERIVED BUSINESS LOGIC ────────────────────────────────────────────
+	private void applyDerivedTimes(FidsAfttab f) {
+		if (f.getAldt() != null) {
+			f.setEibt(f.getAldt());
+		} else {
+			f.setRemp(f.getEibt() != null ? "    " : f.getRemp());
+		}
+		f.setEtai(f.getEibt());
+		f.setEtoa(f.getEibt());
+		f.setEtdi(f.getEobt());
+		f.setEtod(f.getEobt());
+		f.setLand(f.getAldt());
+		f.setAirb(f.getAtot());
+		f.setAxit(f.getExit());
+		f.setAxot(f.getExot());
+		f.setOnbl(f.getAibt());
+		f.setOfbl(f.getAobt());
+	}
+
+	private void applyFlightNumber(FidsAfttab f) {
+		String flno = f.getFlno();
+		if (flno == null || flno.isEmpty()) return;
+
+		Map<String, String> parts = parseFlightNumber(flno, f.getAlc3(), f.getAlc2());
+		if (parts.isEmpty()) {
+			f.setFlns("");
+		} else {
+			f.setFlno(parts.get("prefix") + parts.get("number") + parts.get("suffix"));
+			f.setFlns(parts.get("suffix") != null ? parts.get("suffix") : "");
+			f.setFltn(parts.get("number"));
+		}
+		if (f.getJfno() != null) {
+			f.setJfno(f.getJfno().replace(",", " "));
+		}
+		if (f.getCsgn() != null && f.getFlns() != null) {
+			f.setCsgn(f.getCsgn() + f.getFlns().trim());
+		}
+	}
+
+	private void applyFtyp(FidsAfttab f) {
+		String ftyp = f.getFtyp();
+		if (ftyp == null) return;
+		if (ftyp.equalsIgnoreCase("V")) {
+			f.setFtyp("D");
+		} else if (!ftyp.equalsIgnoreCase("X")) {
+			f.setFtyp("O");
+		}
+	}
+
+	private void applyTrkn(FidsAfttab f) {
+		String trkn = f.getTrkn();
+		if (trkn != null && !trkn.isEmpty() && trkn.length() > 4) {
+			f.setTrkn(trkn.substring(2));
+		}
+	}
+
+	private void applyMtow(FidsAfttab f) {
+		String mtow = f.getMtow();
+		if (mtow == null || mtow.trim().isEmpty()) return;
+		try {
+			int n = Integer.parseInt(mtow.trim());
+			f.setMtow(Integer.toString((int) Math.ceil(n / 1000.0)));
+		} catch (NumberFormatException ignored) {
+		}
+	}
+
+	private void applyAirportLookup(FidsAfttab f, String hopo, boolean isArrival) {
+		String apc4 = fidsAirportRepository.findById(hopo)
+			.map(FidsAirport::getApc4)
+			.orElse("");
+		if (isArrival) {
+			f.setDes3(hopo);
+			f.setDes4(apc4);
+		} else {
+			f.setOrg3(hopo);
+			f.setOrg4(apc4);
+		}
+	}
+
+	private void applyVial(FidsAfttab f, XPath xpath, Document doc, Element flightElement,
+						   String hopo, boolean isArrival, String actionType) {
 		try {
 			String route = (String) xpath.evaluate("//pt_routing", doc, XPathConstants.STRING);
-//			LOGGER.info("==========="+route);
 			String[] airports = route.split("-");
 			String via3 = "";
 			for (int i = 0; i < airports.length; i++) {
 				if (hopo.equals(airports[i])) {
-					if (adid.equalsIgnoreCase("A")) {
-						if (i > 1) { // มากกว่า 1 airport ด้านหน้า BKK
-							via3 = airports[i - 1];
-						}
+					if (isArrival) {
+						if (i > 1) via3 = airports[i - 1];
 					} else {
-						if (i < airports.length - 2) {
-							via3 = airports[i + 1];
-						}
+						if (i < airports.length - 2) via3 = airports[i + 1];
 					}
-//        			LOGGER.info("==========="+adid+" : "+via3);
-					break; // ถ้าเจอ BKK แล้ว ไม่ต้อง loop ต่อ
+					break;
 				}
 			}
 
-			NodeList routingNodes = element.getElementsByTagName("pl_routing");
-			String vial = null;
+			NodeList routingNodes = flightElement.getElementsByTagName("pl_routing");
 			for (int i = 0; i < routingNodes.getLength(); i++) {
-//			Node routingNode = routingNodes.getLength()>0 ? routingNodes.item(0) : null;
-//			if(adid.equalsIgnoreCase("A") && routingNodes.getLength()>1) {
-				Node routingNode = routingNodes.item(i);
-//			}
-				if (routingNode != null) {
-					String actionValue = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc/@action",
-							routingNode);
-					if (actionType.equalsIgnoreCase("DATASET") || (actionType.equalsIgnoreCase("UPDATE")
-							&& ("update".equalsIgnoreCase(actionValue) || "insert".equalsIgnoreCase(actionValue)))) {
-						String rapIata3lc = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc", routingNode);
-						String rapIcao4lc = xpath.evaluate("prt_rap_refairport/ref_airport/rap_icao4lc", routingNode);
-						if (rapIata3lc != null && !rapIata3lc.isEmpty() && rapIcao4lc != null && !rapIcao4lc.isEmpty()
-								&& rapIata3lc.equals(via3)) {
-							vial = getVial(rapIata3lc, rapIcao4lc);
+				Node node = routingNodes.item(i);
+				if (node == null) continue;
+				String act = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc/@action", node);
+				boolean accept = "DATASET".equalsIgnoreCase(actionType)
+					|| ("UPDATE".equalsIgnoreCase(actionType)
+						&& ("update".equalsIgnoreCase(act) || "insert".equalsIgnoreCase(act)));
+				if (!accept) continue;
 
-							fidsAfttab.setVia3(rapIata3lc);
-							fidsAfttab.setVia4(rapIcao4lc);
-							fidsAfttab.setVial(vial);
-							fidsAfttab.setVian(routingNodes.getLength() > 0 ? "1" : "0");
-//		        			LOGGER.info("==========="+vial);
-							break;
-						}
-					}
+				String iata = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc", node);
+				String icao = xpath.evaluate("prt_rap_refairport/ref_airport/rap_icao4lc", node);
+				if (iata != null && !iata.isEmpty() && icao != null && !icao.isEmpty() && iata.equals(via3)) {
+					f.setVia3(iata);
+					f.setVia4(icao);
+					f.setVial(getVial(iata, icao));
+					f.setVian(routingNodes.getLength() > 0 ? "1" : "0");
+					break;
 				}
 			}
 		} catch (XPathExpressionException e) {
-			e.printStackTrace();
+			log.error("applyVial error: ", e);
+		}
+	}
+
+	private void applySharedDerivations(FidsAfttab f, boolean isArrival) {
+		if (f.getRkey() != null) {
+			f.setAurn(f.getRkey().toString());
+		}
+		f.setBags(f.getBagn());
+		f.setDcd2(f.getDcd1());
+		f.setStoa(f.getSibt());
+		f.setStod(f.getSobt());
+		f.setDtd2(f.getDtd1());
+
+		// FLDA from SIBT (arrival) or SOBT (departure)
+		String src = isArrival ? f.getSibt() : f.getSobt();
+		if (src != null && src.length() >= 14 && !src.trim().isEmpty()) {
+			try {
+				f.setFlda(dateTimeFormatHelper.convertUTCToLocal(src).substring(0, 8));
+			} catch (Exception e) {
+				log.error("applyFlda parse error for value: " + src, e);
+			}
+		}
+
+		// DOOA/DOOD + handle null cases
+		if (f.getStoa() != null) {
+			try {
+				LocalDateTime ld = LocalDateTime.parse(f.getStoa(), YMD_HMS);
+				OffsetDateTime utc = ld.atOffset(ZoneOffset.UTC);
+				f.setDooa(Integer.toString(utc.getDayOfWeek().getValue()));
+			} catch (Exception e) {
+				log.error("DOOA parse error for STOA=" + f.getStoa(), e);
+			}
+		} else {
+			f.setSibt(" ");
+			f.setStoa(" ");
+		}
+		if (f.getStod() != null) {
+			try {
+				LocalDateTime ld = LocalDateTime.parse(f.getStod(), YMD_HMS);
+				OffsetDateTime utc = ld.atOffset(ZoneOffset.UTC);
+				f.setDood(Integer.toString(utc.getDayOfWeek().getValue()));
+			} catch (Exception e) {
+				log.error("DOOD parse error for STOD=" + f.getStod(), e);
+			}
+		} else {
+			f.setSobt(" ");
+			f.setStod(" ");
+		}
+	}
+
+	// ─── INDEXED NESTED STRUCTURES ─────────────────────────────────────────
+	private void applyBeltDetails(FidsAfttab f, Element flightElement, boolean isArrival) {
+		NodeList nodes = flightElement.getElementsByTagName(isArrival ? "pl_baggagebelt" : "pl_departurebelt");
+		String prefix = isArrival ? "pbb_" : "pdb_";
+		String beltRefTag = prefix + (isArrival ? "rbb_baggagebelt" : "rdb_departurebelt");
+		String tmbTag = prefix + (isArrival
+			? "rbb_refbaggagebelt/ref_baggagebelt/rbb_rctt_countrytype"
+			: "rdb_refbaggagebelt/ref_baggagebelt/rdb_rctt_countrytype");
+
+		XPath xp = XPathFactory.newInstance().newXPath();
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node n = nodes.item(i);
+			if ("delete".equalsIgnoreCase(((Element) n).getAttribute("action"))) continue;
+			try {
+				String ba = convertDateStringIfNeeded(xp.evaluate(prefix + "beginactual", n));
+				String bs = convertDateStringIfNeeded(xp.evaluate(prefix + "beginplan", n));
+				String ea = convertDateStringIfNeeded(xp.evaluate(prefix + "endactual", n));
+				String es = convertDateStringIfNeeded(xp.evaluate(prefix + "endplan", n));
+				String blt = convertDateStringIfNeeded(xp.evaluate(beltRefTag, n));
+				String tmb = convertDateStringIfNeeded(xp.evaluate(tmbTag, n));
+				String bast = convertDateStringIfNeeded(xp.evaluate(prefix + "status", n));
+
+				setDynamicValue(f, "b", i, "ba", ba);
+				setDynamicValue(f, "b", i, "bs", bs);
+				setDynamicValue(f, "b", i, "ea", ea);
+				setDynamicValue(f, "b", i, "es", es);
+				setDynamicValue(f, "bas", i, "", ba);
+				setDynamicValue(f, "bao", i, "", bs);
+				setDynamicValue(f, "bae", i, "", ea);
+				setDynamicValue(f, "bac", i, "", es);
+				setDynamicValue(f, "blt", i, "", blt);
+				setDynamicValue(f, "tmb", i, "", tmb);
+				setDynamicValue(f, "baz", i, "", blt);
+				f.setBast(bast);
+				f.setB1ba(f.getAibt());
+			} catch (XPathExpressionException e) {
+				log.error("applyBeltDetails error: ", e);
+			}
+		}
+	}
+
+	private void applyGateDetails(FidsAfttab f, Element flightElement, boolean isArrival) {
+		NodeList gatesNodes = flightElement.getElementsByTagName(isArrival ? "pa_arrivalgates" : "pd_departuregates");
+		String gts = gatesNodes.getLength() > 0 ? gatesNodes.item(0).getTextContent() : "";
+		if (gts != null && !gts.isEmpty()) {
+			List<String> lstGates = new ArrayList<>(new LinkedHashSet<>(Arrays.asList(gts.split(","))));
+			String fieldPrefix = "gt" + (isArrival ? "a" : "d");
+			for (int i = 0; i < lstGates.size(); i++) {
+				setDynamicValue(f, fieldPrefix, i, "", lstGates.get(i));
+			}
+		}
+
+		NodeList gateNodes = flightElement.getElementsByTagName(isArrival ? "pl_arrivalgate" : "pl_departuregate");
+		String prefix = isArrival ? "pag_" : "pdg_";
+		String fieldPrefix = "g" + (isArrival ? "a" : "d");
+		XPath xp = XPathFactory.newInstance().newXPath();
+		for (int i = 0; i < gateNodes.getLength(); i++) {
+			Node n = gateNodes.item(i);
+			try {
+				setDynamicValue(f, fieldPrefix, i, "b", convertDateStringIfNeeded(xp.evaluate(prefix + "beginplan", n)));
+				setDynamicValue(f, fieldPrefix, i, "x", convertDateStringIfNeeded(xp.evaluate(prefix + "beginactual", n)));
+				setDynamicValue(f, fieldPrefix, i, "y", convertDateStringIfNeeded(xp.evaluate(prefix + "endactual", n)));
+				setDynamicValue(f, fieldPrefix, i, "e", convertDateStringIfNeeded(xp.evaluate(prefix + "endplan", n)));
+			} catch (XPathExpressionException e) {
+				log.error("applyGateDetails error: ", e);
+			}
+		}
+	}
+
+	private void applyDelayReasons(FidsAfttab f, Element flightElement) {
+		NodeList nodes = flightElement.getElementsByTagName("pl_delayreason");
+		XPath xp = XPathFactory.newInstance().newXPath();
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node n = nodes.item(i);
+			try {
+				String dcd = convertDateStringIfNeeded(xp.evaluate("pdlr_rdlr_delayreason", n));
+				String dela = convertDateStringIfNeeded(xp.evaluate("pdlr_delay", n));
+				setDynamicValue(f, "dcd", i, "", dcd);
+				setDynamicValue(f, "dtd", i, "", dela);
+				f.setDela(dela);
+			} catch (XPathExpressionException e) {
+				log.error("applyDelayReasons error: ", e);
+			}
 		}
 	}
 
 	private List<FidsCcatab> getCounters(Element element, boolean isCommon) {
-		List<FidsCcatab> lstFidsCcatab = new ArrayList<FidsCcatab>();
-		NodeList counterNodes = null;
-		if (isCommon) {
-			Node counterNode = element;
-			counterNodes = new ImplementNodeList(Arrays.asList(counterNode));
-		} else {
-			counterNodes = element.getElementsByTagName("pl_desk");
-		}
+		List<FidsCcatab> lst = new ArrayList<>();
+		NodeList counterNodes = isCommon
+			? new ImplementNodeList(Arrays.asList((Node) element))
+			: element.getElementsByTagName("pl_desk");
 
-//		LOGGER.info("counterNodes : "+counterNodes.getLength());
+		XPath xp = XPathFactory.newInstance().newXPath();
 		for (int i = 0; i < counterNodes.getLength(); i++) {
-			FidsCcatab fidsCcatab = new FidsCcatab();
-			Node counterNode = counterNodes.item(i);
+			FidsCcatab c = new FidsCcatab();
+			Node n = counterNodes.item(i);
 			try {
-				String ckic = convertDateStringIfNeeded(xpath.evaluate("pdk_rcnt_counter", counterNode));
-				String ckbs = convertDateStringIfNeeded(xpath.evaluate("pdk_beginplan", counterNode));
-				String ckes = convertDateStringIfNeeded(xpath.evaluate("pdk_endplan", counterNode));
-				String ckba = convertDateStringIfNeeded(xpath.evaluate("pdk_beginactual", counterNode));
-				String ckea = convertDateStringIfNeeded(xpath.evaluate("pdk_endactual", counterNode));
-				if (!ckic.equals("HOLD")) {
-					if (!isCommon) {
-						String cnts = element.getElementsByTagName("pd_counters").item(0).getTextContent();
-						Set<String> counters = !cnts.equals("") ? new LinkedHashSet<>(List.of(cnts.split(",")))
-								: new LinkedHashSet<>();
-						LOGGER.info("ckic : " + ckic);
-						LOGGER.info("counters : " + counters);
-						String ctyp = counters.contains(ckic) ? " " : "C";
-						if (ctyp.equals(" ")) {
-							fidsCcatab.setCkic(ckic);
-							fidsCcatab.setCtyp(ctyp);
-							fidsCcatab.setCkbs(ckbs);
-							fidsCcatab.setCkes(ckes);
-							fidsCcatab.setCkba(ckba);
-							fidsCcatab.setCkea(ckea);
-							lstFidsCcatab.add(fidsCcatab);
-						}
-					} else {
-						String flnu = convertDateStringIfNeeded(xpath.evaluate("pdk_idseq", counterNode));
-						String flno = convertDateStringIfNeeded(xpath.evaluate(
-								"pdk_rcnt_refmastercci/ref_counter/rcnt_ral_airline/ref_airline/ral_2lc", counterNode));
-						fidsCcatab.setFlnu(new BigDecimal(flnu));
-						fidsCcatab.setFlno(String.format("%-9s", flno));
-						fidsCcatab.setCkic(ckic);
-						fidsCcatab.setCtyp("C");
-						fidsCcatab.setCkbs(ckbs);
-						fidsCcatab.setCkes(ckes);
-						fidsCcatab.setCkba(ckba);
-						fidsCcatab.setCkea(ckea);
-						lstFidsCcatab.add(fidsCcatab);
+				String ckic = convertDateStringIfNeeded(xp.evaluate("pdk_rcnt_counter", n));
+				String ckbs = convertDateStringIfNeeded(xp.evaluate("pdk_beginplan", n));
+				String ckes = convertDateStringIfNeeded(xp.evaluate("pdk_endplan", n));
+				String ckba = convertDateStringIfNeeded(xp.evaluate("pdk_beginactual", n));
+				String ckea = convertDateStringIfNeeded(xp.evaluate("pdk_endactual", n));
+				if ("HOLD".equals(ckic)) continue;
+
+				if (!isCommon) {
+					String cnts = element.getElementsByTagName("pd_counters").item(0).getTextContent();
+					Set<String> counters = !cnts.isEmpty()
+						? new LinkedHashSet<>(Arrays.asList(cnts.split(",")))
+						: new LinkedHashSet<>();
+					String ctyp = counters.contains(ckic) ? " " : "C";
+					if (ctyp.equals(" ")) {
+						c.setCkic(ckic);
+						c.setCtyp(ctyp);
+						c.setCkbs(ckbs);
+						c.setCkes(ckes);
+						c.setCkba(ckba);
+						c.setCkea(ckea);
+						lst.add(c);
 					}
+				} else {
+					String flnu = convertDateStringIfNeeded(xp.evaluate("pdk_idseq", n));
+					String flno = convertDateStringIfNeeded(xp.evaluate(
+						"pdk_rcnt_refmastercci/ref_counter/rcnt_ral_airline/ref_airline/ral_2lc", n));
+					c.setFlnu(new BigDecimal(flnu));
+					c.setFlno(String.format("%-9s", flno));
+					c.setCkic(ckic);
+					c.setCtyp("C");
+					c.setCkbs(ckbs);
+					c.setCkes(ckes);
+					c.setCkba(ckba);
+					c.setCkea(ckea);
+					lst.add(c);
 				}
 			} catch (XPathExpressionException e) {
-				LOGGER.error("XPath error for counterNode: ", e);
-//				e.printStackTrace();
+				log.error("getCounters error: ", e);
 			}
 		}
-		return lstFidsCcatab;
+		return lst;
+	}
+
+	// ─── HELPERS ───────────────────────────────────────────────────────────
+	private Document parseDocument(String xmlString) throws Exception {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		return builder.parse(new InputSource(new StringReader(xmlString)));
+	}
+
+	private static String convertDateStringIfNeeded(String input) {
+		if (input == null) return null;
+		return ISO_8601_Z.matcher(input).matches() ? input.replaceAll("[-:TZ]", "") : input;
 	}
 
 	public String getVial(String via3, String via4) {
-		String SIBT = "              ";
-		String EIBT = "              ";
-		String ALDT = "              ";
-		String AIBT = "              ";
-		String SOBT = "              ";
-		String EOBT = "              ";
-		String AOBT = "              ";
-		String ATOT = "              ";
-		return " " + via3 + via4 + SIBT + EIBT + ALDT + AIBT + SOBT + EOBT + AOBT + ATOT;
+		String pad = "              ";
+		return " " + via3 + via4 + pad + pad + pad + pad + pad + pad + pad + pad;
 	}
 
 	public static Map<String, String> parseFlightNumber(String flightNumber, String alc3, String alc2) {
@@ -652,38 +593,27 @@ public class TranformFidsAfttab {
 		String number = "";
 		String suffix = "";
 
-		if (alc3 != null && !alc3.equals("") && flightNumber.startsWith(alc3)) {
+		if (alc3 != null && !alc3.isEmpty() && flightNumber.startsWith(alc3)) {
 			prefix = alc3;
-			String rest = flightNumber.substring(alc3.length());
-			Matcher matcher = Pattern.compile("^(\\d{1,4})([A-Z]?)$").matcher(rest);
-			if (matcher.find()) {
-				number = String.format("%03d", Integer.parseInt(matcher.group(1)));
-				suffix = matcher.group(2);
+			Matcher m = Pattern.compile("^(\\d{1,4})([A-Z]?)$").matcher(flightNumber.substring(alc3.length()));
+			if (m.find()) {
+				number = String.format("%03d", Integer.parseInt(m.group(1)));
+				suffix = m.group(2);
 			}
-		} else if (alc2 != null && !alc2.equals("") && flightNumber.startsWith(alc2)) {
+		} else if (alc2 != null && !alc2.isEmpty() && flightNumber.startsWith(alc2)) {
 			prefix = alc2;
-			String rest = flightNumber.substring(alc2.length());
-			Matcher matcher = Pattern.compile("^(\\d{1,4})([A-Z]?)$").matcher(rest);
-			if (matcher.find()) {
-				// เติม 0 ด้านหน้าให้เลขครบ 3 หลักขึ้นไป
+			Matcher m = Pattern.compile("^(\\d{1,4})([A-Z]?)$").matcher(flightNumber.substring(alc2.length()));
+			if (m.find()) {
 				if (number.length() < 3) {
-					number = String.format("%03d", Integer.parseInt(matcher.group(1)));
+					number = String.format("%03d", Integer.parseInt(m.group(1)));
 				}
-				suffix = matcher.group(2);
+				suffix = m.group(2);
 			}
 		} else {
-			return Collections.emptyMap(); // ถ้าไม่เข้า pattern
+			return Collections.emptyMap();
 		}
-		// ถ้า prefix มี 2 ตัว ให้เว้นวรรค 1 ช่อง
-		if (prefix.length() == 2) {
-			prefix = prefix + " ";
-		}
-
-		if (number.length() == 4) {
-			number = number + " "; // เว้นวรรค 1 ช่องถ้าเลข 4 หลัก
-		} else {
-			number = number + "  "; // เว้นวรรค 2 ช่องถ้าเลขไม่ถึง 4 หลัก
-		}
+		if (prefix.length() == 2) prefix = prefix + " ";
+		number = number + (number.length() == 4 ? " " : "  ");
 
 		Map<String, String> map = new HashMap<>();
 		map.put("prefix", prefix);
@@ -694,26 +624,12 @@ public class TranformFidsAfttab {
 
 	public void setDynamicValue(FidsAfttab obj, String fieldPrefix, int index, String fieldSuffix, String value) {
 		try {
-			// เช่น fieldName = b1ba, b2bs, ...
 			String fieldName = fieldPrefix + (index + 1) + fieldSuffix;
 			Field field = FidsAfttab.class.getDeclaredField(fieldName);
 			field.setAccessible(true);
-			field.set(obj, value); // ต้องเป็น String
-//	        LOGGER.info(fieldName+" : "+value);
+			field.set(obj, value);
 		} catch (Exception e) {
-			LOGGER.error("setDynamicValue: ", e);
-//	        System.err.println("Error setting field: " + e.getMessage());
+			log.error("setDynamicValue: ", e);
 		}
-	}
-
-	public static void main(String[] args) throws UnsupportedEncodingException, IOException {
-//		File xmlFile = new File("update_new.xml");
-//		String xmlContent = new String(Files.readAllBytes(Paths.get(xmlFile.getPath())), "UTF-8");
-//		convertPlTurntoAfftab(xmlContent, "DATASET", "A");
-//		ESBResponseService.convertFidsAfftabtoEsb("202505315212", fidsAfttab);
-//		Map<String, String> parts = parseFlightNumber("8K803D","","8K");
-//		String flno = parts.get("prefix")+parts.get("number")+parts.get("suffix");
-//		System.out.println(flno);
-//		System.out.println(parts);
 	}
 }
