@@ -2156,7 +2156,7 @@ public class FidsAfttab implements Serializable {
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rrwy_runway", FidsAfttab::setRwya);
 		arrivalPathToSetterMap.put("/pl_arrival/pl_atcarrival_list/pl_atcarrival/paa_runway", FidsAfttab::setRwya);
 		departurePathToSetterMap.put("/pl_departure/pd_rrwy_runway", FidsAfttab::setRwyd);
-		departurePathToSetterMap.put("/pt_departure/pl_atc_departure/pad_runway", FidsAfttab::setRwyd);
+		departurePathToSetterMap.put("/pl_departure/pl_atc_departure/pad_runway", FidsAfttab::setRwyd);
 		arrivalPathToSetterMap.put("/pl_arrival/paa_ssrcode", FidsAfttab::setSsrc);
 		departurePathToSetterMap.put("/pl_departure/pad_ssrcode", FidsAfttab::setSsrc);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rstc_refservicetypecode/ref_servicetypecode/rstc_ristc_iatacode",

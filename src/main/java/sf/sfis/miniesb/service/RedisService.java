@@ -6,19 +6,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RedisService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(RedisService.class);
     private final ObjectMapper objectMapper;
     private final StringRedisTemplate redisTemplate;
 
@@ -46,14 +45,14 @@ public class RedisService {
 
             String jsonData = objectMapper.writeValueAsString(dataList);
 
-//            LOGGER.info(jsonData);
+//            log.info(jsonData);
             redisTemplate.opsForValue().set(key, jsonData);
             redisTemplate.opsForValue().set(keyTime, timestamp);
 
             return "Saved with key: " + key + " and "+keyTime+" : "+timestamp;
 
         } catch (Exception e) {
-        	LOGGER.error("saveDataToRedis: ", e);
+        	log.error("saveDataToRedis: ", e);
             return "Failed to save: " + e.getMessage();
         }
     }

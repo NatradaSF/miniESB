@@ -4,21 +4,19 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import sf.sfis.miniesb.model.FidsAfttab;
 import sf.sfis.miniesb.model.FidsFinalcallHistory;
 import sf.sfis.miniesb.repository.FidsFinalcallHistoryRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FidsFinalcallHistoryService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FidsFinalcallHistoryService.class);
 	private final FidsFinalcallHistoryRepository fidsFinalcallHistoryRepository;
 	
 	@Transactional
@@ -26,7 +24,7 @@ public class FidsFinalcallHistoryService {
 		try {
 			fidsFinalcallHistory = fidsFinalcallHistoryRepository.save(fidsFinalcallHistory);
 		} catch (Exception e) {
-			LOGGER.error("saveFidsFinalcallHistory: ", e);
+			log.error("saveFidsFinalcallHistory: ", e);
 		}
 		return fidsFinalcallHistory;
 	}
@@ -36,7 +34,7 @@ public class FidsFinalcallHistoryService {
 		try {
 			fidsFinalcallHistoryRepository.delete(fidsFinalcallHistory);
 		} catch (Exception e) {
-			LOGGER.error("deleteFidsFinalcallHistory: ", e);
+			log.error("deleteFidsFinalcallHistory: ", e);
 		}
 	}
 	
@@ -47,13 +45,13 @@ public class FidsFinalcallHistoryService {
 		if (queryFidsFinalcallHistory.isPresent()) {
 //			if(!fidsAfttab.getRemp().equals("FNC")) {//Reset FNC 
 			if(!fidsAfttab.getRemp().equals("FNC")) {//Reset 2ND 
-				LOGGER.info("Reset Final Call for URNO "+fidsFinalcallHistory.getUrno());
+				log.info("Reset Final Call for URNO "+fidsFinalcallHistory.getUrno());
 				deleteFidsFinalcallHistory(fidsFinalcallHistory);
 			}
 		}else {
 //			if(fidsAfttab.getRemp().equals("FNC")) {//Reset FNC 
 			if(fidsAfttab.getRemp().equals("FNC")) {//Reset 2ND 
-				LOGGER.info("Reset Final Call for URNO "+fidsFinalcallHistory.getUrno());
+				log.info("Reset Final Call for URNO "+fidsFinalcallHistory.getUrno());
 				fidsFinalcallHistory.setUpdateTime(Timestamp.from(Instant.now()));
 				saveFidsFinalcallHistory(fidsFinalcallHistory);
 			}

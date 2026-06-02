@@ -4,8 +4,6 @@ import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.jws.WebMethod;
@@ -15,19 +13,20 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import lombok.RequiredArgsConstructor;
-import sf.sfis.miniesb.ArtemisProducer;
+import lombok.extern.slf4j.Slf4j;
+import sf.sfis.miniesb.MQArtemisProducer;
 import sf.sfis.miniesb.aodb.Body;
 import sf.sfis.miniesb.aodb.Control;
 import sf.sfis.miniesb.aodb.Envelope;
 import sf.sfis.miniesb.aodb.Header;
 import sf.sfis.miniesb.aodb.Request;
 
+@Slf4j
 @WebService
 @Service
 @RequiredArgsConstructor
 public class SubscribeRequestService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(SubscribeRequestService.class);
-	private final ArtemisProducer artemisProducer;
+	private final MQArtemisProducer artemisProducer;
 
 	@WebMethod
 	public void subscribe(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime, @WebParam(name = "dataType") String dataType) {
@@ -64,18 +63,18 @@ public class SubscribeRequestService {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(envelope, writer);
 
-			LOGGER.info("Subscribe "+dataType+" from "+starttime+" to "+endtime);
-			LOGGER.info(writer.toString());
+			log.info("Subscribe "+dataType+" from "+starttime+" to "+endtime);
+			log.info(writer.toString());
 			artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", writer.toString());
 			
 		} catch (JAXBException e) {
-        	LOGGER.error("subscribe: ", e);
+        	log.error("subscribe: ", e);
 		}
 	}
 	
 	@WebMethod
 	public void requestDataset(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime, @WebParam(name = "dataType") String dataType) {
-		LOGGER.info("Request Dataset...");
+		log.info("Request Dataset...");
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 	        LocalDateTime today = LocalDateTime.now();
@@ -108,10 +107,10 @@ public class SubscribeRequestService {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(envelope, writer);
 
-			LOGGER.info(writer.toString());
+			log.info(writer.toString());
 			artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", writer.toString());
 		} catch (JAXBException e) {
-        	LOGGER.error("requestDataset: ", e);
+        	log.error("requestDataset: ", e);
 //			e.printStackTrace();
 		}
 	}

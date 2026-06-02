@@ -17,9 +17,6 @@ import java.util.List;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.jws.WebMethod;
@@ -30,7 +27,8 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import lombok.RequiredArgsConstructor;
-import sf.sfis.miniesb.ArtemisProducer;
+import lombok.extern.slf4j.Slf4j;
+import sf.sfis.miniesb.MQArtemisProducer;
 import sf.sfis.miniesb.aodb.Aodbprioduration;
 import sf.sfis.miniesb.aodb.Aodbpriostring;
 import sf.sfis.miniesb.aodb.Aodbstring;
@@ -55,19 +53,24 @@ import sf.sfis.miniesb.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJFLIG
 import sf.sfis.miniesb.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJVDGS;
 import sf.sfis.miniesb.utility.FieldInspector;
 
+@Slf4j
 @WebService
 @Service
 @RequiredArgsConstructor
 public class ESBRequestService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ESBRequestService.class);
-	private final ArtemisProducer artemisProducer;
+	private final MQArtemisProducer artemisProducer;
 
 	ObjectFactory factory = new ObjectFactory();
 
 	@WebMethod
 	public void requestAodbInbound(@WebParam(name = "aodbInbound") String xmlString) {
-		LOGGER.info("request AODB Inbound...");
-//		LOGGER.info(xmlString);
+		log.info("Received from WebService...");
+		processXmlMessage(xmlString);
+	}
+
+	public void processXmlMessage(String xmlString) {
+		log.info("request AODB Inbound...");
+		log.info(xmlString);
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(MSG.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -98,7 +101,8 @@ public class ESBRequestService {
 			INFOBJFLIGHT infobjflight = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJFLIGHT();
 			INFOBJVDGS infobjvdgs = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJVDGS();
 			if (bulkdata != null) {
-				String message = systemType.equals("AFTN")?bulkdata.getAFTN().getCONTENT():bulkdata.getSITA().getCONTENT();
+				String message = systemType.equals("AFTN") ? bulkdata.getAFTN().getCONTENT()
+						: bulkdata.getSITA().getCONTENT();
 				body = setBulkData(body, message);
 			} else if (infobjflight != null) {
 				infobjflight.setSTOA(stdt);
@@ -120,21 +124,21 @@ public class ESBRequestService {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(envelope, writer);
 
-			if(systemType.equals("AFTN")) {
-				LOGGER.info("Send to AQ_FROM_AFTN_AOT_AOS_TST...");
+			if (systemType.equals("AFTN")) {
+				log.info("Send to AQ_FROM_AFTN_AOT_AOS_TST...");
 				artemisProducer.sendMessage("AQ_FROM_AFTN_AOT_AOS_TST", writer.toString());
-			}else if(systemType.equals("SITA")) {
-				LOGGER.info("Send to AQ_FROM_SITA_AOT_AOS_TST...");
+			} else if (systemType.equals("SITA")) {
+				log.info("Send to AQ_FROM_SITA_AOT_AOS_TST...");
 				artemisProducer.sendMessage("AQ_FROM_SITA_AOT_AOS_TST", writer.toString());
-			}else {
-				LOGGER.info("Send to AQ_FROM_FIDS_AOT_AOS_TST...");
+			} else {
+				log.info("Send to AQ_FROM_FIDS_AOT_AOS_TST...");
 				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", writer.toString());
 			}
-			LOGGER.info(writer.toString());
+			log.info(writer.toString());
 
 		} catch (JAXBException e) {
-			LOGGER.error("requestAodbInbound: ", e);
-//			e.printStackTrace();
+			log.error("requestAodbInbound: ", e);
+			// e.printStackTrace();
 		}
 	}
 
@@ -153,7 +157,8 @@ public class ESBRequestService {
 		if (adid == ADID.D) {
 			plDeparture = factory.createPlTurnPtPdDeparturePlDeparture();
 			plDeparture.setPdSobt(factory.createPlTurnPtPdDeparturePlDeparturePdSobt(getAodbDate(stdt)));
-			plDeparture.setPdFlightnumber(factory.createPlTurnPtPdDeparturePlDeparturePdFlightnumber(getAodbpriostring(flno)));
+			plDeparture.setPdFlightnumber(
+					factory.createPlTurnPtPdDeparturePlDeparturePdFlightnumber(getAodbpriostring(flno)));
 
 			List<String> fieldsNotNull = FieldInspector.getNonNullFields(infobjvdgs.getVDGSDEP());
 			for (String field : fieldsNotNull) {
@@ -186,7 +191,8 @@ public class ESBRequestService {
 		} else if (adid == ADID.A) {
 			plArrival = factory.createPlTurnPtPaArrivalPlArrival();
 			plArrival.setPaSibt(factory.createPlTurnPtPaArrivalPlArrivalPaSibt(getAodbDate(stdt)));
-			plArrival.setPaFlightnumber(factory.createPlTurnPtPaArrivalPlArrivalPaFlightnumber(getAodbpriostring(flno)));
+			plArrival
+					.setPaFlightnumber(factory.createPlTurnPtPaArrivalPlArrivalPaFlightnumber(getAodbpriostring(flno)));
 
 			List<String> fieldsNotNull = FieldInspector.getNonNullFields(infobjvdgs.getVDGSARR());
 			for (String field : fieldsNotNull) {
@@ -222,7 +228,7 @@ public class ESBRequestService {
 
 	private Body setFlight(ADID adid, Body body, INFOBJFLIGHT infobjflight) {
 		List<String> fieldsNotNull = FieldInspector.getNonNullFields(infobjflight);
-//    	LOGGER.info(String.join(", ", fieldsNotNull));
+		// log.info(String.join(", ", fieldsNotNull));
 
 		PlTurn plTurn = factory.createPlTurn();
 		PlArrival plArrival = null;
@@ -276,7 +282,8 @@ public class ESBRequestService {
 							factory.createPlTurnPtPdDeparturePlDeparturePdAegt(getAodbDate(infobjflight.getAEGT())));
 				} else if (field.equals("ardt")) {
 					plDeparture.setPdDoorclosetime(
-							factory.createPlTurnPtPdDeparturePlDeparturePdDoorclosetime(getAodbDate(infobjflight.getARDT())));
+							factory.createPlTurnPtPdDeparturePlDeparturePdDoorclosetime(
+									getAodbDate(infobjflight.getARDT())));
 				} else if (field.equals("asbt")) {
 					plDeparture.setPdArdt(
 							factory.createPlTurnPtPdDeparturePlDeparturePdAsbt(getAodbDate(infobjflight.getASBT())));
@@ -336,7 +343,7 @@ public class ESBRequestService {
 		try {
 			Aodbprioduration aodbprioduration = factory.createAodbprioduration();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-			if(!value.trim().equals("")) {
+			if (!value.trim().equals("")) {
 				Date d = sdf.parse(value);
 				GregorianCalendar cal = new GregorianCalendar();
 				cal.setTime(d);
@@ -347,11 +354,11 @@ public class ESBRequestService {
 				return aodbprioduration;
 			}
 		} catch (ParseException e) {
-			LOGGER.error("getAodbDate: ", e);
-//			e.printStackTrace();
+			log.error("getAodbDate: ", e);
+			// e.printStackTrace();
 		} catch (DatatypeConfigurationException e) {
-			LOGGER.error("getAodbDate: ", e);
-//			e.printStackTrace();
+			log.error("getAodbDate: ", e);
+			// e.printStackTrace();
 		}
 		return null;
 	}
@@ -365,57 +372,57 @@ public class ESBRequestService {
 		String formatted = localZoned.format(outputFormatter);
 		return formatted;
 	}
-	
+
 	private static String getCurrentDate() {
 		Calendar cal = Calendar.getInstance();
-        // เซตเวลาเป็น 00:00:00
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+		// เซตเวลาเป็น 00:00:00
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
 
-        Date date = cal.getTime();
-        // Format ที่ต้องการ
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String formatted = sdf.format(date);
-//        System.out.println(formatted); // เช่น 20250524000000
-        return formatted;
+		Date date = cal.getTime();
+		// Format ที่ต้องการ
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		String formatted = sdf.format(date);
+		// System.out.println(formatted); // เช่น 20250524000000
+		return formatted;
 	}
 
 	// For test only
 	public static void main(String[] args) {
-//		try {
-//			Header header = new Header();
-//			Control control = new Control();
-//			control.setMessageId("localhost:2d970033:195f1193a55:-12d5");
-//			control.setMessageVersion("1.4");
-//			control.setMessageType("SUBSCRIBE");
-//			control.setSender("FIDS");
-//			control.setTimestamp("2025-04-01T21:32:00");
-//			Request request = new Request();
-//			request.setDatatype("pl_turn");
-//			request.setStartTime("2025-05-09T00:00:00");
-//			request.setEndTime("2025-05-09T23:59:59");
-//			control.setRequest(request);
-//			header.setControl(control);
-//			Body body = new Body();
-//
-//			Envelope envelope = new Envelope();
-//			envelope.setHeader(header);
-//			envelope.setBody(body);
-//
-//			// Marshal to XML String
-//			StringWriter writer = new StringWriter();
-//			JAXBContext context = JAXBContext.newInstance(Envelope.class);
-//			Marshaller marshaller = context.createMarshaller();
-//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-//			marshaller.marshal(envelope, writer);
-//			String xmlPayload = writer.toString();
-//			ArtemisProducer ArtemisProducer = new ArtemisProducer();
-//			ArtemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", xmlPayload);
-//
-//		} catch (JAXBException e) {
-//			e.printStackTrace();
-//		}
+		// try {
+		// Header header = new Header();
+		// Control control = new Control();
+		// control.setMessageId("localhost:2d970033:195f1193a55:-12d5");
+		// control.setMessageVersion("1.4");
+		// control.setMessageType("SUBSCRIBE");
+		// control.setSender("FIDS");
+		// control.setTimestamp("2025-04-01T21:32:00");
+		// Request request = new Request();
+		// request.setDatatype("pl_turn");
+		// request.setStartTime("2025-05-09T00:00:00");
+		// request.setEndTime("2025-05-09T23:59:59");
+		// control.setRequest(request);
+		// header.setControl(control);
+		// Body body = new Body();
+		//
+		// Envelope envelope = new Envelope();
+		// envelope.setHeader(header);
+		// envelope.setBody(body);
+		//
+		// // Marshal to XML String
+		// StringWriter writer = new StringWriter();
+		// JAXBContext context = JAXBContext.newInstance(Envelope.class);
+		// Marshaller marshaller = context.createMarshaller();
+		// marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		// marshaller.marshal(envelope, writer);
+		// String xmlPayload = writer.toString();
+		// ArtemisProducer ArtemisProducer = new ArtemisProducer();
+		// ArtemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", xmlPayload);
+		//
+		// } catch (JAXBException e) {
+		// e.printStackTrace();
+		// }
 	}
 }

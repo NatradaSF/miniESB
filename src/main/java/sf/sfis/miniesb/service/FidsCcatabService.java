@@ -1,33 +1,27 @@
 package sf.sfis.miniesb.service;
 
 import java.sql.SQLException;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import sf.sfis.miniesb.model.FidsAfttab;
 import sf.sfis.miniesb.model.FidsCcatab;
-import sf.sfis.miniesb.model.FidsCcatabId;
-import sf.sfis.miniesb.model.FidsFinalcallHistory;
 import sf.sfis.miniesb.repository.FidsCcatabRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FidsCcatabService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FidsCcatabService.class);
 	private final FidsCcatabRepository fidsCcatabRepository;
 	
 	@Transactional
 	public FidsCcatab saveFidsCcatab(FidsCcatab fidsCcatab) {
 		try {
-			LOGGER.info(fidsCcatab.toString());
+			log.info(fidsCcatab.toString());
 			fidsCcatab = fidsCcatabRepository.save(fidsCcatab);
 		} catch (Exception e) {
-			LOGGER.error("saveFidsCcatab: ", e);
+			log.error("saveFidsCcatab: ", e);
 		}
 		return fidsCcatab;
 	}
@@ -35,10 +29,10 @@ public class FidsCcatabService {
 //	@Transactional
 //	public void deleteCcatab(FidsCcatab fidsCcatab) {
 //		try {
-//			LOGGER.info("delete fidsCcatab: "+ fidsCcatab.getFlnu()+", "+fidsCcatab.getCkic());
+//			log.info("delete fidsCcatab: "+ fidsCcatab.getFlnu()+", "+fidsCcatab.getCkic());
 //			fidsCcatabRepository.delete(fidsCcatab);
 //		} catch (Exception e) {
-//			LOGGER.error("deleteCcatab: ", e);
+//			log.error("deleteCcatab: ", e);
 //		}
 //	}
 	
@@ -48,7 +42,7 @@ public class FidsCcatabService {
 				FidsCcatab fidsCcatab = new FidsCcatab();
 				fidsCcatab.setFlnu(ccatab.getFlnu()!=null?ccatab.getFlnu():fidsAfttab.getUrno());
 				fidsCcatab.setCkic(String.format("%-5s", ccatab.getCkic()));
-				LOGGER.info("CKIC : "+ccatab.getCkic());
+				log.info("CKIC : "+ccatab.getCkic());
 //				deleteCcatab(fidsCcatab);
 				
 				fidsCcatab.setFlno(ccatab.getFlno()!=null?ccatab.getFlno():fidsAfttab.getFlno());

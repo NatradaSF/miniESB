@@ -4,9 +4,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.xml.bind.JAXBContext;
@@ -23,6 +20,8 @@ import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.soap.SOAPPart;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import sf.sfis.miniesb.MQWebSphereProducer;
 import sf.sfis.miniesb.aodb.Envelope;
 import sf.sfis.miniesb.aodb.Fault;
 import sf.sfis.miniesb.aodb.IfAdexpmessage;
@@ -43,10 +42,10 @@ import sf.sfis.miniesb.utility.FieldInspector;
 import sf.sfis.miniesb.utility.GetterAccess;
 import sf.sfis.miniesb.utility.TranformFidsAfttab;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ESBResponseService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ESBResponseService.class);
 	private final DateTimeFormatHelper dateTimeFormatHelper;
 	private final TranformFidsAfttab tranformFidsAfttab;
 	private final FidsAfttabService fidsAfttabService;
@@ -54,26 +53,27 @@ public class ESBResponseService {
 	private final FidsGateHistoryService fidsGateHistoryService;
 	private final FidsFinalcallHistoryService fidsFinalcallHistoryService;
 	private final RedisController redisController;
+	private final MQWebSphereProducer webSphereProducer;
 
 	public void convertXMLtoObject(String xml) {
 		try {
-			LOGGER.info("ESBResponseService...");
+			log.info("ESBResponseService...");
 			JAXBContext jaxbContext = JAXBContext.newInstance(Envelope.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			LOGGER.info(xml);
+			log.info(xml);
 
 			Envelope envelope = (Envelope) unmarshaller.unmarshal(new StringReader(xml));
 			String type = envelope.getHeader().getControl().getMessageType();
 			String timestamp = dateTimeFormatHelper.convertLocalToUTC(envelope.getHeader().getControl().getTimestamp());
 			String hopo = envelope.getHeader().getControl().getStation();
 
-			LOGGER.info("Message Type: " + type);
+			log.info("Message Type: " + type);
 			StringWriter writer = new StringWriter();
 			Marshaller marshaller = jaxbContext.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(envelope, writer);
 
-//			TranformFidsAfttab tranformFidsAfttab = new TranformFidsAfttab();
+			// TranformFidsAfttab tranformFidsAfttab = new TranformFidsAfttab();
 			// Insert or Update all fields on FidsAfttab.
 			FidsAfttab fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", hopo, "A");
 			if (fidsAfttab != null) {
@@ -109,38 +109,56 @@ public class ESBResponseService {
 				if (fidsAfttab != null) {
 					String xmlEsb = convertFidsAfftabtoEsb(timestamp, fidsAfttab);
 					if (xmlEsb != null) {
-						LOGGER.info("Call Web service update arrival flight...");
-						LOGGER.info(xmlEsb);
-						callWebserviceUpdate(xmlEsb);
+						log.info("Update arrival flight...");
+						log.info(xmlEsb);
+						String queueName = fidsAfttab.getAction().equalsIgnoreCase("insert") ? "UFIS_INSERT_FLIGHT_OUT"
+								: "UFIS_FLIGHT_OUT";
+						if (hopo.equalsIgnoreCase("BKK")) {
+							webSphereProducer.sendToMachine1(queueName, xmlEsb);
+						} else {
+							queueName = queueName + "_" + hopo.toUpperCase();
+							webSphereProducer.sendToMachine2(queueName, xmlEsb);
+						}
+						/* callWebserviceUpdate(xmlEsb); */
 					} else {
-						LOGGER.info("No data found for ESB update.");
+						log.info("No data found for ESB update.");
 					}
 				}
 				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "D");
 				if (fidsAfttab != null) {
 					String xmlEsb = convertFidsAfftabtoEsb(timestamp, fidsAfttab);
 					if (xmlEsb != null) {
-						LOGGER.info("Call Web service update departure flight...");
-						LOGGER.info(xmlEsb);
-						callWebserviceUpdate(xmlEsb);
+						log.info("Update departure flight...");
+						log.info(xmlEsb);
+						String queueName = fidsAfttab.getAction().equalsIgnoreCase("insert") ? "UFIS_INSERT_FLIGHT_OUT"
+								: "UFIS_FLIGHT_OUT";
+						if (hopo.equalsIgnoreCase("BKK")) {
+							webSphereProducer.sendToMachine1(queueName, xmlEsb);
+						} else {
+							queueName = queueName + "_" + hopo.toUpperCase();
+							webSphereProducer.sendToMachine2(queueName, xmlEsb);
+						}
+						/* callWebserviceUpdate(xmlEsb); */
 					} else {
-						LOGGER.info("No data found for ESB update.");
+						log.info("No data found for ESB update.");
 					}
 				}
 				// Save data to Redis.
 				redisController.saveData(hopo);
 			} else if (!type.equalsIgnoreCase("DATASET")) {// Send ACK or NACK to ESB by Web service.
+				// ส่ง Webservice ในกรณีที่ ESB Request อัพเดทข้อมูล Flight แล้ว TSystem ส่ง
+				// ACK/NACK กลับมา
 				String contentBody = getContentBody(writer.toString());
 				String xmlEsb = convertResponseMessagetoEsb(timestamp, envelope, contentBody);
-				LOGGER.info("Call Web service response...");
-				LOGGER.info(xmlEsb);
+				log.info("Call Web service response ACK/NACK...");
+				log.info(xmlEsb);
 				callWebserviceResponse(xmlEsb);
 			}
 		} catch (JAXBException e) {
-			LOGGER.error("convertXMLtoObject: ", e);
-//			e.printStackTrace();
+			log.error("convertXMLtoObject: ", e);
+			// e.printStackTrace();
 		} catch (Exception e) {
-			LOGGER.error("convertXMLtoObject: ", e);
+			log.error("convertXMLtoObject: ", e);
 			e.printStackTrace();
 		}
 	}
@@ -158,7 +176,7 @@ public class ESBResponseService {
 			if (ifAdexpmessage != null) {
 				String iamOriginalmessage = GetterAccess.get(ifAdexpmessage, p -> p.getIamOriginalmessage(),
 						v1 -> v1.getValue(), v2 -> v2.getValue(), v -> v.toString()).orElse("");
-//				LOGGER.info("AFTN Message : " + iamOriginalmessage);
+				// log.info("AFTN Message : " + iamOriginalmessage);
 				msgReturn.setMESSAGE(iamOriginalmessage);
 			} else {
 				msgReturn.setMESSAGE(bodyContent);
@@ -173,18 +191,21 @@ public class ESBResponseService {
 				nackdetail.setFaultstring(factory.createMSGNACKDETAILFaultstring(fault.getFaultstring()));
 				nackdetail.setFaultdetail(factory.createMSGNACKDETAILFaultdetail(fault.getDetail()));
 				msgReturn.setNACKDETAIL(factory.createMSGNACKDETAIL(nackdetail));
+			} else {
+				// ใช้สำหรับปิดการรับข้อมูลที่เป็น ACK ช่วงทดสอบจะเปิดให้ส่งก่อน
+				/* return null; */
 			}
 
 			JAXBContext context = JAXBContext.newInstance(sf.sfis.miniesb.esb.MSG.class);
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(msgReturn, writer);
-//			LOGGER.info("convertResponseMessagetoEsb...");
-//			LOGGER.info(writer.toString());
+			// log.info("convertResponseMessagetoEsb...");
+			// log.info(writer.toString());
 			return writer.toString();
 		} catch (JAXBException e) {
-			LOGGER.error("convertResponseMessagetoEsb: ", e);
-//			e.printStackTrace();
+			log.error("convertResponseMessagetoEsb: ", e);
+			// e.printStackTrace();
 		}
 		return null;
 	}
@@ -210,9 +231,11 @@ public class ESBResponseService {
 		infobjgeneric.setRTYP(fidsAfttab.getRtyp());
 
 		MSG.MSGSTREAMOUT.INFOBJFLIGHT infobjflight = new INFOBJFLIGHT();
-//		Set<String> copyFields = new HashSet<>(Arrays.asList("fpla" ,"fpld", "eldt", "etdi", "atot", "etot", "ctot", "etai", "tldt", "tmoa",
-//				"rwya", "rwyd", "land", "airb", "ifra", "ifrd", "onbl", "ofbl", "acgt", "ttot", "tobt", "tsat", "asbt",
-//				"remp", "ardt", "asrt", "asat"));
+		// Set<String> copyFields = new HashSet<>(Arrays.asList("fpla" ,"fpld", "eldt",
+		// "etdi", "atot", "etot", "ctot", "etai", "tldt", "tmoa",
+		// "rwya", "rwyd", "land", "airb", "ifra", "ifrd", "onbl", "ofbl", "acgt",
+		// "ttot", "tobt", "tsat", "asbt",
+		// "remp", "ardt", "asrt", "asat"));
 		copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, infobjflight);
 
 		if (!FieldInspector.allFieldsAreNull(infobjflight)) {
@@ -237,8 +260,8 @@ public class ESBResponseService {
 				marshaller.marshal(esbAfttab, writer);
 				return writer.toString();
 			} catch (JAXBException e) {
-				LOGGER.error("convertFidsAfftabtoEsb: ", e);
-//				e.printStackTrace();
+				log.error("convertFidsAfftabtoEsb: ", e);
+				// e.printStackTrace();
 			}
 		}
 		return null;
@@ -262,55 +285,59 @@ public class ESBResponseService {
 			SOAPMessage soapResponse = soapConnection.call(soapRequest, url);
 
 			// Print response
-//	        System.out.println("Response SOAP Message:");
-//	        soapResponse.writeTo(System.out);
+			// System.out.println("Response SOAP Message:");
+			// soapResponse.writeTo(System.out);
 
 			soapConnection.close();
 		} catch (UnsupportedOperationException e) {
-			LOGGER.error("callWebserviceResponse: ", e);
-//			e.printStackTrace();
+			log.error("callWebserviceResponse: ", e);
+			// e.printStackTrace();
 		} catch (SOAPException e) {
-			LOGGER.error("callWebserviceResponse: ", e);
-//			e.printStackTrace();
+			log.error("callWebserviceResponse: ", e);
+			// e.printStackTrace();
 		} catch (Exception e) {
-			LOGGER.error("callWebserviceResponse: ", e);
-//			e.printStackTrace();
+			log.error("callWebserviceResponse: ", e);
+			// e.printStackTrace();
 		}
 	}
 
-	public void callWebserviceUpdate(String xmlEsb) {
-		// Create SOAP Connection
-		SOAPConnectionFactory soapConnectionFactory;
-		try {
-			soapConnectionFactory = SOAPConnectionFactory.newInstance();
-
-			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
-
-			// Define the endpoint URL
-			String url = "http://esbv10:5555/ws/IFIMS.Service.FlowService.Online.Publish.BKK:AODB_FlightOutbound_WSD/IFIMS_Service_FlowService_Online_Publish_BKK_AODB_FlightOutbound_WSD_Port";
-
-			// Create the SOAP Request
-			SOAPMessage soapRequest = createSoapRequest(xmlEsb, url, "AODB_FlightOutbound");
-
-			// Send request and receive response
-			SOAPMessage soapResponse = soapConnection.call(soapRequest, url);
-
-			// Print response
-//	        System.out.println("Response SOAP Message:");
-//	        soapResponse.writeTo(System.out);
-
-			soapConnection.close();
-		} catch (UnsupportedOperationException e) {
-			LOGGER.error("callWebserviceUpdate: ", e);
-//			e.printStackTrace();
-		} catch (SOAPException e) {
-			LOGGER.error("callWebserviceUpdate: ", e);
-//			e.printStackTrace();
-		} catch (Exception e) {
-			LOGGER.error("callWebserviceUpdate: ", e);
-//			e.printStackTrace();
-		}
-	}
+	/*
+	 * public void callWebserviceUpdate(String xmlEsb) {
+	 * // Create SOAP Connection
+	 * SOAPConnectionFactory soapConnectionFactory;
+	 * try {
+	 * soapConnectionFactory = SOAPConnectionFactory.newInstance();
+	 * 
+	 * SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+	 * 
+	 * // Define the endpoint URL
+	 * String url =
+	 * "http://esbv10:5555/ws/IFIMS.Service.FlowService.Online.Publish.BKK:AODB_FlightOutbound_WSD/IFIMS_Service_FlowService_Online_Publish_BKK_AODB_FlightOutbound_WSD_Port";
+	 * 
+	 * // Create the SOAP Request
+	 * SOAPMessage soapRequest = createSoapRequest(xmlEsb, url,
+	 * "AODB_FlightOutbound");
+	 * 
+	 * // Send request and receive response
+	 * SOAPMessage soapResponse = soapConnection.call(soapRequest, url);
+	 * 
+	 * // Print response
+	 * // System.out.println("Response SOAP Message:");
+	 * // soapResponse.writeTo(System.out);
+	 * 
+	 * soapConnection.close();
+	 * } catch (UnsupportedOperationException e) {
+	 * log.error("callWebserviceUpdate: ", e);
+	 * // e.printStackTrace();
+	 * } catch (SOAPException e) {
+	 * log.error("callWebserviceUpdate: ", e);
+	 * // e.printStackTrace();
+	 * } catch (Exception e) {
+	 * log.error("callWebserviceUpdate: ", e);
+	 * // e.printStackTrace();
+	 * }
+	 * }
+	 */
 
 	private SOAPMessage createSoapRequest(String xmlEsb, String url, String elementName) throws Exception {
 		// Create message
@@ -347,7 +374,7 @@ public class ESBResponseService {
 			try {
 				Object value = sourceField.get(source);
 				if (value != null && !value.toString().equals("") && updateFields.contains(sourceField.getName())) {
-//					 หา field ชื่อเดียวกันใน target
+					// หา field ชื่อเดียวกันใน target
 					try {
 						Field targetField = targetClass.getDeclaredField(sourceField.getName());
 						targetField.setAccessible(true);
@@ -359,8 +386,8 @@ public class ESBResponseService {
 					}
 				}
 			} catch (IllegalAccessException e) {
-				LOGGER.error("copyMatchingFields: ", e);
-//				e.printStackTrace();
+				log.error("copyMatchingFields: ", e);
+				// e.printStackTrace();
 			}
 		}
 	}

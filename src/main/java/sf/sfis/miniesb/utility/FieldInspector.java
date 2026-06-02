@@ -5,13 +5,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
-import sf.sfis.miniesb.controller.RedisController;
-
+@Slf4j
 public class FieldInspector {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FieldInspector.class);
 	
 	public static List<String> getNonNullFields(Object obj) {
 		List<String> nonNullFields = new ArrayList<>();
@@ -24,7 +21,7 @@ public class FieldInspector {
 					nonNullFields.add(field.getName());
 				}
 			} catch (IllegalAccessException e) {
-				LOGGER.error("⚠️ ไม่สามารถเข้าถึง field: " + field.getName());
+				log.error("⚠️ ไม่สามารถเข้าถึง field: " + field.getName());
 			}
 		}
 
@@ -42,7 +39,7 @@ public class FieldInspector {
                     return false; // เจอ field ที่ไม่ null
                 }
             } catch (IllegalAccessException e) {
-				LOGGER.error("allFieldsAreNull: " + e);
+				log.error("allFieldsAreNull: " + e);
                 return false;
             }
         }
@@ -67,7 +64,7 @@ public class FieldInspector {
                 }
 
             } catch (IllegalAccessException e) {
-				LOGGER.error("Cannot access field: " + field.getName());
+				log.error("Cannot access field: " + field.getName());
                 // จะ continue ไป field ถัดไปแม้เจอปัญหา
             }
         }

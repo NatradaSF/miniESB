@@ -40,6 +40,12 @@
 			<artifactId>jakarta.jms-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
+		<!-- WebSphere MQ Library -->
+		<dependency>
+			<groupId>com.ibm.mq</groupId>
+			<artifactId>mq-jms-spring-boot-starter</artifactId>
+			<version>3.2.4</version> 
+		</dependency>
 
 		<!-- Database Library -->
 		<dependency>
@@ -96,6 +102,17 @@
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-webflux</artifactId>
 	    </dependency>
+	    
+	    <!-- SAXON Library -->
+	    <dependency>
+		    <groupId>net.sf.saxon</groupId>
+		    <artifactId>Saxon-HE</artifactId>
+		    <version>12.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.dataformat</groupId>
+		    <artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

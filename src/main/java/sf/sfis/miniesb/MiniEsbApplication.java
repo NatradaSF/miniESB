@@ -1,7 +1,5 @@
 package sf.sfis.miniesb;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,8 +14,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
-import sf.sfis.miniesb.service.SubscribeScheduledService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @SpringBootApplication
 @EnableJms
 @EnableScheduling
@@ -30,7 +29,6 @@ public class MiniEsbApplication extends SpringBootServletInitializer {
 	@Value("${spring.redis.port}")
 	private int redisPort;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MiniEsbApplication.class);
 	private static ObjectMapper objectMapper = new ObjectMapper();
 
 	public static void main(String[] args) {

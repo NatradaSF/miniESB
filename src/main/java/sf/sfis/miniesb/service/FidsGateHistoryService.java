@@ -7,30 +7,27 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import sf.sfis.miniesb.model.FidsAfttab;
 import sf.sfis.miniesb.model.FidsGateHistory;
-import sf.sfis.miniesb.repository.FidsAfttabRepository;
 import sf.sfis.miniesb.repository.FidsGateHistoryRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FidsGateHistoryService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FidsGateHistoryService.class);
 	private final FidsGateHistoryRepository fidsGateHistoryRepository;
-	private final FidsAfttabRepository fidsAfttabRepository;
 
 	@Transactional
 	public FidsGateHistory saveFidsGateHistory(FidsGateHistory fidsGateHistory) {
 		try {
 			fidsGateHistory = fidsGateHistoryRepository.save(fidsGateHistory);
 		} catch (Exception e) {
-			LOGGER.error("saveFidsGateHistory: ", e);
+			log.error("saveFidsGateHistory: ", e);
 		}
 		return fidsGateHistory;
 	}
@@ -40,7 +37,7 @@ public class FidsGateHistoryService {
 		try {
 			fidsGateHistoryRepository.delete(fidsGateHistory);
 		} catch (Exception e) {
-			LOGGER.error("deleteFidsGateHistory: ", e);
+			log.error("deleteFidsGateHistory: ", e);
 		}
 	}
 
@@ -97,7 +94,7 @@ public class FidsGateHistoryService {
 				return false;
 			}
 		} catch (Exception ex) {
-			LOGGER.error("SOBT format error!!");
+			log.error("SOBT format error!!");
 			return false;
 		}
 
@@ -126,8 +123,8 @@ public class FidsGateHistoryService {
 					.findById(fidsAfttab.getUrno().toString());
 			if (queryFidsGateHistory.isPresent()) {
 				FidsGateHistory oldFidsGateHistory = queryFidsGateHistory.get();
-//				LOGGER.info(oldFidsGateHistory.toString());
-//				LOGGER.info(fidsAfttab.toString());
+//				log.info(oldFidsGateHistory.toString());
+//				log.info(fidsAfttab.toString());
 				if (oldFidsGateHistory.getNewgate1() != null
 						&& oldFidsGateHistory.getNewgate1().trim().equals(fidsAfttab.getGtd1().trim())
 						&& oldFidsGateHistory.getNewgate2() != null
@@ -136,16 +133,16 @@ public class FidsGateHistoryService {
 				}
 //				else if(oldFidsGateHistory.getNewgate1()!=null&&oldFidsGateHistory.getNewgate1().trim().length()<=0 && oldFidsGateHistory.getNewgate2()!=null&&oldFidsGateHistory.getNewgate2().trim().length()<=0) {
 //					//Just Add
-//					LOGGER.info("2");
+//					log.info("2");
 //				}
 				else {
-//					LOGGER.info("Gate change detected!! URNO="+fidsAfttab.getUrno()+" New GTD1 "+fidsAfttab.getGtd1()+"("+oldFidsGateHistory.getNewgate1()+") , New GTD2 "+fidsAfttab.getGtd2()+"("+oldFidsGateHistory.getNewgate2()+")");
+//					log.info("Gate change detected!! URNO="+fidsAfttab.getUrno()+" New GTD1 "+fidsAfttab.getGtd1()+"("+oldFidsGateHistory.getNewgate1()+") , New GTD2 "+fidsAfttab.getGtd2()+"("+oldFidsGateHistory.getNewgate2()+")");
 					fidsGateHistory.setOldgate1(oldFidsGateHistory.getNewgate1());
 					fidsGateHistory.setOldgate2(oldFidsGateHistory.getNewgate2());
 				}
 			}
 
-			LOGGER.info(fidsGateHistory.toString());
+			log.info(fidsGateHistory.toString());
 			fidsGateHistory = saveFidsGateHistory(fidsGateHistory);
 		}
 		result = fidsGateHistory != null ? true : false;
