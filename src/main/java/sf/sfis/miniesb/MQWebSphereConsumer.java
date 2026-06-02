@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import jakarta.jms.BytesMessage;
 import jakarta.jms.Message;
-import jakarta.jms.Queue;
 import jakarta.jms.TextMessage;
 import lombok.extern.slf4j.Slf4j;
 import sf.sfis.miniesb.service.ESBRequestService;

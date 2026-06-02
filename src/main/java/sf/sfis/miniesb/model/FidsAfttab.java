@@ -1991,7 +1991,7 @@ public class FidsAfttab implements Serializable {
 	@Transient
 	private List<FidsCcatab> lstFidsCcatab;
 
-	// --- map สำหรับ String
+	/* // --- map สำหรับ String
 	public static final Map<String, BiConsumer<FidsAfttab, String>> arrivalPathToSetterMap = new LinkedHashMap<>();
 	public static final Map<String, BiConsumer<FidsAfttab, String>> departurePathToSetterMap = new LinkedHashMap<>();
 
@@ -2001,7 +2001,7 @@ public class FidsAfttab implements Serializable {
 	
 	// --- map สำหรับ Date
 	public static final Map<String, BiConsumer<FidsAfttab, String>> arrivalPathToSetterMapDate = new LinkedHashMap<>();
-	public static final Map<String, BiConsumer<FidsAfttab, String>> departurePathToSetterMapDate = new LinkedHashMap<>();
+	public static final Map<String, BiConsumer<FidsAfttab, String>> departurePathToSetterMapDate = new LinkedHashMap<>(); */
 
 	@Transient
 	private List<String> fieldsNotNull = new ArrayList<String>();
@@ -2023,7 +2023,7 @@ public class FidsAfttab implements Serializable {
 		}
 	}
 
-	static {
+	/* static {
 
 		// ชั้นแรกของ pl_arrival และ pl_departure
 		arrivalPathToSetterMapBigDecimal.put("/pl_arrival/pa_idseq", FidsAfttab::setUrno);
@@ -2081,8 +2081,6 @@ public class FidsAfttab implements Serializable {
 		departurePathToSetterMap.put("/pl_departure/pd_delayreasons", FidsAfttab::setDcd2);
 		departurePathToSetterMap.put("/pl_departure/pd_delay", FidsAfttab::setDeld);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_diversiontime", FidsAfttab::setDivr);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_eibt", FidsAfttab::setEtai);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_eibt", FidsAfttab::setEtoa);
 		departurePathToSetterMapDate.put("/pl_departure/pd_secondcall", FidsAfttab::setFcal);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_flightnumber", FidsAfttab::setFlno);
 		departurePathToSetterMap.put("/pl_departure/pd_flightnumber", FidsAfttab::setFlno);
@@ -2092,10 +2090,6 @@ public class FidsAfttab implements Serializable {
 				FidsAfttab::setFtyp);
 		departurePathToSetterMap.put("/pl_departure/pd_rfst_flightstatus",
 				FidsAfttab::setFtyp);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_arrivalgates", FidsAfttab::setGta1);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_arrivalgates", FidsAfttab::setGta2);
-//		departurePathToSetterMap.put("/pl_departure/pd_departuregates", FidsAfttab::setGtd1);
-//		departurePathToSetterMap.put("/pl_departure/pd_departuregates", FidsAfttab::setGtd2);
 		arrivalPathToSetterMap.put("/pl_arrival/pl_handlingagent_list/pl_handlingagent/pha_rha_handlingagent",
 				FidsAfttab::setHdll);
 		departurePathToSetterMap.put("/pl_departure/pl_handlingagent_list/pl_handlingagent/pha_rha_handlingagent",
@@ -2163,11 +2157,6 @@ public class FidsAfttab implements Serializable {
 				FidsAfttab::setStyp);
 		departurePathToSetterMap.put("/pl_departure/pd_rstc_refservicetypecode/ref_servicetypecode/rstc_ristc_iatacode",
 				FidsAfttab::setStyp);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate/pag_rgt_gate", FidsAfttab::setTga1);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate", FidsAfttab::setTga2);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate/pdg_rgt_gate",
-//				FidsAfttab::setTgd1);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate", FidsAfttab::setTgd2);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_bibt", FidsAfttab::setTifd);
 		departurePathToSetterMap.put("/pl_departure/pd_bobt", FidsAfttab::setTifd);
 		arrivalPathToSetterMapDate.put("/pl_arrival/pa_firt", FidsAfttab::setTmoa);
@@ -2178,14 +2167,6 @@ public class FidsAfttab implements Serializable {
 		departurePathToSetterMap.put("/pl_departure/pd_rnc_naturecode", FidsAfttab::setTtyp);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_moduser", FidsAfttab::setUseu);
 		departurePathToSetterMap.put("/pl_departure/pd_moduser", FidsAfttab::setUseu);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_refpreviousairport/ref_airport/rap_iata3lc",
-//				FidsAfttab::setVia3);
-//		departurePathToSetterMap.put("/pl_departure/pd_rap_refnextairport/ref_airport/rap_iata3lc",
-//				FidsAfttab::setVia3);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_refpreviousairport/ref_airport/rap_icao4lc",
-//				FidsAfttab::setVia4);
-//		departurePathToSetterMap.put("/pl_departure/pd_rap_refnextairport/ref_airport/rap_icao4lc",
-//				FidsAfttab::setVia4);
 		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_reforiginairport/ref_airport/rap_iata3lc", FidsAfttab::setOrg3);
 		departurePathToSetterMap.put("/pl_departure/pd_rap_refdestinationairport/ref_airport/rap_iata3lc",
 				FidsAfttab::setDes3);
@@ -2261,202 +2242,6 @@ public class FidsAfttab implements Serializable {
 		departurePathToSetterMap.put("/pl_departure/pd_eezt", FidsAfttab::setEezt);
 		arrivalPathToSetterMap.put("/pl_arrival/pl_atcarrival_list/pl_atcarrival/paa_flightrule", FidsAfttab::setIfra);
 		departurePathToSetterMap.put("/pl_departure/pd_flightrule", FidsAfttab::setIfrd);
-//		departurePathToSetterMapBigDecimal.put("/pl_departure/pd_rac_aircraft/ref_aircraft/rac_ract_aircrafttype/ref_aircrafttype/ract_mttt", FidsAfttab::setMttt);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_flightnumber",
-//		FidsAfttab::setFltn);
-//		departurePathToSetterMap.put("/pl_departure/pd_flightnumber",
-//		FidsAfttab::setFltn);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_flightnumber",
-//		FidsAfttab::setFlns);
-//		departurePathToSetterMap.put("/pl_departure/pd_flightnumber",
-//		FidsAfttab::setFlns);
-//		arrivalPathToSetterMap.put("/pl_turn/pt_pa_arrival", FidsAfttab::setAurn);
-//		departurePathToSetterMap.put("/pl_turn/pt_pd_departure", FidsAfttab::setAurn);
-//		departurePathToSetterMap.put("/pl_departure/pd_atot", FidsAfttab::setAirb);
-//		departurePathToSetterMap.put("/pl_departure/pd_rap_destinationairport", FidsAfttab::setDes3);
-//		departurePathToSetterMap.put("/pl_departure/pd_rap_destinationairport", FidsAfttab::setDes4);
-//		departurePathToSetterMap.put("/pl_departure/pd_eobt", FidsAfttab::setEtod);
-//		departurePathToSetterMap.put("/pl_departure/pd_eobt", FidsAfttab::setEtdi);
-//		departurePathToSetterMap.put("/pl_departure/pd_rap_destinationairport", FidsAfttab::setDivr);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_sibt", FidsAfttab::setDooa);
-//		departurePathToSetterMap.put("/pl_departure/pd_sobt", FidsAfttab::setDood);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_delayreason/pdlr_delay", FidsAfttab::setDtd1);
-//		departurePathToSetterMap.put("/pl_departure/pl_delayreason/pdlr_delay", FidsAfttab::setDtd1);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_delayreason/pdlr_delay", FidsAfttab::setDtd2);
-//		departurePathToSetterMap.put("/pl_departure/pl_delayreason/pdlr_delay", FidsAfttab::setDtd2);
-
-		// VIAL
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_routing_list/pl_routing/prt_rap_refairport/ref_airport/rap_iata3lc",
-//				FidsAfttab::setVial);
-//		departurePathToSetterMap.put(
-//				"/pl_departure/pl_routing_list/pl_routing/prt_rap_refairport/ref_airport/rap_iata3lc",
-//				FidsAfttab::setVial);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_routing_list/pl_routing/prt_rap_refairport/ref_airport/rap_icao4lc",
-//				FidsAfttab::setVial);
-//		departurePathToSetterMap.put(
-//				"/pl_departure/pl_routing_list/pl_routing/prt_rap_refairport/ref_airport/rap_icao4lc",
-//				FidsAfttab::setVial);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_sibt", FidsAfttab::setStoa);
-//		departurePathToSetterMap.put("/pl_departure/pd_sobt", FidsAfttab::setStod);
-//		 pathToSetterMap.put("/pl_turn", FidsAfttab::setRtyp);
-//		 pathToSetterMap.put("/pl_turn", FidsAfttab::setRtyp);
-//		departurePathToSetterMap.put("/pl_departure/pd_aobt", FidsAfttab::setOfbl);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_aibt", FidsAfttab::setOnbl);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_previousairport", FidsAfttab::setOrg3);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_rap_previousairport", FidsAfttab::setOrg4);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_aldt", FidsAfttab::setLand);
-//		departurePathToSetterMap.put("/pl_departure/pl_atcdeparture/pad_callsign", FidsAfttab::setCtot);
-//		departurePathToSetterMap.put("/pl_departure/pl_atcdeparture/pad_callsign", FidsAfttab::setCsgn);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate/pdg_rgt_gate",
-//		FidsAfttab::setGtd2);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate/pdg_rgt_gate",
-//		FidsAfttab::setGtd1);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate/pag_rgt_gate", FidsAfttab::setGta2);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate/pag_rgt_gate", FidsAfttab::setGta1);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate[1]/pag_beginplan",
-//		FidsAfttab::setGa1b);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate[1]/pag_endplan",
-//		FidsAfttab::setGa1e);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate[1]/pag_beginactual",
-//		FidsAfttab::setGa1x);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate[1]/pag_endactual",
-//		FidsAfttab::setGa1y);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate[2]/pag_beginplan",
-//		FidsAfttab::setGa2b);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate[2]/pag_endplan",
-//		FidsAfttab::setGa2e);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate[2]/pag_beginactual",
-//		FidsAfttab::setGa2x);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_arrivalgate_list/pl_arrivalgate[2]/pag_endactual",
-//		FidsAfttab::setGa2y);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate[1]/pdg_beginplan",
-//		FidsAfttab::setGd1b);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate[1]/pdg_endplan",
-//		FidsAfttab::setGd1e);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate[1]/pdg_beginactual",
-//		FidsAfttab::setGd1x);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate[1]/pdg_endactual",
-//		FidsAfttab::setGd1y);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate[2]/pdg_beginplan",
-//		FidsAfttab::setGd2b);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate[2]/pdg_endplan",
-//		FidsAfttab::setGd2e);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate[2]/pdg_beginactual",
-//		FidsAfttab::setGd2x);
-//		departurePathToSetterMap.put("/pl_departure/pl_departuregate_list/pl_departuregate[2]/pdg_endactual",
-//		FidsAfttab::setGd2y);
-//		departurePathToSetterMap.put("/pl_departure/pl_delayreason/pdlr_rdlr_delayreason", FidsAfttab::setDcd2);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_delayreason_list/pl_delayreason/pdlr_delay", FidsAfttab::setDela);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_delayreason/pdlr_rdlr_delayreason", FidsAfttab::setDcd2);
-//		departurePathToSetterMap.put("/pl_departure/pl_delayreason/pdlr_rdlr_delayreason", FidsAfttab::setDcd1);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_delayreason/pdlr_rdlr_delayreason", FidsAfttab::setDcd1);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_baggagebelts", FidsAfttab::setBlt1);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_baggagebelt_list/pl_baggagebelt/pbb_rbb_baggagebelt",
-//				FidsAfttab::setBlt1);
-//		departurePathToSetterMap.put("/pl_departure/pd_departurebelts", FidsAfttab::setBlt1);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt/pdb_rdb_departurebelt",
-//				FidsAfttab::setBlt1);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_baggagebelts", FidsAfttab::setBlt2);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_baggagebelt_list/pl_baggagebelt/pbb_rbb_baggagebelt",
-//				FidsAfttab::setBlt2);
-//		departurePathToSetterMap.put("/pl_departure/pd_departurebelts", FidsAfttab::setBlt2);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt/pdb_rdb_departurebelt",
-//				FidsAfttab::setBlt2);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[1]/pdb_beginplan",
-//		FidsAfttab::setBao1);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[2]/pdb_beginplan",
-//		FidsAfttab::setBao2);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[3]/pdb_beginplan",
-//		FidsAfttab::setBao3);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[4]/pdb_beginplan",
-//		FidsAfttab::setBao4);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[5]/pdb_beginplan",
-//		FidsAfttab::setBao5);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[6]/pdb_beginplan",
-//		FidsAfttab::setBao6);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[1]/pdb_beginactual",
-//		FidsAfttab::setBas1);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[1]/pdb_beginactual",
-//		FidsAfttab::setBas2);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[2]/pdb_beginactual",
-//		FidsAfttab::setBas3);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[3]/pdb_beginactual",
-//		FidsAfttab::setBas4);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[4]/pdb_beginactual",
-//		FidsAfttab::setBas5);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[5]/pdb_beginactual",
-//		FidsAfttab::setBas6);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[6]/pbb_status",
-//		FidsAfttab::setBast);
-//		arrivalPathToSetterMap.put("/pl_arrival/pa_baggagecarousels", FidsAfttab::setBaz1);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[1]/pdb_rdb_departurebelt",
-//		FidsAfttab::setBaz1);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[2]/pdb_rdb_departurebelt",
-//		FidsAfttab::setBaz2);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[3]/pdb_rdb_departurebelt",
-//		FidsAfttab::setBaz3);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[4]/pdb_rdb_departurebelt",
-//		FidsAfttab::setBaz4);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[5]/pdb_rdb_departurebelt",
-//		FidsAfttab::setBaz5);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[6]/pdb_rdb_departurebelt",
-//		FidsAfttab::setBaz6);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_baggagebelt_list/pl_baggagebelt[1]/pbb_beginactual",
-//				FidsAfttab::setB1ba);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[1]/pdb_beginactual",
-//				FidsAfttab::setB1ba);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_baggagebelt_list/pl_baggagebelt[1]/pbb_beginplan",
-//				FidsAfttab::setB1bs);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[1]/pdb_beginplan",
-//				FidsAfttab::setB1bs);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_baggagebelt_list/pl_baggagebelt[1]/pbb_endactual",
-//				FidsAfttab::setB1ea);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[1]/pdb_endactual",
-//				FidsAfttab::setB1ea);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_baggagebelt_list/pl_baggagebelt[1]/pbb_endplan",
-//				FidsAfttab::setB1es);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[1]/pdb_endplan",
-//				FidsAfttab::setB1es);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_baggagebelt_list/pl_baggagebelt[2]/pbb_beginactual",
-//				FidsAfttab::setB2ba);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[2]/pdb_beginactual",
-//				FidsAfttab::setB2ba);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_baggagebelt_list/pl_baggagebelt[2]/pbb_beginplan",
-//				FidsAfttab::setB2bs);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[2]/pdb_beginplan",
-//				FidsAfttab::setB2bs);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_baggagebelt_list/pl_baggagebelt[2]/pbb_endactual",
-//				FidsAfttab::setB2ea);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[2]/pdb_endactual",
-//				FidsAfttab::setB2ea);
-//		arrivalPathToSetterMap.put("/pl_arrival/pl_baggagebelt_list/pl_baggagebelt[2]/pbb_endplan",
-//				FidsAfttab::setB2es);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[2]/pdb_endplan",
-//				FidsAfttab::setB2es);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[1]/pdb_endplan",
-//				FidsAfttab::setBac1);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[2]/pdb_endplan",
-//				FidsAfttab::setBac2);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[3]/pdb_endplan",
-//				FidsAfttab::setBac3);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[4]/pdb_endplan",
-//				FidsAfttab::setBac4);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[5]/pdb_endplan",
-//				FidsAfttab::setBac5);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[6]/pdb_endplan",
-//				FidsAfttab::setBac6);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[1]/pdb_endactual",
-//				FidsAfttab::setBae1);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[2]/pdb_endactual",
-//				FidsAfttab::setBae2);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[3]/pdb_endactual",
-//				FidsAfttab::setBae3);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[4]/pdb_endactual",
-//				FidsAfttab::setBae4);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[5]/pdb_endactual",
-//				FidsAfttab::setBae5);
-//		departurePathToSetterMap.put("/pl_departure/pl_departurebelt_list/pl_departurebelt[6]/pdb_endactual",
-//				FidsAfttab::setBae6);
 	}
 
 	public static <T> Optional<BiConsumer<FidsAfttab, BigDecimal>> getSetterByPathBigDecimal(
@@ -2485,5 +2270,5 @@ public class FidsAfttab implements Serializable {
 			}
 		}
 		return Optional.empty();
-	}
+	} */
 }
