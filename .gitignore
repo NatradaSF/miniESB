@@ -4,6 +4,10 @@
 # Log file
 *.log
 
+# IBM MQ JMS log files
+mqjms.log*
+*.lck
+
 # BlueJ files
 *.ctxt
 
@@ -25,3 +29,8 @@ replay_pid*
 /target/
 /.apt_generated/
 /.apt_generated_tests/
+
+# Eclipse IDE files
+.classpath
+.project
+.settings/
