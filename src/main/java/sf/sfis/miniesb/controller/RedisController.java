@@ -74,7 +74,8 @@ public class RedisController {
 //						deleted, result);
 //				LOGGER.info(output);
 			}
-			LOGGER.info(result.toString());
+			//LOGGER.info(result.toString());
+			LOGGER.info("Saved Redis...");
 			return result.toString();
 		} catch (Exception e) {
 			LOGGER.error("saveData: ", e);

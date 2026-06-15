@@ -28,6 +28,17 @@ import sf.sfis.miniesb.aodb.Request;
 public class SubscribeRequestService {
 	private final MQArtemisProducer artemisProducer;
 
+	// Cached JAXBContext — thread-safe, built once instead of per request.
+	private static final JAXBContext ENVELOPE_CTX = newContext();
+
+	private static JAXBContext newContext() {
+		try {
+			return JAXBContext.newInstance(Envelope.class);
+		} catch (JAXBException e) {
+			throw new IllegalStateException("Failed to init JAXBContext for Envelope", e);
+		}
+	}
+
 	@WebMethod
 	public void subscribe(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime, @WebParam(name = "dataType") String dataType) {
 		try {
@@ -58,14 +69,14 @@ public class SubscribeRequestService {
 
 			// Marshal to XML String
 			StringWriter writer = new StringWriter();
-			JAXBContext context = JAXBContext.newInstance(Envelope.class);
+			JAXBContext context = ENVELOPE_CTX;
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(envelope, writer);
 
 			log.info("Subscribe "+dataType+" from "+starttime+" to "+endtime);
-			log.info(writer.toString());
-			artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", writer.toString());
+			//log.info(writer.toString());
+			artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", "BKK", writer.toString());
 			
 		} catch (JAXBException e) {
         	log.error("subscribe: ", e);
@@ -74,7 +85,7 @@ public class SubscribeRequestService {
 	
 	@WebMethod
 	public void requestDataset(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime, @WebParam(name = "dataType") String dataType) {
-		log.info("Request Dataset...");
+		//log.info("Request Dataset...");
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 	        LocalDateTime today = LocalDateTime.now();
@@ -102,13 +113,14 @@ public class SubscribeRequestService {
 
 			// Marshal to XML String
 			StringWriter writer = new StringWriter();
-			JAXBContext context = JAXBContext.newInstance(Envelope.class);
+			JAXBContext context = ENVELOPE_CTX;
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(envelope, writer);
 
-			log.info(writer.toString());
-			artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", writer.toString());
+			log.info("Request "+dataType+" from "+starttime+" to "+endtime);
+			//log.info(writer.toString());
+			artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", "BKK", writer.toString());
 		} catch (JAXBException e) {
         	log.error("requestDataset: ", e);
 //			e.printStackTrace();

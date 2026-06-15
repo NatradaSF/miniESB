@@ -19,6 +19,11 @@ import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.soap.SOAPPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import sf.sfis.miniesb.MQWebSphereProducer;
@@ -54,13 +59,35 @@ public class ESBResponseService {
 	private final FidsFinalcallHistoryService fidsFinalcallHistoryService;
 	private final RedisController redisController;
 	private final MQWebSphereProducer webSphereProducer;
+	// Dedicated logger for outbound XML to ESB → routed to logs/outbound/<hopo>/<queue>.log
+    private static final Logger sendEsbLog = LoggerFactory.getLogger("SEND_ESB_XML");
+
+	// true = ส่ง flight update ออก ESB ผ่าน WebSphere MQ, false = ส่งผ่าน webservice (callWebserviceUpdate)
+	// ใช้ flag เดียวกับที่ปิด/เปิด WebSphere MQ เพื่อไม่ให้ส่งซ้ำ และ prod (MQ ยังไม่มา) จะ fallback เป็น webservice
+	@Value("${websphere.mq.enabled:true}")
+	private boolean webSphereEnabled;
+
+	// Cached JAXBContexts — thread-safe and expensive to build, so create once
+	// instead
+	// of per message. (Marshaller/Unmarshaller are not thread-safe and stay per
+	// call.)
+	private static final JAXBContext ENVELOPE_CTX = newContext(Envelope.class);
+	private static final JAXBContext ESB_MSG_CTX = newContext(sf.sfis.miniesb.esb.MSG.class);
+	private static final JAXBContext OUT_MSG_CTX = newContext(MSG.class);
+
+	private static JAXBContext newContext(Class<?> clazz) {
+		try {
+			return JAXBContext.newInstance(clazz);
+		} catch (JAXBException e) {
+			throw new IllegalStateException("Failed to init JAXBContext for " + clazz.getName(), e);
+		}
+	}
 
 	public void convertXMLtoObject(String xml) {
 		try {
 			log.info("ESBResponseService...");
-			JAXBContext jaxbContext = JAXBContext.newInstance(Envelope.class);
+			JAXBContext jaxbContext = ENVELOPE_CTX;
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			log.info(xml);
 
 			Envelope envelope = (Envelope) unmarshaller.unmarshal(new StringReader(xml));
 			String type = envelope.getHeader().getControl().getMessageType();
@@ -109,17 +136,9 @@ public class ESBResponseService {
 				if (fidsAfttab != null) {
 					String xmlEsb = convertFidsAfftabtoEsb(timestamp, fidsAfttab);
 					if (xmlEsb != null) {
-						log.info("Update arrival flight...");
-						log.info(xmlEsb);
-						String queueName = fidsAfttab.getAction().equalsIgnoreCase("insert") ? "UFIS_INSERT_FLIGHT_OUT"
-								: "UFIS_FLIGHT_OUT";
-						if (hopo.equalsIgnoreCase("BKK")) {
-							webSphereProducer.sendToMachine1(queueName, xmlEsb);
-						} else {
-							queueName = queueName + "_" + hopo.toUpperCase();
-							webSphereProducer.sendToMachine2(queueName, xmlEsb);
-						}
-						/* callWebserviceUpdate(xmlEsb); */
+						log.info("Update arrival flight to ESB...");
+						// log.info(xmlEsb);
+						sendFlightUpdate(hopo, fidsAfttab.getAction(), xmlEsb);
 					} else {
 						log.info("No data found for ESB update.");
 					}
@@ -128,17 +147,9 @@ public class ESBResponseService {
 				if (fidsAfttab != null) {
 					String xmlEsb = convertFidsAfftabtoEsb(timestamp, fidsAfttab);
 					if (xmlEsb != null) {
-						log.info("Update departure flight...");
-						log.info(xmlEsb);
-						String queueName = fidsAfttab.getAction().equalsIgnoreCase("insert") ? "UFIS_INSERT_FLIGHT_OUT"
-								: "UFIS_FLIGHT_OUT";
-						if (hopo.equalsIgnoreCase("BKK")) {
-							webSphereProducer.sendToMachine1(queueName, xmlEsb);
-						} else {
-							queueName = queueName + "_" + hopo.toUpperCase();
-							webSphereProducer.sendToMachine2(queueName, xmlEsb);
-						}
-						/* callWebserviceUpdate(xmlEsb); */
+						log.info("Update departure flight to ESB...");
+						// log.info(xmlEsb);
+						sendFlightUpdate(hopo, fidsAfttab.getAction(), xmlEsb);
 					} else {
 						log.info("No data found for ESB update.");
 					}
@@ -151,7 +162,13 @@ public class ESBResponseService {
 				String contentBody = getContentBody(writer.toString());
 				String xmlEsb = convertResponseMessagetoEsb(timestamp, envelope, contentBody);
 				log.info("Call Web service response ACK/NACK...");
-				log.info(xmlEsb);
+				//log.info(xmlEsb);
+				MDC.put("sendEsbKey", hopo + "/outbound-ACK_NACK");
+				try {
+					sendEsbLog.info(xmlEsb);
+				} finally {
+					MDC.remove("sendEsbKey");
+				}
 				callWebserviceResponse(xmlEsb);
 			}
 		} catch (JAXBException e) {
@@ -196,7 +213,7 @@ public class ESBResponseService {
 				/* return null; */
 			}
 
-			JAXBContext context = JAXBContext.newInstance(sf.sfis.miniesb.esb.MSG.class);
+			JAXBContext context = ESB_MSG_CTX;
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(msgReturn, writer);
@@ -254,7 +271,7 @@ public class ESBResponseService {
 			msgstreamout.setINFOBJFLIGHT(infobjflight);
 			esbAfttab.setMSGSTREAMOUT(msgstreamout);
 			try {
-				JAXBContext context = JAXBContext.newInstance(MSG.class);
+				JAXBContext context = OUT_MSG_CTX;
 				Marshaller marshaller = context.createMarshaller();
 				marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 				marshaller.marshal(esbAfttab, writer);
@@ -265,6 +282,31 @@ public class ESBResponseService {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * ส่ง flight UPDATE ออกไป ESB — เลือกช่องทางเดียวตาม flag webSphereEnabled:
+	 * เปิด = WebSphere MQ, ปิด = webservice (callWebserviceUpdate) เพื่อไม่ให้ส่งซ้ำ.
+	 */
+	private void sendFlightUpdate(String hopo, String action, String xmlEsb) {
+		if (webSphereEnabled) {
+			String queueName = "insert".equalsIgnoreCase(action) ? "UFIS_INSERT_FLIGHT_OUT" : "UFIS_FLIGHT_OUT";
+			if (hopo.equalsIgnoreCase("BKK")) {
+				webSphereProducer.sendToMachine1(queueName, hopo, xmlEsb);
+			} else {
+				queueName = queueName + "_" + hopo.toUpperCase();
+				webSphereProducer.sendToMachine2(queueName, hopo, xmlEsb);
+			}
+		} else {
+			// WebSphere MQ ปิดอยู่ → ส่งผ่าน webservice แทน (เก็บ payload ลง outbound ด้วย)
+			MDC.put("sendEsbKey", hopo + "/outbound-WS");
+			try {
+				sendEsbLog.info(xmlEsb);
+			} finally {
+				MDC.remove("sendEsbKey");
+			}
+			callWebserviceUpdate(xmlEsb);
+		}
 	}
 
 	public void callWebserviceResponse(String xmlEsb) {
@@ -301,43 +343,39 @@ public class ESBResponseService {
 		}
 	}
 
-	/*
-	 * public void callWebserviceUpdate(String xmlEsb) {
-	 * // Create SOAP Connection
-	 * SOAPConnectionFactory soapConnectionFactory;
-	 * try {
-	 * soapConnectionFactory = SOAPConnectionFactory.newInstance();
-	 * 
-	 * SOAPConnection soapConnection = soapConnectionFactory.createConnection();
-	 * 
-	 * // Define the endpoint URL
-	 * String url =
-	 * "http://esbv10:5555/ws/IFIMS.Service.FlowService.Online.Publish.BKK:AODB_FlightOutbound_WSD/IFIMS_Service_FlowService_Online_Publish_BKK_AODB_FlightOutbound_WSD_Port";
-	 * 
-	 * // Create the SOAP Request
-	 * SOAPMessage soapRequest = createSoapRequest(xmlEsb, url,
-	 * "AODB_FlightOutbound");
-	 * 
-	 * // Send request and receive response
-	 * SOAPMessage soapResponse = soapConnection.call(soapRequest, url);
-	 * 
-	 * // Print response
-	 * // System.out.println("Response SOAP Message:");
-	 * // soapResponse.writeTo(System.out);
-	 * 
-	 * soapConnection.close();
-	 * } catch (UnsupportedOperationException e) {
-	 * log.error("callWebserviceUpdate: ", e);
-	 * // e.printStackTrace();
-	 * } catch (SOAPException e) {
-	 * log.error("callWebserviceUpdate: ", e);
-	 * // e.printStackTrace();
-	 * } catch (Exception e) {
-	 * log.error("callWebserviceUpdate: ", e);
-	 * // e.printStackTrace();
-	 * }
-	 * }
-	 */
+	public void callWebserviceUpdate(String xmlEsb) {
+		// Create SOAP Connection
+		SOAPConnectionFactory soapConnectionFactory;
+		try {
+			soapConnectionFactory = SOAPConnectionFactory.newInstance();
+
+			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+
+			// Define the endpoint URL
+			String url = "http://esbv10:5555/ws/IFIMS.Service.FlowService.Online.Publish.BKK:AODB_FlightOutbound_WSD/IFIMS_Service_FlowService_Online_Publish_BKK_AODB_FlightOutbound_WSD_Port";
+
+			// Create the SOAP Request
+			SOAPMessage soapRequest = createSoapRequest(xmlEsb, url, "AODB_FlightOutbound");
+
+			// Send request and receive response
+			SOAPMessage soapResponse = soapConnection.call(soapRequest, url);
+
+			// Print response
+			// System.out.println("Response SOAP Message:");
+			// soapResponse.writeTo(System.out);
+
+			soapConnection.close();
+		} catch (UnsupportedOperationException e) {
+			log.error("callWebserviceUpdate: ", e);
+			// e.printStackTrace();
+		} catch (SOAPException e) {
+			log.error("callWebserviceUpdate: ", e);
+			// e.printStackTrace();
+		} catch (Exception e) {
+			log.error("callWebserviceUpdate: ", e);
+			// e.printStackTrace();
+		}
+	}
 
 	private SOAPMessage createSoapRequest(String xmlEsb, String url, String elementName) throws Exception {
 		// Create message

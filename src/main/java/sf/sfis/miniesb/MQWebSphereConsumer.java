@@ -1,6 +1,7 @@
 package sf.sfis.miniesb;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
@@ -8,22 +9,35 @@ import jakarta.jms.BytesMessage;
 import jakarta.jms.Message;
 import jakarta.jms.TextMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import sf.sfis.miniesb.service.ESBRequestService;
 
+/**
+ * WebSphere MQ inbound listeners. Disabled on environments where WebSphere MQ is
+ * not yet available by setting {@code websphere.mq.enabled=false} — when disabled
+ * this bean is not created, so no listener container starts and no connection is
+ * attempted at startup. Defaults to enabled when the property is absent.
+ */
 @Slf4j
 @Component
+@ConditionalOnProperty(name = "websphere.mq.enabled", havingValue = "true", matchIfMissing = true)
 public class MQWebSphereConsumer {
 
     @Autowired
     ESBRequestService receiverService;
 
-    private void processMessage(Message message) {
-        String queueName = "";
+    // Dedicated logger for inbound XML from ESB → routed to logs/receive_esb/<hopo>/<queue>.log
+    private static final Logger receivedEsbLog = LoggerFactory.getLogger("RECEIVED_ESB_XML");
+
+    private void processMessage(Message message, String queueName, String hopo) {
+        /* String queueName = ""; */
         try {
-            if (message.getJMSDestination() != null) {
+            /* if (message.getJMSDestination() != null) {
                 String destStr = message.getJMSDestination().toString();
                 queueName = destStr.substring(destStr.lastIndexOf("/") + 1);
-            }
+            } */
             String xmlContent = null;
 
             // 🟢 เคสที่ 1: ถ้าเป็น TextMessage ปกติ (อ่านตรงๆ)
@@ -44,6 +58,12 @@ public class MQWebSphereConsumer {
             }
 
             if (xmlContent != null) {
+                MDC.put("recvEsbKey", hopo + "/inbound-" + queueName);
+                try {
+                    receivedEsbLog.info(xmlContent);
+                } finally {
+                    MDC.remove("recvEsbKey");
+                }
                 receiverService.processXmlMessage(xmlContent);
             } else {
                 log.error("Received unsupported message type ({}) from WebsphereMQ [{}]",
@@ -69,82 +89,82 @@ public class MQWebSphereConsumer {
     // --- Queue ของ BKK ---
     @JmsListener(destination = "UFIS_TRIGGER_IN", containerFactory = "mq1ContainerFactory")
     public void listenBkkTrigger(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_TRIGGER_IN", "BKK");
     }
 
     @JmsListener(destination = "UFIS_ATC_IN", containerFactory = "mq1ContainerFactory")
     public void listenBkkAtc(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_ATC_IN", "BKK");
     }
 
     @JmsListener(destination = "UFIS_FIGURE_IN", containerFactory = "mq1ContainerFactory")
     public void listenBkkFigure(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_FIGURE_IN", "BKK");
     }
 
     @JmsListener(destination = "UFIS_MANIFEST_IN", containerFactory = "mq1ContainerFactory")
     public void listenBkkManifest(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_MANIFEST_IN", "BKK");
     }
 
     @JmsListener(destination = "UFIS_OTHERS_IN", containerFactory = "mq1ContainerFactory")
     public void listenBkkOthers(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_OTHERS_IN", "BKK");
     }
 
     @JmsListener(destination = "UFIS_EQUIPMENT_IN", containerFactory = "mq1ContainerFactory")
     public void listenBkkEquipment(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_EQUIPMENT_IN", "BKK");
     }
 
     // --- Queue ของท่าอื่น ---
     @JmsListener(destination = "UFIS_TRIGGER_IN_DMK", containerFactory = "mq2ContainerFactory")
     public void listenOtherTriggerDmk(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_TRIGGER_IN_DMK", "DMK");
     }
 
     @JmsListener(destination = "UFIS_TRIGGER_IN_CNX", containerFactory = "mq2ContainerFactory")
     public void listenOtherTriggerCnx(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_TRIGGER_IN_CNX", "CNX");
     }
 
     @JmsListener(destination = "UFIS_TRIGGER_IN_CEI", containerFactory = "mq2ContainerFactory")
     public void listenOtherTriggerCei(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_TRIGGER_IN_CEI", "CEI");
     }
 
     @JmsListener(destination = "UFIS_TRIGGER_IN_HDY", containerFactory = "mq2ContainerFactory")
     public void listenOtherTriggerHdy(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_TRIGGER_IN_HDY", "HDY");
     }
 
     @JmsListener(destination = "UFIS_TRIGGER_IN_HKT", containerFactory = "mq2ContainerFactory")
     public void listenOtherTriggerHkt(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_TRIGGER_IN_HKT", "HKT");
     }
 
     @JmsListener(destination = "UFIS_ATC_IN_DMK", containerFactory = "mq2ContainerFactory")
     public void listenOtherAtcDmk(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_ATC_IN_DMK", "DMK");
     }
 
     @JmsListener(destination = "UFIS_ATC_IN_CNX", containerFactory = "mq2ContainerFactory")
     public void listenOtherAtcCnx(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_ATC_IN_CNX", "CNX");
     }
 
     @JmsListener(destination = "UFIS_ATC_IN_CEI", containerFactory = "mq2ContainerFactory")
     public void listenOtherAtcCei(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_ATC_IN_CEI", "CEI");
     }
 
     @JmsListener(destination = "UFIS_ATC_IN_HDY", containerFactory = "mq2ContainerFactory")
     public void listenOtherAtcHdy(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_ATC_IN_HDY", "HDY");
     }
 
     @JmsListener(destination = "UFIS_ATC_IN_HKT", containerFactory = "mq2ContainerFactory")
     public void listenOtherAtcHkt(Message message) {
-        processMessage(message);
+        processMessage(message, "UFIS_ATC_IN_HKT", "HKT");
     }
 }

@@ -17,8 +17,8 @@
 	        <!-- กำหนดขนาดสูงสุดของแต่ละไฟล์ -->
 	        <maxFileSize>10MB</maxFileSize>
 	
-	        <!-- เก็บไฟล์ย้อนหลัง 10 วัน -->
-            <maxHistory>10</maxHistory>
+	        <!-- เก็บไฟล์ย้อนหลัง 30 วัน -->
+            <maxHistory>30</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
@@ -44,8 +44,8 @@
 	        <!-- กำหนดขนาดสูงสุดของแต่ละไฟล์ -->
 	        <maxFileSize>10MB</maxFileSize>
 	
-	        <!-- เก็บไฟล์ย้อนหลัง 10 วัน -->
-            <maxHistory>10</maxHistory>
+	        <!-- เก็บไฟล์ย้อนหลัง 30 วัน -->
+            <maxHistory>30</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
@@ -64,6 +64,123 @@
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
+
+    <!-- 📨 XML ที่รับเข้ามา (convertXMLtoObject) — แยกไฟล์ตาม hopo + queue ผ่าน MDC key "recvKey" -->
+    <!-- ค่า recvKey = "<hopo>/<queueName>" → ไฟล์ออกมาเป็น logs/received/<hopo>/<queueName>.log -->
+    <appender name="RECEIVED_SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>recvKey</key>
+            <defaultValue>unknown</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="RECEIVED-${recvKey}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>logs/receive/${recvKey}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>logs/receive/${recvKey}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                    <timeBasedFileNamingAndTriggeringPolicy
+                        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP" />
+                    <maxFileSize>10MB</maxFileSize>
+                    <maxHistory>30</maxHistory>
+                    <totalSizeCap>1GB</totalSizeCap>
+                </rollingPolicy>
+                <encoder>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <!-- ส่ง log ของ logger ชื่อ "RECEIVED_XML" ไป SiftingAppender เท่านั้น (ไม่ปนกับ app.log) -->
+    <logger name="RECEIVED_XML" level="INFO" additivity="false">
+        <appender-ref ref="RECEIVED_SIFT"/>
+    </logger>
+
+    <!-- 📤 XML ที่ส่งออก (MQArtemisProducer) — แยกไฟล์ตาม hopo + queue ผ่าน MDC key "sendKey" -->
+    <!-- ค่า sendKey = "<hopo>/send-<queue>" → ไฟล์ออกมาเป็น logs/send/<hopo>/send-<queue>.log -->
+    <appender name="SEND_SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>sendKey</key>
+            <defaultValue>unknown</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="SEND-${sendKey}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>logs/send/${sendKey}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>logs/send/${sendKey}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                    <timeBasedFileNamingAndTriggeringPolicy
+                        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP" />
+                    <maxFileSize>10MB</maxFileSize>
+                    <maxHistory>30</maxHistory>
+                    <totalSizeCap>1GB</totalSizeCap>
+                </rollingPolicy>
+                <encoder>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <logger name="SEND_XML" level="INFO" additivity="false">
+        <appender-ref ref="SEND_SIFT"/>
+    </logger>
+
+    <!-- 📥 XML ที่รับจาก ESB (MQWebSphereConsumer) — แยกตาม hopo + queue ผ่าน MDC key "recvEsbKey" -->
+    <!-- ไฟล์ออกมาเป็น logs/inbound/<hopo>/<queue>.log -->
+    <appender name="RECEIVED_ESB_SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>recvEsbKey</key>
+            <defaultValue>unknown</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="RECEIVED-ESB-${recvEsbKey}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>logs/inbound/${recvEsbKey}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>logs/inbound/${recvEsbKey}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                    <timeBasedFileNamingAndTriggeringPolicy
+                        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP" />
+                    <maxFileSize>10MB</maxFileSize>
+                    <maxHistory>30</maxHistory>
+                    <totalSizeCap>1GB</totalSizeCap>
+                </rollingPolicy>
+                <encoder>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <logger name="RECEIVED_ESB_XML" level="INFO" additivity="false">
+        <appender-ref ref="RECEIVED_ESB_SIFT"/>
+    </logger>
+
+    <!-- 📤 XML ที่ส่งไป ESB (MQWebSphereProducer) — แยกตาม hopo + queue ผ่าน MDC key "sendEsbKey" -->
+    <!-- ไฟล์ออกมาเป็น logs/outbound/<hopo>/<queue>.log -->
+    <appender name="SEND_ESB_SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>sendEsbKey</key>
+            <defaultValue>unknown</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="SEND-ESB-${sendEsbKey}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>logs/outbound/${sendEsbKey}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>logs/outbound/${sendEsbKey}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                    <timeBasedFileNamingAndTriggeringPolicy
+                        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP" />
+                    <maxFileSize>10MB</maxFileSize>
+                    <maxHistory>30</maxHistory>
+                    <totalSizeCap>1GB</totalSizeCap>
+                </rollingPolicy>
+                <encoder>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <logger name="SEND_ESB_XML" level="INFO" additivity="false">
+        <appender-ref ref="SEND_ESB_SIFT"/>
+    </logger>
 
     <!-- 📍 Logger ทั้งระบบ -->
     <root level="INFO">

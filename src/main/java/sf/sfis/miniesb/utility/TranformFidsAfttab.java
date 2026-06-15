@@ -1,7 +1,7 @@
 package sf.sfis.miniesb.utility;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
@@ -52,7 +52,6 @@ import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmAtomicValue;
 import net.sf.saxon.s9api.XdmValue;
 import net.sf.saxon.s9api.Xslt30Transformer;
-import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import sf.sfis.miniesb.model.FidsAfttab;
 import sf.sfis.miniesb.model.FidsAirport;
@@ -64,9 +63,19 @@ import sf.sfis.miniesb.repository.FidsAirportRepository;
 @RequiredArgsConstructor
 public class TranformFidsAfttab {
 
-	private static final String XSL_PATH = "src/main/resources/fids_afttab.xsl";
+	// Loaded from the classpath (packaged inside the jar/war) — NOT a filesystem path,
+	// so it resolves the same in dev and on the deployed server.
+	private static final String XSL_RESOURCE = "/fids_afttab.xsl";
 	private static final Pattern ISO_8601_Z = Pattern.compile("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z");
 	private static final DateTimeFormatter YMD_HMS = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+	// Cached, thread-safe Saxon/Jackson objects. Compiling the XSL and building the
+	// XmlMapper are expensive and the stylesheet never changes, so do it once instead
+	// of per message. (The per-call Serializer and load30() transformer are not
+	// thread-safe and are still created on each invocation.)
+	private static final Processor SAXON_PROCESSOR = new Processor(false);
+	private static volatile XsltExecutable xsltExecutable;
+	private static final XmlMapper XML_MAPPER = buildXmlMapper();
 
 	private final DateTimeFormatHelper dateTimeFormatHelper;
 	private final FidsAirportRepository fidsAirportRepository;
@@ -178,23 +187,44 @@ public class TranformFidsAfttab {
 
 	// ─── XSL TRANSFORMATION ────────────────────────────────────────────────
 	public static FidsAfttab transformUsingSaxon(String xmlString, String actionType, String adid) throws Exception {
-		Processor proc = new Processor(false);
-		XsltCompiler comp = proc.newXsltCompiler();
-		XsltExecutable exp = comp.compile(new StreamSource(new File(XSL_PATH)));
-
 		StringWriter sw = new StringWriter();
-		Serializer out = proc.newSerializer(sw);
+		Serializer out = SAXON_PROCESSOR.newSerializer(sw);
 		out.setOutputProperty(Serializer.Property.METHOD, "xml");
 		out.setOutputProperty(Serializer.Property.INDENT, "yes");
 		out.setOutputProperty(Serializer.Property.OMIT_XML_DECLARATION, "yes");
 
-		Xslt30Transformer trans = exp.load30();
+		Xslt30Transformer trans = xsltExecutable().load30();
 		Map<QName, XdmValue> params = new HashMap<>();
 		params.put(new QName("syncMode"), new XdmAtomicValue(actionType));
 		params.put(new QName("adidMode"), new XdmAtomicValue(adid));
 		trans.setStylesheetParameters(params);
 		trans.transform(new StreamSource(new StringReader(xmlString)), out);
 
+		return XML_MAPPER.readValue(sw.toString(), FidsAfttab.class);
+	}
+
+	/** Compiles the stylesheet once (lazily) and reuses the immutable executable. */
+	private static XsltExecutable xsltExecutable() throws Exception {
+		XsltExecutable exec = xsltExecutable;
+		if (exec == null) {
+			synchronized (TranformFidsAfttab.class) {
+				exec = xsltExecutable;
+				if (exec == null) {
+					try (InputStream is = TranformFidsAfttab.class.getResourceAsStream(XSL_RESOURCE)) {
+						if (is == null) {
+							throw new IllegalStateException("XSL resource not found on classpath: " + XSL_RESOURCE);
+						}
+						exec = SAXON_PROCESSOR.newXsltCompiler().compile(new StreamSource(is));
+					}
+					xsltExecutable = exec;
+				}
+			}
+		}
+		return exec;
+	}
+
+	/** Builds the date-aware XmlMapper once; ObjectMapper is thread-safe after setup. */
+	private static XmlMapper buildXmlMapper() {
 		XmlMapper xmlMapper = new XmlMapper();
 		xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		SimpleModule module = new SimpleModule();
@@ -205,7 +235,7 @@ public class TranformFidsAfttab {
 			}
 		});
 		xmlMapper.registerModule(module);
-		return xmlMapper.readValue(sw.toString(), FidsAfttab.class);
+		return xmlMapper;
 	}
 
 	// ─── UNCONDITIONAL FIXED IDENTITY FIELDS ───────────────────────────────

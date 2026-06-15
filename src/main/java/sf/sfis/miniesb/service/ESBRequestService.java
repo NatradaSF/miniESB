@@ -26,6 +26,13 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import sf.sfis.miniesb.MQArtemisProducer;
@@ -62,17 +69,49 @@ public class ESBRequestService {
 
 	ObjectFactory factory = new ObjectFactory();
 
+	// Dedicated logger for inbound XML from ESB via webservice → logs/receive_esb/<hopo>/<queue>.log
+	// (ใช้ logger ชื่อเดียวกับฝั่ง WebSphere MQ consumer จึงไปรวมในโฟลเดอร์ receive_esb เดียวกัน)
+	private static final Logger receivedEsbLog = LoggerFactory.getLogger("RECEIVED_ESB_XML");
+	private static final Pattern HOPO_PATTERN = Pattern.compile("<HOPO>\\s*([^<]*?)\\s*</HOPO>");
+
+	private static String extractHopo(String xml) {
+		Matcher m = HOPO_PATTERN.matcher(xml);
+		return (m.find() && !m.group(1).isEmpty()) ? m.group(1) : "unknown";
+	}
+
+	// Cached JAXBContexts — thread-safe, built once instead of per message.
+	private static final JAXBContext MSG_CTX = newContext(MSG.class);
+	private static final JAXBContext ENVELOPE_CTX = newContext(Envelope.class);
+
+	private static JAXBContext newContext(Class<?> clazz) {
+		try {
+			return JAXBContext.newInstance(clazz);
+		} catch (JAXBException e) {
+			throw new IllegalStateException("Failed to init JAXBContext for " + clazz.getName(), e);
+		}
+	}
+
 	@WebMethod
 	public void requestAodbInbound(@WebParam(name = "aodbInbound") String xmlString) {
 		log.info("Received from WebService...");
+
+		// log payload ขาเข้าทาง webservice ลงโฟลเดอร์ receive_esb เหมือนฝั่ง WebSphere MQ
+		// (queue ไม่มีในกรณี webservice จึงใช้ป้าย "WS_request")
+		MDC.put("recvEsbKey", extractHopo(xmlString) + "/inbound-WS");
+		try {
+			receivedEsbLog.info(xmlString);
+		} finally {
+			MDC.remove("recvEsbKey");
+		}
+
 		processXmlMessage(xmlString);
 	}
 
 	public void processXmlMessage(String xmlString) {
 		log.info("request AODB Inbound...");
-		log.info(xmlString);
+		//log.info(xmlString);
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(MSG.class);
+			JAXBContext jaxbContext = MSG_CTX;
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
 			MSG msg = (MSG) unmarshaller.unmarshal(new StringReader(xmlString));
@@ -119,22 +158,22 @@ public class ESBRequestService {
 
 			// Marshal to XML String
 			StringWriter writer = new StringWriter();
-			JAXBContext context = JAXBContext.newInstance(Envelope.class);
+			JAXBContext context = ENVELOPE_CTX;
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(envelope, writer);
 
 			if (systemType.equals("AFTN")) {
 				log.info("Send to AQ_FROM_AFTN_AOT_AOS_TST...");
-				artemisProducer.sendMessage("AQ_FROM_AFTN_AOT_AOS_TST", writer.toString());
+				artemisProducer.sendMessage("AQ_FROM_AFTN_AOT_AOS_TST", hopo, writer.toString());
 			} else if (systemType.equals("SITA")) {
 				log.info("Send to AQ_FROM_SITA_AOT_AOS_TST...");
-				artemisProducer.sendMessage("AQ_FROM_SITA_AOT_AOS_TST", writer.toString());
+				artemisProducer.sendMessage("AQ_FROM_SITA_AOT_AOS_TST", hopo, writer.toString());
 			} else {
 				log.info("Send to AQ_FROM_FIDS_AOT_AOS_TST...");
-				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", writer.toString());
+				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", hopo, writer.toString());
 			}
-			log.info(writer.toString());
+			//log.info(writer.toString());
 
 		} catch (JAXBException e) {
 			log.error("requestAodbInbound: ", e);
