@@ -93,6 +93,7 @@ public class ESBResponseService {
 			String type = envelope.getHeader().getControl().getMessageType();
 			String timestamp = dateTimeFormatHelper.convertLocalToUTC(envelope.getHeader().getControl().getTimestamp());
 			String hopo = envelope.getHeader().getControl().getStation();
+			String originator = envelope.getHeader().getControl().getOriginator();
 
 			log.info("Message Type: " + type);
 			StringWriter writer = new StringWriter();
@@ -132,9 +133,9 @@ public class ESBResponseService {
 			}
 
 			if (type.equalsIgnoreCase("UPDATE")) {// Send update fields to ESB by Web service.
-				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "A");
+				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "A", originator);
 				if (fidsAfttab != null) {
-					String xmlEsb = convertFidsAfftabtoEsb(timestamp, fidsAfttab);
+					String xmlEsb = convertFidsAfftabtoEsb(timestamp, originator, fidsAfttab);
 					if (xmlEsb != null) {
 						log.info("Update arrival flight to ESB...");
 						// log.info(xmlEsb);
@@ -143,9 +144,9 @@ public class ESBResponseService {
 						log.info("No data found for ESB update.");
 					}
 				}
-				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "D");
+				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "D", originator);
 				if (fidsAfttab != null) {
-					String xmlEsb = convertFidsAfftabtoEsb(timestamp, fidsAfttab);
+					String xmlEsb = convertFidsAfftabtoEsb(timestamp, originator, fidsAfttab);
 					if (xmlEsb != null) {
 						log.info("Update departure flight to ESB...");
 						// log.info(xmlEsb);
@@ -227,7 +228,7 @@ public class ESBResponseService {
 		return null;
 	}
 
-	public String convertFidsAfftabtoEsb(String updateTime, FidsAfttab fidsAfttab) {
+	public String convertFidsAfftabtoEsb(String updateTime, String originator, FidsAfttab fidsAfttab) {
 		StringWriter writer = new StringWriter();
 		MSG esbAfttab = new MSG();
 		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
@@ -254,6 +255,12 @@ public class ESBResponseService {
 		// "ttot", "tobt", "tsat", "asbt",
 		// "remp", "ardt", "asrt", "asat"));
 		copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, infobjflight);
+
+		// IDEP: ต้องส่ง TSAT ไป ESB เสมอ แม้ TSAT จะไม่ได้อยู่ในชุด field ที่เปลี่ยน (fieldsNotNull)
+		if ("IDEP".equalsIgnoreCase(originator)
+				&& fidsAfttab.getTsat() != null && !fidsAfttab.getTsat().trim().isEmpty()) {
+			infobjflight.setTSAT(fidsAfttab.getTsat());
+		}
 
 		if (!FieldInspector.allFieldsAreNull(infobjflight)) {
 			// Fix field for ESB

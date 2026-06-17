@@ -12,7 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -68,6 +71,10 @@ public class ESBRequestService {
 	private final MQArtemisProducer artemisProducer;
 
 	ObjectFactory factory = new ObjectFactory();
+
+	// Dispatch tables: field name -> setter lambda — แทน if-else chain ใน setFlight (สร้างครั้งเดียว)
+	private final Map<String, BiConsumer<PlDeparture, INFOBJFLIGHT>> departureSetters = buildDepartureSetters();
+	private final Map<String, BiConsumer<PlArrival, INFOBJFLIGHT>> arrivalSetters = buildArrivalSetters();
 
 	// Dedicated logger for inbound XML from ESB via webservice → logs/receive_esb/<hopo>/<queue>.log
 	// (ใช้ logger ชื่อเดียวกับฝั่ง WebSphere MQ consumer จึงไปรวมในโฟลเดอร์ receive_esb เดียวกัน)
@@ -281,82 +288,26 @@ public class ESBRequestService {
 
 		for (String field : fieldsNotNull) {
 			if (plDeparture != null) {
-				if (field.equals("csgn")) {
-					plDeparture.setPdCallsign(factory
-							.createPlTurnPtPdDeparturePlDeparturePdCallsign(getAodbpriostring(infobjflight.getCSGN())));
-				} else if (field.equals("rwyd")) {
-					plDeparture.setPdRrwyRunway(factory.createPlTurnPtPdDeparturePlDeparturePdRrwyRunway(
-							getAodbpriostring(infobjflight.getRWYD())));
-				} else if (field.equals("tsat") && !infobjflight.getTSAT().trim().equals("")) {
-					plDeparture.setPdTsat(
-							factory.createPlTurnPtPdDeparturePlDeparturePdTsat(getAodbDate(infobjflight.getTSAT())));
-				} else if (field.equals("ctot")) {
-					plDeparture.setPdCtot(
-							factory.createPlTurnPtPdDeparturePlDeparturePdCtot(getAodbDate(infobjflight.getCTOT())));
-				} else if (field.equals("stod")) {
-					plDeparture.setPdSobt(
-							factory.createPlTurnPtPdDeparturePlDeparturePdSobt(getAodbDate(infobjflight.getSTOD())));
-				} else if (field.equals("asrt")) {
-					plDeparture.setPdAsrt(
-							factory.createPlTurnPtPdDeparturePlDeparturePdAsrt(getAodbDate(infobjflight.getASRT())));
-				} else if (field.equals("asat")) {
-					plDeparture.setPdAsat(
-							factory.createPlTurnPtPdDeparturePlDeparturePdAsat(getAodbDate(infobjflight.getASAT())));
-				} else if (field.equals("airb")) {
-					plDeparture.setPdAtot(
-							factory.createPlTurnPtPdDeparturePlDeparturePdAtot(getAodbDate(infobjflight.getAIRB())));
-					plDeparture.setPdSobt(
-							factory.createPlTurnPtPdDeparturePlDeparturePdSobt(getAodbDate(getCurrentDate())));
-				} else if (field.equals("ifrd")) {
-					plDeparture.setPdFlightrule(factory.createPlTurnPtPdDeparturePlDeparturePdFlightrule(
-							getAodbpriostring(infobjflight.getIFRD())));
-				} else if (field.equals("acgt")) {
-					plDeparture.setPdAcgt(
-							factory.createPlTurnPtPdDeparturePlDeparturePdAcgt(getAodbDate(infobjflight.getACGT())));
-				} else if (field.equals("tobt")) {
-					plDeparture.setPdTobt(
-							factory.createPlTurnPtPdDeparturePlDeparturePdTobt(getAodbDate(infobjflight.getTOBT())));
-				} else if (field.equals("aegt")) {
-					plDeparture.setPdAegt(
-							factory.createPlTurnPtPdDeparturePlDeparturePdAegt(getAodbDate(infobjflight.getAEGT())));
-				} else if (field.equals("ardt")) {
-					plDeparture.setPdDoorclosetime(
-							factory.createPlTurnPtPdDeparturePlDeparturePdDoorclosetime(
-									getAodbDate(infobjflight.getARDT())));
-				} else if (field.equals("asbt")) {
-					plDeparture.setPdArdt(
-							factory.createPlTurnPtPdDeparturePlDeparturePdAsbt(getAodbDate(infobjflight.getASBT())));
+				BiConsumer<PlDeparture, INFOBJFLIGHT> setter = departureSetters.get(field);
+				if (setter != null) {
+					setter.accept(plDeparture, infobjflight);
 				}
+			} else if (plArrival != null) {
+				BiConsumer<PlArrival, INFOBJFLIGHT> setter = arrivalSetters.get(field);
+				if (setter != null) {
+					setter.accept(plArrival, infobjflight);
+				}
+			}
+		}
 
+		// สร้าง wrapper ครั้งเดียวหลังลูป (เดิมสร้างซ้ำทุก field ในลูป — สิ้นเปลือง)
+		// guard ด้วย !isEmpty เพื่อรักษาพฤติกรรมเดิม: ถ้าไม่มี field เลย จะไม่ใส่ departure/arrival
+		if (!fieldsNotNull.isEmpty()) {
+			if (plDeparture != null) {
 				PtPdDeparture ptPdDeparture = factory.createPlTurnPtPdDeparture();
 				ptPdDeparture.getContent().add(factory.createPlTurnPtPdDeparturePlDeparture(plDeparture));
 				plTurn.setPtPdDeparture(factory.createPlTurnPtPdDeparture(ptPdDeparture));
 			} else if (plArrival != null) {
-				if (field.equals("csgn")) {
-					plArrival.setPaCallsign(factory
-							.createPlTurnPtPaArrivalPlArrivalPaCallsign(getAodbpriostring(infobjflight.getCSGN())));
-				} else if (field.equals("stoa")) {
-					plArrival.setPaSibt(
-							factory.createPlTurnPtPaArrivalPlArrivalPaSibt(getAodbDate(infobjflight.getSTOA())));
-				} else if (field.equals("rwya")) {
-					plArrival.setPaRrwyRunway(factory
-							.createPlTurnPtPaArrivalPlArrivalPaRrwyRunway(getAodbpriostring(infobjflight.getRWYA())));
-				} else if (field.equals("tldt")) {
-					plArrival.setPaTldt(
-							factory.createPlTurnPtPaArrivalPlArrivalPaTldt(getAodbDate(infobjflight.getTLDT())));
-				} else if (field.equals("tmoa")) {
-					plArrival.setPaFnlt(
-							factory.createPlTurnPtPaArrivalPlArrivalPaFnlt(getAodbDate(infobjflight.getTMOA())));
-				} else if (field.equals("land")) {
-					plArrival.setPaAldt(
-							factory.createPlTurnPtPaArrivalPlArrivalPaAldt(getAodbDate(infobjflight.getLAND())));
-					plArrival.setPaSibt(
-							factory.createPlTurnPtPaArrivalPlArrivalPaSibt(getAodbDate(getCurrentDate())));
-				} else if (field.equals("ifra")) {
-					plArrival.setPaFlightrule(factory
-							.createPlTurnPtPaArrivalPlArrivalPaFlightrule(getAodbpriostring(infobjflight.getIFRA())));
-				}
-
 				PtPaArrival ptPaArrival = factory.createPlTurnPtPaArrival();
 				ptPaArrival.getContent().add(factory.createPlTurnPtPaArrivalPlArrival(plArrival));
 				plTurn.setPtPaArrival(factory.createPlTurnPtPaArrival(ptPaArrival));
@@ -364,6 +315,68 @@ public class ESBRequestService {
 		}
 		body.setPlTurn(plTurn);
 		return body;
+	}
+
+	/** field name -> วิธี set ค่าลง PlDeparture (แทน if-else เดิมใน setFlight ทุกเงื่อนไขเป๊ะ) */
+	private Map<String, BiConsumer<PlDeparture, INFOBJFLIGHT>> buildDepartureSetters() {
+		Map<String, BiConsumer<PlDeparture, INFOBJFLIGHT>> m = new HashMap<>();
+		m.put("csgn", (d, f) -> d.setPdCallsign(
+				factory.createPlTurnPtPdDeparturePlDeparturePdCallsign(getAodbpriostring(f.getCSGN()))));
+		m.put("rwyd", (d, f) -> d.setPdRrwyRunway(
+				factory.createPlTurnPtPdDeparturePlDeparturePdRrwyRunway(getAodbpriostring(f.getRWYD()))));
+		m.put("tsat", (d, f) -> {
+			if (!f.getTSAT().trim().equals("")) {
+				d.setPdTsat(factory.createPlTurnPtPdDeparturePlDeparturePdTsat(getAodbDate(f.getTSAT())));
+			}
+		});
+		m.put("ctot", (d, f) -> d.setPdCtot(
+				factory.createPlTurnPtPdDeparturePlDeparturePdCtot(getAodbDate(f.getCTOT()))));
+		m.put("stod", (d, f) -> d.setPdSobt(
+				factory.createPlTurnPtPdDeparturePlDeparturePdSobt(getAodbDate(f.getSTOD()))));
+		m.put("asrt", (d, f) -> d.setPdAsrt(
+				factory.createPlTurnPtPdDeparturePlDeparturePdAsrt(getAodbDate(f.getASRT()))));
+		m.put("asat", (d, f) -> d.setPdAsat(
+				factory.createPlTurnPtPdDeparturePlDeparturePdAsat(getAodbDate(f.getASAT()))));
+		m.put("airb", (d, f) -> {
+			d.setPdAtot(factory.createPlTurnPtPdDeparturePlDeparturePdAtot(getAodbDate(f.getAIRB())));
+			d.setPdSobt(factory.createPlTurnPtPdDeparturePlDeparturePdSobt(getAodbDate(getCurrentDate())));
+		});
+		m.put("ifrd", (d, f) -> d.setPdFlightrule(
+				factory.createPlTurnPtPdDeparturePlDeparturePdFlightrule(getAodbpriostring(f.getIFRD()))));
+		m.put("acgt", (d, f) -> d.setPdAcgt(
+				factory.createPlTurnPtPdDeparturePlDeparturePdAcgt(getAodbDate(f.getACGT()))));
+		m.put("tobt", (d, f) -> d.setPdTobt(
+				factory.createPlTurnPtPdDeparturePlDeparturePdTobt(getAodbDate(f.getTOBT()))));
+		m.put("aegt", (d, f) -> d.setPdAegt(
+				factory.createPlTurnPtPdDeparturePlDeparturePdAegt(getAodbDate(f.getAEGT()))));
+		m.put("ardt", (d, f) -> d.setPdDoorclosetime(
+				factory.createPlTurnPtPdDeparturePlDeparturePdDoorclosetime(getAodbDate(f.getARDT()))));
+		// หมายเหตุ: asbt ใช้ setPdArdt + wrapper PdAsbt ตามโค้ดเดิม (รักษาพฤติกรรมเดิม)
+		m.put("asbt", (d, f) -> d.setPdArdt(
+				factory.createPlTurnPtPdDeparturePlDeparturePdAsbt(getAodbDate(f.getASBT()))));
+		return m;
+	}
+
+	/** field name -> วิธี set ค่าลง PlArrival (แทน if-else เดิมใน setFlight ทุกเงื่อนไขเป๊ะ) */
+	private Map<String, BiConsumer<PlArrival, INFOBJFLIGHT>> buildArrivalSetters() {
+		Map<String, BiConsumer<PlArrival, INFOBJFLIGHT>> m = new HashMap<>();
+		m.put("csgn", (a, f) -> a.setPaCallsign(
+				factory.createPlTurnPtPaArrivalPlArrivalPaCallsign(getAodbpriostring(f.getCSGN()))));
+		m.put("stoa", (a, f) -> a.setPaSibt(
+				factory.createPlTurnPtPaArrivalPlArrivalPaSibt(getAodbDate(f.getSTOA()))));
+		m.put("rwya", (a, f) -> a.setPaRrwyRunway(
+				factory.createPlTurnPtPaArrivalPlArrivalPaRrwyRunway(getAodbpriostring(f.getRWYA()))));
+		m.put("tldt", (a, f) -> a.setPaTldt(
+				factory.createPlTurnPtPaArrivalPlArrivalPaTldt(getAodbDate(f.getTLDT()))));
+		m.put("tmoa", (a, f) -> a.setPaFnlt(
+				factory.createPlTurnPtPaArrivalPlArrivalPaFnlt(getAodbDate(f.getTMOA()))));
+		m.put("land", (a, f) -> {
+			a.setPaAldt(factory.createPlTurnPtPaArrivalPlArrivalPaAldt(getAodbDate(f.getLAND())));
+			a.setPaSibt(factory.createPlTurnPtPaArrivalPlArrivalPaSibt(getAodbDate(getCurrentDate())));
+		});
+		m.put("ifra", (a, f) -> a.setPaFlightrule(
+				factory.createPlTurnPtPaArrivalPlArrivalPaFlightrule(getAodbpriostring(f.getIFRA()))));
+		return m;
 	}
 
 	private Aodbstring getAodbstring(String value) {

@@ -82,6 +82,11 @@ public class TranformFidsAfttab {
 
 	// ─── ENTRY POINT ───────────────────────────────────────────────────────
 	public FidsAfttab convertPlTurntoAfftab(String xmlString, String actionType, String hopo, String adid) {
+		return convertPlTurntoAfftab(xmlString, actionType, hopo, adid, null);
+	}
+
+	public FidsAfttab convertPlTurntoAfftab(String xmlString, String actionType, String hopo, String adid,
+			String originator) {
 		try {
 			Document doc = parseDocument(xmlString);
 			XPath xpath = XPathFactory.newInstance().newXPath();
@@ -93,7 +98,7 @@ public class TranformFidsAfttab {
 			if (plTurn.isEmpty()) {
 				return buildCommonCounter(doc, hopo, adid);
 			}
-			return buildFlight(xmlString, doc, xpath, actionType, hopo, adid, hasArrival, hasDeparture);
+			return buildFlight(xmlString, doc, xpath, actionType, hopo, adid, hasArrival, hasDeparture, originator);
 		} catch (Exception e) {
 			log.error("convertPlTurntoAfftab error: ", e);
 			return null;
@@ -115,7 +120,7 @@ public class TranformFidsAfttab {
 	// ─── FLIGHT MODE ───────────────────────────────────────────────────────
 	private FidsAfttab buildFlight(String xmlString, Document doc, XPath xpath,
 								   String actionType, String hopo, String adid,
-								   boolean hasArrival, boolean hasDeparture) throws Exception {
+								   boolean hasArrival, boolean hasDeparture, String originator) throws Exception {
 		boolean isArrival = "A".equalsIgnoreCase(adid);
 		if (isArrival && !hasArrival) return null;
 		if (!isArrival && !hasDeparture) return null;
@@ -152,6 +157,13 @@ public class TranformFidsAfttab {
 
 		// 5. Unconditional fixed identity fields (set even when action attribute did not change)
 		applyFixedPaths(f, doc, xpath, isArrival);
+
+		// IDEP: เก็บ TSAT (departure) แบบไม่สนใจ action filter — XSL โหมด UPDATE จะข้าม pd_tsat
+		// ถ้าไม่มี @action ทำให้ tsat ว่าง จึงอ่านดิบจาก XML ตรงๆ เพื่อให้ส่งต่อ ESB ได้เสมอ
+		if ("IDEP".equalsIgnoreCase(originator) && !isArrival) {
+			evaluateRawText(doc, xpath, "/pl_departure/pd_tsat")
+				.ifPresent(v -> f.setTsat(convertDateStringIfNeeded(v)));
+		}
 
 		// 6. Business derivations on fixed paths
 		applyFlightNumber(f);
