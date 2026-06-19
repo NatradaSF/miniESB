@@ -128,4 +128,18 @@ class FlightNumberLogicTest {
 		assertThat(vial).hasSize(120); // " " + via3(3) + via4(4) + 8 * 14-space pad
 		assertThat(vial.substring(8)).isBlank(); // everything after the codes is whitespace
 	}
+
+	@Test
+	@DisplayName("viaAirports: arrival = ซ้าย hopo ยกเว้นซ้ายสุด, departure = ขวา ยกเว้นขวาสุด")
+	void viaAirports_routing() {
+		String route = "TPE-HDY-HKT-BKK-CNX-TPE"; // hopo = BKK (index 3)
+		assertThat(TranformFidsAfttab.viaAirports(route, "BKK", true)).containsExactly("HDY", "HKT"); // Vian = 2
+		assertThat(TranformFidsAfttab.viaAirports(route, "BKK", false)).containsExactly("CNX");        // Vian = 1
+		// hopo อยู่กลางแบบ MDL-BKK-MDL → ไม่มี via ทั้งสองทาง (ตัดหัว-ท้ายออก)
+		assertThat(TranformFidsAfttab.viaAirports("MDL-BKK-MDL", "BKK", true)).isEmpty();
+		assertThat(TranformFidsAfttab.viaAirports("MDL-BKK-MDL", "BKK", false)).isEmpty();
+		// hopo ไม่อยู่ใน route / route ว่าง
+		assertThat(TranformFidsAfttab.viaAirports(route, "XXX", true)).isEmpty();
+		assertThat(TranformFidsAfttab.viaAirports("", "BKK", true)).isEmpty();
+	}
 }

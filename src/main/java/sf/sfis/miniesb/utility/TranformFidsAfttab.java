@@ -383,46 +383,84 @@ public class TranformFidsAfttab {
 		}
 	}
 
-	private void applyVial(FidsAfttab f, XPath xpath, Document doc, Element flightElement,
+	// package-private เพื่อให้ unit test เรียกตรงได้ (โฟกัสเฉพาะ logic VIA ไม่ต้องผ่าน XSL ทั้งชุด)
+	void applyVial(FidsAfttab f, XPath xpath, Document doc, Element flightElement,
 						   String hopo, boolean isArrival, String actionType) {
 		try {
-			String route = (String) xpath.evaluate("//pt_routing", doc, XPathConstants.STRING);
-			String[] airports = route.split("-");
-			String via3 = "";
-			for (int i = 0; i < airports.length; i++) {
-				if (hopo.equals(airports[i])) {
-					if (isArrival) {
-						if (i > 1) via3 = airports[i - 1];
-					} else {
-						if (i < airports.length - 2) via3 = airports[i + 1];
-					}
-					break;
-				}
-			}
+			String route = (String) xpath.evaluate("//pt_routingiata3lc", doc, XPathConstants.STRING);
+			List<String> vias = viaAirports(route, hopo, isArrival);
+			if (vias.isEmpty()) return;
 
+			// map iata -> icao จาก pl_routing nodes (ใช้เป็น via4) + ดูว่ามี routing เปลี่ยนไหม
+			Map<String, String> iataToIcao = new HashMap<>();
+			boolean routingChanged = false;
 			NodeList routingNodes = flightElement.getElementsByTagName("pl_routing");
 			for (int i = 0; i < routingNodes.getLength(); i++) {
 				Node node = routingNodes.item(i);
 				if (node == null) continue;
-				String act = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc/@action", node);
-				boolean accept = "DATASET".equalsIgnoreCase(actionType)
-					|| ("UPDATE".equalsIgnoreCase(actionType)
-						&& ("update".equalsIgnoreCase(act) || "insert".equalsIgnoreCase(act)));
-				if (!accept) continue;
-
 				String iata = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc", node);
 				String icao = xpath.evaluate("prt_rap_refairport/ref_airport/rap_icao4lc", node);
-				if (iata != null && !iata.isEmpty() && icao != null && !icao.isEmpty() && iata.equals(via3)) {
-					f.setVia3(iata);
-					f.setVia4(icao);
-					f.setVial(getVial(iata, icao));
-					f.setVian(routingNodes.getLength() > 0 ? "1" : "0");
-					break;
+				if (iata != null && !iata.isEmpty()) {
+					iataToIcao.put(iata, icao == null ? "" : icao);
+				}
+				String act = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc/@action", node);
+				if ("update".equalsIgnoreCase(act) || "insert".equalsIgnoreCase(act)) {
+					routingChanged = true;
 				}
 			}
+
+			// เหมือนพฤติกรรมเดิม: UPDATE จะ set VIA เฉพาะตอน routing เปลี่ยน, DATASET set เสมอ
+			if (!"DATASET".equalsIgnoreCase(actionType) && !routingChanged) return;
+
+			// Vial = getVial ของแต่ละ via ต่อกัน (ตามลำดับใน route ซ้าย→ขวา)
+			StringBuilder vial = new StringBuilder();
+			for (String via : vias) {
+				vial.append(getVial(via, iataToIcao.getOrDefault(via, "")));
+			}
+
+			// via3/via4 (ช่องเดียว) = via ที่ติด hopo (arrival = ตัวสุดท้าย, departure = ตัวแรก)
+			String adjacent = isArrival ? vias.get(vias.size() - 1) : vias.get(0);
+			f.setVia3(adjacent);
+			f.setVia4(iataToIcao.getOrDefault(adjacent, ""));
+			f.setVial(vial.toString());
+			f.setVian(String.valueOf(vias.size()));
 		} catch (XPathExpressionException e) {
 			log.error("applyVial error: ", e);
 		}
+	}
+
+	/**
+	 * รายชื่อสนามบิน VIA จาก route (คั่นด้วย "-") เทียบกับ hopo:
+	 *  - Arrival: ฝั่งซ้ายของ hopo ยกเว้นซ้ายสุด → airports[1 .. hopoIdx-1]
+	 *  - Departure: ฝั่งขวาของ hopo ยกเว้นขวาสุด → airports[hopoIdx+1 .. len-2]
+	 * เรียงตามลำดับใน route (ซ้าย→ขวา) คืน list ว่างถ้าไม่พบ hopo หรือไม่มี via.
+	 */
+	static List<String> viaAirports(String route, String hopo, boolean isArrival) {
+		List<String> vias = new ArrayList<>();
+		if (route == null || route.isEmpty()) {
+			return vias;
+		}
+		String[] airports = route.split("-");
+		int hopoIdx = -1;
+		for (int i = 0; i < airports.length; i++) {
+			if (hopo.equals(airports[i])) {
+				hopoIdx = i;
+				break;
+			}
+		}
+		if (hopoIdx < 0) {
+			return vias;
+		}
+		if (isArrival) {
+			for (int i = 1; i < hopoIdx; i++) {
+				vias.add(airports[i]);
+			}
+		} else {
+			for (int i = hopoIdx + 1; i < airports.length - 1; i++) {
+				vias.add(airports[i]);
+			}
+		}
+		return vias;
 	}
 
 	private void applySharedDerivations(FidsAfttab f, boolean isArrival) {
@@ -627,7 +665,7 @@ public class TranformFidsAfttab {
 
 	public String getVial(String via3, String via4) {
 		String pad = "              ";
-		return " " + via3 + via4 + pad + pad + pad + pad + pad + pad + pad + pad;
+		return " " + via3 + via4 + pad + pad + pad + pad + pad + pad + pad + pad;//120 length
 	}
 
 	/**
