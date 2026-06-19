@@ -15,50 +15,108 @@ import org.junit.jupiter.api.Test;
 class FlightNumberLogicTest {
 
 	@Test
-	@DisplayName("parse with 2-letter airline code (alc2): prefix padded to 3, number padded to width")
-	void parse_alc2_basic() {
-		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("TG123", "", "TG");
+	@DisplayName("2-char airline (3rd char = digit): prefix=3, number=4 wide")
+	void parse_twoCharAirline() {
+		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("TG123");
 
 		assertThat(parts).isNotEmpty();
-		assertThat(parts.get("prefix")).isEqualTo("TG "); // 2-letter code padded with one space
-		assertThat(parts.get("number")).isEqualTo("123  "); // 3-digit number + 2 trailing spaces
+		assertThat(parts.get("prefix")).isEqualTo("TG "); // 2-char code + 1 space (width 3)
+		assertThat(parts.get("number")).isEqualTo("123 "); // 3-digit + 1 space (width 4)
 		assertThat(parts.get("suffix")).isEqualTo("");
 	}
 
 	@Test
-	@DisplayName("parse with trailing letter suffix: number zero-padded to 3, suffix kept")
-	void parse_alc2_withSuffix() {
-		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("TG7A", "", "TG");
+	@DisplayName("trailing letter suffix: number zero-padded to 3, suffix kept")
+	void parse_withSuffix() {
+		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("TG7A");
 
 		assertThat(parts.get("prefix")).isEqualTo("TG ");
-		assertThat(parts.get("number")).isEqualTo("007  "); // 7 -> 007
+		assertThat(parts.get("number")).isEqualTo("7   "); // 7 ชิดซ้าย เว้น space ท้าย (ไม่เติม 0) = width 4
 		assertThat(parts.get("suffix")).isEqualTo("A");
 	}
 
 	@Test
-	@DisplayName("parse with 3-letter airline code (alc3): prefix not padded")
-	void parse_alc3() {
-		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("THA0456", "THA", "TG");
+	@DisplayName("3rd char = letter → 3-char prefix, not padded")
+	void parse_threeCharAirline() {
+		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("THA0456");
 
-		assertThat(parts.get("prefix")).isEqualTo("THA"); // 3-letter code unchanged
-		assertThat(parts.get("number")).isEqualTo("456  "); // 0456 -> 456
+		assertThat(parts.get("prefix")).isEqualTo("THA"); // 3-char prefix unchanged
+		assertThat(parts.get("number")).isEqualTo("0456"); // เก็บตามต้นฉบับ "0456" (ไม่ตัด 0) = width 4
 		assertThat(parts.get("suffix")).isEqualTo("");
 	}
 
 	@Test
-	@DisplayName("parse 4-digit number: only one trailing space")
+	@DisplayName("4-digit number: no trailing space (already width 4)")
 	void parse_fourDigitNumber() {
-		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("TG1234", "", "TG");
+		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("TG1234");
 
-		assertThat(parts.get("number")).isEqualTo("1234 "); // 4 digits -> single trailing space
+		assertThat(parts.get("number")).isEqualTo("1234"); // 4 digits -> width 4, no pad
 	}
 
 	@Test
-	@DisplayName("flight number matching neither code returns empty map")
-	void parse_noMatch() {
-		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("XY100", "THA", "TG");
+	@DisplayName("airline code with digit (B3) handled positionally without alc")
+	void parse_airlineWithDigit() {
+		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("B3701R");
 
-		assertThat(parts).isEmpty();
+		assertThat(parts.get("prefix")).isEqualTo("B3 "); // 3rd char '7' = digit → 2-char prefix
+		assertThat(parts.get("number")).isEqualTo("701 ");
+		assertThat(parts.get("suffix")).isEqualTo("R");
+	}
+
+	@Test
+	@DisplayName("J-series cases: prefix = 2 chars + 3rd char if letter")
+	void parse_jSeries() {
+		// 3rd char = digit → 2-char prefix
+		assertThat(TranformFidsAfttab.parseFlightNumber("J9365").get("prefix")).isEqualTo("J9 ");
+		assertThat(TranformFidsAfttab.parseFlightNumber("J9365").get("number")).isEqualTo("365 ");
+		assertThat(TranformFidsAfttab.parseFlightNumber("J52365").get("prefix")).isEqualTo("J5 ");
+		assertThat(TranformFidsAfttab.parseFlightNumber("J52365").get("number")).isEqualTo("2365");
+		// 3rd char = letter (T) → 3-char prefix
+		assertThat(TranformFidsAfttab.parseFlightNumber("J5T365").get("prefix")).isEqualTo("J5T");
+		assertThat(TranformFidsAfttab.parseFlightNumber("J5T365").get("number")).isEqualTo("365 ");
+		assertThat(TranformFidsAfttab.parseFlightNumber("J5T2365").get("prefix")).isEqualTo("J5T");
+		assertThat(TranformFidsAfttab.parseFlightNumber("J5T2365").get("number")).isEqualTo("2365");
+	}
+
+	@Test
+	@DisplayName("unparseable input (too short / no flight digits) returns empty map")
+	void parse_unparseable() {
+		assertThat(TranformFidsAfttab.parseFlightNumber("TG")).isEmpty();     // สั้นกว่า 3 ตัว
+		assertThat(TranformFidsAfttab.parseFlightNumber("ABCDE")).isEmpty();  // หลัง prefix ไม่มีตัวเลข
+		assertThat(TranformFidsAfttab.parseFlightNumber(null)).isEmpty();
+	}
+
+	@Test
+	@DisplayName("toFlno: fixed 9-char layout = airline(3) + number(4) + space + suffix/space")
+	void toFlno_fixedLayout() {
+		assertThat(TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("TG123"))).isEqualTo("TG 123   ");
+		assertThat(TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("TG7A"))).isEqualTo("TG 7    A");
+		assertThat(TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("TG1234"))).isEqualTo("TG 1234  ");
+		assertThat(TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("J5T2365"))).isEqualTo("J5T2365  ");
+		assertThat(TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("B3701R"))).isEqualTo("B3 701  R");
+		// ทุกค่ายาว 9 ตัวเสมอ
+		assertThat(TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("TG123"))).hasSize(9);
+		assertThat(TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("J5T2365"))).hasSize(9);
+	}
+
+	@Test
+	@DisplayName("formatJfno: แต่ละ entry 9-char (เหมือน FLNO) ต่อกันตรงๆ ไม่มี separator")
+	void formatJfno_multiple() {
+		String a = TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("TG123"));   // "TG 123   "
+		String b = TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("8M338"));   // "8M 338   "
+		assertThat(TranformFidsAfttab.formatJfno("TG123,8M338")).isEqualTo(a + b);
+		assertThat(TranformFidsAfttab.formatJfno("TG123,8M338")).hasSize(18); // 2 × 9
+	}
+
+	@Test
+	@DisplayName("formatJfno: unparseable kept as-is; null คืน null; ข้ามตัวว่าง")
+	void formatJfno_edgeCases() {
+		assertThat(TranformFidsAfttab.formatJfno("J5T2365")).isEqualTo("J5T2365  "); // 9-char เดี่ยว
+		assertThat(TranformFidsAfttab.formatJfno("XX")).isEqualTo("XX");             // แยกไม่ได้ → ใช้ค่าเดิม
+		String a = TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("TG123"));
+		String b = TranformFidsAfttab.toFlno(TranformFidsAfttab.parseFlightNumber("8M338"));
+		assertThat(TranformFidsAfttab.formatJfno("TG123, ,8M338")).isEqualTo(a + b); // ข้ามตัวว่าง, ไม่มี separator
+		assertThat(TranformFidsAfttab.formatJfno(null)).isNull();
 	}
 
 	@Test

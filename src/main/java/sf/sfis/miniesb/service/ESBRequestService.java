@@ -26,6 +26,7 @@ import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
 import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
@@ -39,6 +40,7 @@ import org.slf4j.MDC;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import sf.sfis.miniesb.MQArtemisProducer;
+import sf.sfis.miniesb.aodb.Aodbduration;
 import sf.sfis.miniesb.aodb.Aodbprioduration;
 import sf.sfis.miniesb.aodb.Aodbpriostring;
 import sf.sfis.miniesb.aodb.Aodbstring;
@@ -52,14 +54,19 @@ import sf.sfis.miniesb.aodb.PlTurn;
 import sf.sfis.miniesb.aodb.PlTurn.PtPaArrival;
 import sf.sfis.miniesb.aodb.PlTurn.PtPaArrival.PlArrival;
 import sf.sfis.miniesb.aodb.PlTurn.PtPaArrival.PlArrival.PaRactAircrafttype;
+import sf.sfis.miniesb.aodb.PlTurn.PtPaArrival.PlArrival.PlBaggagebeltList;
+import sf.sfis.miniesb.aodb.PlTurn.PtPaArrival.PlArrival.PlBaggagebeltList.PlBaggagebelt;
 import sf.sfis.miniesb.aodb.PlTurn.PtPdDeparture;
 import sf.sfis.miniesb.aodb.PlTurn.PtPdDeparture.PlDeparture;
 import sf.sfis.miniesb.aodb.PlTurn.PtPdDeparture.PlDeparture.PdRactAircrafttype;
+import sf.sfis.miniesb.aodb.PlTurn.PtPdDeparture.PlDeparture.PlDeparturebeltList;
+import sf.sfis.miniesb.aodb.PlTurn.PtPdDeparture.PlDeparture.PlDeparturebeltList.PlDeparturebelt;
 import sf.sfis.miniesb.esb.realtimeinbound.ADID;
 import sf.sfis.miniesb.esb.realtimeinbound.MSG;
 import sf.sfis.miniesb.esb.realtimeinbound.MSG.MSGSTREAMIN.INFOBJGENERIC;
 import sf.sfis.miniesb.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.BULKDATA;
 import sf.sfis.miniesb.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJFLIGHT;
+import sf.sfis.miniesb.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJMUINFO;
 import sf.sfis.miniesb.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJVDGS;
 import sf.sfis.miniesb.utility.FieldInspector;
 
@@ -146,6 +153,8 @@ public class ESBRequestService {
 			BULKDATA bulkdata = msg.getMSGSTREAMIN().getMSGOBJECTS().getBULKDATA();
 			INFOBJFLIGHT infobjflight = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJFLIGHT();
 			INFOBJVDGS infobjvdgs = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJVDGS();
+			JAXBElement<INFOBJMUINFO> muElement = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJMUINFO();
+			INFOBJMUINFO infobjmuinfo = (muElement != null) ? muElement.getValue() : null;
 			if (bulkdata != null) {
 				String message = systemType.equals("AFTN") ? bulkdata.getAFTN().getCONTENT()
 						: bulkdata.getSITA().getCONTENT();
@@ -157,6 +166,9 @@ public class ESBRequestService {
 				body = setFlight(adid, body, infobjflight);
 			} else if (infobjvdgs != null) {
 				body = setVdgs(adid, body, stdt, flno, infobjvdgs);
+			} else if (infobjmuinfo != null) {
+				// BHS make-up unit info (INFOBJ_MUINFO) → carousel/belt แยกตาม ADID (A=arrival, D=departure)
+				body = setBhs(adid, body, infobjmuinfo);
 			}
 
 			Envelope envelope = new Envelope();
@@ -377,6 +389,109 @@ public class ESBRequestService {
 		m.put("ifra", (a, f) -> a.setPaFlightrule(
 				factory.createPlTurnPtPaArrivalPlArrivalPaFlightrule(getAodbpriostring(f.getIFRA()))));
 		return m;
+	}
+
+	/**
+	 * BHS make-up unit info (INFOBJ_MUINFO) → AODB pl_departurebelt (departure carousels).
+	 * BAZ1/BAZ4 = carousel ID (สายพานที่ 1/2), BAO/BAC = เวลาเปิด/ปิด "จริง" → beginactual/endactual.
+	 */
+	private Body setBhs(ADID adid, Body body, INFOBJMUINFO mu) {
+		PlTurn plTurn = factory.createPlTurn();
+		if (adid == ADID.A) {
+			// ADID = A → arrival reclaim belt (pl_baggagebelt, pbb_*)
+			PlArrival plArrival = factory.createPlTurnPtPaArrivalPlArrival();
+			PlBaggagebeltList beltList = factory.createPlTurnPtPaArrivalPlArrivalPlBaggagebeltList();
+			addArrivalBelt(beltList, jaxbValue(mu.getBAZ1()), jaxbValue(mu.getBAO1()), jaxbValue(mu.getBAC1()));
+			addArrivalBelt(beltList, jaxbValue(mu.getBAZ4()), jaxbValue(mu.getBAO4()), jaxbValue(mu.getBAC4()));
+			plArrival.setPlBaggagebeltList(beltList);
+			PtPaArrival ptPaArrival = factory.createPlTurnPtPaArrival();
+			ptPaArrival.getContent().add(factory.createPlTurnPtPaArrivalPlArrival(plArrival));
+			plTurn.setPtPaArrival(factory.createPlTurnPtPaArrival(ptPaArrival));
+		} else if (adid == ADID.D) {
+			// ADID = D → departure make-up belt (pl_departurebelt, pdb_*)
+			PlDeparture plDeparture = factory.createPlTurnPtPdDeparturePlDeparture();
+			PlDeparturebeltList beltList = factory.createPlTurnPtPdDeparturePlDeparturePlDeparturebeltList();
+			addDepartureBelt(beltList, jaxbValue(mu.getBAZ1()), jaxbValue(mu.getBAO1()), jaxbValue(mu.getBAC1()));
+			addDepartureBelt(beltList, jaxbValue(mu.getBAZ4()), jaxbValue(mu.getBAO4()), jaxbValue(mu.getBAC4()));
+			plDeparture.setPlDeparturebeltList(beltList);
+			PtPdDeparture ptPdDeparture = factory.createPlTurnPtPdDeparture();
+			ptPdDeparture.getContent().add(factory.createPlTurnPtPdDeparturePlDeparture(plDeparture));
+			plTurn.setPtPdDeparture(factory.createPlTurnPtPdDeparture(ptPdDeparture));
+		}
+		body.setPlTurn(plTurn);
+		return body;
+	}
+
+	/**
+	 * ADID=D: สร้าง pl_departurebelt 1 รายการ "เสมอ" (แม้ carousel id ว่าง) แล้วเพิ่มเข้า list
+	 * — slot ว่าง = code ว่าง เพื่อให้ AODB อัพเดต/เคลียร์สายพานนั้นได้ (ลำดับใน list = ลำดับ carousel).
+	 */
+	private void addDepartureBelt(PlDeparturebeltList beltList, String carouselId, String openTime, String closeTime) {
+		PlDeparturebelt belt = factory.createPlTurnPtPdDeparturePlDeparturePlDeparturebeltListPlDeparturebelt();
+		belt.setPdbRdbDeparturebelt(factory
+				.createPlTurnPtPdDeparturePlDeparturePlDeparturebeltListPlDeparturebeltPdbRdbDeparturebelt(
+						getAodbstring(carouselId == null ? "" : carouselId.trim())));
+		Aodbduration open = getAodbDurationMinute(openTime);
+		if (open != null) {
+			belt.setPdbBeginactual(factory
+					.createPlTurnPtPdDeparturePlDeparturePlDeparturebeltListPlDeparturebeltPdbBeginactual(open));
+		}
+		Aodbduration close = getAodbDurationMinute(closeTime);
+		if (close != null) {
+			belt.setPdbEndactual(factory
+					.createPlTurnPtPdDeparturePlDeparturePlDeparturebeltListPlDeparturebeltPdbEndactual(close));
+		}
+		beltList.getPlDeparturebelt().add(belt);
+	}
+
+	/**
+	 * ADID=A: สร้าง pl_baggagebelt 1 รายการ "เสมอ" (แม้ carousel id ว่าง) แล้วเพิ่มเข้า list
+	 * — slot ว่าง = code ว่าง เพื่อให้ AODB อัพเดต/เคลียร์สายพานนั้นได้ (ลำดับใน list = ลำดับ carousel).
+	 */
+	private void addArrivalBelt(PlBaggagebeltList beltList, String carouselId, String openTime, String closeTime) {
+		PlBaggagebelt belt = factory.createPlTurnPtPaArrivalPlArrivalPlBaggagebeltListPlBaggagebelt();
+		belt.setPbbRbbBaggagebelt(factory
+				.createPlTurnPtPaArrivalPlArrivalPlBaggagebeltListPlBaggagebeltPbbRbbBaggagebelt(
+						getAodbstring(carouselId == null ? "" : carouselId.trim())));
+		Aodbduration open = getAodbDurationMinute(openTime);
+		if (open != null) {
+			belt.setPbbBeginactual(factory
+					.createPlTurnPtPaArrivalPlArrivalPlBaggagebeltListPlBaggagebeltPbbBeginactual(open));
+		}
+		Aodbduration close = getAodbDurationMinute(closeTime);
+		if (close != null) {
+			belt.setPbbEndactual(factory
+					.createPlTurnPtPaArrivalPlArrivalPlBaggagebeltListPlBaggagebeltPbbEndactual(close));
+		}
+		beltList.getPlBaggagebelt().add(belt);
+	}
+
+	private static String jaxbValue(JAXBElement<String> el) {
+		return (el == null) ? null : el.getValue();
+	}
+
+	/** BHS ส่งเวลา 12 หลัก (yyyyMMddHHmm ไม่มีวินาที) → เติม "00" วินาที แล้วแปลงเป็น Aodbduration */
+	private Aodbduration getAodbDurationMinute(String value) {
+		if (value == null || value.trim().isEmpty()) {
+			return null;
+		}
+		try {
+			Aodbduration aodbduration = factory.createAodbduration();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+			Date d = sdf.parse(value.trim() + "00");
+			GregorianCalendar cal = new GregorianCalendar();
+			cal.setTime(d);
+			XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+			xmlCal.setFractionalSecond(null);
+			xmlCal.setTimezone(0);
+			aodbduration.setValue(xmlCal);
+			return aodbduration;
+		} catch (ParseException e) {
+			log.error("getAodbDurationMinute: ", e);
+		} catch (DatatypeConfigurationException e) {
+			log.error("getAodbDurationMinute: ", e);
+		}
+		return null;
 	}
 
 	private Aodbstring getAodbstring(String value) {

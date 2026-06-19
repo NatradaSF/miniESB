@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,23 @@ public class SubscribeScheduledService {
 	LocalDateTime today;
 	LocalDateTime tomorrowFrom;
 	LocalDateTime tomorrowTo;
+
+	/**
+	 * เรียก subscribe ทันทีที่แอป start เสร็จ (re-subscribe หลัง restart).
+	 * ใช้ ApplicationReadyEvent เพื่อให้ context/JMS connection พร้อมก่อน (ทำงานหลัง bean ทั้งหมดถูกสร้าง).
+	 * ครอบ try/catch ไว้เพื่อไม่ให้การ subscribe ที่ fail (เช่น Artemis ยังไม่พร้อม) ทำให้ startup ล้ม.
+	 */
+	@EventListener(ApplicationReadyEvent.class)
+	public void subscribeOnStartup() {
+		try {
+			log.info("miniESB started — running initial subscribe...");
+			subscribeAfttab();
+			// ถ้าต้องการ subscribe common counter (pl_desk) ตอน start ด้วย ให้เปิดบรรทัดนี้:
+			// subscribeAndRequestCcatab();
+		} catch (Exception e) {
+			log.error("subscribeOnStartup: ", e);
+		}
+	}
 
 	@Scheduled(cron = "1 0 0 * * ?") //ทุกๆ เที่ยงคืนเลยไป 1 วิของวันถัดไป เพื่อรับข้อมูลของ Common Counter
 	public void subscribeAndRequestCcatab() {

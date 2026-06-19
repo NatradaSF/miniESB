@@ -60,6 +60,57 @@ class ESBRequestServiceSnapshotTest {
 		verifySnapshot("esbreq-arrival", runProcess(buildMsg(ADID.A, flt)));
 	}
 
+	private static final String BHS_SAMPLE = """
+			<?xml version="1.0"?>
+			<MSG>
+			  <MSGSTREAM_IN>
+			    <INFOBJ_GENERIC>
+			      <MESSAGETYPE>WMMUUD</MESSAGETYPE>
+			      <MESSAGEORIGIN>BHS</MESSAGEORIGIN>
+			      <TIMEID>UTC</TIMEID>
+			      <HOPO>BKK</HOPO>
+			      <TIMESTAMP>20260512003022</TIMESTAMP>
+			      <ACTIONTYPE>U</ACTIONTYPE>
+			      <ADID>D</ADID>
+			      <STDT>20260511162500</STDT>
+			      <FLNO>8M 0373 </FLNO>
+			    </INFOBJ_GENERIC>
+			    <MSGOBJECTS>
+			      <INFOBJ_MUINFO>
+			        <BAZ1>05   </BAZ1>
+			        <BAZ4>     </BAZ4>
+			        <BAO1>202605111225</BAO1>
+			        <BAC1>202605111730</BAC1>
+			        <BAO4>            </BAO4>
+			        <BAC4>            </BAC4>
+			      </INFOBJ_MUINFO>
+			    </MSGOBJECTS>
+			  </MSGSTREAM_IN>
+			</MSG>
+			""";
+
+	@Test
+	@DisplayName("BHS make-up (ADID=D) maps to pl_departurebelt, matches snapshot")
+	void bhsDeparture() throws Exception {
+		verifySnapshot("bhs-departure", runProcessXml(BHS_SAMPLE));
+	}
+
+	@Test
+	@DisplayName("BHS make-up (ADID=A) maps to pl_baggagebelt, matches snapshot")
+	void bhsArrival() throws Exception {
+		verifySnapshot("bhs-arrival", runProcessXml(BHS_SAMPLE.replace("<ADID>D</ADID>", "<ADID>A</ADID>")));
+	}
+
+	/** Runs processXmlMessage with a raw XML string, returns the XML sent to Artemis. */
+	private String runProcessXml(String inputXml) {
+		MQArtemisProducer producer = mock(MQArtemisProducer.class);
+		ESBRequestService service = new ESBRequestService(producer);
+		service.processXmlMessage(inputXml);
+		ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+		verify(producer).sendMessage(anyString(), anyString(), captor.capture());
+		return captor.getValue();
+	}
+
 	/** Marshals the input MSG, runs processXmlMessage, returns the XML sent to Artemis. */
 	private String runProcess(MSG msg) throws Exception {
 		StringWriter in = new StringWriter();

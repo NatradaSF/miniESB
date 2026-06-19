@@ -42,23 +42,18 @@ public class SubscribeRequestService {
 	@WebMethod
 	public void subscribe(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime, @WebParam(name = "dataType") String dataType) {
 		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+			/* DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 	        LocalDateTime today = LocalDateTime.now();
-	        String currentDate = today.format(formatter);
+	        String currentDate = today.format(formatter); */
 	        		
 			Header header = new Header();
 			Control control = new Control();
-			control.setMessageId("localhost:2d970033:195f1193a55:-12d5");
 			control.setMessageVersion("1.4");
 			control.setMessageType("SUBSCRIBE");
-			control.setSender("FIDS");
-			control.setTimestamp(currentDate);
+			control.setSender("MiniESB");
 			Request request = new Request();
 			request.setDatatype(dataType);//"pl_turn","pl_desk"
-//	        request.setStartTime("2025-05-09T00:00:00");
-//	        request.setEndTime("2025-05-09T23:59:59");
-			request.setStartTime(starttime);
-			request.setEndTime(endtime);
+			request.setKeepSubscription("Y");
 			control.setRequest(request);
 			header.setControl(control);
 			Body body = new Body();
@@ -87,17 +82,16 @@ public class SubscribeRequestService {
 	public void requestDataset(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime, @WebParam(name = "dataType") String dataType) {
 		//log.info("Request Dataset...");
 		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+			/* DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 	        LocalDateTime today = LocalDateTime.now();
-	        String currentDate = today.format(formatter);
+	        String currentDate = today.format(formatter); */
 	        
 			Header header = new Header();
 			Control control = new Control();
-			control.setMessageId("localhost:2d970033:195f1193a55:-12d5");
 			control.setMessageVersion("1.4");
 			control.setMessageType("DATASET");
-			control.setSender("FIDS");
-			control.setTimestamp(currentDate);
+			control.setSender("MiniESB");
+			/* control.setTimestamp(currentDate); */
 			Request request = new Request();
 			request.setDatatype(dataType);//"pl_turn","pl_desk"
 			request.setKeepSubscription("y");

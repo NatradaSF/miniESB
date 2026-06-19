@@ -327,16 +327,16 @@ public class TranformFidsAfttab {
 		String flno = f.getFlno();
 		if (flno == null || flno.isEmpty()) return;
 
-		Map<String, String> parts = parseFlightNumber(flno, f.getAlc3(), f.getAlc2());
+		Map<String, String> parts = parseFlightNumber(flno);
 		if (parts.isEmpty()) {
 			f.setFlns("");
 		} else {
-			f.setFlno(parts.get("prefix") + parts.get("number") + parts.get("suffix"));
+			f.setFlno(toFlno(parts));
 			f.setFlns(parts.get("suffix") != null ? parts.get("suffix") : "");
 			f.setFltn(parts.get("number"));
 		}
 		if (f.getJfno() != null) {
-			f.setJfno(f.getJfno().replace(",", " "));
+			f.setJfno(formatJfno(f.getJfno()));
 		}
 		if (f.getCsgn() != null && f.getFlns() != null) {
 			f.setCsgn(f.getCsgn() + f.getFlns().trim());
@@ -630,38 +630,70 @@ public class TranformFidsAfttab {
 		return " " + via3 + via4 + pad + pad + pad + pad + pad + pad + pad + pad;
 	}
 
-	public static Map<String, String> parseFlightNumber(String flightNumber, String alc3, String alc2) {
-		String prefix = "";
-		String number = "";
-		String suffix = "";
-
-		if (alc3 != null && !alc3.isEmpty() && flightNumber.startsWith(alc3)) {
-			prefix = alc3;
-			Matcher m = Pattern.compile("^(\\d{1,4})([A-Z]?)$").matcher(flightNumber.substring(alc3.length()));
-			if (m.find()) {
-				number = String.format("%03d", Integer.parseInt(m.group(1)));
-				suffix = m.group(2);
-			}
-		} else if (alc2 != null && !alc2.isEmpty() && flightNumber.startsWith(alc2)) {
-			prefix = alc2;
-			Matcher m = Pattern.compile("^(\\d{1,4})([A-Z]?)$").matcher(flightNumber.substring(alc2.length()));
-			if (m.find()) {
-				if (number.length() < 3) {
-					number = String.format("%03d", Integer.parseInt(m.group(1)));
-				}
-				suffix = m.group(2);
-			}
-		} else {
+	/**
+	 * แยกหมายเลขเที่ยวบินเป็น prefix (รหัสสายการบิน) + number + suffix แบบ "อ่านจากตำแหน่ง"
+	 * โดยไม่ต้องใช้รหัสสายการบินจากภายนอก (alc2/alc3):
+	 *  - prefix = 2 ตัวแรก และรวมตัวที่ 3 ด้วยถ้าเป็น "ตัวอักษร" (รองรับรหัส 3 ตัวที่มีอักษร เช่น J5T)
+	 *  - number = ตัวเลข 1-4 หลักถัดมา (zero-pad อย่างน้อย 3 หลัก)
+	 *  - suffix = ตัวอักษรท้าย 1 ตัว (ถ้ามี)
+	 * คืน emptyMap ถ้าแยกไม่ได้ (สั้นกว่า 3 ตัว หรือส่วนหลัง prefix ไม่ใช่ "เลข 1-4 หลัก + อักษร 0-1 ตัว")
+	 */
+	public static Map<String, String> parseFlightNumber(String flightNumber) {
+		if (flightNumber == null || flightNumber.length() < 3) {
 			return Collections.emptyMap();
 		}
-		if (prefix.length() == 2) prefix = prefix + " ";
-		number = number + (number.length() == 4 ? " " : "  ");
+		// prefix = 2 ตัวแรก + ตัวที่ 3 ถ้าเป็นตัวอักษร
+		int prefixLen = Character.isLetter(flightNumber.charAt(2)) ? 3 : 2;
+		String prefix = flightNumber.substring(0, prefixLen);
+		String rest = flightNumber.substring(prefixLen);
+
+		Matcher m = Pattern.compile("^(\\d{1,4})([A-Z]?)$").matcher(rest);
+		if (!m.find()) {
+			return Collections.emptyMap();
+		}
+		String number = String.format("%-4s", m.group(1)); // เลขตามต้นฉบับ ชิดซ้าย เว้น space ท้ายจนกว้าง 4 (ไม่เติม/ไม่ตัด 0)
+		String suffix = m.group(2);
+
+		if (prefix.length() == 2) prefix = prefix + " ";    // airline กว้าง 3
 
 		Map<String, String> map = new HashMap<>();
 		map.put("prefix", prefix);
 		map.put("number", number);
 		map.put("suffix", suffix);
 		return map;
+	}
+
+	/**
+	 * ประกอบหมายเลขเที่ยวบินเป็นความกว้างคงที่ 9 ตัว:
+	 *   airline(3) + number(4) + ช่องว่างคั่น(1) + suffix หรือช่องว่าง(1)
+	 * (prefix/number ถูก pad มาจาก {@link #parseFlightNumber} แล้วเป็น 3 และ 4 ตามลำดับ)
+	 */
+	public static String toFlno(Map<String, String> parts) {
+		String suffix = parts.get("suffix");
+		return parts.get("prefix") + parts.get("number") + " "
+				+ (suffix == null || suffix.isEmpty() ? " " : suffix);
+	}
+
+	/**
+	 * แปลง JFNO (รายการเที่ยวบิน codeshare คั่นด้วย ",") โดยจัดรูปแต่ละเที่ยวบินเหมือน FLNO
+	 * (9 ตัวคงที่ ผ่าน {@link #toFlno}) แล้ว "ต่อกันตรงๆ" ไม่มี separator (split ทุก 9 ตัวได้).
+	 * ถ้าตัวไหนแยกไม่ได้ ใช้ค่าเดิม (trim) และข้ามตัวที่ว่าง.
+	 */
+	public static String formatJfno(String jfno) {
+		if (jfno == null) {
+			return null;
+		}
+		StringBuilder sb = new StringBuilder();
+		for (String part : jfno.split(",")) {
+			String j = part.trim();
+			if (j.isEmpty()) {
+				continue;
+			}
+			Map<String, String> p = parseFlightNumber(j);
+			// แต่ละ entry ยาว 9 ตัวคงที่ → ต่อกันตรงๆ ไม่ต้องมี separator (split ทุก 9 ตัวได้)
+			sb.append(p.isEmpty() ? j : toFlno(p));
+		}
+		return sb.toString();
 	}
 
 	public void setDynamicValue(FidsAfttab obj, String fieldPrefix, int index, String fieldSuffix, String value) {
