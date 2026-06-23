@@ -2199,7 +2199,9 @@ public class RealTimeMessageOUT {
                     "schs",
                     "sche",
                     "acts",
-                    "acte"
+                    "acte",
+                    "onbl",
+                    "ofbl"
                 })
                 public static class TOWINGS {
 
@@ -2219,6 +2221,10 @@ public class RealTimeMessageOUT {
                     protected String acts;
                     @XmlElement(name = "ACTE")
                     protected String acte;
+                    @XmlElement(name = "ONBL")
+                    protected String onbl;
+                    @XmlElement(name = "OFBL")
+                    protected String ofbl;
 
                     /**
                      * Gets the value of the toid property.
@@ -2410,6 +2416,54 @@ public class RealTimeMessageOUT {
                      */
                     public void setACTE(String value) {
                         this.acte = value;
+                    }
+
+                    /**
+                     * Gets the value of the acte property.
+                     * 
+                     * @return
+                     *     possible object is
+                     *     {@link String }
+                     *     
+                     */
+                    public String getONBL() {
+                        return onbl;
+                    }
+
+                    /**
+                     * Sets the value of the acte property.
+                     * 
+                     * @param value
+                     *     allowed object is
+                     *     {@link String }
+                     *     
+                     */
+                    public void setONBL(String value) {
+                        this.onbl = value;
+                    }
+
+                    /**
+                     * Gets the value of the acte property.
+                     * 
+                     * @return
+                     *     possible object is
+                     *     {@link String }
+                     *     
+                     */
+                    public String getOFBL() {
+                        return ofbl;
+                    }
+
+                    /**
+                     * Sets the value of the acte property.
+                     * 
+                     * @param value
+                     *     allowed object is
+                     *     {@link String }
+                     *     
+                     */
+                    public void setOFBL(String value) {
+                        this.ofbl = value;
                     }
 
                 }

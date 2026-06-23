@@ -64,7 +64,7 @@ public class SubscribeScheduledService {
 		subscribeRequestService.subscribe(startTime, endTime, dataType);
 	}
 	
-	@Scheduled(cron = "0 0 17 * * ?") // ทุกๆ 5 โมงเย็น รับข้อมูลของ Flight วันถัดไป โดยใช้ Subscribe เดิมที่รันไว้ตอน 00.01
+	/* @Scheduled(cron = "0 0 17 * * ?") // ทุกๆ 5 โมงเย็น รับข้อมูลของ Flight วันถัดไป โดยใช้ Subscribe เดิมที่รันไว้ตอน 00.01
 	public void requestAfttab() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 		tomorrowFrom = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
@@ -74,5 +74,5 @@ public class SubscribeScheduledService {
 		String dataType = "pl_turn";
 
 		subscribeRequestService.requestDataset(startTime, endTime, dataType);
-	}
+	} */
 }
