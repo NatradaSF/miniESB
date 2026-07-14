@@ -42,18 +42,21 @@ public class SubscribeRequestService {
 	@WebMethod
 	public void subscribe(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime, @WebParam(name = "dataType") String dataType) {
 		try {
-			/* DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 	        LocalDateTime today = LocalDateTime.now();
-	        String currentDate = today.format(formatter); */
+	        String currentDate = today.format(formatter);
 	        		
 			Header header = new Header();
 			Control control = new Control();
 			control.setMessageVersion("1.4");
 			control.setMessageType("SUBSCRIBE");
-			control.setSender("MiniESB");
+			control.setSender("MINIESB");
+			control.setTimestamp(currentDate);
 			Request request = new Request();
-			request.setDatatype(dataType);//"pl_turn","pl_desk"
+			request.setDatatype(dataType);//"pl_turn"
 			request.setKeepSubscription("Y");
+			request.setStartTime(starttime);
+			request.setEndTime(endtime);
 			control.setRequest(request);
 			header.setControl(control);
 			Body body = new Body();
@@ -82,19 +85,18 @@ public class SubscribeRequestService {
 	public void requestDataset(@WebParam(name = "startTime") String starttime, @WebParam(name = "endTime") String endtime, @WebParam(name = "dataType") String dataType) {
 		//log.info("Request Dataset...");
 		try {
-			/* DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 	        LocalDateTime today = LocalDateTime.now();
-	        String currentDate = today.format(formatter); */
+	        String currentDate = today.format(formatter);
 	        
 			Header header = new Header();
 			Control control = new Control();
 			control.setMessageVersion("1.4");
 			control.setMessageType("DATASET");
-			control.setSender("MiniESB");
-			/* control.setTimestamp(currentDate); */
+			control.setSender("MINIESB");
+			control.setTimestamp(currentDate);
 			Request request = new Request();
 			request.setDatatype(dataType);//"pl_turn","pl_desk"
-			request.setKeepSubscription("y");
 			request.setStartTime(starttime);
 			request.setEndTime(endtime);
 			control.setRequest(request);

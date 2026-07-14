@@ -130,6 +130,8 @@ public class ESBRequestService {
 
 			MSG msg = (MSG) unmarshaller.unmarshal(new StringReader(xmlString));
 			INFOBJGENERIC infobjgeneric = msg.getMSGSTREAMIN().getINFOBJGENERIC();
+			String sender = "MINIESB";
+			String receiver = "AOS";
 			String systemType = infobjgeneric.getMESSAGEORIGIN();
 			String hopo = infobjgeneric.getHOPO();
 			ADID adid = infobjgeneric.getADID();
@@ -139,13 +141,13 @@ public class ESBRequestService {
 
 			Header header = new Header();
 			Control control = new Control();
-			control.setMessageId("localhost:2d970033:195f1193a55:-12d5");
+			/* control.setMessageId("localhost:2d970033:195f1193a55:-12d5"); */
 			control.setMessageVersion("1.4");
 			control.setMessageType("UPDATE");
 			control.setConfirmType("ALL");
 			control.setOriginator(systemType);
-			control.setSender(systemType);
-			control.setReceiver("aodb");
+			control.setSender(sender);
+			control.setReceiver(receiver);
 			control.setStation(hopo);
 			control.setTimestamp(getLocalDate(infobjgeneric.getTIMESTAMP()));
 			header.setControl(control);

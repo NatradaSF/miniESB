@@ -1,5 +1,6 @@
 package sf.sfis.miniesb.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -32,47 +33,54 @@ public class SubscribeScheduledService {
 			log.info("miniESB started — running initial subscribe...");
 			subscribeAfttab();
 			// ถ้าต้องการ subscribe common counter (pl_desk) ตอน start ด้วย ให้เปิดบรรทัดนี้:
-			// subscribeAndRequestCcatab();
+			// requestCcatab();
 		} catch (Exception e) {
 			log.error("subscribeOnStartup: ", e);
 		}
-	}
-
-	@Scheduled(cron = "1 0 0 * * ?") //ทุกๆ เที่ยงคืนเลยไป 1 วิของวันถัดไป เพื่อรับข้อมูลของ Common Counter
-	public void subscribeAndRequestCcatab() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-		tomorrowFrom = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
-		tomorrowTo = LocalDateTime.now().plusDays(1).withHour(23).withMinute(59).withSecond(59).withNano(999999999);
-		String startTime = tomorrowFrom.format(formatter);
-		String endTime = tomorrowTo.format(formatter);
-		String dataType = "pl_desk";
-
-		subscribeRequestService.subscribe(startTime, endTime, dataType);
-		subscribeRequestService.requestDataset(startTime, endTime, dataType);
 	}
 	
 	@Scheduled(cron = "0 1 0 * * ?") // ทุกๆ 00.01 รับข้อมูล Update ระหว่างวัน และรองรับดึงข้อมูลของวันถัดไปด้วย
 	@Scheduled(cron = "0 7 17 * * ?") // ทุกๆ 17.07 รับข้อมูล Update ระหว่างวัน และรองรับดึงข้อมูลของวันถัดไปด้วย
 	public void subscribeAfttab() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-		today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
+		LocalDate now = LocalDate.now();
+		// startTime = ต้นวันของวันนี้ (00:00:00.000000000)
+		today = now.atStartOfDay();
 		String startTime = today.format(formatter);
-		tomorrowTo = LocalDateTime.now().plusDays(1).withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+		// endTime = สิ้นวันของอีก 3 วันข้างหน้า (+72 ชม.) => 23:59:59.999999999
+		tomorrowTo = now.plusDays(3).atTime(23, 59, 59, 999_999_999);
 		String endTime = tomorrowTo.format(formatter);
 		String dataType = "pl_turn";
 
 		subscribeRequestService.subscribe(startTime, endTime, dataType);
 	}
-	
-	/* @Scheduled(cron = "0 0 17 * * ?") // ทุกๆ 5 โมงเย็น รับข้อมูลของ Flight วันถัดไป โดยใช้ Subscribe เดิมที่รันไว้ตอน 00.01
-	public void requestAfttab() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-		tomorrowFrom = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+
+	@Scheduled(cron = "1 0 0 * * ?") //ทุกๆ เที่ยงคืนเลยไป 1 วิของวันถัดไป เพื่อรับข้อมูลของ Common Counter
+	public void requestCcatab() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
+		LocalDate now = LocalDate.now();
+		tomorrowFrom = now.plusDays(1).atTime(0, 0, 0);
+		tomorrowTo = now.plusDays(1).atTime(23, 59, 59, 999_999_999);
+		
 		String startTime = tomorrowFrom.format(formatter);
-		tomorrowTo = LocalDateTime.now().plusDays(1).withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+		String endTime = tomorrowTo.format(formatter);
+		String dataType = "pl_desk";
+
+		//subscribeRequestService.subscribe(startTime, endTime, dataType);
+		subscribeRequestService.requestDataset(startTime, endTime, dataType);
+	}
+	
+	@Scheduled(cron = "0 0 17 * * ?") // ทุกๆ 5 โมงเย็น รับข้อมูลของ Flight วันถัดไป โดยใช้ Subscribe เดิมที่รันไว้ตอน 00.01
+	public void requestAfttab() { 
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
+		LocalDate now = LocalDate.now();
+		tomorrowFrom = now.plusDays(1).atTime(0, 0, 0);
+		tomorrowTo = now.plusDays(1).atTime(23, 59, 59, 999_999_999);
+		
+		String startTime = tomorrowFrom.format(formatter);
 		String endTime = tomorrowTo.format(formatter);
 		String dataType = "pl_turn";
 
 		subscribeRequestService.requestDataset(startTime, endTime, dataType);
-	} */
+	}
 }
