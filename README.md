@@ -1,2 +1,2 @@
-# miniESB
+# iFIMSConnect
 
