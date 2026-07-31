@@ -62,7 +62,8 @@ public class ESBResponseService {
 	// Dedicated logger for outbound XML to ESB → routed to logs/outbound/<hopo>/<queue>.log
     private static final Logger sendEsbLog = LoggerFactory.getLogger("SEND_ESB_XML");
 
-	// true = ส่ง flight update ออก ESB ผ่าน WebSphere MQ, false = ส่งผ่าน webservice (callWebserviceUpdate)
+	// true = ส่ง flight update ออก ESB ผ่าน WebSphere MQ (IBM MQ อย่างเดียว)
+	// false = ส่งผ่าน webservice (callWebserviceUpdate) แทน
 	// ใช้ flag เดียวกับที่ปิด/เปิด WebSphere MQ เพื่อไม่ให้ส่งซ้ำ และ prod (MQ ยังไม่มา) จะ fallback เป็น webservice
 	@Value("${websphere.mq.enabled:true}")
 	private boolean webSphereEnabled;
@@ -168,7 +169,7 @@ public class ESBResponseService {
 				if (xmlEsb != null) {
 					log.info("Call Web service response NACK...");
 					//log.info(xmlEsb);
-					MDC.put("sendEsbKey", hopo + "/outbound-ACK_NACK");
+					MDC.put("sendEsbKey", hopo + "/outbound-NACK");
 					try {
 						sendEsbLog.info(xmlEsb);
 					} finally {
@@ -300,7 +301,9 @@ public class ESBResponseService {
 
 	/**
 	 * ส่ง flight UPDATE ออกไป ESB — เลือกช่องทางเดียวตาม flag webSphereEnabled:
-	 * เปิด = WebSphere MQ, ปิด = webservice (callWebserviceUpdate) เพื่อไม่ให้ส่งซ้ำ.
+	 * true = WebSphere MQ (IBM MQ อย่างเดียว), false = webservice (callWebserviceUpdate).
+	 * กรณี MQ: การเก็บ log payload ลง logs/outbound/&lt;hopo&gt;/outbound-&lt;queue&gt;.log ทำใน
+	 * {@link MQWebSphereProducer#sendToMachine1}/{@code sendToMachine2} ก่อนส่งเข้าคิวอยู่แล้ว.
 	 */
 	private void sendFlightUpdate(String hopo, String action, String xmlEsb) {
 		if (webSphereEnabled) {
@@ -313,7 +316,7 @@ public class ESBResponseService {
 				webSphereProducer.sendToMachine2(queueName, hopo, xmlEsb);
 			}
 		} else {
-			// WebSphere MQ ปิดอยู่ → ส่งผ่าน webservice แทน (เก็บ payload ลง outbound ด้วย)
+			// webSphereEnabled=false → ส่งผ่าน webservice แทน (เก็บ payload ลง outbound ด้วย)
 			MDC.put("sendEsbKey", hopo + "/outbound-WS");
 			try {
 				sendEsbLog.info(xmlEsb);
