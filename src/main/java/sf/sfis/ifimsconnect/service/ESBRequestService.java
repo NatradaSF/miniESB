@@ -65,9 +65,12 @@ import sf.sfis.ifimsconnect.esb.realtimeinbound.ADID;
 import sf.sfis.ifimsconnect.esb.realtimeinbound.MSG;
 import sf.sfis.ifimsconnect.esb.realtimeinbound.MSG.MSGSTREAMIN.INFOBJGENERIC;
 import sf.sfis.ifimsconnect.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.BULKDATA;
+import sf.sfis.ifimsconnect.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJEQUIPMENT;
 import sf.sfis.ifimsconnect.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJFLIGHT;
+import sf.sfis.ifimsconnect.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJMANIFEST;
 import sf.sfis.ifimsconnect.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJMUINFO;
 import sf.sfis.ifimsconnect.esb.realtimeinbound.MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJVDGS;
+import sf.sfis.ifimsconnect.esb.figurein.FigureMessageIn;
 import sf.sfis.ifimsconnect.utility.FieldInspector;
 
 @Slf4j
@@ -157,6 +160,11 @@ public class ESBRequestService {
 			INFOBJVDGS infobjvdgs = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJVDGS();
 			JAXBElement<INFOBJMUINFO> muElement = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJMUINFO();
 			INFOBJMUINFO infobjmuinfo = (muElement != null) ? muElement.getValue() : null;
+			FigureMessageIn.InfobjFigure infobjfigure = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJFIGURE();
+			JAXBElement<INFOBJMANIFEST> manElement = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJMANIFEST();
+			INFOBJMANIFEST infobjmanifest = (manElement != null) ? manElement.getValue() : null;
+			JAXBElement<INFOBJEQUIPMENT> eqpElement = msg.getMSGSTREAMIN().getMSGOBJECTS().getINFOBJEQUIPMENT();
+			INFOBJEQUIPMENT infobjequipment = (eqpElement != null) ? eqpElement.getValue() : null;
 			if (bulkdata != null) {
 				String message = systemType.equals("AFTN") ? bulkdata.getAFTN().getCONTENT()
 						: bulkdata.getSITA().getCONTENT();
@@ -171,6 +179,21 @@ public class ESBRequestService {
 			} else if (infobjmuinfo != null) {
 				// BHS make-up unit info (INFOBJ_MUINFO) → carousel/belt แยกตาม ADID (A=arrival, D=departure)
 				body = setBhs(adid, body, infobjmuinfo);
+			} else if (infobjfigure != null) {
+				// WMFIGURE (load figures) จาก UFIS_FIGURE_IN → รับเข้า object ของเราเอง
+				// ไม่แปลงเข้า AODB pl_turn และไม่ส่งต่อคิว AOS (backend object ค่อยทำภายหลัง)
+				handleFigureMessage(infobjfigure);
+				return;
+			} else if (infobjmanifest != null) {
+				// WMMANIFEST (passenger manifest) จาก UFIS_MANIFEST_IN → รับเข้า object ของเราเอง
+				// ไม่แปลงเข้า AODB และไม่ส่งต่อคิว AOS (backend object ค่อยทำภายหลัง)
+				handleManifestMessage(infobjmanifest);
+				return;
+			} else if (infobjequipment != null) {
+				// APSBLK (equipment/belt usage) จาก UFIS_EQUIPMENT_IN → รับเข้า object ของเราเอง
+				// ไม่แปลงเข้า AODB และไม่ส่งต่อคิว AOS (backend object ค่อยทำภายหลัง)
+				handleEquipmentMessage(infobjequipment);
+				return;
 			}
 
 			Envelope envelope = new Envelope();
@@ -200,6 +223,71 @@ public class ESBRequestService {
 			log.error("requestAodbInbound: ", e);
 			// e.printStackTrace();
 		}
+	}
+
+	/**
+	 * รับข้อความ WMFIGURE (load figures) จาก UFIS_FIGURE_IN ที่ถูก unmarshal มากับ MSG แล้ว
+	 * (element INFOBJ_FIGURE). ขั้นนี้ทำแค่ "รับค่า" — log ให้เห็นว่าอ่านได้ครบ. การ map เข้า
+	 * object หลังบ้าน (ยังไม่มีตัวรองรับ) และการ persist/forward ค่อยต่อยอดที่จุด TODO ด้านล่าง.
+	 */
+	private void handleFigureMessage(FigureMessageIn.InfobjFigure infobjfigure) {
+		FigureMessageIn.Figure figure = (infobjfigure != null) ? infobjfigure.getFigure() : null;
+		if (figure == null) {
+			log.warn("INFOBJ_FIGURE received but <figure> element is missing");
+			return;
+		}
+
+		log.info("Received WMFIGURE: flight={} date={} reg={} ad={} intdom={} paxDisembark(dom/intl)={}/{} crew={}",
+				figure.getFlightnumber(), figure.getFlightdate(), figure.getRegistration(),
+				figure.getAdindicator(), figure.getIntdomindicator(),
+				figure.getPaxdisembarkdom(), figure.getPaxdisembarkintl(), figure.getCrew());
+
+		// TODO: map `figure` (+ figure.getRoot().getPort()) เข้า object หลังบ้านของเรา
+		//       แล้ว persist/ส่งต่อ ตาม spec ที่จะกำหนดภายหลัง
+	}
+
+	/**
+	 * รับข้อความ WMMANIFEST (passenger manifest) จาก UFIS_MANIFEST_IN ที่ถูก unmarshal
+	 * มากับ MSG แล้ว (element INFOBJ_MANIFEST — มีอยู่ใน schema เดิม). ขั้นนี้ทำแค่ "รับค่า"
+	 * — log ให้เห็นว่าอ่านได้. การ map เข้า object หลังบ้าน (ยังไม่มีตัวรองรับ) และการ
+	 * persist/forward ค่อยต่อยอดที่จุด TODO ด้านล่าง. หมายเหตุ: MESSAGE เป็นข้อความยาว
+	 * (manifest ทั้งใบ) จึง log แค่ความยาว ไม่ log เนื้อทั้งก้อนกันท่วม log.
+	 */
+	private void handleManifestMessage(INFOBJMANIFEST infobjmanifest) {
+		INFOBJMANIFEST.Manifest manifest = (infobjmanifest != null) ? infobjmanifest.getManifest() : null;
+		if (manifest == null) {
+			log.warn("INFOBJ_MANIFEST received but <manifest> element is missing");
+			return;
+		}
+
+		log.info("Received WMMANIFEST: flight={} date={} reg={} ad={} type={} messageLen={}",
+				manifest.getFLIGHTNUMBER(), manifest.getFLIGHTDATE(), manifest.getREGISTRATION(),
+				manifest.getADINDICATOR(), manifest.getTYPE(),
+				(manifest.getMESSAGE() != null) ? manifest.getMESSAGE().length() : 0);
+
+		// TODO: map `manifest` (โดยเฉพาะ manifest.getMESSAGE() ที่เป็น text ทั้งใบ) เข้า
+		//       object หลังบ้านของเรา แล้ว persist/ส่งต่อ ตาม spec ที่จะกำหนดภายหลัง
+	}
+
+	/**
+	 * รับข้อความ APSBLK (equipment/belt usage) จาก UFIS_EQUIPMENT_IN ที่ถูก unmarshal มากับ
+	 * MSG แล้ว (element INFOBJ_EQUIPMENT — มีอยู่ใน schema เดิม). ขั้นนี้ทำแค่ "รับค่า" — log
+	 * ค่าใน PLB/USAGE (BGRP/STATUS/DATETIME). การ map เข้า object หลังบ้าน (ยังไม่มีตัวรองรับ)
+	 * และการ persist/forward ค่อยต่อยอดที่จุด TODO ด้านล่าง.
+	 */
+	private void handleEquipmentMessage(INFOBJEQUIPMENT infobjequipment) {
+		INFOBJEQUIPMENT.PLB plb = (infobjequipment != null) ? infobjequipment.getPLB() : null;
+		INFOBJEQUIPMENT.PLB.USAGE usage = (plb != null) ? plb.getUSAGE() : null;
+		if (usage == null) {
+			log.warn("INFOBJ_EQUIPMENT received but PLB/USAGE element is missing");
+			return;
+		}
+
+		log.info("Received APSBLK equipment: bgrp={} status={} datetime={}",
+				usage.getBGRP(), usage.getSTATUS(), usage.getDATETIME());
+
+		// TODO: map `usage` (PLB/USAGE: BGRP/STATUS/DATETIME) เข้า object หลังบ้านของเรา
+		//       แล้ว persist/ส่งต่อ ตาม spec ที่จะกำหนดภายหลัง
 	}
 
 	private Body setBulkData(Body body, String message) {

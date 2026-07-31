@@ -162,15 +162,22 @@ public class ESBResponseService {
 				// ACK/NACK กลับมา
 				String contentBody = getContentBody(writer.toString());
 				String xmlEsb = convertResponseMessagetoEsb(timestamp, envelope, contentBody);
-				log.info("Call Web service response ACK/NACK...");
-				//log.info(xmlEsb);
-				MDC.put("sendEsbKey", hopo + "/outbound-ACK_NACK");
-				try {
-					sendEsbLog.info(xmlEsb);
-				} finally {
-					MDC.remove("sendEsbKey");
+				// ACK (หรือ marshal ล้มเหลว) จะได้ xmlEsb == null → ไม่ต้องส่ง webservice
+				// (ถ้าไม่เช็คจะเรียก callWebserviceResponse(null) แล้วโยน NPE ตอน addTextNode(null)
+				//  ทำให้ได้ ERROR log ทุกครั้งที่มี ACK และ SOAPConnection ไม่ถูกปิด)
+				if (xmlEsb != null) {
+					log.info("Call Web service response NACK...");
+					//log.info(xmlEsb);
+					MDC.put("sendEsbKey", hopo + "/outbound-ACK_NACK");
+					try {
+						sendEsbLog.info(xmlEsb);
+					} finally {
+						MDC.remove("sendEsbKey");
+					}
+					callWebserviceResponse(xmlEsb);
+				} else {
+					log.info("ACK message ignored (no ESB response to send).");
 				}
-				callWebserviceResponse(xmlEsb);
 			}
 		} catch (JAXBException e) {
 			log.error("convertXMLtoObject: ", e);
@@ -210,8 +217,8 @@ public class ESBResponseService {
 				nackdetail.setFaultdetail(factory.createMSGNACKDETAILFaultdetail(fault.getDetail()));
 				msgReturn.setNACKDETAIL(factory.createMSGNACKDETAIL(nackdetail));
 			} else {
-				// ใช้สำหรับปิดการรับข้อมูลที่เป็น ACK ช่วงทดสอบจะเปิดให้ส่งก่อน
-				/* return null; */
+				// ใช้สำหรับปิดการรับข้อมูลที่เป็น ACK
+				return null;
 			}
 
 			JAXBContext context = ESB_MSG_CTX;
@@ -234,7 +241,7 @@ public class ESBResponseService {
 		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
 		MSG.MSGSTREAMOUT.INFOBJGENERIC infobjgeneric = new INFOBJGENERIC();
 		infobjgeneric.setMESSAGETYPE("UFISFLTUD");
-		infobjgeneric.setMESSAGEORIGIN("UFIS");
+		infobjgeneric.setMESSAGEORIGIN("AOS");
 		infobjgeneric.setTIMEID(TIMEID.UTC);
 		infobjgeneric.setTIMESTAMP(updateTime);
 		infobjgeneric.setACTIONTYPE(fidsAfttab.getAction().equalsIgnoreCase("insert") ? ACTIONTYPE.I : ACTIONTYPE.U);
@@ -297,11 +304,12 @@ public class ESBResponseService {
 	 */
 	private void sendFlightUpdate(String hopo, String action, String xmlEsb) {
 		if (webSphereEnabled) {
-			String queueName = "insert".equalsIgnoreCase(action) ? "UFIS_INSERT_FLIGHT_OUT" : "UFIS_FLIGHT_OUT";
+			//String queueName = "insert".equalsIgnoreCase(action) ? "UFIS_INSERT_FLIGHT_OUT" : "UFIS_FLIGHT_OUT";
+			String queueName = "UFIS_FLIGHT_OUT_" + hopo.toUpperCase();
 			if (hopo.equalsIgnoreCase("BKK")) {
 				webSphereProducer.sendToMachine1(queueName, hopo, xmlEsb);
 			} else {
-				queueName = queueName + "_" + hopo.toUpperCase();
+				//queueName = queueName + "_" + hopo.toUpperCase();
 				webSphereProducer.sendToMachine2(queueName, hopo, xmlEsb);
 			}
 		} else {

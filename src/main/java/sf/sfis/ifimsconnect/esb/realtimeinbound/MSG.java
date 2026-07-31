@@ -2491,7 +2491,8 @@ public class MSG {
             "bulkdata",
             "infobjmuinfo",
             "infobjmanifest",
-            "infobjequipment"
+            "infobjequipment",
+            "infobjfigure"
         })
         public static class MSGOBJECTS {
 
@@ -2523,6 +2524,10 @@ public class MSG {
             protected JAXBElement<MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJMANIFEST> infobjmanifest;
             @XmlElementRef(name = "INFOBJ_EQUIPMENT", type = JAXBElement.class, required = false)
             protected JAXBElement<MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJEQUIPMENT> infobjequipment;
+            // INFOBJ_FIGURE (WMFIGURE load figures) — เพิ่มด้วยมือ อ้างอิง type ที่เขียนไว้ใน
+            // sf.sfis.ifimsconnect.esb.figurein.FigureMessageIn เพื่อไม่ให้ field figure ซ้ำซ้อน
+            @XmlElement(name = "INFOBJ_FIGURE")
+            protected sf.sfis.ifimsconnect.esb.figurein.FigureMessageIn.InfobjFigure infobjfigure;
 
             /**
              * Gets the value of the infobjflight property.
@@ -2858,6 +2863,28 @@ public class MSG {
              */
             public void setINFOBJEQUIPMENT(JAXBElement<MSG.MSGSTREAMIN.MSGOBJECTS.INFOBJEQUIPMENT> value) {
                 this.infobjequipment = value;
+            }
+
+            /**
+             * Gets the value of the infobjfigure property.
+             *
+             * @return
+             *     possible object is
+             *     {@link sf.sfis.ifimsconnect.esb.figurein.FigureMessageIn.InfobjFigure }
+             */
+            public sf.sfis.ifimsconnect.esb.figurein.FigureMessageIn.InfobjFigure getINFOBJFIGURE() {
+                return infobjfigure;
+            }
+
+            /**
+             * Sets the value of the infobjfigure property.
+             *
+             * @param value
+             *     allowed object is
+             *     {@link sf.sfis.ifimsconnect.esb.figurein.FigureMessageIn.InfobjFigure }
+             */
+            public void setINFOBJFIGURE(sf.sfis.ifimsconnect.esb.figurein.FigureMessageIn.InfobjFigure value) {
+                this.infobjfigure = value;
             }
 
 

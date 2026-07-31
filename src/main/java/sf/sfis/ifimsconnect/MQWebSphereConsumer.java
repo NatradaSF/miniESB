@@ -87,14 +87,14 @@ public class MQWebSphereConsumer {
     }
 
     // --- Queue ของ BKK ---
-    @JmsListener(destination = "UFIS_TRIGGER_IN", containerFactory = "mq1ContainerFactory")
+    @JmsListener(destination = "UFIS_TRIGGER_IN_BKK", containerFactory = "mq1ContainerFactory")
     public void listenBkkTrigger(Message message) {
-        processMessage(message, "UFIS_TRIGGER_IN", "BKK");
+        processMessage(message, "UFIS_TRIGGER_IN_BKK", "BKK");
     }
 
-    @JmsListener(destination = "UFIS_ATC_IN", containerFactory = "mq1ContainerFactory")
+    @JmsListener(destination = "UFIS_ATC_IN_BKK", containerFactory = "mq1ContainerFactory")
     public void listenBkkAtc(Message message) {
-        processMessage(message, "UFIS_ATC_IN", "BKK");
+        processMessage(message, "UFIS_ATC_IN_BKK", "BKK");
     }
 
     @JmsListener(destination = "UFIS_FIGURE_IN", containerFactory = "mq1ContainerFactory")
