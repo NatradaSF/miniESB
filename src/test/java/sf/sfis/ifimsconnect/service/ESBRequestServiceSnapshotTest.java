@@ -101,6 +101,22 @@ class ESBRequestServiceSnapshotTest {
 		verifySnapshot("bhs-arrival", runProcessXml(BHS_SAMPLE.replace("<ADID>D</ADID>", "<ADID>A</ADID>")));
 	}
 
+	/**
+	 * Tripwire: ปัจจุบัน setMessageId ใน processXmlMessage ถูก comment ไว้ → output ต้อง "ไม่มี"
+	 * &lt;aodb:message-id&gt; (golden snapshot ทั้งหมดจึงไม่มี field นี้ด้วย).
+	 *
+	 * <p>ถ้าอนาคต "เปิดใช้ message-id" (uncomment control.setMessageId ใน
+	 * {@link ESBRequestService#processXmlMessage}) เทสนี้จะ fail โดยตั้งใจ เพื่อบังคับให้:
+	 * (1) เปลี่ยนเทสนี้เป็นยืนยันค่า message-id ที่คาดหวัง และ
+	 * (2) regenerate golden snapshot ทั้ง 4 ไฟล์ (ลบไฟล์แล้วรันเทสใหม่).
+	 */
+	@Test
+	@DisplayName("message-id absent by default (tripwire for when setMessageId is re-enabled)")
+	void messageIdAbsentByDefault() {
+		String out = runProcessXml(BHS_SAMPLE);
+		assertThat(out).doesNotContain("<aodb:message-id>");
+	}
+
 	/** Runs processXmlMessage with a raw XML string, returns the XML sent to Artemis. */
 	private String runProcessXml(String inputXml) {
 		MQArtemisProducer producer = mock(MQArtemisProducer.class);

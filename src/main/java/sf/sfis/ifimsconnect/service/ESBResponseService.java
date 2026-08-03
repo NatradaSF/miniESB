@@ -35,11 +35,19 @@ import sf.sfis.ifimsconnect.esb.MSG.NACKDETAIL;
 import sf.sfis.ifimsconnect.esb.ObjectFactory;
 import sf.sfis.ifimsconnect.esb.realtimeoutbound.ACTIONTYPE;
 import sf.sfis.ifimsconnect.esb.realtimeoutbound.ADID;
+import sf.sfis.ifimsconnect.esb.realtimeoutbound.CTYP;
 import sf.sfis.ifimsconnect.esb.realtimeoutbound.FLTI;
 import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG;
 import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT;
+import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.BULKDATA;
+import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.CONCAT;
+import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJACPOSITION;
+import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJBELT;
+import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJCOUNTER;
 import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJFLIGHT;
+import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJGATE;
 import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJGENERIC;
+import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJVDGS;
 import sf.sfis.ifimsconnect.esb.realtimeoutbound.TIMEID;
 import sf.sfis.ifimsconnect.model.FidsAfttab;
 import sf.sfis.ifimsconnect.utility.DateTimeFormatHelper;
@@ -140,7 +148,7 @@ public class ESBResponseService {
 					if (xmlEsb != null) {
 						log.info("Update arrival flight to ESB...");
 						// log.info(xmlEsb);
-						sendFlightUpdate(hopo, fidsAfttab.getAction(), xmlEsb);
+						sendToOutboundQueue("UFIS_FLIGHT_OUT", hopo, xmlEsb);
 					} else {
 						log.info("No data found for ESB update.");
 					}
@@ -151,7 +159,7 @@ public class ESBResponseService {
 					if (xmlEsb != null) {
 						log.info("Update departure flight to ESB...");
 						// log.info(xmlEsb);
-						sendFlightUpdate(hopo, fidsAfttab.getAction(), xmlEsb);
+						sendToOutboundQueue("UFIS_FLIGHT_OUT", hopo, xmlEsb);
 					} else {
 						log.info("No data found for ESB update.");
 					}
@@ -240,21 +248,8 @@ public class ESBResponseService {
 		StringWriter writer = new StringWriter();
 		MSG esbAfttab = new MSG();
 		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
-		MSG.MSGSTREAMOUT.INFOBJGENERIC infobjgeneric = new INFOBJGENERIC();
-		infobjgeneric.setMESSAGETYPE("UFISFLTUD");
-		infobjgeneric.setMESSAGEORIGIN("AOS");
-		infobjgeneric.setTIMEID(TIMEID.UTC);
-		infobjgeneric.setTIMESTAMP(updateTime);
-		infobjgeneric.setACTIONTYPE(fidsAfttab.getAction().equalsIgnoreCase("insert") ? ACTIONTYPE.I : ACTIONTYPE.U);
-		infobjgeneric.setHOPO(fidsAfttab.getHopo());
-		infobjgeneric.setURNO(fidsAfttab.getUrno() != null ? fidsAfttab.getUrno().toString() : null);
-		infobjgeneric.setADID(ADID.valueOf(fidsAfttab.getAdid()));
-		infobjgeneric.setHOPO(fidsAfttab.getHopo());
-		infobjgeneric.setSTDT(infobjgeneric.getADID() == ADID.A ? fidsAfttab.getStoa() : fidsAfttab.getStod());
-		infobjgeneric.setFLNO(fidsAfttab.getFlno().trim());
-		infobjgeneric.setCSGN(fidsAfttab.getCsgn());
-		infobjgeneric.setRKEY(fidsAfttab.getRkey() != null ? fidsAfttab.getRkey().toString() : null);
-		infobjgeneric.setRTYP(fidsAfttab.getRtyp());
+		// INFOBJ_GENERIC — ใช้ helper ร่วมกับ counter/gate (แก้ logic ที่เดียว)
+		MSG.MSGSTREAMOUT.INFOBJGENERIC infobjgeneric = buildOutboundGeneric("UFISFLTUD", updateTime, fidsAfttab);
 
 		MSG.MSGSTREAMOUT.INFOBJFLIGHT infobjflight = new INFOBJFLIGHT();
 		// Set<String> copyFields = new HashSet<>(Arrays.asList("fpla" ,"fpld", "eldt",
@@ -298,21 +293,420 @@ public class ESBResponseService {
 		}
 		return null;
 	}
+	
 
 	/**
-	 * ส่ง flight UPDATE ออกไป ESB — เลือกช่องทางเดียวตาม flag webSphereEnabled:
-	 * true = WebSphere MQ (IBM MQ อย่างเดียว), false = webservice (callWebserviceUpdate).
-	 * กรณี MQ: การเก็บ log payload ลง logs/outbound/&lt;hopo&gt;/outbound-&lt;queue&gt;.log ทำใน
-	 * {@link MQWebSphereProducer#sendToMachine1}/{@code sendToMachine2} ก่อนส่งเข้าคิวอยู่แล้ว.
+	 * ปั้น XML สำหรับคิว UFIS_COUNTER_OUT (UFISCHKUD — check-in counter update).
+	 * ส่วน INFOBJ_GENERIC ตั้งค่าจาก {@link FidsAfttab} แบบเดียวกับ {@link #convertFidsAfftabtoEsb}
+	 * (dynamic ตามเที่ยวบิน) — ต่างกันแค่ MESSAGETYPE/MESSAGEORIGIN ที่เป็น identity ของ counter.
+	 * ส่วน INFOBJ_COUNTER ยังไม่มี source ใน FidsAfttab จึงตั้งเป็นค่าว่าง "" ไปก่อน (รอ backend map).
+	 * หมายเหตุ: CTYP เป็น enum ตั้งค่าว่างไม่ได้ จึงปล่อย null (tag จะไม่ถูก marshal ออกมา).
 	 */
-	private void sendFlightUpdate(String hopo, String action, String xmlEsb) {
+	public String convertCountertoEsb(String updateTime, FidsAfttab fidsAfttab) {
+		StringWriter writer = new StringWriter();
+		MSG esb = new MSG();
+		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
+
+		// INFOBJ_GENERIC — dynamic จาก FidsAfttab (identity counter = UFISCHKUD)
+		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISCHKUD", updateTime, fidsAfttab);
+
+		// --- INFOBJ_COUNTER: ยังไม่มี source ใน FidsAfttab → ค่าว่าง "" (รอ backend map) ---
+		// CTYP เป็น enum ตั้งค่าว่างไม่ได้ → ใส่ placeholder CTYP.D ไปก่อน (รอ backend map)
+		MSG.MSGSTREAMOUT.INFOBJCOUNTER counter = new INFOBJCOUNTER();
+		counter.setCKIC("");
+		counter.setCTYP(CTYP.D);
+		counter.setCKIT("");
+		counter.setCKBS("");
+		counter.setCKES("");
+		counter.setDISP("");
+		counter.setFLNU("");
+		counter.setURNO("");
+
+		msgstreamout.setINFOBJGENERIC(generic);
+		msgstreamout.setINFOBJCOUNTER(counter);
+		esb.setMSGSTREAMOUT(msgstreamout);
+		try {
+			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(esb, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			log.error("convertCountertoEsb: ", e);
+		}
+		return null;
+	}
+
+	/**
+	 * ส่ง counter เข้าคิว UFIS_COUNTER_OUT_&lt;hopo&gt; โดย INFOBJ_GENERIC ดึงจาก FidsAfttab
+	 * (INFOBJ_COUNTER ยังว่างรอ backend map). เรียกจากภายนอกได้ (controller/test) —
+	 * ยังไม่ได้ผูกเข้า flow convertXMLtoObject อัตโนมัติ.
+	 */
+	public void sendEmptyCounter(String updateTime, FidsAfttab fidsAfttab) {
+		String xmlEsb = convertCountertoEsb(updateTime, fidsAfttab);
+		if (xmlEsb != null) {
+			sendToOutboundQueue("UFIS_COUNTER_OUT", fidsAfttab.getHopo(), xmlEsb);
+		}
+	}
+
+	/**
+	 * ปั้น XML สำหรับคิว UFIS_GATE_OUT (UFISGTDUD — gate update).
+	 * INFOBJ_GENERIC ดึงจาก FidsAfttab (ดู {@link #buildOutboundGeneric}).
+	 * INFOBJ_GATE เลือก GATEARR/GATEDEP ตาม ADID — field ค่าว่าง "" ไปก่อน (รอ backend map).
+	 */
+	public String convertGatetoEsb(String updateTime, FidsAfttab fidsAfttab) {
+		StringWriter writer = new StringWriter();
+		MSG esb = new MSG();
+		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
+
+		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISGTDUD", updateTime, fidsAfttab);
+
+		// --- INFOBJ_GATE: เลือก arr/dep ตาม ADID, field ค่าว่าง "" (รอ backend map) ---
+		MSG.MSGSTREAMOUT.INFOBJGATE gate = new INFOBJGATE();
+		if (generic.getADID() == ADID.A) {
+			INFOBJGATE.GATEARR arr = new INFOBJGATE.GATEARR();
+			arr.setGTA1("");
+			arr.setGA1B("");
+			arr.setGA1E("");
+			gate.setGATEARR(arr);
+		} else {
+			INFOBJGATE.GATEDEP dep = new INFOBJGATE.GATEDEP();
+			dep.setGTD1("");
+			dep.setGD1B("");
+			dep.setGD1E("");
+			gate.setGATEDEP(dep);
+		}
+
+		msgstreamout.setINFOBJGENERIC(generic);
+		msgstreamout.setINFOBJGATE(gate);
+		esb.setMSGSTREAMOUT(msgstreamout);
+		try {
+			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(esb, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			log.error("convertGatetoEsb: ", e);
+		}
+		return null;
+	}
+
+	/**
+	 * ส่ง gate เข้าคิว UFIS_GATE_OUT_&lt;hopo&gt; (INFOBJ_GATE ยังว่างรอ backend map).
+	 * เรียกจากภายนอกได้ — ยังไม่ได้ผูกเข้า flow convertXMLtoObject อัตโนมัติ.
+	 */
+	public void sendEmptyGate(String updateTime, FidsAfttab fidsAfttab) {
+		String xmlEsb = convertGatetoEsb(updateTime, fidsAfttab);
+		if (xmlEsb != null) {
+			sendToOutboundQueue("UFIS_GATE_OUT", fidsAfttab.getHopo(), xmlEsb);
+		}
+	}
+
+	/**
+	 * ปั้น XML สำหรับคิว UFIS_BELT_OUT (UFISBLTUD — baggage belt update).
+	 * INFOBJ_GENERIC ดึงจาก FidsAfttab (ดู {@link #buildOutboundGeneric}).
+	 * INFOBJ_BELT ยังไม่มี source ใน FidsAfttab → field ค่าว่าง "" ไปก่อน (รอ backend map).
+	 */
+	public String convertBelttoEsb(String updateTime, FidsAfttab fidsAfttab) {
+		StringWriter writer = new StringWriter();
+		MSG esb = new MSG();
+		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
+
+		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISBLTUD", updateTime, fidsAfttab);
+
+		// --- INFOBJ_BELT: ยังไม่มี source ใน FidsAfttab → ค่าว่าง "" (รอ backend map) ---
+		MSG.MSGSTREAMOUT.INFOBJBELT belt = new INFOBJBELT();
+		belt.setBLT1("");
+		belt.setB1BS("");
+		belt.setB1ES("");
+
+		msgstreamout.setINFOBJGENERIC(generic);
+		msgstreamout.setINFOBJBELT(belt);
+		esb.setMSGSTREAMOUT(msgstreamout);
+		try {
+			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(esb, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			log.error("convertBelttoEsb: ", e);
+		}
+		return null;
+	}
+
+	/**
+	 * ส่ง belt เข้าคิว UFIS_BELT_OUT_&lt;hopo&gt; (INFOBJ_BELT ยังว่างรอ backend map).
+	 * เรียกจากภายนอกได้ — ยังไม่ได้ผูกเข้า flow convertXMLtoObject อัตโนมัติ.
+	 */
+	public void sendEmptyBelt(String updateTime, FidsAfttab fidsAfttab) {
+		String xmlEsb = convertBelttoEsb(updateTime, fidsAfttab);
+		if (xmlEsb != null) {
+			sendToOutboundQueue("UFIS_BELT_OUT", fidsAfttab.getHopo(), xmlEsb);
+		}
+	}
+
+	/**
+	 * ปั้น XML สำหรับคิว UFIS_ACPOSITION_OUT (UFISPOSUD — aircraft position/stand update).
+	 * INFOBJ_GENERIC ดึงจาก FidsAfttab (ดู {@link #buildOutboundGeneric}).
+	 * INFOBJ_ACPOSITION เลือก ACPOSITIONARR/ACPOSITIONDEP ตาม ADID — field ค่าว่าง "" ไปก่อน (รอ backend map).
+	 */
+	public String convertAcpositiontoEsb(String updateTime, FidsAfttab fidsAfttab) {
+		StringWriter writer = new StringWriter();
+		MSG esb = new MSG();
+		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
+
+		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISPOSUD", updateTime, fidsAfttab);
+
+		// --- INFOBJ_ACPOSITION: เลือก arr/dep ตาม ADID, field ค่าว่าง "" (รอ backend map) ---
+		MSG.MSGSTREAMOUT.INFOBJACPOSITION pos = new INFOBJACPOSITION();
+		if (generic.getADID() == ADID.A) {
+			INFOBJACPOSITION.ACPOSITIONARR arr = new INFOBJACPOSITION.ACPOSITIONARR();
+			arr.setPSTA("");
+			arr.setPABS("");
+			arr.setPAES("");
+			pos.setACPOSITIONARR(arr);
+		} else {
+			INFOBJACPOSITION.ACPOSITIONDEP dep = new INFOBJACPOSITION.ACPOSITIONDEP();
+			dep.setPSTD("");
+			dep.setPDBS("");
+			dep.setPDES("");
+			pos.setACPOSITIONDEP(dep);
+		}
+
+		msgstreamout.setINFOBJGENERIC(generic);
+		msgstreamout.setINFOBJACPOSITION(pos);
+		esb.setMSGSTREAMOUT(msgstreamout);
+		try {
+			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(esb, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			log.error("convertAcpositiontoEsb: ", e);
+		}
+		return null;
+	}
+
+	/**
+	 * ส่ง acposition เข้าคิว UFIS_ACPOSITION_OUT_&lt;hopo&gt; (INFOBJ_ACPOSITION ยังว่างรอ backend map).
+	 * เรียกจากภายนอกได้ — ยังไม่ได้ผูกเข้า flow convertXMLtoObject อัตโนมัติ.
+	 */
+	public void sendEmptyAcposition(String updateTime, FidsAfttab fidsAfttab) {
+		String xmlEsb = convertAcpositiontoEsb(updateTime, fidsAfttab);
+		if (xmlEsb != null) {
+			sendToOutboundQueue("UFIS_ACPOSITION_OUT", fidsAfttab.getHopo(), xmlEsb);
+		}
+	}
+
+	/**
+	 * ปั้น XML สำหรับคิว UFIS_OTHERS_OUT — towing (UFISTOWUD). ต่างจากคิวอื่นตรงที่ payload
+	 * อยู่ใต้ {@code CONCAT > TOWINGS} (ไม่ใช่ INFOBJ_XXX). INFOBJ_GENERIC ดึงจาก FidsAfttab
+	 * (ดู {@link #buildOutboundGeneric}); TOWINGS (TOID/TWTP/SCHE) ค่าว่าง "" ไปก่อน (รอ backend map).
+	 */
+	public String convertTowingtoEsb(String updateTime, FidsAfttab fidsAfttab) {
+		StringWriter writer = new StringWriter();
+		MSG esb = new MSG();
+		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
+
+		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISTOWUD", updateTime, fidsAfttab);
+
+		// --- CONCAT/TOWINGS: ยังไม่มี source ใน FidsAfttab → ค่าว่าง "" (รอ backend map) ---
+		MSG.MSGSTREAMOUT.CONCAT concat = new CONCAT();
+		CONCAT.TOWINGS towings = new CONCAT.TOWINGS();
+		towings.setTOID("");
+		towings.setTWTP("");
+		towings.setSCHE("");
+		concat.setTOWINGS(towings);
+
+		msgstreamout.setINFOBJGENERIC(generic);
+		msgstreamout.setCONCAT(concat);
+		esb.setMSGSTREAMOUT(msgstreamout);
+		try {
+			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(esb, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			log.error("convertTowingtoEsb: ", e);
+		}
+		return null;
+	}
+
+	/**
+	 * ส่ง towing เข้าคิว UFIS_OTHERS_OUT_&lt;hopo&gt; (CONCAT/TOWINGS ยังว่างรอ backend map).
+	 * เรียกจากภายนอกได้ — ยังไม่ได้ผูกเข้า flow convertXMLtoObject อัตโนมัติ.
+	 */
+	public void sendEmptyTowing(String updateTime, FidsAfttab fidsAfttab) {
+		String xmlEsb = convertTowingtoEsb(updateTime, fidsAfttab);
+		if (xmlEsb != null) {
+			sendToOutboundQueue("UFIS_OTHERS_OUT", fidsAfttab.getHopo(), xmlEsb);
+		}
+	}
+
+	/**
+	 * ปั้น XML สำหรับคิว UFIS_OTHERS_OUT — SITA bulk file (UFISSITA). ต่างจากคิวอื่นตรงที่ SITA
+	 * เป็นไฟล์ ไม่ผูกเที่ยวบิน → INFOBJ_GENERIC มีแค่ header ขั้นต่ำ (ไม่ใช้ {@link #buildOutboundGeneric})
+	 * และ payload เป็น {@code BULKDATA > SITA} (FILE_NAME + CONTENT ที่ส่งค่าจริงเข้ามา).
+	 * หมายเหตุ: ACTIONTYPE = I (SITA เป็นไฟล์ใหม่) ตาม sample.
+	 */
+	public String convertSitatoEsb(String updateTime, String hopo, String fileName, String content) {
+		StringWriter writer = new StringWriter();
+		MSG esb = new MSG();
+		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
+
+		// INFOBJ_GENERIC — header ขั้นต่ำ (SITA ไม่ผูกเที่ยวบิน จึงไม่มี URNO/ADID/FLNO/...)
+		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = new INFOBJGENERIC();
+		generic.setMESSAGETYPE("UFISSITA");
+		generic.setMESSAGEORIGIN("AOS");
+		generic.setTIMEID(TIMEID.UTC);
+		generic.setTIMESTAMP(updateTime);
+		generic.setACTIONTYPE(ACTIONTYPE.I);
+		generic.setHOPO(hopo);
+
+		// BULKDATA/SITA — payload จริง (ไฟล์)
+		MSG.MSGSTREAMOUT.BULKDATA bulkdata = new BULKDATA();
+		BULKDATA.SITA sita = new BULKDATA.SITA();
+		sita.setFILENAME(fileName);
+		sita.setCONTENT(content);
+		bulkdata.setSITA(sita);
+
+		msgstreamout.setINFOBJGENERIC(generic);
+		msgstreamout.setBULKDATA(bulkdata);
+		esb.setMSGSTREAMOUT(msgstreamout);
+		try {
+			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(esb, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			log.error("convertSitatoEsb: ", e);
+		}
+		return null;
+	}
+
+	/**
+	 * ส่ง SITA bulk file เข้าคิว UFIS_OTHERS_OUT_&lt;hopo&gt; (ใช้คิวร่วมกับ towing).
+	 */
+	public void sendSita(String updateTime, String hopo, String fileName, String content) {
+		String xmlEsb = convertSitatoEsb(updateTime, hopo, fileName, content);
+		if (xmlEsb != null) {
+			sendToOutboundQueue("UFIS_OTHERS_OUT", hopo, xmlEsb);
+		}
+	}
+
+	/**
+	 * ปั้น XML สำหรับคิว UFIS_TRIGGER_OUT — VDGS (UFISVDGUD).
+	 * INFOBJ_GENERIC ดึงจาก FidsAfttab (ดู {@link #buildOutboundGeneric}) — ACTIONTYPE เป็น
+	 * U/I ปกติเหมือนคิวอื่น. INFOBJ_VDGS เลือก VDGSARR/VDGSDEP ตาม ADID — field ค่าว่าง "" ไปก่อน (รอ backend map).
+	 */
+	public String convertVdgstoEsb(String updateTime, FidsAfttab fidsAfttab) {
+		StringWriter writer = new StringWriter();
+		MSG esb = new MSG();
+		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
+
+		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISVDGUD", updateTime, fidsAfttab);
+
+		// --- INFOBJ_VDGS: เลือก arr/dep ตาม ADID, field ค่าว่าง "" (รอ backend map) ---
+		MSG.MSGSTREAMOUT.INFOBJVDGS vdgs = new INFOBJVDGS();
+		if (generic.getADID() == ADID.A) {
+			INFOBJVDGS.VDGSARR arr = new INFOBJVDGS.VDGSARR();
+			arr.setPSTA("");
+			arr.setACT5("");
+			arr.setFTYP("");
+			vdgs.setVDGSARR(arr);
+		} else {
+			INFOBJVDGS.VDGSDEP dep = new INFOBJVDGS.VDGSDEP();
+			dep.setPSTD("");
+			dep.setACT5("");
+			dep.setFTYP("");
+			dep.setTIFD("");
+			vdgs.setVDGSDEP(dep);
+		}
+
+		msgstreamout.setINFOBJGENERIC(generic);
+		msgstreamout.setINFOBJVDGS(vdgs);
+		esb.setMSGSTREAMOUT(msgstreamout);
+		try {
+			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(esb, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			log.error("convertVdgstoEsb: ", e);
+		}
+		return null;
+	}
+
+	/**
+	 * ส่ง VDGS เข้าคิว UFIS_TRIGGER_OUT_&lt;hopo&gt; (INFOBJ_VDGS ยังว่างรอ backend map).
+	 * เรียกจากภายนอกได้ — ยังไม่ได้ผูกเข้า flow convertXMLtoObject อัตโนมัติ.
+	 */
+	public void sendEmptyVdgs(String updateTime, FidsAfttab fidsAfttab) {
+		String xmlEsb = convertVdgstoEsb(updateTime, fidsAfttab);
+		if (xmlEsb != null) {
+			sendToOutboundQueue("UFIS_TRIGGER_OUT", fidsAfttab.getHopo(), xmlEsb);
+		}
+	}
+
+	/**
+	 * ส่งต่อ File Ready เข้าคิว UFIS_TRIGGER_OUT_&lt;hopo&gt; แบบ passthrough — รับ XML ที่ปั้นมา
+	 * เรียบร้อยแล้วจากต้นทาง แล้วลงคิวต่อเลย ไม่ parse/ไม่ build/ไม่เก็บ backend (iFIMSConnect เป็น
+	 * แค่ตัวกลางรับ-ส่งต่อ). ใช้คิวร่วมกับ VDGS.
+	 *
+	 * @param hopo   สำหรับ routing/ชื่อคิวเท่านั้น (payload ไม่มี hopo)
+	 * @param xmlEsb XML File Ready ที่พร้อมส่ง (ปั้นมาจากต้นทางแล้ว)
+	 */
+	public void sendFileReady(String hopo, String xmlEsb) {
+		if (xmlEsb != null) {
+			sendToOutboundQueue("UFIS_TRIGGER_OUT", hopo, xmlEsb);
+		}
+	}
+
+	/**
+	 * สร้าง INFOBJ_GENERIC (ส่วนหัว) สำหรับ outbound message ทุกคิว โดยดึงค่าจาก {@link FidsAfttab}
+	 * แบบเดียวกับ {@link #convertFidsAfftabtoEsb} — ต่างกันแค่ MESSAGETYPE ที่เป็น identity ของ
+	 * แต่ละ message. MESSAGEORIGIN ใช้ "AOS" เหมือนกันทุกคิว.
+	 */
+	private MSG.MSGSTREAMOUT.INFOBJGENERIC buildOutboundGeneric(String messageType, String updateTime,
+			FidsAfttab fidsAfttab) {
+		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = new INFOBJGENERIC();
+		generic.setMESSAGETYPE(messageType);
+		generic.setMESSAGEORIGIN("AOS");
+		generic.setTIMEID(TIMEID.UTC);
+		generic.setTIMESTAMP(updateTime);
+		generic.setACTIONTYPE(fidsAfttab.getAction().equalsIgnoreCase("insert") ? ACTIONTYPE.I : ACTIONTYPE.U);
+		generic.setHOPO(fidsAfttab.getHopo());
+		generic.setURNO(fidsAfttab.getUrno() != null ? fidsAfttab.getUrno().toString() : null);
+		generic.setADID(ADID.valueOf(fidsAfttab.getAdid()));
+		generic.setSTDT(generic.getADID() == ADID.A ? fidsAfttab.getStoa() : fidsAfttab.getStod());
+		generic.setFLNO(fidsAfttab.getFlno() != null ? fidsAfttab.getFlno().trim() : null);
+		generic.setCSGN(fidsAfttab.getCsgn());
+		generic.setRKEY(fidsAfttab.getRkey() != null ? fidsAfttab.getRkey().toString() : null);
+		generic.setRTYP(fidsAfttab.getRtyp());
+		return generic;
+	}
+
+	/**
+	 * ส่ง XML ออก ESB สำหรับคิว outbound ใดๆ (flight/counter/gate/...) — เลือกช่องทางเดียวตาม
+	 * flag webSphereEnabled:
+	 * <ul>
+	 *   <li>true  = WebSphere MQ, route ตาม hopo (BKK→machine1, อื่น→machine2);
+	 *       producer เก็บ log payload ลง outbound-&lt;queue&gt;.log ให้เอง</li>
+	 *   <li>false = webservice ({@link #callWebserviceUpdate}) + เก็บ log payload ลง outbound-WS</li>
+	 * </ul>
+	 *
+	 * <p>⚠️ caveat: callWebserviceUpdate ยิงไป endpoint ของ flight (AODB_FlightOutbound) —
+	 * ถ้า webSphereEnabled=false ตอนส่ง counter/gate จะไป endpoint นี้ด้วย (ไม่ตรงชนิด message).
+	 * ใน prod ที่ใช้ MQ (flag=true) ไม่มีปัญหา; ถ้าจะใช้ WS จริงกับคิวอื่นต้องเพิ่ม endpoint แยก.
+	 *
+	 * @param queueBase ชื่อคิวฐาน (ไม่ต้องมี suffix hopo) เช่น "UFIS_GATE_OUT" — method จะต่อ
+	 *                  "_&lt;HOPO&gt;" ให้เอง เป็น "UFIS_GATE_OUT_BKK"
+	 */
+	private void sendToOutboundQueue(String queueBase, String hopo, String xmlEsb) {
+		String queueName = queueBase + "_" + hopo;
 		if (webSphereEnabled) {
-			//String queueName = "insert".equalsIgnoreCase(action) ? "UFIS_INSERT_FLIGHT_OUT" : "UFIS_FLIGHT_OUT";
-			String queueName = "UFIS_FLIGHT_OUT_" + hopo.toUpperCase();
 			if (hopo.equalsIgnoreCase("BKK")) {
 				webSphereProducer.sendToMachine1(queueName, hopo, xmlEsb);
 			} else {
-				//queueName = queueName + "_" + hopo.toUpperCase();
 				webSphereProducer.sendToMachine2(queueName, hopo, xmlEsb);
 			}
 		} else {

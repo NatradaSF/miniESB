@@ -2,14 +2,13 @@
 <soap-env:Envelope xmlns:aodb="urn:com.tsystems.ac.aodb" xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
     <soap-env:Header>
         <aodb:control>
-            <aodb:message-id>localhost:2d970033:195f1193a55:-12d5</aodb:message-id>
             <aodb:message-version>1.4</aodb:message-version>
             <aodb:message-type>UPDATE</aodb:message-type>
             <aodb:confirm-type>ALL</aodb:confirm-type>
             <aodb:originator>BHS</aodb:originator>
             <aodb:timestamp>2026-05-12T07:30:22.000</aodb:timestamp>
-            <aodb:sender>BHS</aodb:sender>
-            <aodb:receiver>aodb</aodb:receiver>
+            <aodb:sender>IFIMS</aodb:sender>
+            <aodb:receiver>AOS</aodb:receiver>
             <aodb:station>BKK</aodb:station>
         </aodb:control>
     </soap-env:Header>
