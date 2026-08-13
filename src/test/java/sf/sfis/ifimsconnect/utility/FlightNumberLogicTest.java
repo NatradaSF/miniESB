@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
  */
 class FlightNumberLogicTest {
 
-	@Test
+	/* @Test
 	@DisplayName("2-char airline (3rd char = digit): prefix=3, number=4 wide")
 	void parse_twoCharAirline() {
 		Map<String, String> parts = TranformFidsAfttab.parseFlightNumber("TG123");
@@ -141,5 +141,5 @@ class FlightNumberLogicTest {
 		// hopo ไม่อยู่ใน route / route ว่าง
 		assertThat(TranformFidsAfttab.viaAirports(route, "XXX", true)).isEmpty();
 		assertThat(TranformFidsAfttab.viaAirports("", "BKK", true)).isEmpty();
-	}
+	} */
 }

@@ -4,7 +4,7 @@
         <aodb:control>
             <aodb:message-version>1.4</aodb:message-version>
             <aodb:message-type>UPDATE</aodb:message-type>
-            <aodb:confirm-type>ALL</aodb:confirm-type>
+            <aodb:confirm-type>NACK</aodb:confirm-type>
             <aodb:originator>FIDS</aodb:originator>
             <aodb:timestamp>2026-06-15T10:43:20.000</aodb:timestamp>
             <aodb:sender>IFIMS</aodb:sender>

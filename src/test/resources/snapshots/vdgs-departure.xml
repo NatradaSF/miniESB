@@ -5,8 +5,8 @@
             <aodb:message-version>1.4</aodb:message-version>
             <aodb:message-type>UPDATE</aodb:message-type>
             <aodb:confirm-type>NACK</aodb:confirm-type>
-            <aodb:originator>BHS</aodb:originator>
-            <aodb:timestamp>2026-05-12T07:30:22.000</aodb:timestamp>
+            <aodb:originator>VDGS</aodb:originator>
+            <aodb:timestamp>2026-06-15T10:43:20.000</aodb:timestamp>
             <aodb:sender>IFIMS</aodb:sender>
             <aodb:receiver>AOS</aodb:receiver>
             <aodb:station>BKK</aodb:station>
@@ -16,16 +16,15 @@
         <pl_turn>
             <pt_pd_departure>
                 <pl_departure>
-                    <pl_departurebelt_list>
-                        <pl_departurebelt>
-                            <pdb_beginactual>2026-05-11T12:25:00Z</pdb_beginactual>
-                            <pdb_endactual>2026-05-11T17:30:00Z</pdb_endactual>
-                            <pdb_rdb_departurebelt>05</pdb_rdb_departurebelt>
-                        </pl_departurebelt>
-                        <pl_departurebelt>
-                            <pdb_rdb_departurebelt></pdb_rdb_departurebelt>
-                        </pl_departurebelt>
-                    </pl_departurebelt_list>
+                    <pd_aobt>2026-06-15T04:10:00Z</pd_aobt>
+                    <pd_flightnumber>8M 338</pd_flightnumber>
+                    <pd_rsta_stand>514</pd_rsta_stand>
+                    <pd_sobt>2026-06-15T04:30:00Z</pd_sobt>
+                    <pd_ract_aircrafttype>B77L
+                        <ref_aircrafttype>
+                            <ract_icaotype>B77L</ract_icaotype>
+                        </ref_aircrafttype>
+                    </pd_ract_aircrafttype>
                 </pl_departure>
             </pt_pd_departure>
         </pl_turn>

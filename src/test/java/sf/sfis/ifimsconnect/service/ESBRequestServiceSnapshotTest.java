@@ -14,6 +14,8 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
@@ -117,6 +119,93 @@ class ESBRequestServiceSnapshotTest {
 		assertThat(out).doesNotContain("<aodb:message-id>");
 	}
 
+	private static final String VDGS_DEP = """
+			<MSG><MSGSTREAM_IN>
+			  <INFOBJ_GENERIC>
+			    <MESSAGETYPE>WMVDGSUD</MESSAGETYPE>
+			    <MESSAGEORIGIN>VDGS</MESSAGEORIGIN>
+			    <TIMEID>UTC</TIMEID>
+			    <HOPO>BKK</HOPO>
+			    <TIMESTAMP>20260615034320</TIMESTAMP>
+			    <ADID>D</ADID>
+			    <STDT>20260615043000</STDT>
+			    <FLNO>8M 338</FLNO>
+			  </INFOBJ_GENERIC>
+			  <MSGOBJECTS>
+			    <INFOBJ_VDGS>
+			      <VDGSDEP>
+			        <PSTD>514</PSTD>
+			        <ACT5>B77L</ACT5>
+			        <OFBL>20260615041000</OFBL>
+			      </VDGSDEP>
+			    </INFOBJ_VDGS>
+			  </MSGOBJECTS>
+			</MSGSTREAM_IN></MSG>
+			""";
+
+	private static final String VDGS_ARR = """
+			<MSG><MSGSTREAM_IN>
+			  <INFOBJ_GENERIC>
+			    <MESSAGETYPE>WMVDGSUD</MESSAGETYPE>
+			    <MESSAGEORIGIN>VDGS</MESSAGEORIGIN>
+			    <TIMEID>UTC</TIMEID>
+			    <HOPO>BKK</HOPO>
+			    <TIMESTAMP>20260615034320</TIMESTAMP>
+			    <ADID>A</ADID>
+			    <STDT>20260615043000</STDT>
+			    <FLNO>8M 338</FLNO>
+			  </INFOBJ_GENERIC>
+			  <MSGOBJECTS>
+			    <INFOBJ_VDGS>
+			      <VDGSARR>
+			        <PSTA>G1</PSTA>
+			        <ACT5>B77L</ACT5>
+			        <ONBL>20260615041000</ONBL>
+			      </VDGSARR>
+			    </INFOBJ_VDGS>
+			  </MSGOBJECTS>
+			</MSGSTREAM_IN></MSG>
+			""";
+
+	private static final String BULK_SITA = """
+			<MSG><MSGSTREAM_IN>
+			  <INFOBJ_GENERIC>
+			    <MESSAGETYPE>UFISSITA</MESSAGETYPE>
+			    <MESSAGEORIGIN>SITA</MESSAGEORIGIN>
+			    <TIMEID>UTC</TIMEID>
+			    <HOPO>BKK</HOPO>
+			    <TIMESTAMP>20260615034320</TIMESTAMP>
+			    <ADID>A</ADID>
+			  </INFOBJ_GENERIC>
+			  <MSGOBJECTS>
+			    <BULKDATA>
+			      <SITA>
+			        <FILE_NAME>x.snd</FILE_NAME>
+			        <CONTENT>HELLO SITA CONTENT</CONTENT>
+			      </SITA>
+			    </BULKDATA>
+			  </MSGOBJECTS>
+			</MSGSTREAM_IN></MSG>
+			""";
+
+	@Test
+	@DisplayName("VDGS departure mapping matches snapshot")
+	void vdgsDeparture() throws Exception {
+		verifySnapshot("vdgs-departure", runProcessXml(VDGS_DEP));
+	}
+
+	@Test
+	@DisplayName("VDGS arrival mapping matches snapshot")
+	void vdgsArrival() throws Exception {
+		verifySnapshot("vdgs-arrival", runProcessXml(VDGS_ARR));
+	}
+
+	@Test
+	@DisplayName("BULKDATA (SITA) → if_adexpmessage matches snapshot")
+	void bulkSita() throws Exception {
+		verifySnapshot("bulk-sita", runProcessXml(BULK_SITA));
+	}
+
 	/** Runs processXmlMessage with a raw XML string, returns the XML sent to Artemis. */
 	private String runProcessXml(String inputXml) {
 		MQArtemisProducer producer = mock(MQArtemisProducer.class);
@@ -174,8 +263,15 @@ class ESBRequestServiceSnapshotTest {
 			return;
 		}
 		String expected = new String(Files.readAllBytes(golden), StandardCharsets.UTF_8);
-		assertThat(actual)
-				.as("Snapshot '%s' changed: processXmlMessage output differs from committed golden (%s).", name, golden)
-				.isEqualTo(expected);
+		// เทียบแบบ semantic (XMLUnit) — production ใช้ XSLT (aos_inbound.xsl) แล้ว serialize ต่างจาก
+		// JAXB เดิม byte-ต่อ-byte แต่โครง/ค่า/namespace ต้องตรง golden (= ผลโค้ด JAXB เดิม).
+		Diff diff = DiffBuilder.compare(expected).withTest(actual)
+				.ignoreWhitespace()
+				.checkForSimilar()
+				.build();
+		assertThat(diff.hasDifferences())
+				.as("Snapshot '%s' differs (semantic) from golden %s:%n%s%n--- actual ---%n%s",
+						name, golden, diff, actual)
+				.isFalse();
 	}
 }

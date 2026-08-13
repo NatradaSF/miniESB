@@ -97,6 +97,11 @@ public class MQWebSphereConsumer {
         processMessage(message, "UFIS_ATC_IN_BKK", "BKK");
     }
 
+    @JmsListener(destination = "UFIS_OTHERS_IN_BKK", containerFactory = "mq1ContainerFactory")
+    public void listenBkkOthers(Message message) {
+        processMessage(message, "UFIS_OTHERS_IN_BKK", "BKK");
+    }
+
     @JmsListener(destination = "UFIS_FIGURE_IN", containerFactory = "mq1ContainerFactory")
     public void listenBkkFigure(Message message) {
         processMessage(message, "UFIS_FIGURE_IN", "BKK");
@@ -105,11 +110,6 @@ public class MQWebSphereConsumer {
     @JmsListener(destination = "UFIS_MANIFEST_IN", containerFactory = "mq1ContainerFactory")
     public void listenBkkManifest(Message message) {
         processMessage(message, "UFIS_MANIFEST_IN", "BKK");
-    }
-
-    @JmsListener(destination = "UFIS_OTHERS_IN", containerFactory = "mq1ContainerFactory")
-    public void listenBkkOthers(Message message) {
-        processMessage(message, "UFIS_OTHERS_IN", "BKK");
     }
 
     @JmsListener(destination = "UFIS_EQUIPMENT_IN", containerFactory = "mq1ContainerFactory")
@@ -166,5 +166,30 @@ public class MQWebSphereConsumer {
     @JmsListener(destination = "UFIS_ATC_IN_HKT", containerFactory = "mq2ContainerFactory")
     public void listenOtherAtcHkt(Message message) {
         processMessage(message, "UFIS_ATC_IN_HKT", "HKT");
+    }
+
+    @JmsListener(destination = "UFIS_OTHERS_IN_DMK", containerFactory = "mq2ContainerFactory")
+    public void listenOthersDmk(Message message) {
+        processMessage(message, "UFIS_OTHERS_IN_DMK", "DMK");
+    }
+
+    @JmsListener(destination = "UFIS_OTHERS_IN_CNX", containerFactory = "mq2ContainerFactory")
+    public void listenOthersCnx(Message message) {
+        processMessage(message, "UFIS_OTHERS_IN_CNX", "CNX");
+    }
+
+    @JmsListener(destination = "UFIS_OTHERS_IN_CEI", containerFactory = "mq2ContainerFactory")
+    public void listenOthersCei(Message message) {
+        processMessage(message, "UFIS_OTHERS_IN_CEI", "CEI");
+    }
+
+    @JmsListener(destination = "UFIS_OTHERS_IN_HDY", containerFactory = "mq2ContainerFactory")
+    public void listenOthersHdy(Message message) {
+        processMessage(message, "UFIS_OTHERS_IN_HDY", "HDY");
+    }
+
+    @JmsListener(destination = "UFIS_OTHERS_IN_HKT", containerFactory = "mq2ContainerFactory")
+    public void listenOthersHkt(Message message) {
+        processMessage(message, "UFIS_OTHERS_IN_HKT", "HKT");
     }
 }

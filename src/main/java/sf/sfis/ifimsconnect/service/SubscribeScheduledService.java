@@ -42,13 +42,13 @@ public class SubscribeScheduledService {
 	@Scheduled(cron = "0 1 0 * * ?") // ทุกๆ 00.01 รับข้อมูล Update ระหว่างวัน และรองรับดึงข้อมูลของวันถัดไปด้วย
 	@Scheduled(cron = "0 7 17 * * ?") // ทุกๆ 17.07 รับข้อมูล Update ระหว่างวัน และรองรับดึงข้อมูลของวันถัดไปด้วย
 	public void subscribeAfttab() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 		LocalDate now = LocalDate.now();
 		// startTime = ต้นวันของวันนี้ (00:00:00.000000000)
 		today = now.atStartOfDay();
 		String startTime = today.format(formatter);
 		// endTime = สิ้นวันของอีก 3 วันข้างหน้า (+72 ชม.) => 23:59:59.999999999
-		tomorrowTo = now.plusDays(3).atTime(23, 59, 59, 999_999_999);
+		tomorrowTo = now.plusDays(3).atTime(23, 59, 59);
 		String endTime = tomorrowTo.format(formatter);
 		String dataType = "pl_turn";
 
@@ -57,10 +57,10 @@ public class SubscribeScheduledService {
 
 	@Scheduled(cron = "1 0 0 * * ?") //ทุกๆ เที่ยงคืนเลยไป 1 วิของวันถัดไป เพื่อรับข้อมูลของ Common Counter
 	public void requestCcatab() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 		LocalDate now = LocalDate.now();
 		tomorrowFrom = now.plusDays(1).atTime(0, 0, 0);
-		tomorrowTo = now.plusDays(1).atTime(23, 59, 59, 999_999_999);
+		tomorrowTo = now.plusDays(1).atTime(23, 59, 59);
 		
 		String startTime = tomorrowFrom.format(formatter);
 		String endTime = tomorrowTo.format(formatter);
@@ -72,10 +72,10 @@ public class SubscribeScheduledService {
 	
 	@Scheduled(cron = "0 0 17 * * ?") // ทุกๆ 5 โมงเย็น รับข้อมูลของ Flight วันถัดไป โดยใช้ Subscribe เดิมที่รันไว้ตอน 00.01
 	public void requestAfttab() { 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 		LocalDate now = LocalDate.now();
 		tomorrowFrom = now.plusDays(1).atTime(0, 0, 0);
-		tomorrowTo = now.plusDays(1).atTime(23, 59, 59, 999_999_999);
+		tomorrowTo = now.plusDays(1).atTime(23, 59, 59);
 		
 		String startTime = tomorrowFrom.format(formatter);
 		String endTime = tomorrowTo.format(formatter);

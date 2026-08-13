@@ -5,7 +5,7 @@
             <aodb:message-version>1.4</aodb:message-version>
             <aodb:message-type>UPDATE</aodb:message-type>
             <aodb:confirm-type>NACK</aodb:confirm-type>
-            <aodb:originator>FIDS</aodb:originator>
+            <aodb:originator>VDGS</aodb:originator>
             <aodb:timestamp>2026-06-15T10:43:20.000</aodb:timestamp>
             <aodb:sender>IFIMS</aodb:sender>
             <aodb:receiver>AOS</aodb:receiver>
@@ -14,16 +14,19 @@
     </soap-env:Header>
     <soap-env:Body>
         <pl_turn>
-            <pt_pd_departure>
-                <pl_departure>
-                    <pd_asrt>2026-06-15T04:30:00Z</pd_asrt>
-                    <pd_callsign>MMA338</pd_callsign>
-                    <pd_ctot>2026-06-15T04:10:00Z</pd_ctot>
-                    <pd_rrwy_runway>01</pd_rrwy_runway>
-                    <pd_sobt>2026-06-15T04:30:00Z</pd_sobt>
-                    <pd_tsat>2026-06-15T04:15:00Z</pd_tsat>
-                </pl_departure>
-            </pt_pd_departure>
+            <pt_pa_arrival>
+                <pl_arrival>
+                    <pa_aibt>2026-06-15T04:10:00Z</pa_aibt>
+                    <pa_flightnumber>8M 338</pa_flightnumber>
+                    <pa_rsta_stand>G1</pa_rsta_stand>
+                    <pa_sibt>2026-06-15T04:30:00Z</pa_sibt>
+                    <pa_ract_aircrafttype>B77L
+                        <ref_aircrafttype>
+                            <ract_icaotype>B77L</ract_icaotype>
+                        </ref_aircrafttype>
+                    </pa_ract_aircrafttype>
+                </pl_arrival>
+            </pt_pa_arrival>
         </pl_turn>
     </soap-env:Body>
 </soap-env:Envelope>

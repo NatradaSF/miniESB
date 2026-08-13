@@ -1992,6 +1992,9 @@ public class FidsAfttab implements Serializable {
 	
 	@Transient
 	private String action;
+
+	@Transient
+	private String toid;
 	
 	public void setRemp(String remp) {
 		if(remp!=null) {
