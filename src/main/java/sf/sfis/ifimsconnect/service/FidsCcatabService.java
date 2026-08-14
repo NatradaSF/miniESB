@@ -21,6 +21,7 @@ public class FidsCcatabService {
 			log.info(fidsCcatab.toString());
 			fidsCcatab = fidsCcatabRepository.save(fidsCcatab);
 		} catch (Exception e) {
+			log.error("CKIC: ", fidsCcatab.getCkic());
 			log.error("saveFidsCcatab: ", e);
 		}
 		return fidsCcatab;

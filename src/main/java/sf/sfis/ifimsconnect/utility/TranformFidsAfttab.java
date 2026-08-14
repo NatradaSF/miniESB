@@ -287,7 +287,9 @@ public class TranformFidsAfttab {
 
 	public static FidsAfttab transformUsingSaxon(String xmlString, String actionType, String adid) throws Exception {
 		String transformedXml = transformXmlUsingSaxon(xmlString, actionType, adid);
-		return XML_MAPPER.readValue(transformedXml, FidsAfttab.class);
+		//ลบ attribute action="..." ออกก่อนส่งให้ Jackson
+		String removeActionXml = transformedXml.replaceAll("(?i)\\s+action=\"[^\"]*\"", "");
+		return XML_MAPPER.readValue(removeActionXml, FidsAfttab.class);
 	}
 
 	/**
