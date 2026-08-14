@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -1985,7 +1988,24 @@ public class FidsAfttab implements Serializable {
 	private String rdto;
 	
 	@Transient
+	@JacksonXmlElementWrapper(localName = "lstFidsCcatab")
+	@JacksonXmlProperty(localName = "fidsCcatab")
 	private List<FidsCcatab> lstFidsCcatab;
+
+	@Transient
+	private String route;
+
+	@Transient
+	@JacksonXmlElementWrapper(localName = "lstRouting")
+	@JacksonXmlProperty(localName = "routing")
+	private List<Routing> lstRouting;
+
+	@Data
+	public static class Routing {
+        private String iata;
+        private String icao;
+        private String action;
+    }
 
 	@Transient
 	private List<String> fieldsNotNull = new ArrayList<String>();

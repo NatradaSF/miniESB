@@ -1352,6 +1352,42 @@
 					</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
+
+			<route>
+				<xsl:value-of select="//pt_routingiata3lc"/>
+			</route>
+			<lstRouting>
+				<xsl:variable name="routingNode" select="
+					if ($adidMode = 'A') then //pl_arrival/pl_routing_list/pl_routing/prt_rap_refairport/ref_airport 
+					else //pl_departure/pl_routing_list/pl_routing/prt_rap_refairport/ref_airport"/>
+				<xsl:for-each select="$routingNode">
+					<routing>
+						<iata><xsl:value-of select="rap_iata3lc"/></iata>
+						<icao><xsl:value-of select="rap_icao4lc"/></icao>
+						<action><xsl:value-of select="rap_iata3lc/@action"/></action>
+					</routing>
+				</xsl:for-each>
+			</lstRouting>
+
+			<lstFidsCcatab>
+				<xsl:for-each select="pl_desk">
+					<fidsCcatab>
+						<ckic><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_code"/></ckic>
+						<ckbs><xsl:value-of select="custom:convertDate(pdk_beginplan)"/></ckbs>
+						<ckes><xsl:value-of select="custom:convertDate(pdk_endplan)"/></ckes>
+						<ckba><xsl:value-of select="custom:convertDate(pdk_beginactual)"/></ckba>
+						<ckea><xsl:value-of select="custom:convertDate(pdk_endactual)"/></ckea>
+						<ctyp><xsl:value-of select="pdk_checkintype"/></ctyp>
+						<ckit><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_rco_concourse"/></ckit>
+						<disp><xsl:value-of select="pdk_checkinclassid"/></disp>
+						<act3><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_ral_airline"/></act3>
+						
+						<!-- กรณี Common -->
+						<flnu><xsl:value-of select="pdk_idseq"/></flnu>
+						<flno><xsl:value-of select="pdk_rcnt_refmastercci/ref_counter/rcnt_ral_airline/ref_airline/ral_2lc"/></flno>
+					</fidsCcatab>
+				</xsl:for-each>
+			</lstFidsCcatab>
 		</FidsAfttab>
 	</xsl:template>
 </xsl:stylesheet>

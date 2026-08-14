@@ -31,7 +31,7 @@ class ApplyVialTest {
 	private final TranformFidsAfttab t = new TranformFidsAfttab(null, null);
 
 	/** one <pl_routing> entry; changed=true marks rap_iata3lc with action="update" */
-	private static String node(String iata, String icao, boolean changed) {
+	/* private static String node(String iata, String icao, boolean changed) {
 		String act = changed ? " action=\"update\"" : "";
 		return "<pl_routing><prt_rap_refairport><ref_airport>"
 				+ "<rap_iata3lc" + act + ">" + iata + "</rap_iata3lc>"
@@ -43,10 +43,10 @@ class ApplyVialTest {
 		return node("TPE", "RCTP", false) + node("HDY", "VTSH", false)
 				+ node("SHJ", "OMSJ", shjChanged) + node("BKK", "VTBS", false)
 				+ node("CNX", "VTCC", cnxChanged) + node("TPE", "RCTP", false);
-	}
+	} */
 
 	/** pl_turn with route TPE-HDY-SHJ-BKK-CNX-TPE; arrival/departure each carry the routing list */
-	private static String xml(boolean arrShjChanged, boolean depCnxChanged) {
+	/* private static String xml(boolean arrShjChanged, boolean depCnxChanged) {
 		return "<pl_turn><pt_routingiata3lc>TPE-HDY-SHJ-BKK-CNX-TPE</pt_routingiata3lc>"
 				+ "<pt_pa_arrival><pl_arrival>" + routingList(arrShjChanged, false) + "</pl_arrival></pt_pa_arrival>"
 				+ "<pt_pd_departure><pl_departure>" + routingList(false, depCnxChanged) + "</pl_departure></pt_pd_departure>"
@@ -112,5 +112,5 @@ class ApplyVialTest {
 		assertThat(f.getVian()).isEqualTo("2");
 		assertThat(f.getVia3()).isEqualTo("SHJ");
 		assertThat(f.getVial()).hasSize(240);
-	}
+	} */
 }

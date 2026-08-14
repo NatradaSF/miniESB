@@ -118,7 +118,7 @@ public class TranformFidsAfttab {
 		f.setHopo(hopo);
 		NodeList counterList = doc.getElementsByTagName("pl_desk");
 		if (counterList.getLength() > 0) {
-			f.setLstFidsCcatab(getCounters((Element) counterList.item(0), true));
+			f.setLstFidsCcatab(getCountersOld((Element) counterList.item(0), true));
 		}
 		return f;
 	}
@@ -157,7 +157,8 @@ public class TranformFidsAfttab {
 		applyDerivedTimes(f);
 
 		// 3. VIA from routing
-		applyVial(f, xpath, doc, flightElement, hopo, isArrival, actionType);
+		//applyVial(f, xpath, doc, flightElement, hopo, isArrival, actionType);
+		applyVial(f, hopo, isArrival, actionType);
 
 		// 4. fieldsNotNull — captured before unconditional fixed paths so that
 		// URNO/RKEY/SIBT/SOBT/FLNO/CSGN/FLTI/ALC2/ALC3 are only tracked when
@@ -241,11 +242,12 @@ public class TranformFidsAfttab {
 		applyTrkn(f);
 
 		// 7. Indexed nested structures
-		applyBeltDetails(f, flightElement, isArrival);
+		//applyBeltDetails(f, flightElement, isArrival);
+		f.setB1ba(f.getAibt());
 		// applyGateDetails(f, flightElement, isArrival);
-		applyDelayReasons(f, flightElement);
+		//applyDelayReasons(f, flightElement);
 		if (!isArrival) {
-			f.setLstFidsCcatab(getCounters(flightElement, false));
+			f.setLstFidsCcatab(getCounters(f.getLstFidsCcatab(), false));
 		}
 
 		// 8. Shared derivations (AURN, BAGS, DCD2, STOA, STOD, FLDA, DTD2, DOOA, DOOD)
@@ -391,7 +393,7 @@ public class TranformFidsAfttab {
 	 * }
 	 */
 
-	private Optional<String> evaluateRawText(Document doc, XPath xpath, String path) {
+	/* private Optional<String> evaluateRawText(Document doc, XPath xpath, String path) {
 		try {
 			String fixed = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
 			String textValue = (String) xpath.evaluate(fixed + "/text()[1])", doc, XPathConstants.STRING);
@@ -403,7 +405,7 @@ public class TranformFidsAfttab {
 			log.error("XPath error for path: " + path, e);
 			return Optional.empty();
 		}
-	}
+	} */
 
 	// ─── DERIVED BUSINESS LOGIC ────────────────────────────────────────────
 	private void applyDerivedTimes(FidsAfttab f) {
@@ -491,7 +493,47 @@ public class TranformFidsAfttab {
 
 	// package-private เพื่อให้ unit test เรียกตรงได้ (โฟกัสเฉพาะ logic VIA
 	// ไม่ต้องผ่าน XSL ทั้งชุด)
-	void applyVial(FidsAfttab f, XPath xpath, Document doc, Element flightElement,
+	void applyVial(FidsAfttab f, String hopo, boolean isArrival, String actionType) {
+		String route = f.getRoute();
+		List<String> vias = viaAirports(route, hopo, isArrival);
+		if (vias.isEmpty())
+			return;
+
+		// map iata -> icao จาก pl_routing nodes (ใช้เป็น via4) + ดูว่ามี routing เปลี่ยนไหม
+		Map<String, String> iataToIcao = new HashMap<>();
+		boolean routingChanged = false;
+		if(f.getLstRouting() != null){
+			for (FidsAfttab.Routing item : f.getLstRouting()) {
+				if (item.getIata() != null && !item.getIata().isEmpty()) {
+					iataToIcao.put(item.getIata(), item.getIcao() == null ? "" : item.getIcao());
+				}
+				String act = item.getAction();
+				if ("update".equalsIgnoreCase(act) || "insert".equalsIgnoreCase(act)) {
+					routingChanged = true;
+				}
+			}
+		}
+
+		// เหมือนพฤติกรรมเดิม: UPDATE จะ set VIA เฉพาะตอน routing เปลี่ยน, DATASET set
+		// เสมอ
+		if (!"DATASET".equalsIgnoreCase(actionType) && !routingChanged)
+			return;
+
+		// Vial = getVial ของแต่ละ via ต่อกัน (ตามลำดับใน route ซ้าย→ขวา)
+		StringBuilder vial = new StringBuilder();
+		for (String via : vias) {
+			vial.append(getVial(via, iataToIcao.getOrDefault(via, "")));
+		}
+
+		// via3/via4 (ช่องเดียว) = via ที่ติด hopo (arrival = ตัวสุดท้าย, departure =
+		// ตัวแรก)
+		String adjacent = isArrival ? vias.get(vias.size() - 1) : vias.get(0);
+		f.setVia3(adjacent);
+		f.setVia4(iataToIcao.getOrDefault(adjacent, ""));
+		f.setVial(vial.toString());
+		f.setVian(String.valueOf(vias.size()));
+	}
+	/* void applyVial(FidsAfttab f, XPath xpath, Document doc, Element flightElement,
 			String hopo, boolean isArrival, String actionType) {
 		try {
 			String route = (String) xpath.evaluate("//pt_routingiata3lc", doc, XPathConstants.STRING);
@@ -540,7 +582,7 @@ public class TranformFidsAfttab {
 		} catch (XPathExpressionException e) {
 			log.error("applyVial error: ", e);
 		}
-	}
+	} */
 
 	/**
 	 * รายชื่อสนามบิน VIA จาก route (คั่นด้วย "-") เทียบกับ hopo:
@@ -580,11 +622,8 @@ public class TranformFidsAfttab {
 		if (f.getRkey() != null) {
 			f.setAurn(f.getRkey().toString());
 		}
-		f.setBags(f.getBagn());
-		f.setDcd2(f.getDcd1());
 		f.setStoa(f.getSibt());
 		f.setStod(f.getSobt());
-		f.setDtd2(f.getDtd1());
 
 		// FLDA from SIBT (arrival) or SOBT (departure)
 		String src = isArrival ? f.getSibt() : f.getSobt();
@@ -624,7 +663,7 @@ public class TranformFidsAfttab {
 	}
 
 	// ─── INDEXED NESTED STRUCTURES ─────────────────────────────────────────
-	private void applyBeltDetails(FidsAfttab f, Element flightElement, boolean isArrival) {
+	/* private void applyBeltDetails(FidsAfttab f, Element flightElement, boolean isArrival) {
 		NodeList nodes = flightElement.getElementsByTagName(isArrival ? "pl_baggagebelt" : "pl_departurebelt");
 		String prefix = isArrival ? "pbb_" : "pdb_";
 		String beltRefTag = prefix + (isArrival ? "rbb_baggagebelt" : "rdb_departurebelt");
@@ -663,7 +702,7 @@ public class TranformFidsAfttab {
 				log.error("applyBeltDetails error: ", e);
 			}
 		}
-	}
+	} */
 
 	/*
 	 * private void applyGateDetails(FidsAfttab f, Element flightElement, boolean
@@ -704,7 +743,7 @@ public class TranformFidsAfttab {
 	 * }
 	 */
 
-	private void applyDelayReasons(FidsAfttab f, Element flightElement) {
+	/* private void applyDelayReasons(FidsAfttab f, Element flightElement) {
 		NodeList nodes = flightElement.getElementsByTagName("pl_delayreason");
 		XPath xp = XPathFactory.newInstance().newXPath();
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -719,9 +758,38 @@ public class TranformFidsAfttab {
 				log.error("applyDelayReasons error: ", e);
 			}
 		}
+	} */
+
+	private List<FidsCcatab> getCounters(List<FidsCcatab> lstFidsCcatab,boolean isCommon) {
+		if (lstFidsCcatab == null || lstFidsCcatab.isEmpty()) {
+			return new ArrayList<>();
+		}
+		List<FidsCcatab> lst = new ArrayList<>();
+		for (FidsCcatab item : lstFidsCcatab) {
+			String ckic = item.getCkic();
+			if ("HOLD".equals(ckic)) {
+				continue;
+			}
+			
+			if (!isCommon) {
+				String ctyp = item.getCtyp();
+				ctyp = "C".equals(ctyp) ? "C" : " ";
+				if (" ".equals(ctyp)) {
+					item.setCtyp(ctyp);
+					lst.add(item);
+				}
+			} else {
+				if (item.getFlno() != null) {
+					item.setFlno(String.format("%-9s", item.getFlno()));
+				}
+				item.setCtyp("C");
+            	lst.add(item);
+			}
+		}
+		return lst;
 	}
 
-	private List<FidsCcatab> getCounters(Element element, boolean isCommon) {
+	private List<FidsCcatab> getCountersOld(Element element, boolean isCommon) {
 		List<FidsCcatab> lst = new ArrayList<>();
 		NodeList counterNodes = isCommon
 				? new ImplementNodeList(Arrays.asList((Node) element))
@@ -747,14 +815,6 @@ public class TranformFidsAfttab {
 					continue;
 
 				if (!isCommon) {
-					/*
-					 * String cnts =
-					 * element.getElementsByTagName("pd_counters").item(0).getTextContent();
-					 * Set<String> counters = !cnts.isEmpty()
-					 * ? new LinkedHashSet<>(Arrays.asList(cnts.split(",")))
-					 * : new LinkedHashSet<>();
-					 * String ctyp = counters.contains(ckic) ? " " : "C";
-					 */
 					ctyp = ctyp.equals("C") ? ctyp : " ";
 					if (ctyp.equals(" ")) {
 						c.setCkic(ckic);
@@ -893,7 +953,7 @@ public class TranformFidsAfttab {
 		return new JfnoResult(sb.toString(), String.valueOf(count));
 	}
 
-	public void setDynamicValue(FidsAfttab obj, String fieldPrefix, int index, String fieldSuffix, String value) {
+	/* public void setDynamicValue(FidsAfttab obj, String fieldPrefix, int index, String fieldSuffix, String value) {
 		try {
 			String fieldName = fieldPrefix + (index + 1) + fieldSuffix;
 			Field field = FidsAfttab.class.getDeclaredField(fieldName);
@@ -902,5 +962,5 @@ public class TranformFidsAfttab {
 		} catch (Exception e) {
 			log.error("setDynamicValue: ", e);
 		}
-	}
+	} */
 }
