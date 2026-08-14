@@ -146,11 +146,11 @@ public class TranformFidsAfttab {
 
 		// 1. XSL transform → action-filtered path mappings deserialised into
 		// FidsAfttab.
-		String transformedXml = transformXmlUsingSaxon(xmlString, actionType, adid);
-		FidsAfttab f = transformUsingSaxon(xmlString, actionType, adid);
+		String transformedXml = transformXmlUsingSaxon(xmlString, actionType, adid, originator);
+		FidsAfttab f = transformUsingSaxon(xmlString, actionType, adid, originator);
 		if (f == null)
 			return null;
-		f.setAdid(isArrival ? "A" : "D");
+		f.setAdid(adid);
 		f.setAction(action);
 
 		// 2. Derived time fields (EIBT/ETAI/ETOA/LAND/AIRB/AXIT/AXOT/ONBL/OFBL/REMP)
@@ -230,10 +230,10 @@ public class TranformFidsAfttab {
 		// pd_tsat
 		// ถ้าไม่มี @action ทำให้ tsat ว่าง จึงอ่านดิบจาก XML ตรงๆ เพื่อให้ส่งต่อ ESB
 		// ได้เสมอ
-		if ("IDEP".equalsIgnoreCase(originator) && !isArrival) {
+		/* if ("IDEP".equalsIgnoreCase(originator) && !isArrival) {
 			evaluateRawText(doc, xpath, "/pl_departure/pd_tsat")
 					.ifPresent(v -> f.setTsat(convertDateStringIfNeeded(v)));
-		}
+		} */
 
 		// 6. Business derivations on fixed paths
 		applyFlightNumber(f);
@@ -268,7 +268,7 @@ public class TranformFidsAfttab {
 	}
 
 	// ─── XSL TRANSFORMATION ────────────────────────────────────────────────
-	public static String transformXmlUsingSaxon(String xmlString, String actionType, String adid) throws Exception {
+	public static String transformXmlUsingSaxon(String xmlString, String actionType, String adid, String originator) throws Exception {
 		StringWriter sw = new StringWriter();
 		Serializer out = SAXON_PROCESSOR.newSerializer(sw);
 		out.setOutputProperty(Serializer.Property.METHOD, "xml");
@@ -279,14 +279,15 @@ public class TranformFidsAfttab {
 		Map<QName, XdmValue> params = new HashMap<>();
 		params.put(new QName("syncMode"), new XdmAtomicValue(actionType));
 		params.put(new QName("adidMode"), new XdmAtomicValue(adid));
+		params.put(new QName("originator"), new XdmAtomicValue(originator != null ? originator : ""));
 		trans.setStylesheetParameters(params);
 		trans.transform(new StreamSource(new StringReader(xmlString)), out);
 
 		return sw.toString();
 	}
 
-	public static FidsAfttab transformUsingSaxon(String xmlString, String actionType, String adid) throws Exception {
-		String transformedXml = transformXmlUsingSaxon(xmlString, actionType, adid);
+	public static FidsAfttab transformUsingSaxon(String xmlString, String actionType, String adid, String originator) throws Exception {
+		String transformedXml = transformXmlUsingSaxon(xmlString, actionType, adid, originator);
 		//ลบ attribute action="..." ออกก่อนส่งให้ Jackson
 		String removeActionXml = transformedXml.replaceAll("(?i)\\s+action=\"[^\"]*\"", "");
 		return XML_MAPPER.readValue(removeActionXml, FidsAfttab.class);

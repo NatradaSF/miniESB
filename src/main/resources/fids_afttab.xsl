@@ -11,6 +11,7 @@
 	<xsl:param name="syncMode" select="'UPDATE'"/>
 	<!-- adidMode: A = produce arrival record; D = produce departure record -->
 	<xsl:param name="adidMode" select="'A'"/>
+	<xsl:param name="originator" select="''"/>
 
 	<!-- ฟังก์ชันแปลง Date String -->
     <xsl:function name="custom:convertDate" as="xs:string?">
@@ -1328,9 +1329,12 @@
 					</xsl:with-param>
 				</xsl:call-template>
 
+				<xsl:variable name="isIDEP" select="$adidMode = 'D' and 
+    				$originator = 'IDEP'"/>
 				<xsl:variable name="tsatNode" select="//pl_departure/pd_tsat"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="'tsat'"/>
+					<xsl:with-param name="forceEmit" select="$isIDEP"/>
 					<xsl:with-param name="node">
 						<field action="{$tsatNode/@action}">
 							<xsl:value-of select="custom:convertDate($tsatNode)"/>
