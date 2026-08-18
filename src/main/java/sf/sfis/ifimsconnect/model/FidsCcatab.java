@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Entity
@@ -120,4 +121,7 @@ public class FidsCcatab implements Serializable {
 	
 	@Column(name = "USEU", length = 32)
 	private String useu;
+
+	@Transient
+	private String action;
 }

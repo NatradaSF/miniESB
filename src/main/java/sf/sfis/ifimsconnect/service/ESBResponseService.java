@@ -55,6 +55,7 @@ import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJGENERIC;
 import sf.sfis.ifimsconnect.esb.realtimeoutbound.MSG.MSGSTREAMOUT.INFOBJVDGS;
 import sf.sfis.ifimsconnect.esb.realtimeoutbound.TIMEID;
 import sf.sfis.ifimsconnect.model.FidsAfttab;
+import sf.sfis.ifimsconnect.model.FidsCcatab;
 import sf.sfis.ifimsconnect.utility.DateTimeFormatHelper;
 import sf.sfis.ifimsconnect.utility.FieldInspector;
 import sf.sfis.ifimsconnect.utility.GetterAccess;
@@ -171,6 +172,10 @@ public class ESBResponseService {
 						log.info("No data found for ESB update.");
 					}
 				}
+
+				//Send counter to Outbound UFIS_COUNTER_OUT
+				sendCounter(timestamp, fidsAfttab);
+				
 				// Save data to Redis.
 				redisController.saveData(hopo);
 			} else if (!type.equalsIgnoreCase("DATASET")) {// Send ACK or NACK to ESB by Web service.
@@ -315,30 +320,34 @@ public class ESBResponseService {
 	 * หมายเหตุ: CTYP เป็น enum ตั้งค่าว่างไม่ได้ จึงปล่อย null (tag จะไม่ถูก
 	 * marshal ออกมา).
 	 */
-	public String convertCountertoEsb(String updateTime, FidsAfttab fidsAfttab) {
+	public String convertCountertoEsb(String updateTime, MSG.MSGSTREAMOUT.INFOBJGENERIC generic, String urno, String flno, FidsCcatab fidsCcatab) {
 		StringWriter writer = new StringWriter();
 		MSG esb = new MSG();
 		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
 
 		// INFOBJ_GENERIC — dynamic จาก FidsAfttab (identity counter = UFISCHKUD)
-		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISCHKUD", updateTime, fidsAfttab);
+		//MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISCHKUD", updateTime, fidsAfttab);
 
 		// --- INFOBJ_COUNTER: ยังไม่มี source ใน FidsAfttab → ค่าว่าง "" (รอ backend
 		// map) ---
 		// CTYP เป็น enum ตั้งค่าว่างไม่ได้ → ใส่ placeholder CTYP.D ไปก่อน (รอ backend
 		// map)
 		MSG.MSGSTREAMOUT.INFOBJCOUNTER counter = new INFOBJCOUNTER();
-		counter.setCKIC("");
-		counter.setCTYP(CTYP.D);
-		counter.setCKIT("");
-		counter.setCKBS("");
-		counter.setCKES("");
-		counter.setDISP("");
-		counter.setFLNU("");
-		counter.setURNO("");
 
-		msgstreamout.setINFOBJGENERIC(generic);
+		// แมปค่าจาก FidsCcatab ลงใน INFOBJCOUNTER
+		counter.setCKIC(nullIfEmpty(fidsCcatab.getCkic()));
+		counter.setCKIT(nullIfEmpty(fidsCcatab.getCkit()));
+		counter.setCKBS(nullIfEmpty(fidsCcatab.getCkbs()));
+		counter.setCKES(nullIfEmpty(fidsCcatab.getCkes()));
+		counter.setDISP(nullIfEmpty(fidsCcatab.getDisp()));
+		counter.setFLNU(nullIfEmpty(fidsCcatab.getFlnu().toString()));
+		counter.setURNO(nullIfEmpty(urno));
+
+		// สำหรับ Enum: ถ้าไม่มีค่า จะได้ null ทำให้ไม่พ่นแท็ก <CTYP> ออกมาเช่นกัน
+		counter.setCTYP(mapToCtypEnum(fidsCcatab.getCtyp()));
+		
 		msgstreamout.setINFOBJCOUNTER(counter);
+		msgstreamout.setINFOBJGENERIC(generic);
 		esb.setMSGSTREAMOUT(msgstreamout);
 		try {
 			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
@@ -351,16 +360,37 @@ public class ESBResponseService {
 		return null;
 	}
 
+	private String nullIfEmpty(String str) {
+		if (str == null || str.trim().isEmpty()) {
+			return null;
+		}
+		return str.trim();
+	}
+
+	private CTYP mapToCtypEnum(String ctypStr) {
+		log.info("CTYP: "+ctypStr);
+		if (ctypStr == null || ctypStr.trim().isEmpty()) {
+			return null; // ไม่สร้างแท็ก <CTYP>
+		}
+		return ctypStr.equals("C")?CTYP.C:CTYP.D;
+	}
+
 	/**
 	 * ส่ง counter เข้าคิว UFIS_COUNTER_OUT_&lt;hopo&gt; โดย INFOBJ_GENERIC ดึงจาก
 	 * FidsAfttab
 	 * (INFOBJ_COUNTER ยังว่างรอ backend map). เรียกจากภายนอกได้ (controller/test) —
 	 * ยังไม่ได้ผูกเข้า flow convertXMLtoObject อัตโนมัติ.
 	 */
-	public void sendEmptyCounter(String updateTime, FidsAfttab fidsAfttab) {
-		String xmlEsb = convertCountertoEsb(updateTime, fidsAfttab);
-		if (xmlEsb != null) {
-			sendToOutboundQueue("UFIS_COUNTER_OUT", fidsAfttab.getHopo(), xmlEsb);
+	public void sendCounter(String updateTime, FidsAfttab fidsAfttab) {
+		if (fidsAfttab != null && fidsAfttab.getLstFidsCcatab() != null && !fidsAfttab.getLstFidsCcatab().isEmpty()) {
+			MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISCHKUD", updateTime, fidsAfttab);
+			for (FidsCcatab item : fidsAfttab.getLstFidsCcatab()) {
+				String xmlEsb = convertCountertoEsb(updateTime, generic, fidsAfttab.getUrno().toString(), fidsAfttab.getFlno(), item);
+				if (xmlEsb != null) {
+					log.info("Update counter ("+item.getCkic()+") to ESB...");
+					sendToOutboundQueue("UFIS_COUNTER_OUT", fidsAfttab.getHopo(), xmlEsb);
+				}
+			}
 		}
 	}
 

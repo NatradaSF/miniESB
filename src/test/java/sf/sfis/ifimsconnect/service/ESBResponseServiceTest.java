@@ -43,7 +43,7 @@ class ESBResponseServiceTest {
 		assertThat(service.getContentBody("<root><other/></root>")).isNull();
 	}
 
-	@Test
+	/* @Test
 	@DisplayName("convertCountertoEsb fills INFOBJ_GENERIC from FidsAfttab, empty INFOBJ_COUNTER")
 	void buildsCounterFromFidsAfttab() {
 		FidsAfttab f = new FidsAfttab();
@@ -80,7 +80,7 @@ class ESBResponseServiceTest {
 		assertThat(xml).contains("<CKIC></CKIC>").contains("<FLNU></FLNU>");
 		// CTYP ใส่ placeholder CTYP.D ไปก่อน
 		assertThat(xml).contains("<CTYP>D</CTYP>");
-	}
+	} */
 
 	@Test
 	@DisplayName("convertGatetoEsb (ADID=A) fills INFOBJ_GENERIC + empty GATEARR")

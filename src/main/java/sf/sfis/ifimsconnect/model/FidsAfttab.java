@@ -1986,6 +1986,9 @@ public class FidsAfttab implements Serializable {
 
 	@Column(name = "RDTO", length = 1)
 	private String rdto;
+
+	@Transient
+	private String counter;
 	
 	@Transient
 	@JacksonXmlElementWrapper(localName = "lstFidsCcatab")

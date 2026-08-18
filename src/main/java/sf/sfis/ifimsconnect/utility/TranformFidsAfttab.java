@@ -137,7 +137,7 @@ public class TranformFidsAfttab {
 				? (Element) doc.getElementsByTagName("pl_arrival").item(0)
 				: (Element) doc.getElementsByTagName("pl_departure").item(0);
 		String action = flightElement.getAttribute("action");
-		log.info("Flight action ("+adid+"): " + action);
+		log.info("Flight action (" + adid + "): " + action);
 
 		if (!"DATASET".equalsIgnoreCase(actionType)
 				&& !"update".equalsIgnoreCase(action) && !"insert".equalsIgnoreCase(action)) {
@@ -157,7 +157,7 @@ public class TranformFidsAfttab {
 		applyDerivedTimes(f);
 
 		// 3. VIA from routing
-		//applyVial(f, xpath, doc, flightElement, hopo, isArrival, actionType);
+		// applyVial(f, xpath, doc, flightElement, hopo, isArrival, actionType);
 		applyVial(f, hopo, isArrival, actionType);
 
 		// 4. fieldsNotNull — captured before unconditional fixed paths so that
@@ -165,14 +165,13 @@ public class TranformFidsAfttab {
 		// they were set via the action-filtered XSL pass (matches legacy behaviour).
 		if ("UPDATE".equalsIgnoreCase(actionType) || "INSERT".equalsIgnoreCase(actionType)) {
 			try {
-				//log.info("--- transformedXml Output ---");
-				//log.info(transformedXml);
+				// log.info("--- transformedXml Output ---");
+				// log.info(transformedXml);
 				// 1. แปลง XML String เป็น Document
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				dbf.setNamespaceAware(false);
 				Document transformedDoc = dbf.newDocumentBuilder().parse(
-					new ByteArrayInputStream(transformedXml.getBytes(StandardCharsets.UTF_8))
-				);
+						new ByteArrayInputStream(transformedXml.getBytes(StandardCharsets.UTF_8)));
 
 				// 2. ดึง Node ทั้งหมดที่ลูกของมันมี attribute action="UPDATE"
 				Set<String> updateTagNames = new HashSet<>();
@@ -183,32 +182,37 @@ public class TranformFidsAfttab {
 					Element elem = (Element) allElements.item(i);
 					String actionAttr = elem.getAttribute("action");
 
-					// เช็กว่ามี attribute action เป็น update หรือ insert หรือไม่ (ไม่สนตัวพิมพ์เล็ก-ใหญ่)
+					// เช็กว่ามี attribute action เป็น update หรือ insert หรือไม่
+					// (ไม่สนตัวพิมพ์เล็ก-ใหญ่)
 					if ("update".equalsIgnoreCase(actionAttr.trim()) || "insert".equalsIgnoreCase(actionAttr.trim())) {
 						String nodeName = elem.getNodeName().toLowerCase();
 
-						// กรณีที่ 1: แท็กชื่อ <field action="update"> -> ให้เอาชื่อแท็กแม่ (เช่น <csgn>)
+						// กรณีที่ 1: แท็กชื่อ <field action="update"> -> ให้เอาชื่อแท็กแม่ (เช่น
+						// <csgn>)
 						if ("field".equals(nodeName)) {
 							Node parent = elem.getParentNode();
 							if (parent != null && parent.getNodeType() == Node.ELEMENT_NODE) {
 								updateTagNames.add(parent.getNodeName().toLowerCase());
-								//log.info("Found updated field (from child <field>): " + parent.getNodeName().toLowerCase());
+								// log.info("Found updated field (from child <field>): " +
+								// parent.getNodeName().toLowerCase());
 							}
-						} 
+						}
 						// กรณีที่ 2: แท็กชื่อ <csgn action="update">
 						else if (!"fidsafttab".equals(nodeName) && !"root".equals(nodeName)) {
 							updateTagNames.add(nodeName);
-							//log.info("Found updated field (direct tag): " + nodeName);
+							// log.info("Found updated field (direct tag): " + nodeName);
 						}
-            		}
-        		}
-				//log.info("=== Matched Update Nodes Count: " + updateTagNames.size() + " ===");
+					}
+				}
+				// log.info("=== Matched Update Nodes Count: " + updateTagNames.size() + "
+				// ===");
 				// 3. กรองข้อมูลจาก FieldInspector โดยเอาเฉพาะฟิลด์ที่มีอยู่ใน updateTagNames
 				List<String> nonNullFields = FieldInspector.getNonNullFields(f);
 				List<String> actualUpdatedFields = new ArrayList<>();
 
 				for (String fieldName : nonNullFields) {
-					// เช็คว่าฟิลด์นั้นมี tag UPDATE ใน XML หรือไม่ (เปรียบเทียบแบบไม่สนตัวพิมพ์เล็ก-ใหญ่)
+					// เช็คว่าฟิลด์นั้นมี tag UPDATE ใน XML หรือไม่
+					// (เปรียบเทียบแบบไม่สนตัวพิมพ์เล็ก-ใหญ่)
 					if (updateTagNames.contains(fieldName.toLowerCase())) {
 						actualUpdatedFields.add(fieldName);
 					}
@@ -231,10 +235,12 @@ public class TranformFidsAfttab {
 		// pd_tsat
 		// ถ้าไม่มี @action ทำให้ tsat ว่าง จึงอ่านดิบจาก XML ตรงๆ เพื่อให้ส่งต่อ ESB
 		// ได้เสมอ
-		/* if ("IDEP".equalsIgnoreCase(originator) && !isArrival) {
-			evaluateRawText(doc, xpath, "/pl_departure/pd_tsat")
-					.ifPresent(v -> f.setTsat(convertDateStringIfNeeded(v)));
-		} */
+		/*
+		 * if ("IDEP".equalsIgnoreCase(originator) && !isArrival) {
+		 * evaluateRawText(doc, xpath, "/pl_departure/pd_tsat")
+		 * .ifPresent(v -> f.setTsat(convertDateStringIfNeeded(v)));
+		 * }
+		 */
 
 		// 6. Business derivations on fixed paths
 		applyFlightNumber(f);
@@ -242,12 +248,13 @@ public class TranformFidsAfttab {
 		applyTrkn(f);
 
 		// 7. Indexed nested structures
-		//applyBeltDetails(f, flightElement, isArrival);
+		// applyBeltDetails(f, flightElement, isArrival);
 		f.setB1ba(f.getAibt());
 		// applyGateDetails(f, flightElement, isArrival);
-		//applyDelayReasons(f, flightElement);
+		// applyDelayReasons(f, flightElement);
+
 		if (!isArrival) {
-			f.setLstFidsCcatab(getCounters(f.getLstFidsCcatab(), false));
+			f.setLstFidsCcatab(getCounters(f.getLstFidsCcatab(), actionType));
 		}
 
 		// 8. Shared derivations (AURN, BAGS, DCD2, STOA, STOD, FLDA, DTD2, DOOA, DOOD)
@@ -270,7 +277,8 @@ public class TranformFidsAfttab {
 	}
 
 	// ─── XSL TRANSFORMATION ────────────────────────────────────────────────
-	public static String transformXmlUsingSaxon(String xmlString, String actionType, String adid, String originator) throws Exception {
+	public static String transformXmlUsingSaxon(String xmlString, String actionType, String adid, String originator)
+			throws Exception {
 		StringWriter sw = new StringWriter();
 		Serializer out = SAXON_PROCESSOR.newSerializer(sw);
 		out.setOutputProperty(Serializer.Property.METHOD, "xml");
@@ -288,9 +296,10 @@ public class TranformFidsAfttab {
 		return sw.toString();
 	}
 
-	public static FidsAfttab transformUsingSaxon(String xmlString, String actionType, String adid, String originator) throws Exception {
+	public static FidsAfttab transformUsingSaxon(String xmlString, String actionType, String adid, String originator)
+			throws Exception {
 		String transformedXml = transformXmlUsingSaxon(xmlString, actionType, adid, originator);
-		//ลบ attribute action="..." ออกก่อนส่งให้ Jackson
+		// ลบ attribute action="..." ออกก่อนส่งให้ Jackson
 		String removeActionXml = transformedXml.replaceAll("(?i)\\s+action=\"[^\"]*\"", "");
 		return XML_MAPPER.readValue(removeActionXml, FidsAfttab.class);
 	}
@@ -393,19 +402,24 @@ public class TranformFidsAfttab {
 	 * }
 	 */
 
-	/* private Optional<String> evaluateRawText(Document doc, XPath xpath, String path) {
-		try {
-			String fixed = "string(//" + (path.startsWith("/") ? path.substring(1) : path);
-			String textValue = (String) xpath.evaluate(fixed + "/text()[1])", doc, XPathConstants.STRING);
-			if (textValue == null)
-				return Optional.empty();
-			String trimmed = textValue.trim();
-			return trimmed.isEmpty() ? Optional.empty() : Optional.of(trimmed);
-		} catch (XPathExpressionException e) {
-			log.error("XPath error for path: " + path, e);
-			return Optional.empty();
-		}
-	} */
+	/*
+	 * private Optional<String> evaluateRawText(Document doc, XPath xpath, String
+	 * path) {
+	 * try {
+	 * String fixed = "string(//" + (path.startsWith("/") ? path.substring(1) :
+	 * path);
+	 * String textValue = (String) xpath.evaluate(fixed + "/text()[1])", doc,
+	 * XPathConstants.STRING);
+	 * if (textValue == null)
+	 * return Optional.empty();
+	 * String trimmed = textValue.trim();
+	 * return trimmed.isEmpty() ? Optional.empty() : Optional.of(trimmed);
+	 * } catch (XPathExpressionException e) {
+	 * log.error("XPath error for path: " + path, e);
+	 * return Optional.empty();
+	 * }
+	 * }
+	 */
 
 	// ─── DERIVED BUSINESS LOGIC ────────────────────────────────────────────
 	private void applyDerivedTimes(FidsAfttab f) {
@@ -499,10 +513,11 @@ public class TranformFidsAfttab {
 		if (vias.isEmpty())
 			return;
 
-		// map iata -> icao จาก pl_routing nodes (ใช้เป็น via4) + ดูว่ามี routing เปลี่ยนไหม
+		// map iata -> icao จาก pl_routing nodes (ใช้เป็น via4) + ดูว่ามี routing
+		// เปลี่ยนไหม
 		Map<String, String> iataToIcao = new HashMap<>();
 		boolean routingChanged = false;
-		if(f.getLstRouting() != null){
+		if (f.getLstRouting() != null) {
 			for (FidsAfttab.Routing item : f.getLstRouting()) {
 				if (item.getIata() != null && !item.getIata().isEmpty()) {
 					iataToIcao.put(item.getIata(), item.getIcao() == null ? "" : item.getIcao());
@@ -533,56 +548,64 @@ public class TranformFidsAfttab {
 		f.setVial(vial.toString());
 		f.setVian(String.valueOf(vias.size()));
 	}
-	/* void applyVial(FidsAfttab f, XPath xpath, Document doc, Element flightElement,
-			String hopo, boolean isArrival, String actionType) {
-		try {
-			String route = (String) xpath.evaluate("//pt_routingiata3lc", doc, XPathConstants.STRING);
-			List<String> vias = viaAirports(route, hopo, isArrival);
-			if (vias.isEmpty())
-				return;
-
-			// map iata -> icao จาก pl_routing nodes (ใช้เป็น via4) + ดูว่ามี routing
-			// เปลี่ยนไหม
-			Map<String, String> iataToIcao = new HashMap<>();
-			boolean routingChanged = false;
-			NodeList routingNodes = flightElement.getElementsByTagName("pl_routing");
-			for (int i = 0; i < routingNodes.getLength(); i++) {
-				Node node = routingNodes.item(i);
-				if (node == null)
-					continue;
-				String iata = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc", node);
-				String icao = xpath.evaluate("prt_rap_refairport/ref_airport/rap_icao4lc", node);
-				if (iata != null && !iata.isEmpty()) {
-					iataToIcao.put(iata, icao == null ? "" : icao);
-				}
-				String act = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc/@action", node);
-				if ("update".equalsIgnoreCase(act) || "insert".equalsIgnoreCase(act)) {
-					routingChanged = true;
-				}
-			}
-
-			// เหมือนพฤติกรรมเดิม: UPDATE จะ set VIA เฉพาะตอน routing เปลี่ยน, DATASET set
-			// เสมอ
-			if (!"DATASET".equalsIgnoreCase(actionType) && !routingChanged)
-				return;
-
-			// Vial = getVial ของแต่ละ via ต่อกัน (ตามลำดับใน route ซ้าย→ขวา)
-			StringBuilder vial = new StringBuilder();
-			for (String via : vias) {
-				vial.append(getVial(via, iataToIcao.getOrDefault(via, "")));
-			}
-
-			// via3/via4 (ช่องเดียว) = via ที่ติด hopo (arrival = ตัวสุดท้าย, departure =
-			// ตัวแรก)
-			String adjacent = isArrival ? vias.get(vias.size() - 1) : vias.get(0);
-			f.setVia3(adjacent);
-			f.setVia4(iataToIcao.getOrDefault(adjacent, ""));
-			f.setVial(vial.toString());
-			f.setVian(String.valueOf(vias.size()));
-		} catch (XPathExpressionException e) {
-			log.error("applyVial error: ", e);
-		}
-	} */
+	/*
+	 * void applyVial(FidsAfttab f, XPath xpath, Document doc, Element
+	 * flightElement,
+	 * String hopo, boolean isArrival, String actionType) {
+	 * try {
+	 * String route = (String) xpath.evaluate("//pt_routingiata3lc", doc,
+	 * XPathConstants.STRING);
+	 * List<String> vias = viaAirports(route, hopo, isArrival);
+	 * if (vias.isEmpty())
+	 * return;
+	 * 
+	 * // map iata -> icao จาก pl_routing nodes (ใช้เป็น via4) + ดูว่ามี routing
+	 * // เปลี่ยนไหม
+	 * Map<String, String> iataToIcao = new HashMap<>();
+	 * boolean routingChanged = false;
+	 * NodeList routingNodes = flightElement.getElementsByTagName("pl_routing");
+	 * for (int i = 0; i < routingNodes.getLength(); i++) {
+	 * Node node = routingNodes.item(i);
+	 * if (node == null)
+	 * continue;
+	 * String iata = xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc",
+	 * node);
+	 * String icao = xpath.evaluate("prt_rap_refairport/ref_airport/rap_icao4lc",
+	 * node);
+	 * if (iata != null && !iata.isEmpty()) {
+	 * iataToIcao.put(iata, icao == null ? "" : icao);
+	 * }
+	 * String act =
+	 * xpath.evaluate("prt_rap_refairport/ref_airport/rap_iata3lc/@action", node);
+	 * if ("update".equalsIgnoreCase(act) || "insert".equalsIgnoreCase(act)) {
+	 * routingChanged = true;
+	 * }
+	 * }
+	 * 
+	 * // เหมือนพฤติกรรมเดิม: UPDATE จะ set VIA เฉพาะตอน routing เปลี่ยน, DATASET
+	 * set
+	 * // เสมอ
+	 * if (!"DATASET".equalsIgnoreCase(actionType) && !routingChanged)
+	 * return;
+	 * 
+	 * // Vial = getVial ของแต่ละ via ต่อกัน (ตามลำดับใน route ซ้าย→ขวา)
+	 * StringBuilder vial = new StringBuilder();
+	 * for (String via : vias) {
+	 * vial.append(getVial(via, iataToIcao.getOrDefault(via, "")));
+	 * }
+	 * 
+	 * // via3/via4 (ช่องเดียว) = via ที่ติด hopo (arrival = ตัวสุดท้าย, departure =
+	 * // ตัวแรก)
+	 * String adjacent = isArrival ? vias.get(vias.size() - 1) : vias.get(0);
+	 * f.setVia3(adjacent);
+	 * f.setVia4(iataToIcao.getOrDefault(adjacent, ""));
+	 * f.setVial(vial.toString());
+	 * f.setVian(String.valueOf(vias.size()));
+	 * } catch (XPathExpressionException e) {
+	 * log.error("applyVial error: ", e);
+	 * }
+	 * }
+	 */
 
 	/**
 	 * รายชื่อสนามบิน VIA จาก route (คั่นด้วย "-") เทียบกับ hopo:
@@ -663,46 +686,52 @@ public class TranformFidsAfttab {
 	}
 
 	// ─── INDEXED NESTED STRUCTURES ─────────────────────────────────────────
-	/* private void applyBeltDetails(FidsAfttab f, Element flightElement, boolean isArrival) {
-		NodeList nodes = flightElement.getElementsByTagName(isArrival ? "pl_baggagebelt" : "pl_departurebelt");
-		String prefix = isArrival ? "pbb_" : "pdb_";
-		String beltRefTag = prefix + (isArrival ? "rbb_baggagebelt" : "rdb_departurebelt");
-		String tmbTag = prefix + (isArrival
-				? "rbb_refbaggagebelt/ref_baggagebelt/rbb_rctt_countrytype"
-				: "rdb_refbaggagebelt/ref_baggagebelt/rdb_rctt_countrytype");
-
-		XPath xp = XPathFactory.newInstance().newXPath();
-		for (int i = 0; i < nodes.getLength(); i++) {
-			Node n = nodes.item(i);
-			if ("delete".equalsIgnoreCase(((Element) n).getAttribute("action")))
-				continue;
-			try {
-				String ba = convertDateStringIfNeeded(xp.evaluate(prefix + "beginactual", n));
-				String bs = convertDateStringIfNeeded(xp.evaluate(prefix + "beginplan", n));
-				String ea = convertDateStringIfNeeded(xp.evaluate(prefix + "endactual", n));
-				String es = convertDateStringIfNeeded(xp.evaluate(prefix + "endplan", n));
-				String blt = convertDateStringIfNeeded(xp.evaluate(beltRefTag, n));
-				String tmb = convertDateStringIfNeeded(xp.evaluate(tmbTag, n));
-				String bast = convertDateStringIfNeeded(xp.evaluate(prefix + "status", n));
-
-				setDynamicValue(f, "b", i, "ba", ba);
-				setDynamicValue(f, "b", i, "bs", bs);
-				setDynamicValue(f, "b", i, "ea", ea);
-				setDynamicValue(f, "b", i, "es", es);
-				setDynamicValue(f, "bas", i, "", ba);
-				setDynamicValue(f, "bao", i, "", bs);
-				setDynamicValue(f, "bae", i, "", ea);
-				setDynamicValue(f, "bac", i, "", es);
-				setDynamicValue(f, "blt", i, "", blt);
-				setDynamicValue(f, "tmb", i, "", tmb);
-				setDynamicValue(f, "baz", i, "", blt);
-				f.setBast(bast);
-				f.setB1ba(f.getAibt());
-			} catch (XPathExpressionException e) {
-				log.error("applyBeltDetails error: ", e);
-			}
-		}
-	} */
+	/*
+	 * private void applyBeltDetails(FidsAfttab f, Element flightElement, boolean
+	 * isArrival) {
+	 * NodeList nodes = flightElement.getElementsByTagName(isArrival ?
+	 * "pl_baggagebelt" : "pl_departurebelt");
+	 * String prefix = isArrival ? "pbb_" : "pdb_";
+	 * String beltRefTag = prefix + (isArrival ? "rbb_baggagebelt" :
+	 * "rdb_departurebelt");
+	 * String tmbTag = prefix + (isArrival
+	 * ? "rbb_refbaggagebelt/ref_baggagebelt/rbb_rctt_countrytype"
+	 * : "rdb_refbaggagebelt/ref_baggagebelt/rdb_rctt_countrytype");
+	 * 
+	 * XPath xp = XPathFactory.newInstance().newXPath();
+	 * for (int i = 0; i < nodes.getLength(); i++) {
+	 * Node n = nodes.item(i);
+	 * if ("delete".equalsIgnoreCase(((Element) n).getAttribute("action")))
+	 * continue;
+	 * try {
+	 * String ba = convertDateStringIfNeeded(xp.evaluate(prefix + "beginactual",
+	 * n));
+	 * String bs = convertDateStringIfNeeded(xp.evaluate(prefix + "beginplan", n));
+	 * String ea = convertDateStringIfNeeded(xp.evaluate(prefix + "endactual", n));
+	 * String es = convertDateStringIfNeeded(xp.evaluate(prefix + "endplan", n));
+	 * String blt = convertDateStringIfNeeded(xp.evaluate(beltRefTag, n));
+	 * String tmb = convertDateStringIfNeeded(xp.evaluate(tmbTag, n));
+	 * String bast = convertDateStringIfNeeded(xp.evaluate(prefix + "status", n));
+	 * 
+	 * setDynamicValue(f, "b", i, "ba", ba);
+	 * setDynamicValue(f, "b", i, "bs", bs);
+	 * setDynamicValue(f, "b", i, "ea", ea);
+	 * setDynamicValue(f, "b", i, "es", es);
+	 * setDynamicValue(f, "bas", i, "", ba);
+	 * setDynamicValue(f, "bao", i, "", bs);
+	 * setDynamicValue(f, "bae", i, "", ea);
+	 * setDynamicValue(f, "bac", i, "", es);
+	 * setDynamicValue(f, "blt", i, "", blt);
+	 * setDynamicValue(f, "tmb", i, "", tmb);
+	 * setDynamicValue(f, "baz", i, "", blt);
+	 * f.setBast(bast);
+	 * f.setB1ba(f.getAibt());
+	 * } catch (XPathExpressionException e) {
+	 * log.error("applyBeltDetails error: ", e);
+	 * }
+	 * }
+	 * }
+	 */
 
 	/*
 	 * private void applyGateDetails(FidsAfttab f, Element flightElement, boolean
@@ -743,49 +772,63 @@ public class TranformFidsAfttab {
 	 * }
 	 */
 
-	/* private void applyDelayReasons(FidsAfttab f, Element flightElement) {
-		NodeList nodes = flightElement.getElementsByTagName("pl_delayreason");
-		XPath xp = XPathFactory.newInstance().newXPath();
-		for (int i = 0; i < nodes.getLength(); i++) {
-			Node n = nodes.item(i);
-			try {
-				String dcd = convertDateStringIfNeeded(xp.evaluate("pdlr_rdlr_delayreason", n));
-				String dela = convertDateStringIfNeeded(xp.evaluate("pdlr_delay", n));
-				setDynamicValue(f, "dcd", i, "", dcd);
-				setDynamicValue(f, "dtd", i, "", dela);
-				f.setDela(dela);
-			} catch (XPathExpressionException e) {
-				log.error("applyDelayReasons error: ", e);
-			}
-		}
-	} */
+	/*
+	 * private void applyDelayReasons(FidsAfttab f, Element flightElement) {
+	 * NodeList nodes = flightElement.getElementsByTagName("pl_delayreason");
+	 * XPath xp = XPathFactory.newInstance().newXPath();
+	 * for (int i = 0; i < nodes.getLength(); i++) {
+	 * Node n = nodes.item(i);
+	 * try {
+	 * String dcd = convertDateStringIfNeeded(xp.evaluate("pdlr_rdlr_delayreason",
+	 * n));
+	 * String dela = convertDateStringIfNeeded(xp.evaluate("pdlr_delay", n));
+	 * setDynamicValue(f, "dcd", i, "", dcd);
+	 * setDynamicValue(f, "dtd", i, "", dela);
+	 * f.setDela(dela);
+	 * } catch (XPathExpressionException e) {
+	 * log.error("applyDelayReasons error: ", e);
+	 * }
+	 * }
+	 * }
+	 */
 
-	private List<FidsCcatab> getCounters(List<FidsCcatab> lstFidsCcatab,boolean isCommon) {
+	private List<FidsCcatab> getCounters(List<FidsCcatab> lstFidsCcatab, String actionType) {
 		if (lstFidsCcatab == null || lstFidsCcatab.isEmpty()) {
 			return new ArrayList<>();
 		}
+		
 		List<FidsCcatab> lst = new ArrayList<>();
+		boolean isDataset = "DATASET".equalsIgnoreCase(actionType);
+
 		for (FidsCcatab item : lstFidsCcatab) {
+			String action = item.getAction();
+
+			// 1. เช็ก action: ถ้าไม่มี action หรือไม่ใช่ DATASET/UPDATE/INSERT ให้ข้าม
+			if (!isDataset && !"UPDATE".equalsIgnoreCase(action) && !"INSERT".equalsIgnoreCase(action)) {
+				continue;
+			}
+
+			// 2. เช็ก HOLD
 			String ckic = item.getCkic();
 			if ("HOLD".equals(ckic)) {
 				continue;
 			}
-			
-			if (!isCommon) {
-				String ctyp = item.getCtyp();
-				ctyp = "C".equals(ctyp) ? "C" : " ";
-				if (" ".equals(ctyp)) {
-					item.setCtyp(ctyp);
-					lst.add(item);
-				}
-			} else {
-				if (item.getFlno() != null) {
-					item.setFlno(String.format("%-9s", item.getFlno()));
-				}
+
+			// 3. เซ็ตค่า ctyp (Y -> C, อื่นๆ -> " ")
+			/* if ("Y".equalsIgnoreCase(item.getCtyp())) {
 				item.setCtyp("C");
-            	lst.add(item);
+			} else {
+				item.setCtyp(" ");
+			} */
+
+			// 4. จัด Format เติมช่องว่างให้ครบ 9 ตัวอักษร
+			if (item.getFlno() != null) {
+				item.setFlno(String.format("%-9s", item.getFlno()));
 			}
+
+			lst.add(item);
 		}
+
 		return lst;
 	}
 
@@ -953,14 +996,17 @@ public class TranformFidsAfttab {
 		return new JfnoResult(sb.toString(), String.valueOf(count));
 	}
 
-	/* public void setDynamicValue(FidsAfttab obj, String fieldPrefix, int index, String fieldSuffix, String value) {
-		try {
-			String fieldName = fieldPrefix + (index + 1) + fieldSuffix;
-			Field field = FidsAfttab.class.getDeclaredField(fieldName);
-			field.setAccessible(true);
-			field.set(obj, value);
-		} catch (Exception e) {
-			log.error("setDynamicValue: ", e);
-		}
-	} */
+	/*
+	 * public void setDynamicValue(FidsAfttab obj, String fieldPrefix, int index,
+	 * String fieldSuffix, String value) {
+	 * try {
+	 * String fieldName = fieldPrefix + (index + 1) + fieldSuffix;
+	 * Field field = FidsAfttab.class.getDeclaredField(fieldName);
+	 * field.setAccessible(true);
+	 * field.set(obj, value);
+	 * } catch (Exception e) {
+	 * log.error("setDynamicValue: ", e);
+	 * }
+	 * }
+	 */
 }

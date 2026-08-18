@@ -1369,22 +1369,31 @@
 				</xsl:for-each>
 			</lstRouting>
 
+			<counter>
+				<xsl:value-of select="//pl_departure/pd_counters"/>
+			</counter>
 			<lstFidsCcatab>
-				<xsl:for-each select="pl_desk">
+				<xsl:for-each select="//pl_desk">
 					<fidsCcatab>
+						<action><xsl:value-of select="@action"/></action>
+						<flnu><xsl:value-of select="pdk_idseq"/></flnu>
 						<ckic><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_code"/></ckic>
 						<ckbs><xsl:value-of select="custom:convertDate(pdk_beginplan)"/></ckbs>
 						<ckes><xsl:value-of select="custom:convertDate(pdk_endplan)"/></ckes>
 						<ckba><xsl:value-of select="custom:convertDate(pdk_beginactual)"/></ckba>
 						<ckea><xsl:value-of select="custom:convertDate(pdk_endactual)"/></ckea>
-						<ctyp><xsl:value-of select="pdk_checkintype"/></ctyp>
+						<ctyp>
+							<xsl:value-of select="if (pdk_cciind = 'Y') then 'C' else 'D'"/>
+						</ctyp>
 						<ckit><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_rco_concourse"/></ckit>
 						<disp><xsl:value-of select="pdk_checkinclassid"/></disp>
 						<act3><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_ral_airline"/></act3>
-						
-						<!-- กรณี Common -->
-						<flnu><xsl:value-of select="pdk_idseq"/></flnu>
-						<flno><xsl:value-of select="pdk_rcnt_refmastercci/ref_counter/rcnt_ral_airline/ref_airline/ral_2lc"/></flno>
+						<flno>
+							<!-- กรณี Common จะเป็น Y -->
+							<xsl:value-of select="if (pdk_cciind = 'Y') 
+								then pdk_rcnt_refmastercci/ref_counter/rcnt_ral_airline/ref_airline/ral_2lc 
+								else pdk_pd_flightnumber"/>
+						</flno>
 					</fidsCcatab>
 				</xsl:for-each>
 			</lstFidsCcatab>

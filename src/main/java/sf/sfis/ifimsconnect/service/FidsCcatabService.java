@@ -46,7 +46,7 @@ public class FidsCcatabService {
 				log.info("CKIC : "+ccatab.getCkic());
 //				deleteCcatab(fidsCcatab);
 				
-				fidsCcatab.setFlno(ccatab.getFlno()!=null?ccatab.getFlno():fidsAfttab.getFlno());
+				fidsCcatab.setFlno(fidsAfttab.getFlno());
 				fidsCcatab.setHopo(fidsAfttab.getHopo());
 				fidsCcatab.setAct3(fidsAfttab.getAct3());
 				fidsCcatab.setStod(fidsAfttab.getStod());
@@ -56,7 +56,7 @@ public class FidsCcatabService {
 				fidsCcatab.setStat(fidsAfttab.getStat());
 				fidsCcatab.setUsec(fidsAfttab.getUsec());
 				fidsCcatab.setUseu(fidsAfttab.getUseu());
-				fidsCcatab.setCtyp(ccatab.getCtyp());
+				fidsCcatab.setCtyp(ccatab.getCtyp().equals("C")?"C":" ");
 				fidsCcatab.setCkbs(ccatab.getCkbs());
 			    fidsCcatab.setCkes(ccatab.getCkes());
 			    fidsCcatab.setCkba(ccatab.getCkba());
