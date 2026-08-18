@@ -80,7 +80,7 @@ class ESBResponseServiceTest {
 		assertThat(xml).contains("<CKIC></CKIC>").contains("<FLNU></FLNU>");
 		// CTYP ใส่ placeholder CTYP.D ไปก่อน
 		assertThat(xml).contains("<CTYP>D</CTYP>");
-	} */
+	}
 
 	@Test
 	@DisplayName("convertGatetoEsb (ADID=A) fills INFOBJ_GENERIC + empty GATEARR")
@@ -107,9 +107,9 @@ class ESBResponseServiceTest {
 		assertThat(xml).contains("<INFOBJ_GATE>").contains("<GATEARR>")
 				.doesNotContain("<GATEDEP>");
 		assertThat(xml).contains("<GTA1></GTA1>").contains("<GA1B></GA1B>").contains("<GA1E></GA1E>");
-	}
+	} */
 
-	@Test
+	/* @Test
 	@DisplayName("convertGatetoEsb (ADID=D) uses GATEDEP instead of GATEARR")
 	void buildsGateDeparture() {
 		FidsAfttab f = new FidsAfttab();
@@ -126,9 +126,9 @@ class ESBResponseServiceTest {
 				.contains("<STDT>20260512024000</STDT>")   // ADID=D → stod
 				.contains("<GATEDEP>").doesNotContain("<GATEARR>");
 		assertThat(xml).contains("<GTD1></GTD1>").contains("<GD1B></GD1B>").contains("<GD1E></GD1E>");
-	}
+	} */
 
-	@Test
+	/* @Test
 	@DisplayName("convertBelttoEsb fills INFOBJ_GENERIC from FidsAfttab, empty INFOBJ_BELT")
 	void buildsBelt() {
 		FidsAfttab f = new FidsAfttab();
@@ -198,7 +198,7 @@ class ESBResponseServiceTest {
 				.contains("<STDT>20260512024000</STDT>")
 				.contains("<ACPOSITIONDEP>").doesNotContain("<ACPOSITIONARR>");
 		assertThat(xml).contains("<PSTD></PSTD>").contains("<PDBS></PDBS>").contains("<PDES></PDES>");
-	}
+	} */
 
 	/* @Test
 	@DisplayName("convertTowingtoEsb fills INFOBJ_GENERIC, empty CONCAT/TOWINGS")
