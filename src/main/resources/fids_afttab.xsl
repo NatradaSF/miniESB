@@ -1383,15 +1383,15 @@
 						<ckba><xsl:value-of select="custom:convertDate(pdk_beginactual)"/></ckba>
 						<ckea><xsl:value-of select="custom:convertDate(pdk_endactual)"/></ckea>
 						<ctyp>
-							<xsl:value-of select="if (pdk_cciind = 'Y') then 'C' else 'D'"/>
+							<xsl:value-of select="if (pdk_rcnt_refcounter/ref_counter/rcnt_type = 'C') then 'C' else 'D'"/>
 						</ctyp>
 						<ckit><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_rco_concourse"/></ckit>
 						<disp><xsl:value-of select="pdk_checkinclassid"/></disp>
 						<act3><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_ral_airline"/></act3>
 						<flno>
 							<!-- กรณี Common จะเป็น Y -->
-							<xsl:value-of select="if (pdk_cciind = 'Y') 
-								then pdk_rcnt_refmastercci/ref_counter/rcnt_ral_airline/ref_airline/ral_2lc 
+							<xsl:value-of select="if (pdk_rcnt_refcounter/ref_counter/rcnt_type = 'C') 
+								then pdk_rcnt_refcounter/ref_counter/rcnt_ral_airline 
 								else pdk_pd_flightnumber"/>
 						</flno>
 					</fidsCcatab>

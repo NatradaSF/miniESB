@@ -163,13 +163,37 @@ public class ESBRequestService {
 			if (out == null) {
 				return;
 			}
-
+			//เมื่อมีคิวใหม่แล้ว แยกคิวตาม systemType เช่น  VDGS, AFTN, SITA, ATCA
 			if (systemType.equals("AFTN")) {
-				log.info("Send to AQ_FROM_AFTN_AOT_AOS_TST...");
+				log.info("Send to AOS_AFTN_IN...");
 				artemisProducer.sendMessage("AQ_FROM_AFTN_AOT_AOS_TST", hopo, out);
 			} else if (systemType.equals("SITA")) {
-				log.info("Send to AQ_FROM_SITA_AOT_AOS_TST...");
+				log.info("Send to AOS_SITA_IN...");
 				artemisProducer.sendMessage("AQ_FROM_SITA_AOT_AOS_TST", hopo, out);
+			} else if (systemType.equals("ATC")) {
+				log.info("Send to AOS_ATC_IN...");
+				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", hopo, out);
+			} else if (systemType.equals("IDEP")) {
+				log.info("Send to AOS_IDEP_IN...");
+				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", hopo, out);
+			} else if (systemType.equals("ACDM")) {
+				log.info("Send to AOS_ACDM_IN...");
+				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", hopo, out);
+			} else if (systemType.equals("VDGS")) {
+				log.info("Send to AOS_VDGS_IN...");
+				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", hopo, out);
+			} else if (systemType.equals("BHS")) {
+				log.info("Send to AOS_BHS_IN...");
+				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", hopo, out);
+			} else if (systemType.equals("PG")) {
+				log.info("Send to AOS_OTHERS_IN...");
+				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", hopo, out);
+			} else if (systemType.equals("SWIM")) {
+				log.info("Send to AOS_SWIM_IN...");
+				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", hopo, out);
+			} else if (systemType.equals("XMIDS")) {//ไม่ได้รับจาก ESB รับจากระบบ Xmids แล้วส่งให้ AOS
+				log.info("Send to AOS_XMIDS_IN...");
+				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", hopo, out);
 			} else {
 				log.info("Send to AQ_FROM_FIDS_AOT_AOS_TST...");
 				artemisProducer.sendMessage("AQ_FROM_FIDS_AOT_AOS_TST", hopo, out);

@@ -33,6 +33,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -254,7 +255,7 @@ public class TranformFidsAfttab {
 		// applyDelayReasons(f, flightElement);
 
 		if (!isArrival) {
-			f.setLstFidsCcatab(getCounters(f.getLstFidsCcatab(), actionType));
+			f.setLstFidsCcatab(getCounters(f.getLstFidsCcatab(), f.getCounter(), actionType));
 		}
 
 		// 8. Shared derivations (AURN, BAGS, DCD2, STOA, STOD, FLDA, DTD2, DOOA, DOOD)
@@ -792,7 +793,7 @@ public class TranformFidsAfttab {
 	 * }
 	 */
 
-	private List<FidsCcatab> getCounters(List<FidsCcatab> lstFidsCcatab, String actionType) {
+	private List<FidsCcatab> getCounters(List<FidsCcatab> lstFidsCcatab, String counter, String actionType) {
 		if (lstFidsCcatab == null || lstFidsCcatab.isEmpty()) {
 			return new ArrayList<>();
 		}
@@ -814,19 +815,25 @@ public class TranformFidsAfttab {
 				continue;
 			}
 
-			// 3. เซ็ตค่า ctyp (Y -> C, อื่นๆ -> " ")
-			/* if ("Y".equalsIgnoreCase(item.getCtyp())) {
-				item.setCtyp("C");
-			} else {
-				item.setCtyp(" ");
-			} */
-
-			// 4. จัด Format เติมช่องว่างให้ครบ 9 ตัวอักษร
+			// 3. จัด Format เติมช่องว่างให้ครบ 9 ตัวอักษร
 			if (item.getFlno() != null) {
 				item.setFlno(String.format("%-9s", item.getFlno()));
 			}
 
-			lst.add(item);
+			// 4. ถ้าเป็น Common ให้ตั้งค่า ckic ตาม pd_counters
+			if ("C".equalsIgnoreCase(item.getCtyp())) {
+				if (counter != null && !counter.trim().isEmpty()) {
+					String[] counters = counter.split(",");
+					for (String c : counters) {
+						FidsCcatab fidsCcatab = new FidsCcatab();
+						BeanUtils.copyProperties(item, fidsCcatab);
+						fidsCcatab.setCkic(c.trim());
+						lst.add(fidsCcatab);
+					}
+				}
+			} else {
+				lst.add(item);
+			}
 		}
 
 		return lst;

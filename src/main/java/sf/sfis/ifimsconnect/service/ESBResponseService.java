@@ -317,17 +317,9 @@ public class ESBResponseService {
 	}
 
 	/**
-	 * ปั้น XML สำหรับคิว UFIS_COUNTER_OUT (UFISCHKUD — check-in counter update).
-	 * ส่วน INFOBJ_GENERIC ตั้งค่าจาก {@link FidsAfttab} แบบเดียวกับ
-	 * {@link #convertFidsAfftabtoEsb}
-	 * (dynamic ตามเที่ยวบิน) — ต่างกันแค่ MESSAGETYPE/MESSAGEORIGIN ที่เป็น
-	 * identity ของ counter.
-	 * ส่วน INFOBJ_COUNTER ยังไม่มี source ใน FidsAfttab จึงตั้งเป็นค่าว่าง ""
-	 * ไปก่อน (รอ backend map).
-	 * หมายเหตุ: CTYP เป็น enum ตั้งค่าว่างไม่ได้ จึงปล่อย null (tag จะไม่ถูก
-	 * marshal ออกมา).
+	 * ปั้น XML สำหรับคิว UFIS_COUNTER_OUT (UFISCHKUD — check-in dedicated counter update).
 	 */
-	public String convertCountertoEsb(String updateTime, MSG.MSGSTREAMOUT.INFOBJGENERIC generic, String urno, String flno, FidsCcatab fidsCcatab) {
+	public String convertDedicatedCounterToEsb(MSG.MSGSTREAMOUT.INFOBJGENERIC generic, FidsAfttab fidsAfttab, FidsCcatab fidsCcatab) {
 		StringWriter writer = new StringWriter();
 		MSG esb = new MSG();
 		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
@@ -348,8 +340,10 @@ public class ESBResponseService {
 		counter.setCKES(nullIfEmpty(fidsCcatab.getCkes()));
 		counter.setDISP(nullIfEmpty(fidsCcatab.getDisp()));
 		//Only ESB set switch value.
+		String urno = fidsAfttab.getUrno() != null ? fidsAfttab.getUrno().toString() : null;
+    	String flnu = fidsCcatab.getFlnu() != null ? fidsCcatab.getFlnu().toString() : null;
 		counter.setFLNU(nullIfEmpty(urno));
-		counter.setURNO(nullIfEmpty(fidsCcatab.getFlnu().toString()));
+		counter.setURNO(nullIfEmpty(flnu));
 		counter.setCTYP(CTYP.valueOf(fidsCcatab.getCtyp()));
 		
 		msgstreamout.setINFOBJCOUNTER(counter);
@@ -366,6 +360,56 @@ public class ESBResponseService {
 		return null;
 	}
 
+
+	/**
+	 * ปั้น XML สำหรับคิว UFIS_COUNTER_OUT (UFISCCIUD — check-in common counter update).
+	 */
+	public String convertCommonCounterToEsb(MSG.MSGSTREAMOUT.INFOBJGENERIC generic, FidsAfttab fidsAfttab, FidsCcatab fidsCcatab) {
+		StringWriter writer = new StringWriter();
+		MSG esb = new MSG();
+		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
+
+		// สร้างโครงสร้างชั้น STATIC -> RESOURCES -> COMMON_COUNTERS
+		MSG.MSGSTREAMOUT.STATIC staticNode = new MSG.MSGSTREAMOUT.STATIC();
+		MSG.MSGSTREAMOUT.STATIC.RESOURCES resources = new MSG.MSGSTREAMOUT.STATIC.RESOURCES();
+		MSG.MSGSTREAMOUT.STATIC.RESOURCES.COMMONCOUNTERS commonCounter = new MSG.MSGSTREAMOUT.STATIC.RESOURCES.COMMONCOUNTERS();
+
+		// เซ็ตฟิลด์ตามโครงสร้าง Common Counter จากรูปภาพ
+		commonCounter.setCKIC(nullIfEmpty(fidsCcatab.getCkic()));
+		commonCounter.setALCD(nullIfEmpty(fidsAfttab.getAlc2()));
+		commonCounter.setCTYP(nullIfEmpty(fidsCcatab.getCtyp()));
+		commonCounter.setCKIT(nullIfEmpty(fidsCcatab.getCkit()));
+		commonCounter.setCKBS(nullIfEmpty(fidsCcatab.getCkbs()));
+		commonCounter.setCKES(nullIfEmpty(fidsCcatab.getCkes()));
+		commonCounter.setCKEA(nullIfEmpty(fidsCcatab.getCkea()));
+
+		// Switch value FLNU / URNO
+		String urno = fidsAfttab.getUrno() != null ? fidsAfttab.getUrno().toString() : null;
+		String flnu = fidsCcatab.getFlnu() != null ? fidsCcatab.getFlnu().toString() : null;
+		
+		commonCounter.setFLNU(nullIfEmpty(urno));
+		commonCounter.setURNO(nullIfEmpty(flnu));
+
+		// ประกอบโครงสร้างเข้าด้วยกัน
+		// (หมายเหตุ: ถ้า JAXB เจนมาเป็น List ให้ใช้ .getCOMMONCOUNTERS().add(commonCounter))
+		resources.setCOMMONCOUNTERS(commonCounter);
+		staticNode.setRESOURCES(resources);
+
+		msgstreamout.setINFOBJGENERIC(generic);
+		msgstreamout.setSTATIC(staticNode);
+		esb.setMSGSTREAMOUT(msgstreamout);
+
+		try {
+			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(esb, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			log.error("convertCommonCounterToEsb: ", e);
+		}
+		return null;
+	}
+
 	private String nullIfEmpty(String str) {
 		if (str == null || str.trim().isEmpty()) {
 			return null;
@@ -373,23 +417,24 @@ public class ESBResponseService {
 		return str.trim();
 	}
 
-	/* private CTYP mapToCtypEnum(String ctypStr) {
-		if (ctypStr == null || ctypStr.trim().isEmpty()) {
-			return null; // ไม่สร้างแท็ก <CTYP>
-		}
-		return ctypStr.equals("C")?CTYP.C:CTYP.D;
-	} */
-
 	/**
 	 * ส่ง counter เข้าคิว UFIS_COUNTER_OUT_{HOPO} โดย INFOBJ_GENERIC ดึงจาก FidsAfttab
 	 */
 	public void sendCounter(String updateTime, FidsAfttab fidsAfttab) {
 		if (fidsAfttab != null && fidsAfttab.getLstFidsCcatab() != null && !fidsAfttab.getLstFidsCcatab().isEmpty()) {
-			MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISCHKUD", updateTime, fidsAfttab);
 			for (FidsCcatab item : fidsAfttab.getLstFidsCcatab()) {
-				String xmlEsb = convertCountertoEsb(updateTime, generic, fidsAfttab.getUrno().toString(), fidsAfttab.getFlno(), item);
+				boolean isCommon = "C".equalsIgnoreCase(item.getCtyp());
+				String msgType = isCommon ? "UFISCCIUD" : "UFISCHKUD";
+            	MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric(msgType, updateTime, fidsAfttab);
+				String xmlEsb;
+				if (isCommon) {
+					xmlEsb = convertCommonCounterToEsb(generic, fidsAfttab, item);
+				} else {
+					xmlEsb = convertDedicatedCounterToEsb(generic, fidsAfttab, item);
+				}
+
 				if (xmlEsb != null) {
-					log.info("Update counter ("+item.getCkic()+") to ESB...");
+					log.info("Update {} counter ({}) to ESB...", isCommon ? "Common" : "Dedicated", item.getCkic());
 					sendToOutboundQueue("UFIS_COUNTER_OUT", fidsAfttab.getHopo(), xmlEsb);
 				}
 			}
@@ -565,6 +610,65 @@ public class ESBResponseService {
 	}
 
 	/**
+	 * ปั้น XML สำหรับคิว UFIS_TRIGGER_OUT — VDGS (UFISVDGUD).
+	 * INFOBJ_GENERIC ดึงจาก FidsAfttab (ดู {@link #buildOutboundGeneric}) —
+	 * ACTIONTYPE เป็น
+	 * U/I ปกติเหมือนคิวอื่น. INFOBJ_VDGS เลือก VDGSARR/VDGSDEP ตาม ADID
+	 */
+	public String convertVdgstoEsb(String updateTime, FidsAfttab fidsAfttab) {
+		StringWriter writer = new StringWriter();
+		MSG esb = new MSG();
+		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
+
+		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISVDGUD", updateTime, fidsAfttab);
+
+		// --- INFOBJ_VDGS: เลือก arr/dep ตาม ADID, field ค่าว่าง "" (รอ backend map)
+		// ---
+		MSG.MSGSTREAMOUT.INFOBJVDGS vdgs = new INFOBJVDGS();
+		if (generic.getADID() == ADID.A) {
+			INFOBJVDGS.VDGSARR arr = new INFOBJVDGS.VDGSARR();
+			/* arr.setPSTA("");
+			arr.setACT5("");
+			arr.setFTYP(""); */
+			copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, arr);
+			vdgs.setVDGSARR(arr);
+		} else {
+			INFOBJVDGS.VDGSDEP dep = new INFOBJVDGS.VDGSDEP();
+			/* dep.setPSTD("");
+			dep.setACT5("");
+			dep.setFTYP("");
+			dep.setTIFD(""); */
+			copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, dep);
+			vdgs.setVDGSDEP(dep);
+		}
+
+		msgstreamout.setINFOBJGENERIC(generic);
+		msgstreamout.setINFOBJVDGS(vdgs);
+		esb.setMSGSTREAMOUT(msgstreamout);
+		try {
+			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(esb, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			log.error("convertVdgstoEsb: ", e);
+		}
+		return null;
+	}
+
+	/**
+	 * ส่ง VDGS เข้าคิว UFIS_TRIGGER_OUT_&lt;hopo&gt; (INFOBJ_VDGS ยังว่างรอ backend
+	 * map).
+	 * เรียกจากภายนอกได้ — ยังไม่ได้ผูกเข้า flow convertXMLtoObject อัตโนมัติ.
+	 */
+	public void sendEmptyVdgs(String updateTime, FidsAfttab fidsAfttab) {
+		String xmlEsb = convertVdgstoEsb(updateTime, fidsAfttab);
+		if (xmlEsb != null) {
+			sendToOutboundQueue("UFIS_TRIGGER_OUT", fidsAfttab.getHopo(), xmlEsb);
+		}
+	}
+
+	/**
 	 * ปั้น XML สำหรับคิว UFIS_OTHERS_OUT — towing (UFISTOWUD). ต่างจากคิวอื่นตรงที่
 	 * payload
 	 * อยู่ใต้ {@code CONCAT > TOWINGS} (ไม่ใช่ INFOBJ_XXX). INFOBJ_GENERIC ดึงจาก
@@ -661,71 +765,12 @@ public class ESBResponseService {
 	}
 
 	/**
-	 * ส่ง SITA bulk file เข้าคิว UFIS_OTHERS_OUT_&lt;hopo&gt; (ใช้คิวร่วมกับ
-	 * towing).
+	 * ส่ง SITA bulk file เข้าคิว UFIS_OTHERS_OUT_{HOPO} (ใช้คิวร่วมกับ towing).
 	 */
 	public void sendSita(String updateTime, String hopo, String fileName, String content) {
 		String xmlEsb = convertSitatoEsb(updateTime, hopo, fileName, content);
 		if (xmlEsb != null) {
 			sendToOutboundQueue("UFIS_OTHERS_OUT", hopo, xmlEsb);
-		}
-	}
-
-	/**
-	 * ปั้น XML สำหรับคิว UFIS_TRIGGER_OUT — VDGS (UFISVDGUD).
-	 * INFOBJ_GENERIC ดึงจาก FidsAfttab (ดู {@link #buildOutboundGeneric}) —
-	 * ACTIONTYPE เป็น
-	 * U/I ปกติเหมือนคิวอื่น. INFOBJ_VDGS เลือก VDGSARR/VDGSDEP ตาม ADID — field
-	 * ค่าว่าง "" ไปก่อน (รอ backend map).
-	 */
-	public String convertVdgstoEsb(String updateTime, FidsAfttab fidsAfttab) {
-		StringWriter writer = new StringWriter();
-		MSG esb = new MSG();
-		MSG.MSGSTREAMOUT msgstreamout = new MSGSTREAMOUT();
-
-		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISVDGUD", updateTime, fidsAfttab);
-
-		// --- INFOBJ_VDGS: เลือก arr/dep ตาม ADID, field ค่าว่าง "" (รอ backend map)
-		// ---
-		MSG.MSGSTREAMOUT.INFOBJVDGS vdgs = new INFOBJVDGS();
-		if (generic.getADID() == ADID.A) {
-			INFOBJVDGS.VDGSARR arr = new INFOBJVDGS.VDGSARR();
-			arr.setPSTA("");
-			arr.setACT5("");
-			arr.setFTYP("");
-			vdgs.setVDGSARR(arr);
-		} else {
-			INFOBJVDGS.VDGSDEP dep = new INFOBJVDGS.VDGSDEP();
-			dep.setPSTD("");
-			dep.setACT5("");
-			dep.setFTYP("");
-			dep.setTIFD("");
-			vdgs.setVDGSDEP(dep);
-		}
-
-		msgstreamout.setINFOBJGENERIC(generic);
-		msgstreamout.setINFOBJVDGS(vdgs);
-		esb.setMSGSTREAMOUT(msgstreamout);
-		try {
-			Marshaller marshaller = OUT_MSG_CTX.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.marshal(esb, writer);
-			return writer.toString();
-		} catch (JAXBException e) {
-			log.error("convertVdgstoEsb: ", e);
-		}
-		return null;
-	}
-
-	/**
-	 * ส่ง VDGS เข้าคิว UFIS_TRIGGER_OUT_&lt;hopo&gt; (INFOBJ_VDGS ยังว่างรอ backend
-	 * map).
-	 * เรียกจากภายนอกได้ — ยังไม่ได้ผูกเข้า flow convertXMLtoObject อัตโนมัติ.
-	 */
-	public void sendEmptyVdgs(String updateTime, FidsAfttab fidsAfttab) {
-		String xmlEsb = convertVdgstoEsb(updateTime, fidsAfttab);
-		if (xmlEsb != null) {
-			sendToOutboundQueue("UFIS_TRIGGER_OUT", fidsAfttab.getHopo(), xmlEsb);
 		}
 	}
 
@@ -761,13 +806,16 @@ public class ESBResponseService {
 		generic.setTIMESTAMP(updateTime);
 		generic.setACTIONTYPE(fidsAfttab.getAction().equalsIgnoreCase("insert") ? ACTIONTYPE.I : ACTIONTYPE.U);
 		generic.setHOPO(fidsAfttab.getHopo());
-		generic.setURNO(fidsAfttab.getUrno() != null ? fidsAfttab.getUrno().toString() : null);
-		generic.setADID(ADID.valueOf(fidsAfttab.getAdid()));
-		generic.setSTDT(generic.getADID() == ADID.A ? fidsAfttab.getStoa() : fidsAfttab.getStod());
-		generic.setFLNO(fidsAfttab.getFlno() != null ? fidsAfttab.getFlno().trim() : null);
-		generic.setCSGN(fidsAfttab.getCsgn());
-		generic.setRKEY(fidsAfttab.getRkey() != null ? fidsAfttab.getRkey().toString() : null);
-		generic.setRTYP(fidsAfttab.getRtyp());
+		
+		if(!"UFISCCIUD".equalsIgnoreCase(messageType)){
+			generic.setURNO(fidsAfttab.getUrno() != null ? fidsAfttab.getUrno().toString() : null);
+			generic.setADID(ADID.valueOf(fidsAfttab.getAdid()));
+			generic.setSTDT(generic.getADID() == ADID.A ? fidsAfttab.getStoa() : fidsAfttab.getStod());
+			generic.setFLNO(fidsAfttab.getFlno() != null ? fidsAfttab.getFlno().trim() : null);
+			generic.setCSGN(fidsAfttab.getCsgn());
+			generic.setRKEY(fidsAfttab.getRkey() != null ? fidsAfttab.getRkey().toString() : null);
+			generic.setRTYP(fidsAfttab.getRtyp());
+		}
 		return generic;
 	}
 

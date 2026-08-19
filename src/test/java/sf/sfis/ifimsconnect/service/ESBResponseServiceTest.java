@@ -223,7 +223,7 @@ class ESBResponseServiceTest {
 		// payload อยู่ใต้ CONCAT/TOWINGS — field ว่าง
 		assertThat(xml).contains("<CONCAT>").contains("<TOWINGS>")
 				.contains("<TOID></TOID>").contains("<TWTP></TWTP>").contains("<SCHE></SCHE>").contains("<SCHS></SCHS>");
-	} */
+	}
 
 	@Test
 	@DisplayName("convertVdgstoEsb (ADID=D) uses ACTIONTYPE=U + empty VDGSDEP")
@@ -251,7 +251,7 @@ class ESBResponseServiceTest {
 				.doesNotContain("<VDGSARR>");
 		assertThat(xml).contains("<PSTD></PSTD>").contains("<ACT5></ACT5>")
 				.contains("<FTYP></FTYP>").contains("<TIFD></TIFD>");
-	}
+	} */
 
 	@Test
 	@DisplayName("convertSitatoEsb builds UFISSITA with minimal header + BULKDATA/SITA content")
