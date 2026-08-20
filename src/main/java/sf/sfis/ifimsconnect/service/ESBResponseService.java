@@ -327,25 +327,22 @@ public class ESBResponseService {
 		// INFOBJ_GENERIC — dynamic จาก FidsAfttab (identity counter = UFISCHKUD)
 		//MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISCHKUD", updateTime, fidsAfttab);
 
-		// --- INFOBJ_COUNTER: ยังไม่มี source ใน FidsAfttab → ค่าว่าง "" (รอ backend
-		// map) ---
-		// CTYP เป็น enum ตั้งค่าว่างไม่ได้ → ใส่ placeholder CTYP.D ไปก่อน (รอ backend
-		// map)
 		MSG.MSGSTREAMOUT.INFOBJCOUNTER counter = new INFOBJCOUNTER();
 
 		// แมปค่าจาก FidsCcatab ลงใน INFOBJCOUNTER
-		counter.setCKIC(nullIfEmpty(fidsCcatab.getCkic()));
-		counter.setCKIT(nullIfEmpty(fidsCcatab.getCkit()));
-		counter.setCKBS(nullIfEmpty(fidsCcatab.getCkbs()));
-		counter.setCKES(nullIfEmpty(fidsCcatab.getCkes()));
-		counter.setDISP(nullIfEmpty(fidsCcatab.getDisp()));
+		counter.setCKIC(fidsCcatab.getCkic());
+		counter.setCKIT(fidsCcatab.getCkit());
+		counter.setCKBS(fidsCcatab.getCkbs());
+		counter.setCKES(fidsCcatab.getCkes());
+		counter.setDISP(fidsCcatab.getDisp());
 		//Only ESB set switch value.
 		String urno = fidsAfttab.getUrno() != null ? fidsAfttab.getUrno().toString() : null;
     	String flnu = fidsCcatab.getFlnu() != null ? fidsCcatab.getFlnu().toString() : null;
-		counter.setFLNU(nullIfEmpty(urno));
-		counter.setURNO(nullIfEmpty(flnu));
+		counter.setFLNU(urno);
+		counter.setURNO(flnu);
 		counter.setCTYP(CTYP.valueOf(fidsCcatab.getCtyp()));
 		
+		sanitizeEmptyToNull(counter);
 		msgstreamout.setINFOBJCOUNTER(counter);
 		msgstreamout.setINFOBJGENERIC(generic);
 		esb.setMSGSTREAMOUT(msgstreamout);
@@ -375,21 +372,21 @@ public class ESBResponseService {
 		MSG.MSGSTREAMOUT.STATIC.RESOURCES.COMMONCOUNTERS commonCounter = new MSG.MSGSTREAMOUT.STATIC.RESOURCES.COMMONCOUNTERS();
 
 		// เซ็ตฟิลด์ตามโครงสร้าง Common Counter จากรูปภาพ
-		commonCounter.setCKIC(nullIfEmpty(fidsCcatab.getCkic()));
-		commonCounter.setALCD(nullIfEmpty(fidsAfttab.getAlc2()));
-		commonCounter.setCTYP(nullIfEmpty(fidsCcatab.getCtyp()));
-		commonCounter.setCKIT(nullIfEmpty(fidsCcatab.getCkit()));
-		commonCounter.setCKBS(nullIfEmpty(fidsCcatab.getCkbs()));
-		commonCounter.setCKES(nullIfEmpty(fidsCcatab.getCkes()));
-		commonCounter.setCKEA(nullIfEmpty(fidsCcatab.getCkea()));
+		commonCounter.setCKIC(fidsCcatab.getCkic());
+		commonCounter.setALCD(fidsAfttab.getAlc2());
+		commonCounter.setCTYP(fidsCcatab.getCtyp());
+		commonCounter.setCKIT(fidsCcatab.getCkit());
+		commonCounter.setCKBS(fidsCcatab.getCkbs());
+		commonCounter.setCKES(fidsCcatab.getCkes());
+		commonCounter.setCKEA(fidsCcatab.getCkea());
 
 		// Switch value FLNU / URNO
 		String urno = fidsAfttab.getUrno() != null ? fidsAfttab.getUrno().toString() : null;
 		String flnu = fidsCcatab.getFlnu() != null ? fidsCcatab.getFlnu().toString() : null;
 		
-		commonCounter.setFLNU(nullIfEmpty(urno));
-		commonCounter.setURNO(nullIfEmpty(flnu));
-
+		commonCounter.setFLNU(urno);
+		commonCounter.setURNO(flnu);
+		sanitizeEmptyToNull(commonCounter);
 		// ประกอบโครงสร้างเข้าด้วยกัน
 		// (หมายเหตุ: ถ้า JAXB เจนมาเป็น List ให้ใช้ .getCOMMONCOUNTERS().add(commonCounter))
 		resources.setCOMMONCOUNTERS(commonCounter);
@@ -408,13 +405,6 @@ public class ESBResponseService {
 			log.error("convertCommonCounterToEsb: ", e);
 		}
 		return null;
-	}
-
-	private String nullIfEmpty(String str) {
-		if (str == null || str.trim().isEmpty()) {
-			return null;
-		}
-		return str.trim();
 	}
 
 	/**
@@ -459,10 +449,12 @@ public class ESBResponseService {
 		if (generic != null && generic.getADID() == ADID.A) {
 			INFOBJGATE.GATEARR arr = new INFOBJGATE.GATEARR();
 			copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, arr);
+			sanitizeEmptyToNull(arr);
 			gate.setGATEARR(arr);
 		} else {
 			INFOBJGATE.GATEDEP dep = new INFOBJGATE.GATEDEP();
 			copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, dep);
+			sanitizeEmptyToNull(dep);
 			gate.setGATEDEP(dep);
 		}
 
@@ -515,6 +507,7 @@ public class ESBResponseService {
 		belt.setB1BS("");
 		belt.setB1ES(""); */
 		copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, belt);
+		sanitizeEmptyToNull(belt);
 		
 		if (!hasAnyData(belt)) {
 			return null;
@@ -569,6 +562,7 @@ public class ESBResponseService {
 			arr.setPABS("");
 			arr.setPAES(""); */
 			copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, arr);
+			sanitizeEmptyToNull(arr);
 			pos.setACPOSITIONARR(arr);
 		} else {
 			INFOBJACPOSITION.ACPOSITIONDEP dep = new INFOBJACPOSITION.ACPOSITIONDEP();
@@ -576,6 +570,7 @@ public class ESBResponseService {
 			dep.setPDBS("");
 			dep.setPDES(""); */
 			copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, dep);
+			sanitizeEmptyToNull(dep);
 			pos.setACPOSITIONDEP(dep);
 		}
 		
@@ -631,6 +626,7 @@ public class ESBResponseService {
 			arr.setACT5("");
 			arr.setFTYP(""); */
 			copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, arr);
+			sanitizeEmptyToNull(arr);
 			vdgs.setVDGSARR(arr);
 		} else {
 			INFOBJVDGS.VDGSDEP dep = new INFOBJVDGS.VDGSDEP();
@@ -639,6 +635,7 @@ public class ESBResponseService {
 			dep.setFTYP("");
 			dep.setTIFD(""); */
 			copyMatchingFields(fidsAfttab.getFieldsNotNull(), fidsAfttab, dep);
+			sanitizeEmptyToNull(dep);
 			vdgs.setVDGSDEP(dep);
 		}
 
@@ -657,9 +654,7 @@ public class ESBResponseService {
 	}
 
 	/**
-	 * ส่ง VDGS เข้าคิว UFIS_TRIGGER_OUT_&lt;hopo&gt; (INFOBJ_VDGS ยังว่างรอ backend
-	 * map).
-	 * เรียกจากภายนอกได้ — ยังไม่ได้ผูกเข้า flow convertXMLtoObject อัตโนมัติ.
+	 * ส่ง VDGS เข้าคิว UFIS_TRIGGER_OUT_{HOPO}
 	 */
 	public void sendEmptyVdgs(String updateTime, FidsAfttab fidsAfttab) {
 		String xmlEsb = convertVdgstoEsb(updateTime, fidsAfttab);
@@ -806,7 +801,7 @@ public class ESBResponseService {
 		generic.setTIMESTAMP(updateTime);
 		generic.setACTIONTYPE(fidsAfttab.getAction().equalsIgnoreCase("insert") ? ACTIONTYPE.I : ACTIONTYPE.U);
 		generic.setHOPO(fidsAfttab.getHopo());
-		
+
 		if(!"UFISCCIUD".equalsIgnoreCase(messageType)){
 			generic.setURNO(fidsAfttab.getUrno() != null ? fidsAfttab.getUrno().toString() : null);
 			generic.setADID(ADID.valueOf(fidsAfttab.getAdid()));
@@ -836,9 +831,13 @@ public class ESBResponseService {
 							return true; // เจอข้อมูลแล้ว
 						}
 					} 
-					// ถ้าเป็น Object ซ้อนข้างใน (เช่น GATEARR / GATEDEP) ให้ค้นลงไปข้างในอีกชั้น
+					// 2. ถ้าเป็น Data Type พื้นฐาน (Primitive / Wrapper / Enum / Date / Number) ถือว่ามีข้อมูลทันที
+					else if (isPrimitiveOrWrapper(value.getClass()) || value instanceof Enum<?>) {
+						return true;
+					}
+					// 3. ถ้าเป็น Custom DTO Object ซ้อนข้างใน (เช่น GATEARR / GATEDEP) ค่อยลงไปเช็ก Recursive
 					else if (hasAnyData(value)) {
-						return true; // เจอข้อมูลข้างใน
+						return true;
 					}
 				}
 			} catch (IllegalAccessException e) {
@@ -846,6 +845,15 @@ public class ESBResponseService {
 			}
 		}
 		return false; // ไม่พบข้อมูลใดๆ เลย
+	}
+
+	// Helper method เช็กว่าเป็น Class พื้นฐานหรือไม่
+	private boolean isPrimitiveOrWrapper(Class<?> clazz) {
+		return clazz.isPrimitive() 
+			|| Number.class.isAssignableFrom(clazz) 
+			|| Boolean.class.isAssignableFrom(clazz) 
+			|| Character.class.isAssignableFrom(clazz)
+			|| java.util.Date.class.isAssignableFrom(clazz);
 	}
 
 	/**
@@ -1026,34 +1034,49 @@ public class ESBResponseService {
 		Class<?> sourceClass = source.getClass();
 		Class<?> targetClass = target.getClass();
 
-		for (Field sourceField : sourceClass.getDeclaredFields()) {
-			sourceField.setAccessible(true);
-			try {
-				Object value = sourceField.get(source);
-				
-				// เช็กว่า value มีค่า และชื่อฟิลด์อยู่ใน updateFields หรือไม่
-				if (value != null && !value.toString().trim().isEmpty() && safeUpdateFields.contains(sourceField.getName())) {
+		while (sourceClass != null && sourceClass != Object.class) {
+			for (Field sourceField : sourceClass.getDeclaredFields()) {
+				sourceField.setAccessible(true);
+				try {
+					Object value = sourceField.get(source);
 					
-					// ค้นหา Target Field แบบ Case-Insensitive เผื่อ JAXB เจนชื่อตัวพิมพ์ต่างกัน
-					Field targetField = findTargetField(targetClass, sourceField.getName());
-					
-					if (targetField != null) {
-						targetField.setAccessible(true);
+					// เช็กว่า value มีค่า และชื่อฟิลด์อยู่ใน updateFields หรือไม่
+					if (value != null && !value.toString().trim().isEmpty() && isFieldInUpdateList(safeUpdateFields, sourceField.getName())) {
 						
-						// กรณี Type เดียวกันเป๊ะ
-						if (targetField.getType().equals(sourceField.getType())) {
-							targetField.set(target, value);
-						} 
-						// กรณี Target เป็น String แต่ Source เป็นประเภทอื่น (ให้สั่ง toString())
-						else if (targetField.getType().equals(String.class)) {
-							targetField.set(target, value.toString());
+						// ค้นหา Target Field แบบ Case-Insensitive เผื่อ JAXB เจนชื่อตัวพิมพ์ต่างกัน
+						Field targetField = findTargetField(targetClass, sourceField.getName());
+						
+						if (targetField != null) {
+							targetField.setAccessible(true);
+							
+							// กรณี Type เดียวกันเป๊ะ
+							if (targetField.getType().equals(sourceField.getType())) {
+								targetField.set(target, value);
+							} 
+							// กรณี Target เป็น String แต่ Source เป็นประเภทอื่น (ให้สั่ง toString())
+							else if (targetField.getType().equals(String.class)) {
+								targetField.set(target, value.toString());
+							}
 						}
 					}
+				} catch (IllegalAccessException e) {
+					log.error("copyMatchingFields access error on field {}: ", sourceField.getName(), e);
 				}
-			} catch (IllegalAccessException e) {
-				log.error("copyMatchingFields access error on field {}: ", sourceField.getName(), e);
+			}
+			sourceClass = sourceClass.getSuperclass();
+		}
+	}
+
+	/**
+	 * เช็กว่า fieldName อยู่ใน updateFields หรือไม่ โดยไม่สนใจตัวพิมพ์เล็ก-ใหญ่
+	 */
+	private boolean isFieldInUpdateList(List<String> updateFields, String fieldName) {
+		for (String field : updateFields) {
+			if (field.equalsIgnoreCase(fieldName)) {
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -1066,6 +1089,25 @@ public class ESBResponseService {
 			}
 		}
 		return null;
+	}
+
+	private <T> T sanitizeEmptyToNull(T object) {
+		if (object == null) return null;
+
+		for (Field field : object.getClass().getDeclaredFields()) {
+			if (field.getType().equals(String.class)) {
+				field.setAccessible(true);
+				try {
+					String value = (String) field.get(object);
+					if (value != null && value.trim().isEmpty()) {
+						field.set(object, null); // เปลี่ยน "" หรือ "   " ให้เป็น null
+					}
+				} catch (IllegalAccessException e) {
+					log.error("Error sanitizing field: {}", field.getName(), e);
+				}
+			}
+		}
+		return object;
 	}
 
 	public String getContentBody(String xml) {

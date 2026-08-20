@@ -51,7 +51,7 @@ class TranformFidsAfttabSnapshotTest {
 	private static TranformFidsAfttab transformer;
 	private static ObjectMapper mapper;
 
-	/* @BeforeAll
+	@BeforeAll
 	static void setUp() throws Exception {
 		sampleXml = new String(Files.readAllBytes(SAMPLE), StandardCharsets.UTF_8);
 
@@ -111,7 +111,7 @@ class TranformFidsAfttabSnapshotTest {
 		FidsAfttab result = transformer.convertPlTurntoAfftab(sampleXml, "UPDATE", "BKK", "D");
 
 		verifySnapshot("update-departure", result);
-	} */
+	}
 
 	/**
 	 * Compares the serialised transform output against a committed golden file,

@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -41,6 +43,33 @@ class ESBResponseServiceTest {
 	@DisplayName("getContentBody returns null when no pl_turn element is present")
 	void returnsNullWhenAbsent() {
 		assertThat(service.getContentBody("<root><other/></root>")).isNull();
+	}
+
+	@Test
+	void convertGatetoEsb_ShouldNotContainEmptyTags_WhenSomeFieldsAreEmpty() {
+		// 1. Arrange: กำหนดค่า FidsAfttab โดยใส่ทั้งค่าจริง และค่าว่าง/spaces
+		FidsAfttab fidsAfttab = new FidsAfttab();
+		fidsAfttab.setAction("UPDATE");
+		fidsAfttab.setAdid("D");
+		fidsAfttab.setGtd1(" ");       // Whitespace
+		fidsAfttab.setGtd2("");         // ค่าว่าง
+		fidsAfttab.setGd1b("20260819053400");      // มีค่า
+		fidsAfttab.setGd1e(null);       // null
+
+		// กำหนด fieldsNotNull สำหรับ copyMatchingFields
+		fidsAfttab.setFieldsNotNull(Arrays.asList("gtd1", "gtd2", "gd1b", "gd1e"));
+
+		// 2. Act
+		String xmlResult = service.convertGatetoEsb("2026-08-20T14:30:00Z", fidsAfttab);
+
+		// 3. Assert
+		assertThat(xmlResult).isNotNull();
+		assertThat(xmlResult).contains("<GD1B>20260819053400</GD1B>"); // ต้องมี Tag ที่มีค่า
+
+		// ❌ ต้องไม่มี Tag ของ GTD1, GTD2, GD1E ปรากฏอยู่ใน XML เลย (รวมถึงรูปแบท <TAG/> หรือ <TAG></TAG>)
+		assertThat(xmlResult).doesNotContain("<GTD1>", "<GTD2>", "<GD1E>");
+		assertThat(xmlResult).doesNotMatch(".*<(GTD1|GTD2|GD1E)\\s*/>.*");
+		assertThat(xmlResult).doesNotMatch(".*<(GTD1|GTD2|GD1E)>\\s*</\\1>.*");
 	}
 
 	/* @Test

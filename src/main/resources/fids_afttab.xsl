@@ -681,6 +681,123 @@
 				</xsl:call-template>
 			</xsl:if>
 
+			<!-- Gates -->
+			<xsl:for-each select="
+				if ($adidMode = 'A') then //pl_arrivalgate_list/pl_arrivalgate 
+				else //pl_departuregate_list/pl_departuregate">
+				<xsl:variable name="pos" select="position()"/>
+				<!-- กำหนด Prefix สำหรับ Tag Name ตาม Mode (A = gta/ga, อื่นๆ = gtd/gd) -->
+				<xsl:variable name="prefix1" select="if ($adidMode = 'A') then 'gta' else 'gtd'"/>
+				<xsl:variable name="prefix2" select="if ($adidMode = 'A') then 'ga' else 'gd'"/>
+
+				<!-- 1. Gate Name -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat($prefix1, $pos)"/>
+					<xsl:with-param name="node">
+						<field action="{@action}">
+							<xsl:value-of select="if ($adidMode = 'A') then pag_rgt_gate else pdg_rgt_gate"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<!-- 2. Begin Plan (b) -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'b')"/>
+					<xsl:with-param name="node">
+						<field action="{@action}">
+							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pag_beginplan else pdg_beginplan)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<!-- 3. End Plan (e) -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'e')"/>
+					<xsl:with-param name="node">
+						<field action="{@action}">
+							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pag_endplan else pdg_endplan)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<!-- 4. Begin Actual (x) -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'x')"/>
+					<xsl:with-param name="node">
+						<field action="{@action}">
+							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pag_beginactual else pdg_beginactual)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<!-- 5. End Actual (y) -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'y')"/>
+					<xsl:with-param name="node">
+						<field action="{@action}">
+							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pag_endactual else pdg_endactual)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:for-each>
+
+			<!-- Belts -->
+			<xsl:for-each select="
+				if ($adidMode = 'A') then //pl_baggagebelt_list/pl_baggagebelt 
+				else //pl_departurebelt_list/pl_departurebelt">
+				<xsl:variable name="pos" select="position()"/>
+				
+				<!-- 1. Belt Name -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat('blt', $pos)"/>
+					<xsl:with-param name="node">
+						<field action="{@action}">
+							<xsl:value-of select="if ($adidMode = 'A') then pbb_rbb_baggagebelt else pdb_rdb_departurebelt"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<!-- 2. Begin Plan (bs) -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat('b', $pos, 'bs')"/>
+					<xsl:with-param name="node">
+						<field action="{@action}">
+							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pbb_beginplan else pdb_beginplan)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<!-- 3. End Plan (be) -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat('b', $pos, 'es')"/>
+					<xsl:with-param name="node">
+						<field action="{@action}">
+							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pbb_endplan else pdb_endplan)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<!-- 4. Begin Actual (ba) -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat('b', $pos, 'ba')"/>
+					<xsl:with-param name="node">
+						<field action="{@action}">
+							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pbb_beginactual else pdb_beginactual)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<!-- 5. End Actual (ea) -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat('b', $pos, 'ea')"/>
+					<xsl:with-param name="node">
+						<field action="{@action}">
+							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pbb_endactual else pdb_endactual)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:for-each>
+
 			<!-- ============================================================
 			     ARRIVAL-ONLY FIELDS (action-filtered)
 			     ============================================================ -->
@@ -774,123 +891,6 @@
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
-
-				<!-- Gates -->
-				<xsl:for-each select="
-					if ($adidMode = 'A') then //pl_arrivalgate_list/pl_arrivalgate 
-					else //pl_departuregate_list/pl_departuregate">
-					<xsl:variable name="pos" select="position()"/>
-					<!-- กำหนด Prefix สำหรับ Tag Name ตาม Mode (A = gta/ga, อื่นๆ = gtd/gd) -->
-					<xsl:variable name="prefix1" select="if ($adidMode = 'A') then 'gta' else 'gtd'"/>
-					<xsl:variable name="prefix2" select="if ($adidMode = 'A') then 'ga' else 'gd'"/>
-
-					<!-- 1. Gate Name -->
-					<xsl:call-template name="getValue">
-						<xsl:with-param name="tagName" select="concat($prefix1, $pos)"/>
-						<xsl:with-param name="node">
-							<field action="{@action}">
-								<xsl:value-of select="pag_rgt_gate | pdg_rgt_gate"/>
-							</field>
-						</xsl:with-param>
-					</xsl:call-template>
-
-					<!-- 2. Begin Plan (b) -->
-					<xsl:call-template name="getValue">
-						<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'b')"/>
-						<xsl:with-param name="node">
-							<field action="{@action}">
-								<xsl:value-of select="custom:convertDate(pag_beginplan | pdg_beginplan)"/>
-							</field>
-						</xsl:with-param>
-					</xsl:call-template>
-
-					<!-- 3. End Plan (e) -->
-					<xsl:call-template name="getValue">
-						<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'e')"/>
-						<xsl:with-param name="node">
-							<field action="{@action}">
-								<xsl:value-of select="custom:convertDate(pag_endplan | pdg_endplan)"/>
-							</field>
-						</xsl:with-param>
-					</xsl:call-template>
-
-					<!-- 4. Begin Actual (x) -->
-					<xsl:call-template name="getValue">
-						<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'x')"/>
-						<xsl:with-param name="node">
-							<field action="{@action}">
-								<xsl:value-of select="custom:convertDate(pag_beginactual | pdg_beginactual)"/>
-							</field>
-						</xsl:with-param>
-					</xsl:call-template>
-
-					<!-- 5. End Actual (y) -->
-					<xsl:call-template name="getValue">
-						<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'y')"/>
-						<xsl:with-param name="node">
-							<field action="{@action}">
-								<xsl:value-of select="custom:convertDate(pag_endactual | pdg_endactual)"/>
-							</field>
-						</xsl:with-param>
-					</xsl:call-template>
-				</xsl:for-each>
-
-				<!-- Belts -->
-				<xsl:for-each select="
-					if ($adidMode = 'A') then //pl_baggagebelt_list/pl_baggagebelt 
-					else //pl_departurebelt_list/pl_departurebelt">
-					<xsl:variable name="pos" select="position()"/>
-					
-					<!-- 1. Belt Name -->
-					<xsl:call-template name="getValue">
-						<xsl:with-param name="tagName" select="concat('blt', $pos)"/>
-						<xsl:with-param name="node">
-							<field action="{@action}">
-								<xsl:value-of select="pbb_rbb_baggagebelt | pdb_rdb_departurebelt"/>
-							</field>
-						</xsl:with-param>
-					</xsl:call-template>
-
-					<!-- 2. Begin Plan (bs) -->
-					<xsl:call-template name="getValue">
-						<xsl:with-param name="tagName" select="concat('b', $pos, 'bs')"/>
-						<xsl:with-param name="node">
-							<field action="{@action}">
-								<xsl:value-of select="custom:convertDate(pbb_beginplan | pdb_beginplan)"/>
-							</field>
-						</xsl:with-param>
-					</xsl:call-template>
-
-					<!-- 3. End Plan (be) -->
-					<xsl:call-template name="getValue">
-						<xsl:with-param name="tagName" select="concat('b', $pos, 'be')"/>
-						<xsl:with-param name="node">
-							<field action="{@action}">
-								<xsl:value-of select="custom:convertDate(pbb_endplan | pdb_endplan)"/>
-							</field>
-						</xsl:with-param>
-					</xsl:call-template>
-
-					<!-- 4. Begin Actual (ba) -->
-					<xsl:call-template name="getValue">
-						<xsl:with-param name="tagName" select="concat('b', $pos, 'ba')"/>
-						<xsl:with-param name="node">
-							<field action="{@action}">
-								<xsl:value-of select="custom:convertDate(pbb_beginactual | pdb_beginactual)"/>
-							</field>
-						</xsl:with-param>
-					</xsl:call-template>
-
-					<!-- 5. End Actual (ea) -->
-					<xsl:call-template name="getValue">
-						<xsl:with-param name="tagName" select="concat('b', $pos, 'ea')"/>
-						<xsl:with-param name="node">
-							<field action="{@action}">
-								<xsl:value-of select="custom:convertDate(pbb_endactual | pdb_endactual)"/>
-							</field>
-						</xsl:with-param>
-					</xsl:call-template>
-				</xsl:for-each>
 
 				<!-- Arrival time fields -->
 				<xsl:variable name="aibtNode" select="//pl_arrival/pa_aibt"/>
@@ -1372,6 +1372,7 @@
 			<counter>
 				<xsl:value-of select="//pl_departure/pd_counters"/>
 			</counter>
+			<xsl:variable name="terminal" select="//pl_departure/pd_rtrm_terminal"/>
 			<lstFidsCcatab>
 				<xsl:for-each select="//pl_desk">
 					<fidsCcatab>
@@ -1385,7 +1386,7 @@
 						<ctyp>
 							<xsl:value-of select="if (pdk_rcnt_refcounter/ref_counter/rcnt_type = 'C') then 'C' else 'D'"/>
 						</ctyp>
-						<ckit><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_rco_concourse"/></ckit>
+						<ckit><xsl:value-of select="$terminal"/></ckit>
 						<disp><xsl:value-of select="pdk_checkinclassid"/></disp>
 						<act3><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_ral_airline"/></act3>
 						<flno>

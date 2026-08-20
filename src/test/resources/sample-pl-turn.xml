@@ -1,1603 +1,1234 @@
-<soap-env:Envelope
-  xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"
-  xmlns:aodb="urn:com.tsystems.ac.aodb"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <soap-env:Header>
-    <aodb:control>
-      <aodb:message-id>appintegration:-78ddf0a1:197aaac58cf:-5dd8</aodb:message-id>
-      <aodb:message-version>1.4</aodb:message-version>
-      <aodb:message-type>UPDATE</aodb:message-type>
-      <aodb:originator>GUI[sfis]</aodb:originator>
-      <aodb:timestamp>2025-06-27T03:32:47.900</aodb:timestamp>
-      <aodb:sender>aodb</aodb:sender>
-      <aodb:station>BKK</aodb:station>
-    </aodb:control>
-  </soap-env:Header>
-  <soap-env:Body>
-    <pl_turn id="1005425713" action="update">
-      <pt_idseq>1005425713</pt_idseq>
-      <pl_stand_list>
-        <pl_stand>
-          <pst_idseq>1003548245</pst_idseq>
-          <pst_beginactual xsi:nil="true"/>
-          <pst_beginplan>2025-06-27T03:42:00Z</pst_beginplan>
-          <pst_comments xsi:nil="true"/>
-          <pst_createtime>2025-06-27T03:15:16Z</pst_createtime>
-          <pst_displaycode>I</pst_displaycode>
-          <pst_endactual xsi:nil="true"/>
-          <pst_endplan>2025-06-27T07:50:00Z</pst_endplan>
-          <pst_extraindicator xsi:nil="true"/>
-          <pst_gpuunits xsi:nil="true"/>
-          <pst_lockind>N</pst_lockind>
-          <pst_modtime>2025-06-27T03:15:40Z</pst_modtime>
-          <pst_moduser>auto</pst_moduser>
-          <pst_note xsi:nil="true"/>
-          <pst_order>0</pst_order>
-          <pst_pt_turn>1005425713</pst_pt_turn>
-          <pst_rmsc_scenario>1</pst_rmsc_scenario>
-          <pst_rsta_laststand xsi:nil="true"/>
-          <pst_rsta_refstand>HOLD@1</pst_rsta_refstand>
-          <pst_rsta_reftowstand xsi:nil="true"/>
-          <pst_rsta_stand>HOLD</pst_rsta_stand>
-          <pst_towbarind xsi:nil="true"/>
-          <pst_towbeginactual xsi:nil="true"/>
-          <pst_towbeginearliest xsi:nil="true"/>
-          <pst_towbeginlatest xsi:nil="true"/>
-          <pst_towbeginplan xsi:nil="true"/>
-          <pst_towbeginproposed xsi:nil="true"/>
-          <pst_towcallsign xsi:nil="true"/>
-          <pst_towflightnumber xsi:nil="true"/>
-          <pst_towindicator xsi:nil="true"/>
-          <pst_towrequesttime xsi:nil="true"/>
-          <pst_towrestriction xsi:nil="true"/>
-        </pl_stand>
-      </pl_stand_list>
-      <pt_createtime>2025-06-27T03:15:16Z</pt_createtime>
-      <pt_modtime>2025-06-27T03:15:16Z</pt_modtime>
-      <pt_moduser>sfis</pt_moduser>
-      <pt_mttt>1</pt_mttt>
-      <pt_overallmodtime action="update" old="2025-06-27T03:27:24Z">2025-06-27T03:32:33Z</pt_overallmodtime>
-      <pt_pa_arrival>1006805147
-        <pl_arrival action="update">
-          <pa_idseq>1006805147</pa_idseq>
-          <pa_additionalinfo xsi:nil="true"/>
-          <pa_aibt xsi:nil="true"/>
-          <pa_airbridges xsi:nil="true"/>
-          <pa_airtraffic xsi:nil="true"/>
-          <pa_aldt xsi:nil="true"/>
-          <pa_arrivalgates>HOLD</pa_arrivalgates>
-          <pa_assistingpax xsi:nil="true"/>
-          <pa_atccomment xsi:nil="true"/>
-          <pa_atcfplstatus>N</pa_atcfplstatus>
-          <pa_atotoutstation>2025-06-27T02:00:00Z</pa_atotoutstation>
-          <pa_baggagebelts action="update" old="14">11,14</pa_baggagebelts>
-          <pa_baggagecarousels xsi:nil="true"/>
-          <pa_bibt>2025-06-27T03:42:00Z</pa_bibt>
-          <pa_bibtsent xsi:nil="true"/>
-          <pa_billingcomments xsi:nil="true"/>
-          <pa_billingstatus>I</pa_billingstatus>
-          <pa_busind>N</pa_busind>
-          <pa_callsign>EVA3333</pa_callsign>
-          <pa_cancellationtime xsi:nil="true"/>
-          <pa_cashamount xsi:nil="true"/>
-          <pa_cashind>N</pa_cashind>
-          <pa_cashlodgements xsi:nil="true"/>
-          <pa_cbpind>N</pa_cbpind>
-          <pa_chargeableexempt xsi:nil="true"/>
-          <pa_chargeablepermit>NNNNN</pa_chargeablepermit>
-          <pa_chargeformno>0</pa_chargeformno>
-          <pa_checkpointprofile xsi:nil="true"/>
-          <pa_codeshareflightnumbers xsi:nil="true"/>
-          <pa_createreason xsi:nil="true"/>
-          <pa_createtime>2025-06-27T03:15:16Z</pa_createtime>
-          <pa_delayreasons xsi:nil="true"/>
-          <pa_displaycode>P</pa_displaycode>
-          <pa_diversiontime xsi:nil="true"/>
-          <pa_dooropentime xsi:nil="true"/>
-          <pa_doublegatewayind>N</pa_doublegatewayind>
-          <pa_eflt xsi:nil="true"/>
-          <pa_eibt>2025-06-27T03:42:00Z</pa_eibt>
-          <pa_eldt>2025-06-27T03:32:00Z</pa_eldt>
-          <pa_enrc xsi:nil="true"/>
-          <pa_etotoutstation xsi:nil="true"/>
-          <pa_exit>10</pa_exit>
-          <pa_exitsent xsi:nil="true"/>
-          <pa_externalflightnumber xsi:nil="true"/>
-          <pa_externalsystemid xsi:nil="true"/>
-          <pa_failediatamessages>0</pa_failediatamessages>
-          <pa_firstbag xsi:nil="true"/>
-          <pa_firt>2025-06-27T03:02:00Z</pa_firt>
-          <pa_flightnumber>BR3333</pa_flightnumber>
-          <pa_fnlt>2025-06-27T03:22:00Z</pa_fnlt>
-          <pa_fplactivationtime action="update" old="2025-06-27T03:27:23Z">2025-06-27T03:32:32Z</pa_fplactivationtime>
-          <pa_fuelrequired xsi:nil="true"/>
-          <pa_gpu xsi:nil="true"/>
-          <pa_gpuid>Y</pa_gpuid>
-          <pa_iatapriority xsi:nil="true"/>
-          <pa_ifplid xsi:nil="true"/>
-          <pa_indicatorfield>------------</pa_indicatorfield>
-          <pa_lastbag xsi:nil="true"/>
-          <pa_lockind>N</pa_lockind>
-          <pa_milestoneindstring>______</pa_milestoneindstring>
-          <pa_modtime action="update" old="2025-06-27T03:27:23Z">2025-06-27T03:32:32Z</pa_modtime>
-          <pa_moduser>sfis</pa_moduser>
-          <pa_nextinfotime xsi:nil="true"/>
-          <pa_onbridge xsi:nil="true"/>
-          <pa_operator>EVA</pa_operator>
-          <pa_operatorflightnumber>BR3333</pa_operatorflightnumber>
-          <pa_opscomment xsi:nil="true"/>
-          <pa_pa_mainflight xsi:nil="true"/>
-          <pa_paymentmode>I</pa_paymentmode>
-          <pa_paymentreference xsi:nil="true"/>
-          <pa_pibt>2025-06-27T03:42:00Z</pa_pibt>
-          <pa_prioind>N</pa_prioind>
-          <pa_priorityfield>PaRegistration,U,99;</pa_priorityfield>
-          <pa_prmlevypax xsi:nil="true"/>
-          <pa_prmpax xsi:nil="true"/>
-          <pa_publiccomment xsi:nil="true"/>
-          <pa_rac_aircraft>1000102729
-            <ref_aircraft>
-              <rac_idseq>1000102729</rac_idseq>
-              <rac_bonus>N</rac_bonus>
-              <rac_comment xsi:nil="true"/>
-              <rac_createtime>2025-04-25T14:55:06Z</rac_createtime>
-              <rac_firstlanding xsi:nil="true"/>
-              <rac_lastlanding xsi:nil="true"/>
-              <rac_modtime>2025-04-28T12:34:35Z</rac_modtime>
-              <rac_moduser>loaded</rac_moduser>
-              <rac_mtow>205000</rac_mtow>
-              <rac_nacelletreatmentind>Y</rac_nacelletreatmentind>
-              <rac_name xsi:nil="true"/>
-              <rac_noisecategoryinternal xsi:nil="true"/>
-              <rac_opscreatedind>N</rac_opscreatedind>
-              <rac_owner xsi:nil="true"/>
-              <rac_paxcargoind>P</rac_paxcargoind>
-              <rac_permit xsi:nil="true"/>
-              <rac_privatecommercialind>C</rac_privatecommercialind>
-              <rac_ract_aircrafttype>A333
-                <ref_aircrafttype>
-                  <ract_accessheight xsi:nil="true"/>
-                  <ract_averageseatcapacity xsi:nil="true"/>
-                  <ract_bonus>N</ract_bonus>
-                  <ract_bridgerequiredind>N</ract_bridgerequiredind>
-                  <ract_createtime>2025-04-25T13:52:21Z</ract_createtime>
-                  <ract_description>Airbus A330-300 P2F</ract_description>
-                  <ract_enginecount>2</ract_enginecount>
-                  <ract_firstbag xsi:nil="true"/>
-                  <ract_height>1679</ract_height>
-                  <ract_iatasubtype xsi:nil="true"/>
-                  <ract_iatatype>ZZZ</ract_iatatype>
-                  <ract_icaotype>A333</ract_icaotype>
-                  <ract_internalcode>A333</ract_internalcode>
-                  <ract_landingweight xsi:nil="true"/>
-                  <ract_length>6366</ract_length>
-                  <ract_manufacturer xsi:nil="true"/>
-                  <ract_model xsi:nil="true"/>
-                  <ract_modtime>2025-04-28T13:20:25Z</ract_modtime>
-                  <ract_moduser>loaded</ract_moduser>
-                  <ract_mtow xsi:nil="true"/>
-                  <ract_mtta xsi:nil="true"/>
-                  <ract_mttd xsi:nil="true"/>
-                  <ract_mttt xsi:nil="true"/>
-                  <ract_noiseapproach xsi:nil="true"/>
-                  <ract_noiseflyover xsi:nil="true"/>
-                  <ract_noiselateral xsi:nil="true"/>
-                  <ract_opscreatedind>N</ract_opscreatedind>
-                  <ract_payload xsi:nil="true"/>
-                  <ract_piercompatibleind xsi:nil="true"/>
-                  <ract_propulsion xsi:nil="true"/>
-                  <ract_ret_enginetype xsi:nil="true"/>
-                  <ract_rnca_noisecategory xsi:nil="true"/>
-                  <ract_shadow xsi:nil="true"/>
-                  <ract_sizecategory>E</ract_sizecategory>
-                  <ract_statisweightcategory xsi:nil="true"/>
-                  <ract_symbolname xsi:nil="true"/>
-                  <ract_taxifuelperminute xsi:nil="true"/>
-                  <ract_widebodyind>Y</ract_widebodyind>
-                  <ract_width>6030</ract_width>
-                </ref_aircrafttype>
-              </rac_ract_aircrafttype>
-              <rac_ral_lessee xsi:nil="true"/>
-              <rac_ral_operator>BR</rac_ral_operator>
-              <rac_registration>B16340</rac_registration>
-              <rac_rnca_noisecategory xsi:nil="true"/>
-              <rac_seatcapacity xsi:nil="true"/>
-              <rac_serialnumber xsi:nil="true"/>
-              <rac_validfrom>2017-06-19T00:00:00Z</rac_validfrom>
-              <rac_validto xsi:nil="true"/>
-            </ref_aircraft>
-          </pa_rac_aircraft>
-          <pa_ract_aircrafttype>A333
-            <ref_aircrafttype>
-              <ract_accessheight xsi:nil="true"/>
-              <ract_averageseatcapacity xsi:nil="true"/>
-              <ract_bonus>N</ract_bonus>
-              <ract_bridgerequiredind>N</ract_bridgerequiredind>
-              <ract_createtime>2025-04-25T13:52:21Z</ract_createtime>
-              <ract_description>Airbus A330-300 P2F</ract_description>
-              <ract_firstbag xsi:nil="true"/>
-              <ract_height>1679</ract_height>
-              <ract_iatatype action="update">ZZZ</ract_iatatype>
-              <ract_icaotype>A333</ract_icaotype>
-              <ract_internalcode>A333</ract_internalcode>
-              <ract_landingweight xsi:nil="true"/>
-              <ract_length>6366</ract_length>
-              <ract_manufacturer xsi:nil="true"/>
-              <ract_model xsi:nil="true"/>
-              <ract_modtime>2025-04-28T13:20:25Z</ract_modtime>
-              <ract_moduser>loaded</ract_moduser>
-              <ract_mtow xsi:nil="true"/>
-              <ract_mtta xsi:nil="true"/>
-              <ract_mttd xsi:nil="true"/>
-              <ract_mttt xsi:nil="true"/>
-              <ract_opscreatedind>N</ract_opscreatedind>
-              <ract_payload xsi:nil="true"/>
-              <ract_piercompatibleind xsi:nil="true"/>
-              <ract_propulsion xsi:nil="true"/>
-              <ract_rnca_noisecategory xsi:nil="true"/>
-              <ract_shadow xsi:nil="true"/>
-              <ract_sizecategory>E</ract_sizecategory>
-              <ract_symbolname xsi:nil="true"/>
-              <ract_taxifuelperminute xsi:nil="true"/>
-              <ract_widebodyind>Y</ract_widebodyind>
-              <ract_width>6030</ract_width>
-            </ref_aircrafttype>
-          </pa_ract_aircrafttype>
-          <pa_ract_plannedact xsi:nil="true"/>
-          <pa_ral_airline>BR
-            <ref_airline>
-              <ral_2lc>BR</ral_2lc>
-              <ral_3lc action="update">EVA</ral_3lc>
-              <ral_alliance xsi:nil="true"/>
-              <ral_callsign>EVA AIR</ral_callsign>
-              <ral_category xsi:nil="true"/>
-              <ral_createtime>2025-04-16T09:19:45Z</ral_createtime>
-              <ral_description>DOC 8585 EDT 185/CA</ral_description>
-              <ral_formatflightnumberind>Y</ral_formatflightnumberind>
-              <ral_ignorecreatedayind>N</ral_ignorecreatedayind>
-              <ral_ignorestatisticsind>N</ral_ignorestatisticsind>
-              <ral_internal>BR</ral_internal>
-              <ral_lpccode>&#13;</ral_lpccode>
-              <ral_modtime>2025-04-16T09:19:45Z</ral_modtime>
-              <ral_moduser>loaded</ral_moduser>
-              <ral_name>EVA AIRWAYS</ral_name>
-              <ral_opscreatedind>N</ral_opscreatedind>
-              <ral_paymentmode>I</ral_paymentmode>
-              <ral_rctr_country>TW</ral_rctr_country>
-              <ral_registrationcopyind>Y</ral_registrationcopyind>
-              <ral_rha_agentbag xsi:nil="true"/>
-              <ral_rha_agentci xsi:nil="true"/>
-              <ral_rtrm_terminal xsi:nil="true"/>
-            </ref_airline>
-          </pa_ral_airline>
-          <pa_ramphandlingagent xsi:nil="true"/>
-          <pa_rap_diversionairport xsi:nil="true"/>
-          <pa_rap_originairport>CDG</pa_rap_originairport>
-          <pa_rap_previousairport>HKG</pa_rap_previousairport>
-          <pa_rap_refdiversionairport>
-            <ref_airport/>
-          </pa_rap_refdiversionairport>
-          <pa_rap_reforiginairport>CDG
-            <ref_airport>
-              <rap_city xsi:nil="true"/>
-              <rap_city3lc xsi:nil="true"/>
-              <rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
-              <rap_distance xsi:nil="true"/>
-              <rap_iata3lc>CDG</rap_iata3lc>
-              <rap_iataregion xsi:nil="true"/>
-              <rap_icao4lc>LFPG</rap_icao4lc>
-              <rap_internalcode>CDG</rap_internalcode>
-              <rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
-              <rap_moduser>loaded</rap_moduser>
-              <rap_name1>PARIS CHARLES DE GAULLE</rap_name1>
-              <rap_name2>PARIS</rap_name2>
-              <rap_name3>DOC7910 168/AP</rap_name3>
-              <rap_name4 xsi:nil="true"/>
-              <rap_name5 xsi:nil="true"/>
-              <rap_rctr_country>FR</rap_rctr_country>
-              <rap_rctt_countrytype>I</rap_rctt_countrytype>
-              <rap_safeind>Y</rap_safeind>
-              <rap_slg_additionallanguage xsi:nil="true"/>
-              <rap_syst_station xsi:nil="true"/>
-              <rap_timezone xsi:nil="true"/>
-              <ref_airportversion_list/>
-            </ref_airport>
-          </pa_rap_reforiginairport>
-          <pa_rap_refpreviousairport>HKG
-            <ref_airport>
-              <rap_city xsi:nil="true"/>
-              <rap_city3lc xsi:nil="true"/>
-              <rap_createtime>2025-04-16T09:14:41Z</rap_createtime>
-              <rap_defaultarrivalroutepoint xsi:nil="true"/>
-              <rap_defaultdepartureroutepoint xsi:nil="true"/>
-              <rap_distance xsi:nil="true"/>
-              <rap_iata3lc>HKG</rap_iata3lc>
-              <rap_iataregion xsi:nil="true"/>
-              <rap_icao4lc>VHHH</rap_icao4lc>
-              <rap_internalcode>HKG</rap_internalcode>
-              <rap_modtime>2025-04-16T09:14:41Z</rap_modtime>
-              <rap_moduser>loaded</rap_moduser>
-              <rap_name1>HONG KONG INTERNATIONAL</rap_name1>
-              <rap_name2>HONG KONG</rap_name2>
-              <rap_name3>DOC7910 168/ANNE</rap_name3>
-              <rap_name4 xsi:nil="true"/>
-              <rap_name5 xsi:nil="true"/>
-              <rap_rctr_country>HK</rap_rctr_country>
-              <rap_rctt_countrytype>I</rap_rctt_countrytype>
-              <rap_safeind>Y</rap_safeind>
-              <rap_slg_additionallanguage xsi:nil="true"/>
-              <rap_syst_station xsi:nil="true"/>
-              <rap_timezone xsi:nil="true"/>
-              <ref_airportversion_list/>
-            </ref_airport>
-          </pa_rap_refpreviousairport>
-          <pa_rcdms_status>
-            <ref_cdmstatus/>
-          </pa_rcdms_status>
-          <pa_rco_concourse xsi:nil="true"/>
-          <pa_rco_refconcourse xsi:nil="true"/>
-          <pa_rctt_countrytype>I
-            <ref_countrytype>
-              <rctt_availableforcountryind>Y</rctt_availableforcountryind>
-              <rctt_code>I</rctt_code>
-              <rctt_createtime>2025-04-18T00:00:00Z</rctt_createtime>
-              <rctt_description>International</rctt_description>
-              <rctt_internalcode>T</rctt_internalcode>
-              <rctt_modtime>2025-04-18T00:00:00Z</rctt_modtime>
-              <rctt_moduser>loaded</rctt_moduser>
-            </ref_countrytype>
-          </pa_rctt_countrytype>
-          <pa_registration>B16340</pa_registration>
-          <pa_rfst_flightstatus>+</pa_rfst_flightstatus>
-          <pa_rfst_refflightstatus>A+
-            <ref_flightstatus>
-              <rfst_arrdepind>A</rfst_arrdepind>
-              <rfst_code>+</rfst_code>
-              <rfst_code3l>FNL</rfst_code3l>
-              <rfst_createtime>2025-04-17T13:14:48Z</rfst_createtime>
-              <rfst_description>Final Approach</rfst_description>
-              <rfst_idcode>A+</rfst_idcode>
-              <rfst_legacystatus>F</rfst_legacystatus>
-              <rfst_minimumturnorder xsi:nil="true"/>
-              <rfst_modtime>2025-04-17T13:14:48Z</rfst_modtime>
-              <rfst_moduser>loaded</rfst_moduser>
-              <rfst_order>25</rfst_order>
-              <rfst_rrmk_refremark xsi:nil="true"/>
-              <rfst_rrmk_remark xsi:nil="true"/>
-              <rfst_timestamp>PaFnlt</rfst_timestamp>
-            </ref_flightstatus>
-          </pa_rfst_refflightstatus>
-          <pa_rha_agentbag xsi:nil="true"/>
-          <pa_rmsc_scenario>1</pa_rmsc_scenario>
-          <pa_rnc_naturecode>01</pa_rnc_naturecode>
-          <pa_rnc_refnaturecode>10155</pa_rnc_refnaturecode>
-          <pa_rrmk_refremark xsi:nil="true"/>
-          <pa_rrmk_remark xsi:nil="true"/>
-          <pa_rrwy_refrunway>01@BKK
-            <ref_runway>
-              <rrwy_activeind>Y</rrwy_activeind>
-              <rrwy_code>01</rrwy_code>
-              <rrwy_comment>Runway 01</rrwy_comment>
-              <rrwy_createtime>2025-05-03T11:49:02Z</rrwy_createtime>
-              <rrwy_description>Runway 01</rrwy_description>
-              <rrwy_idcode>01@BKK</rrwy_idcode>
-              <rrwy_length xsi:nil="true"/>
-              <rrwy_modtime>2025-05-03T12:04:55Z</rrwy_modtime>
-              <rrwy_moduser>admin</rrwy_moduser>
-              <rrwy_restriction xsi:nil="true"/>
-              <rrwy_rrwy_refrunwaysystem xsi:nil="true"/>
-              <rrwy_rrwy_runwaysystem xsi:nil="true"/>
-              <rrwy_runwaytract xsi:nil="true"/>
-              <rrwy_rwytype>R</rrwy_rwytype>
-              <rrwy_syst_station>BKK</rrwy_syst_station>
-              <rrwy_width xsi:nil="true"/>
-            </ref_runway>
-          </pa_rrwy_refrunway>
-          <pa_rrwy_runway>01</pa_rrwy_runway>
-          <pa_rsta_refstand>HOLD@1
-            <ref_stand>
-              <rsta_angle xsi:nil="true"/>
-              <rsta_capacity>-1</rsta_capacity>
-              <rsta_cctvstream xsi:nil="true"/>
-              <rsta_code>HOLD</rsta_code>
-              <rsta_createtime>2025-03-30T00:00:00Z</rsta_createtime>
-              <rsta_description>Stand HOLD</rsta_description>
-              <rsta_displaytext xsi:nil="true"/>
-              <rsta_dockingind>N</rsta_dockingind>
-              <rsta_elevatorind xsi:nil="true"/>
-              <rsta_eqconstraint>A</rsta_eqconstraint>
-              <rsta_externalid xsi:nil="true"/>
-              <rsta_fuelpitind xsi:nil="true"/>
-              <rsta_gpuind>N</rsta_gpuind>
-              <rsta_gpuname xsi:nil="true"/>
-              <rsta_idcode>HOLD@1</rsta_idcode>
-              <rsta_latitude xsi:nil="true"/>
-              <rsta_length xsi:nil="true"/>
-              <rsta_longitude xsi:nil="true"/>
-              <rsta_marsind>N</rsta_marsind>
-              <rsta_modtime>2025-03-30T00:00:00Z</rsta_modtime>
-              <rsta_moduser>bkranthi</rsta_moduser>
-              <rsta_owner xsi:nil="true"/>
-              <rsta_pdgs_status xsi:nil="true"/>
-              <rsta_ract_maximumaircrafttype xsi:nil="true"/>
-              <rsta_ral_airline xsi:nil="true"/>
-              <rsta_rco_concourse xsi:nil="true"/>
-              <rsta_rctt_countrytype>A</rsta_rctt_countrytype>
-              <rsta_rgt_gate xsi:nil="true"/>
-              <rsta_rgt_refgate xsi:nil="true"/>
-              <rsta_rmsc_scenario>1</rsta_rmsc_scenario>
-              <rsta_rsna_area xsi:nil="true"/>
-              <rsta_validfrom xsi:nil="true"/>
-              <rsta_validto xsi:nil="true"/>
-              <rsta_width xsi:nil="true"/>
-            </ref_stand>
-          </pa_rsta_refstand>
-          <pa_rsta_stand>HOLD</pa_rsta_stand>
-          <pa_rsta_standardstand xsi:nil="true"/>
-          <pa_rstc_refservicetypecode>J@BKK
-            <ref_servicetypecode>
-              <rstc_arrivalbridgeopind>N</rstc_arrivalbridgeopind>
-              <rstc_arrivalbusind>N</rstc_arrivalbusind>
-              <rstc_arrivalgatetind>Y</rstc_arrivalgatetind>
-              <rstc_arrivaltractorind>N</rstc_arrivaltractorind>
-              <rstc_baggagebeltind>Y</rstc_baggagebeltind>
-              <rstc_checkcgoloadind>N</rstc_checkcgoloadind>
-              <rstc_checkincounterind>Y</rstc_checkincounterind>
-              <rstc_checkmailloadind>N</rstc_checkmailloadind>
-              <rstc_checkpaxloadind>N</rstc_checkpaxloadind>
-              <rstc_code>J</rstc_code>
-              <rstc_comment xsi:nil="true"/>
-              <rstc_createtime>2025-04-17T11:34:16Z</rstc_createtime>
-              <rstc_departurebeltind>N</rstc_departurebeltind>
-              <rstc_departurebridgeopind>N</rstc_departurebridgeopind>
-              <rstc_departurebusind>N</rstc_departurebusind>
-              <rstc_departuregatetind>Y</rstc_departuregatetind>
-              <rstc_departureloungeind>N</rstc_departureloungeind>
-              <rstc_departuresecurityind>N</rstc_departuresecurityind>
-              <rstc_departuretractorind>N</rstc_departuretractorind>
-              <rstc_description>Passenger Scheduled</rstc_description>
-              <rstc_displaycode>P</rstc_displaycode>
-              <rstc_exempt xsi:nil="true"/>
-              <rstc_iatadefault>N</rstc_iatadefault>
-              <rstc_ignorestatisticsind>Y</rstc_ignorestatisticsind>
-              <rstc_infoserviceind>N</rstc_infoserviceind>
-              <rstc_modtime>2025-05-08T15:34:27Z</rstc_modtime>
-              <rstc_moduser>sfis</rstc_moduser>
-              <rstc_ristc_iatacode>J</rstc_ristc_iatacode>
-              <rstc_standind>Y</rstc_standind>
-              <rstc_statisticcode xsi:nil="true"/>
-            </ref_servicetypecode>
-          </pa_rstc_refservicetypecode>
-          <pa_rstc_servicetypecode>J</pa_rstc_servicetypecode>
-          <pa_rtrm_refterminal>1@1
-            <ref_terminal>
-              <rtrm_closedind>N</rtrm_closedind>
-              <rtrm_closurereason xsi:nil="true"/>
-              <rtrm_code>1</rtrm_code>
-              <rtrm_comment>Terminal 1</rtrm_comment>
-              <rtrm_createtime>2025-04-29T13:50:36Z</rtrm_createtime>
-              <rtrm_description>Terminal 1</rtrm_description>
-              <rtrm_idcode>1@1</rtrm_idcode>
-              <rtrm_modtime>2025-04-29T13:50:36Z</rtrm_modtime>
-              <rtrm_moduser>admin</rtrm_moduser>
-              <rtrm_rmsc_scenario>1</rtrm_rmsc_scenario>
-            </ref_terminal>
-          </pa_rtrm_refterminal>
-          <pa_rtrm_terminal>1</pa_rtrm_terminal>
-          <pa_runwayexittime xsi:nil="true"/>
-          <pa_runwayoccupancytime xsi:nil="true"/>
-          <pa_safeind>Y</pa_safeind>
-          <pa_salt_refcdmalarm xsi:nil="true"/>
-          <pa_seats xsi:nil="true"/>
-          <pa_sflt xsi:nil="true"/>
-          <pa_sibt>2025-06-27T04:00:00Z</pa_sibt>
-          <pa_standchangecnt>0</pa_standchangecnt>
-          <pa_standnote xsi:nil="true"/>
-          <pa_star xsi:nil="true"/>
-          <pa_stotoutstation xsi:nil="true"/>
-          <pa_tariffcode>BL</pa_tariffcode>
-          <pa_tldt xsi:nil="true"/>
-          <pa_totalbag xsi:nil="true"/>
-          <pa_totalcrew xsi:nil="true"/>
-          <pa_totalextracrew xsi:nil="true"/>
-          <pa_totalpax>0</pa_totalpax>
-          <pa_transferpax xsi:nil="true"/>
-          <pa_transitpax xsi:nil="true"/>
-          <pa_vipcomment xsi:nil="true"/>
-          <pa_vipind>N</pa_vipind>
-          <pa_zerofreightind>N</pa_zerofreightind>
-          <pa_zeromailind>N</pa_zeromailind>
-          <pa_zeropaxind>N</pa_zeropaxind>
-          <pa_zerototalweightind>N</pa_zerototalweightind>
-          <pl_api_list/>
-          <pl_arrival_list/>
-          <pl_arrivalgate_list>
-            <pl_arrivalgate>
-              <pag_idseq>1001172893</pag_idseq>
-              <pag_airbridgeind>N</pag_airbridgeind>
-              <pag_beginactual xsi:nil="true"/>
-              <pag_beginplan>2025-06-27T03:42:00Z</pag_beginplan>
-              <pag_createtime>2025-06-27T03:15:16Z</pag_createtime>
-              <pag_displaycode>I</pag_displaycode>
-              <pag_endactual xsi:nil="true"/>
-              <pag_endplan>2025-06-27T04:02:00Z</pag_endplan>
-              <pag_lockind>N</pag_lockind>
-              <pag_modtime>2025-06-27T03:15:40Z</pag_modtime>
-              <pag_moduser>auto</pag_moduser>
-              <pag_note xsi:nil="true"/>
-              <pag_pa_arrival>1006805147</pag_pa_arrival>
-              <pag_pa_flightnumber>BR3333</pag_pa_flightnumber>
-              <pag_publiccomment xsi:nil="true"/>
-              <pag_rgt_gate>HOLD</pag_rgt_gate>
-              <pag_rgt_lastgate xsi:nil="true"/>
-              <pag_rgt_refgate>HOLD@1
-                <ref_gate>
-                  <rgt_arrdepind>B</rgt_arrdepind>
-                  <rgt_capacity>-1</rgt_capacity>
-                  <rgt_cctvstream xsi:nil="true"/>
-                  <rgt_code>HOLD</rgt_code>
-                  <rgt_createtime>2025-03-30T00:00:00Z</rgt_createtime>
-                  <rgt_description>Gate HOLD</rgt_description>
-                  <rgt_displaytext xsi:nil="true"/>
-                  <rgt_egateavailableind>N</rgt_egateavailableind>
-                  <rgt_gatetype>T</rgt_gatetype>
-                  <rgt_idcode>HOLD@1</rgt_idcode>
-                  <rgt_modtime>2025-03-30T00:00:00Z</rgt_modtime>
-                  <rgt_moduser>bkranthi</rgt_moduser>
-                  <rgt_paxloadingbridgeind>N</rgt_paxloadingbridgeind>
-                  <rgt_ral_airline xsi:nil="true"/>
-                  <rgt_rco_concourse xsi:nil="true"/>
-                  <rgt_rco_refconcourse xsi:nil="true"/>
-                  <rgt_rcpa_areabordercontrol xsi:nil="true"/>
-                  <rgt_rcpa_areasecurity xsi:nil="true"/>
-                  <rgt_rctt_countrytype>A</rgt_rctt_countrytype>
-                  <rgt_rdlg_refdeparturelounge xsi:nil="true"/>
-                  <rgt_rmsc_scenario>1</rgt_rmsc_scenario>
-                  <rgt_validfrom xsi:nil="true"/>
-                  <rgt_validto xsi:nil="true"/>
-                </ref_gate>
-              </pag_rgt_refgate>
-              <pag_rgt_standardgate xsi:nil="true"/>
-              <pag_rmsc_scenario>1</pag_rmsc_scenario>
-              <pag_seqno>1</pag_seqno>
-              <pag_status>S</pag_status>
-            </pl_arrivalgate>
-          </pl_arrivalgate_list>
-          <pl_atcarrival_list/>
-          <pl_baggagebelt_list>
-            <pl_baggagebelt action="insert">
-              <pbb_idseq action="insert">1002064797</pbb_idseq>
-              <pbb_beginactual xsi:nil="true"/>
-              <pbb_beginplan action="insert">2025-06-27T03:43:00Z</pbb_beginplan>
-              <pbb_checkinclassid xsi:nil="true"/>
-              <pbb_createtime action="insert">2025-06-27T03:32:32Z</pbb_createtime>
-              <pbb_displaycode action="insert">P</pbb_displaycode>
-              <pbb_endactual action="insert">2025-06-28T04:08:00Z</pbb_endactual>
-              <pbb_endplan action="insert">2025-06-27T04:08:00Z</pbb_endplan>
-              <pbb_firstbag xsi:nil="true"/>
-              <pbb_lastbag xsi:nil="true"/>
-              <pbb_loadstatus action="insert">S</pbb_loadstatus>
-              <pbb_lockind action="insert">N</pbb_lockind>
-              <pbb_modtime action="insert">2025-06-27T03:32:32Z</pbb_modtime>
-              <pbb_moduser action="insert">sfis</pbb_moduser>
-              <pbb_note xsi:nil="true"/>
-              <pbb_pa_arrival action="insert">1006805147</pbb_pa_arrival>
-              <pbb_pa_flightnumber action="insert">BR3333</pbb_pa_flightnumber>
-              <pbb_publiccomment xsi:nil="true"/>
-              <pbb_rbb_baggagebelt action="insert">11</pbb_rbb_baggagebelt>
-              <pbb_rbb_lastbaggagebelt xsi:nil="true"/>
-              <pbb_rbb_refbaggagebelt action="insert">11@1
-                <ref_baggagebelt action="update">
-                  <rbb_bcishostname xsi:nil="true"/>
-                  <rbb_capacity xsi:nil="true"/>
-                  <rbb_carousel xsi:nil="true"/>
-                  <rbb_cctvstream xsi:nil="true"/>
-                  <rbb_code action="update" old="">11</rbb_code>
-                  <rbb_createtime action="update" old="">2025-04-16T10:04:05Z</rbb_createtime>
-                  <rbb_description action="update" old="">Baggage Bay 11</rbb_description>
-                  <rbb_displaytext action="update" old="">&#13;</rbb_displaytext>
-                  <rbb_idcode action="update" old="">11@1</rbb_idcode>
-                  <rbb_modtime action="update" old="">2025-04-16T10:04:05Z</rbb_modtime>
-                  <rbb_moduser action="update" old="">loaded</rbb_moduser>
-                  <rbb_ral_airline xsi:nil="true"/>
-                  <rbb_rbbc_carousel xsi:nil="true"/>
-                  <rbb_rco_concourse xsi:nil="true"/>
-                  <rbb_rco_refconcourse xsi:nil="true"/>
-                  <rbb_rcpa_areacustoms xsi:nil="true"/>
-                  <rbb_rctt_countrytype action="update" old="">I</rbb_rctt_countrytype>
-                  <rbb_rmsc_scenario action="update" old="">1</rbb_rmsc_scenario>
-                  <rbb_validfrom xsi:nil="true"/>
-                  <rbb_validto xsi:nil="true"/>
-                </ref_baggagebelt>
-              </pbb_rbb_refbaggagebelt>
-              <pbb_rbb_standardbelt xsi:nil="true"/>
-              <pbb_rdt_displaytext xsi:nil="true"/>
-              <pbb_rmsc_scenario action="insert">1</pbb_rmsc_scenario>
-              <pbb_seqno action="insert">2</pbb_seqno>
-              <pbb_status action="insert">S</pbb_status>
-            </pl_baggagebelt>
-            <pl_baggagebelt>
-              <pbb_idseq>1002064796</pbb_idseq>
-              <pbb_beginactual xsi:nil="true"/>
-              <pbb_beginplan>2025-06-27T03:42:00Z</pbb_beginplan>
-              <pbb_checkinclassid xsi:nil="true"/>
-              <pbb_createtime>2025-06-27T03:15:16Z</pbb_createtime>
-              <pbb_displaycode>P</pbb_displaycode>
-              <pbb_endactual action="insert">2025-06-27T04:08:00Z</pbb_endactual>
-              <pbb_endplan>2025-06-27T04:27:00Z</pbb_endplan>
-              <pbb_firstbag xsi:nil="true"/>
-              <pbb_lastbag xsi:nil="true"/>
-              <pbb_loadstatus>S</pbb_loadstatus>
-              <pbb_lockind>N</pbb_lockind>
-              <pbb_modtime>2025-06-27T03:27:23Z</pbb_modtime>
-              <pbb_moduser>sfis</pbb_moduser>
-              <pbb_note xsi:nil="true"/>
-              <pbb_pa_arrival>1006805147</pbb_pa_arrival>
-              <pbb_pa_flightnumber>BR3333</pbb_pa_flightnumber>
-              <pbb_publiccomment xsi:nil="true"/>
-              <pbb_rbb_baggagebelt>14</pbb_rbb_baggagebelt>
-              <pbb_rbb_lastbaggagebelt xsi:nil="true"/>
-              <pbb_rbb_refbaggagebelt>14@1
-                <ref_baggagebelt>
-                  <rbb_bcishostname xsi:nil="true"/>
-                  <rbb_capacity xsi:nil="true"/>
-                  <rbb_carousel xsi:nil="true"/>
-                  <rbb_cctvstream xsi:nil="true"/>
-                  <rbb_code>14</rbb_code>
-                  <rbb_createtime>2025-04-16T10:04:05Z</rbb_createtime>
-                  <rbb_description>Baggage Bay 14</rbb_description>
-                  <rbb_displaytext>&#13;</rbb_displaytext>
-                  <rbb_idcode>14@1</rbb_idcode>
-                  <rbb_modtime>2025-04-16T10:04:05Z</rbb_modtime>
-                  <rbb_moduser>loaded</rbb_moduser>
-                  <rbb_ral_airline xsi:nil="true"/>
-                  <rbb_rbbc_carousel xsi:nil="true"/>
-                  <rbb_rco_concourse xsi:nil="true"/>
-                  <rbb_rco_refconcourse xsi:nil="true"/>
-                  <rbb_rcpa_areacustoms xsi:nil="true"/>
-                  <rbb_rctt_countrytype>I</rbb_rctt_countrytype>
-                  <rbb_rmsc_scenario>1</rbb_rmsc_scenario>
-                  <rbb_validfrom xsi:nil="true"/>
-                  <rbb_validto xsi:nil="true"/>
-                </ref_baggagebelt>
-              </pbb_rbb_refbaggagebelt>
-              <pbb_rbb_standardbelt xsi:nil="true"/>
-              <pbb_rdt_displaytext xsi:nil="true"/>
-              <pbb_rmsc_scenario>1</pbb_rmsc_scenario>
-              <pbb_seqno>1</pbb_seqno>
-              <pbb_status>S</pbb_status>
-            </pl_baggagebelt>
-          </pl_baggagebelt_list>
-          <pl_cdmstatus_list/>
-          <pl_containerinfo_list/>
-          <pl_delayreason_list/>
-          <pl_genericarrivalres_list/>
-          <pl_handlingagent_list/>
-          <pl_routing_list>
-            <pl_routing>
-              <prt_idseq>1004418151</prt_idseq>
-              <prt_createtime>2025-06-27T03:15:16Z</prt_createtime>
-              <prt_displaycode>P</prt_displaycode>
-              <prt_modtime>2025-06-27T03:15:16Z</prt_modtime>
-              <prt_moduser>sfis</prt_moduser>
-              <prt_numberinleg>1</prt_numberinleg>
-              <prt_pa_arrival>1006805147</prt_pa_arrival>
-              <prt_pd_departure xsi:nil="true"/>
-              <prt_rap_airport>CDG</prt_rap_airport>
-              <prt_rap_refairport>CDG
-                <ref_airport>
-                  <rap_additionalinfo xsi:nil="true"/>
-                  <rap_city xsi:nil="true"/>
-                  <rap_city3lc xsi:nil="true"/>
-                  <rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
-                  <rap_distance xsi:nil="true"/>
-                  <rap_federalstate xsi:nil="true"/>
-                  <rap_iata3lc>CDG</rap_iata3lc>
-                  <rap_iataregion xsi:nil="true"/>
-                  <rap_icao4lc>LFPG</rap_icao4lc>
-                  <rap_internalcode>CDG</rap_internalcode>
-                  <rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
-                  <rap_moduser>loaded</rap_moduser>
-                  <rap_name1>PARIS CHARLES DE GAULLE</rap_name1>
-                  <rap_name2>PARIS</rap_name2>
-                  <rap_name3>DOC7910 168/AP</rap_name3>
-                  <rap_name4 xsi:nil="true"/>
-                  <rap_name5 xsi:nil="true"/>
-                  <rap_opscreatedind>N</rap_opscreatedind>
-                  <rap_rctr_country>FR</rap_rctr_country>
-                  <rap_rctt_countrytype>I</rap_rctt_countrytype>
-                  <rap_safeind>Y</rap_safeind>
-                  <rap_slg_additionallanguage xsi:nil="true"/>
-                  <rap_timezone xsi:nil="true"/>
-                </ref_airport>
-              </prt_rap_refairport>
-              <prt_rtr_trafficrestriction xsi:nil="true"/>
-              <prt_stastation xsi:nil="true"/>
-              <prt_stdstation xsi:nil="true"/>
-            </pl_routing>
-            <pl_routing>
-              <prt_idseq>1004418152</prt_idseq>
-              <prt_createtime>2025-06-27T03:15:16Z</prt_createtime>
-              <prt_displaycode>P</prt_displaycode>
-              <prt_modtime>2025-06-27T03:15:16Z</prt_modtime>
-              <prt_moduser>sfis</prt_moduser>
-              <prt_numberinleg>2</prt_numberinleg>
-              <prt_pa_arrival>1006805147</prt_pa_arrival>
-              <prt_pd_departure xsi:nil="true"/>
-              <prt_rap_airport>HKG</prt_rap_airport>
-              <prt_rap_refairport>HKG
-                <ref_airport>
-                  <rap_additionalinfo xsi:nil="true"/>
-                  <rap_city xsi:nil="true"/>
-                  <rap_city3lc xsi:nil="true"/>
-                  <rap_createtime>2025-04-16T09:14:41Z</rap_createtime>
-                  <rap_distance xsi:nil="true"/>
-                  <rap_federalstate xsi:nil="true"/>
-                  <rap_iata3lc>HKG</rap_iata3lc>
-                  <rap_iataregion xsi:nil="true"/>
-                  <rap_icao4lc>VHHH</rap_icao4lc>
-                  <rap_internalcode>HKG</rap_internalcode>
-                  <rap_modtime>2025-04-16T09:14:41Z</rap_modtime>
-                  <rap_moduser>loaded</rap_moduser>
-                  <rap_name1>HONG KONG INTERNATIONAL</rap_name1>
-                  <rap_name2>HONG KONG</rap_name2>
-                  <rap_name3>DOC7910 168/ANNE</rap_name3>
-                  <rap_name4 xsi:nil="true"/>
-                  <rap_name5 xsi:nil="true"/>
-                  <rap_opscreatedind>N</rap_opscreatedind>
-                  <rap_rctr_country>HK</rap_rctr_country>
-                  <rap_rctt_countrytype>I</rap_rctt_countrytype>
-                  <rap_safeind>Y</rap_safeind>
-                  <rap_slg_additionallanguage xsi:nil="true"/>
-                  <rap_timezone xsi:nil="true"/>
-                </ref_airport>
-              </prt_rap_refairport>
-              <prt_rtr_trafficrestriction xsi:nil="true"/>
-              <prt_stastation xsi:nil="true"/>
-              <prt_stdstation xsi:nil="true"/>
-            </pl_routing>
-          </pl_routing_list>
-          <pl_specialservice_list/>
-          <pl_transferpax_list/>
-        </pl_arrival>
-      </pt_pa_arrival>
-      <pt_pd_departure>1006805148
-        <pl_departure>
-          <pd_idseq>1006805148</pd_idseq>
-          <pd_acgt xsi:nil="true"/>
-          <pd_aczt xsi:nil="true"/>
-          <pd_adc xsi:nil="true"/>
-          <pd_additionalinfo xsi:nil="true"/>
-          <pd_aebt xsi:nil="true"/>
-          <pd_aegt xsi:nil="true"/>
-          <pd_aezt xsi:nil="true"/>
-          <pd_aght xsi:nil="true"/>
-          <pd_airbridges xsi:nil="true"/>
-          <pd_airtraffic xsi:nil="true"/>
-          <pd_aldtnext xsi:nil="true"/>
-          <pd_aobt xsi:nil="true"/>
-          <pd_ardt xsi:nil="true"/>
-          <pd_arzt xsi:nil="true"/>
-          <pd_asat xsi:nil="true"/>
-          <pd_asbt xsi:nil="true"/>
-          <pd_asrt xsi:nil="true"/>
-          <pd_assistingpax xsi:nil="true"/>
-          <pd_atccomment xsi:nil="true"/>
-          <pd_atcfplstatus>N</pd_atcfplstatus>
-          <pd_atot xsi:nil="true"/>
-          <pd_billingcomments xsi:nil="true"/>
-          <pd_billingstatus>I</pd_billingstatus>
-          <pd_blockedind>N</pd_blockedind>
-          <pd_bobt>2025-06-27T07:50:00Z</pd_bobt>
-          <pd_busind>N</pd_busind>
-          <pd_callsign>EVA3333</pd_callsign>
-          <pd_cancellationtime xsi:nil="true"/>
-          <pd_cashamount xsi:nil="true"/>
-          <pd_cashind>N</pd_cashind>
-          <pd_cashlodgements xsi:nil="true"/>
-          <pd_cbpind>N</pd_cbpind>
-          <pd_chareablepermit>NNNNN</pd_chareablepermit>
-          <pd_chargeableexempt xsi:nil="true"/>
-          <pd_chargeformno>0</pd_chargeformno>
-          <pd_checkpointprofile xsi:nil="true"/>
-          <pd_codeshareflightnumbers xsi:nil="true"/>
-          <pd_counterareas xsi:nil="true"/>
-          <pd_counters>H20,H22,J11</pd_counters>
-          <pd_createreason xsi:nil="true"/>
-          <pd_createtime>2025-06-27T03:15:16Z</pd_createtime>
-          <pd_ctot xsi:nil="true"/>
-          <pd_deicingcounter xsi:nil="true"/>
-          <pd_delay xsi:nil="true"/>
-          <pd_delayreasons xsi:nil="true"/>
-          <pd_departurebelts xsi:nil="true"/>
-          <pd_departuregates>HOLD</pd_departuregates>
-          <pd_dir xsi:nil="true"/>
-          <pd_displaycode>P</pd_displaycode>
-          <pd_doorclosetime xsi:nil="true"/>
-          <pd_doublegatewayind>N</pd_doublegatewayind>
-          <pd_dpistatus xsi:nil="true"/>
-          <pd_dpitime xsi:nil="true"/>
-          <pd_eczt xsi:nil="true"/>
-          <pd_edit xsi:nil="true"/>
-          <pd_eezt xsi:nil="true"/>
-          <pd_egateind>N</pd_egateind>
-          <pd_enrc xsi:nil="true"/>
-          <pd_eobt>2025-06-27T07:50:00Z</pd_eobt>
-          <pd_eobtatc xsi:nil="true"/>
-          <pd_eobtatcchangecnt xsi:nil="true"/>
-          <pd_eobtlocal xsi:nil="true"/>
-          <pd_erzt xsi:nil="true"/>
-          <pd_estimateddoorclosetime xsi:nil="true"/>
-          <pd_etot xsi:nil="true"/>
-          <pd_exot>10</pd_exot>
-          <pd_exotpad xsi:nil="true"/>
-          <pd_externalflightnumber xsi:nil="true"/>
-          <pd_externalsystemid xsi:nil="true"/>
-          <pd_failediatamessages>0</pd_failediatamessages>
-          <pd_fic xsi:nil="true"/>
-          <pd_flightnumber>BR3333</pd_flightnumber>
-          <pd_flightrule xsi:nil="true"/>
-          <pd_fplactivationtime xsi:nil="true"/>
-          <pd_freezeind xsi:nil="true"/>
-          <pd_fuelrequired xsi:nil="true"/>
-          <pd_gatedisplaycode xsi:nil="true"/>
-          <pd_gatesuspendind xsi:nil="true"/>
-          <pd_gotogate xsi:nil="true"/>
-          <pd_gpu xsi:nil="true"/>
-          <pd_gpuind>Y</pd_gpuind>
-          <pd_iatapriority xsi:nil="true"/>
-          <pd_ifplid xsi:nil="true"/>
-          <pd_indicatorfield>------------</pd_indicatorfield>
-          <pd_lineuptime xsi:nil="true"/>
-          <pd_lockind>N</pd_lockind>
-          <pd_milestoneindstring>____________</pd_milestoneindstring>
-          <pd_modtime>2025-06-27T03:21:53Z</pd_modtime>
-          <pd_moduser>sfis</pd_moduser>
-          <pd_nextinfotime xsi:nil="true"/>
-          <pd_offbridge xsi:nil="true"/>
-          <pd_operator>EVA</pd_operator>
-          <pd_operatorflightnumber>BR3333</pd_operatorflightnumber>
-          <pd_opscomment xsi:nil="true"/>
-          <pd_paymentmode>I</pd_paymentmode>
-          <pd_paymentreference xsi:nil="true"/>
-          <pd_pd_mainflight xsi:nil="true"/>
-          <pd_pobt>2025-06-27T07:50:00Z</pd_pobt>
-          <pd_prioind>N</pd_prioind>
-          <pd_priorityfield>PdRegistration,U,99;</pd_priorityfield>
-          <pd_prmlevypax xsi:nil="true"/>
-          <pd_prmpax xsi:nil="true"/>
-          <pd_profile xsi:nil="true"/>
-          <pd_publiccomment xsi:nil="true"/>
-          <pd_pushbacknecessaryind>N</pd_pushbacknecessaryind>
-          <pd_rac_aircraft>1000102729
-            <ref_aircraft>
-              <rac_idseq>1000102729</rac_idseq>
-              <rac_bonus>N</rac_bonus>
-              <rac_comment xsi:nil="true"/>
-              <rac_createtime>2025-04-25T14:55:06Z</rac_createtime>
-              <rac_firstlanding xsi:nil="true"/>
-              <rac_lastlanding xsi:nil="true"/>
-              <rac_modtime>2025-04-28T12:34:35Z</rac_modtime>
-              <rac_moduser>loaded</rac_moduser>
-              <rac_mtow>205000</rac_mtow>
-              <rac_nacelletreatmentind>Y</rac_nacelletreatmentind>
-              <rac_name xsi:nil="true"/>
-              <rac_noisecategoryinternal xsi:nil="true"/>
-              <rac_opscreatedind>N</rac_opscreatedind>
-              <rac_owner xsi:nil="true"/>
-              <rac_paxcargoind>P</rac_paxcargoind>
-              <rac_permit xsi:nil="true"/>
-              <rac_privatecommercialind>C</rac_privatecommercialind>
-              <rac_ract_aircrafttype>A333
-                <ref_aircrafttype>
-                  <ract_accessheight xsi:nil="true"/>
-                  <ract_averageseatcapacity xsi:nil="true"/>
-                  <ract_bonus>N</ract_bonus>
-                  <ract_bridgerequiredind>N</ract_bridgerequiredind>
-                  <ract_createtime>2025-04-25T13:52:21Z</ract_createtime>
-                  <ract_description>Airbus A330-300 P2F</ract_description>
-                  <ract_enginecount>2</ract_enginecount>
-                  <ract_firstbag xsi:nil="true"/>
-                  <ract_height>1679</ract_height>
-                  <ract_iatasubtype xsi:nil="true"/>
-                  <ract_iatatype>ZZZ</ract_iatatype>
-                  <ract_icaotype>A333</ract_icaotype>
-                  <ract_internalcode>A333</ract_internalcode>
-                  <ract_landingweight xsi:nil="true"/>
-                  <ract_length>6366</ract_length>
-                  <ract_manufacturer xsi:nil="true"/>
-                  <ract_model xsi:nil="true"/>
-                  <ract_modtime>2025-04-28T13:20:25Z</ract_modtime>
-                  <ract_moduser>loaded</ract_moduser>
-                  <ract_mtow xsi:nil="true"/>
-                  <ract_mtta xsi:nil="true"/>
-                  <ract_mttd xsi:nil="true"/>
-                  <ract_mttt xsi:nil="true"/>
-                  <ract_noiseapproach xsi:nil="true"/>
-                  <ract_noiseflyover xsi:nil="true"/>
-                  <ract_noiselateral xsi:nil="true"/>
-                  <ract_opscreatedind>N</ract_opscreatedind>
-                  <ract_payload xsi:nil="true"/>
-                  <ract_piercompatibleind xsi:nil="true"/>
-                  <ract_propulsion xsi:nil="true"/>
-                  <ract_ret_enginetype xsi:nil="true"/>
-                  <ract_rnca_noisecategory xsi:nil="true"/>
-                  <ract_shadow xsi:nil="true"/>
-                  <ract_sizecategory>E</ract_sizecategory>
-                  <ract_statisweightcategory xsi:nil="true"/>
-                  <ract_symbolname xsi:nil="true"/>
-                  <ract_taxifuelperminute xsi:nil="true"/>
-                  <ract_widebodyind>Y</ract_widebodyind>
-                  <ract_width>6030</ract_width>
-                </ref_aircrafttype>
-              </rac_ract_aircrafttype>
-              <rac_ral_lessee xsi:nil="true"/>
-              <rac_ral_operator>BR</rac_ral_operator>
-              <rac_registration>B16340</rac_registration>
-              <rac_rnca_noisecategory xsi:nil="true"/>
-              <rac_seatcapacity xsi:nil="true"/>
-              <rac_serialnumber xsi:nil="true"/>
-              <rac_validfrom>2017-06-19T00:00:00Z</rac_validfrom>
-              <rac_validto xsi:nil="true"/>
-            </ref_aircraft>
-          </pd_rac_aircraft>
-          <pd_ract_aircrafttype>A333
-            <ref_aircrafttype>
-              <ract_accessheight xsi:nil="true"/>
-              <ract_averageseatcapacity xsi:nil="true"/>
-              <ract_bonus>N</ract_bonus>
-              <ract_bridgerequiredind>N</ract_bridgerequiredind>
-              <ract_createtime>2025-04-25T13:52:21Z</ract_createtime>
-              <ract_description>Airbus A330-300 P2F</ract_description>
-              <ract_firstbag xsi:nil="true"/>
-              <ract_height>1679</ract_height>
-              <ract_iatatype>ZZZ</ract_iatatype>
-              <ract_icaotype>A333</ract_icaotype>
-              <ract_internalcode>A333</ract_internalcode>
-              <ract_landingweight xsi:nil="true"/>
-              <ract_length>6366</ract_length>
-              <ract_manufacturer xsi:nil="true"/>
-              <ract_model xsi:nil="true"/>
-              <ract_modtime>2025-04-28T13:20:25Z</ract_modtime>
-              <ract_moduser>loaded</ract_moduser>
-              <ract_mtow xsi:nil="true"/>
-              <ract_mtta xsi:nil="true"/>
-              <ract_mttd xsi:nil="true"/>
-              <ract_mttt xsi:nil="true"/>
-              <ract_opscreatedind>N</ract_opscreatedind>
-              <ract_payload xsi:nil="true"/>
-              <ract_piercompatibleind xsi:nil="true"/>
-              <ract_propulsion xsi:nil="true"/>
-              <ract_rnca_noisecategory xsi:nil="true"/>
-              <ract_shadow xsi:nil="true"/>
-              <ract_sizecategory>E</ract_sizecategory>
-              <ract_symbolname xsi:nil="true"/>
-              <ract_taxifuelperminute xsi:nil="true"/>
-              <ract_widebodyind>Y</ract_widebodyind>
-              <ract_width>6030</ract_width>
-            </ref_aircrafttype>
-          </pd_ract_aircrafttype>
-          <pd_ract_plannedact xsi:nil="true"/>
-          <pd_ral_airline>BR
-            <ref_airline>
-              <ral_2lc>BR</ral_2lc>
-              <ral_3lc>EVA</ral_3lc>
-              <ral_alliance xsi:nil="true"/>
-              <ral_callsign>EVA AIR</ral_callsign>
-              <ral_category xsi:nil="true"/>
-              <ral_createtime>2025-04-16T09:19:45Z</ral_createtime>
-              <ral_description>DOC 8585 EDT 185/CA</ral_description>
-              <ral_formatflightnumberind>Y</ral_formatflightnumberind>
-              <ral_ignorecreatedayind>N</ral_ignorecreatedayind>
-              <ral_ignorestatisticsind>N</ral_ignorestatisticsind>
-              <ral_internal>BR</ral_internal>
-              <ral_lpccode>&#13;</ral_lpccode>
-              <ral_modtime>2025-04-16T09:19:45Z</ral_modtime>
-              <ral_moduser>loaded</ral_moduser>
-              <ral_name>EVA AIRWAYS</ral_name>
-              <ral_opscreatedind>N</ral_opscreatedind>
-              <ral_paymentmode>I</ral_paymentmode>
-              <ral_rctr_country>TW</ral_rctr_country>
-              <ral_registrationcopyind>Y</ral_registrationcopyind>
-              <ral_rha_agentbag xsi:nil="true"/>
-              <ral_rha_agentci xsi:nil="true"/>
-              <ral_rtrm_terminal xsi:nil="true"/>
-            </ref_airline>
-          </pd_ral_airline>
-          <pd_ramp_handlingagent xsi:nil="true"/>
-          <pd_rap_destinationairport>CDG</pd_rap_destinationairport>
-          <pd_rap_nextairport>HKG</pd_rap_nextairport>
-          <pd_rap_refdestinationairport>CDG
-            <ref_airport>
-              <rap_city xsi:nil="true"/>
-              <rap_city3lc xsi:nil="true"/>
-              <rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
-              <rap_distance xsi:nil="true"/>
-              <rap_iata3lc>CDG</rap_iata3lc>
-              <rap_iataregion xsi:nil="true"/>
-              <rap_icao4lc>LFPG</rap_icao4lc>
-              <rap_internalcode>CDG</rap_internalcode>
-              <rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
-              <rap_moduser>loaded</rap_moduser>
-              <rap_name1>PARIS CHARLES DE GAULLE</rap_name1>
-              <rap_name2>PARIS</rap_name2>
-              <rap_name3>DOC7910 168/AP</rap_name3>
-              <rap_name4 xsi:nil="true"/>
-              <rap_name5 xsi:nil="true"/>
-              <rap_rctr_country>FR</rap_rctr_country>
-              <rap_rctt_countrytype>I</rap_rctt_countrytype>
-              <rap_safeind>Y</rap_safeind>
-              <rap_slg_additionallanguage xsi:nil="true"/>
-              <rap_syst_station xsi:nil="true"/>
-              <rap_timezone xsi:nil="true"/>
-              <ref_airportversion_list/>
-            </ref_airport>
-          </pd_rap_refdestinationairport>
-          <pd_rap_refnextairport>HKG
-            <ref_airport>
-              <rap_city xsi:nil="true"/>
-              <rap_city3lc xsi:nil="true"/>
-              <rap_createtime>2025-04-16T09:14:41Z</rap_createtime>
-              <rap_defaultarrivalroutepoint xsi:nil="true"/>
-              <rap_defaultdepartureroutepoint xsi:nil="true"/>
-              <rap_distance xsi:nil="true"/>
-              <rap_iata3lc>HKG</rap_iata3lc>
-              <rap_iataregion xsi:nil="true"/>
-              <rap_icao4lc>VHHH</rap_icao4lc>
-              <rap_internalcode>HKG</rap_internalcode>
-              <rap_modtime>2025-04-16T09:14:41Z</rap_modtime>
-              <rap_moduser>loaded</rap_moduser>
-              <rap_name1>HONG KONG INTERNATIONAL</rap_name1>
-              <rap_name2>HONG KONG</rap_name2>
-              <rap_name3>DOC7910 168/ANNE</rap_name3>
-              <rap_name4 xsi:nil="true"/>
-              <rap_name5 xsi:nil="true"/>
-              <rap_rctr_country>HK</rap_rctr_country>
-              <rap_rctt_countrytype>I</rap_rctt_countrytype>
-              <rap_safeind>Y</rap_safeind>
-              <rap_slg_additionallanguage xsi:nil="true"/>
-              <rap_syst_station xsi:nil="true"/>
-              <rap_timezone xsi:nil="true"/>
-              <ref_airportversion_list/>
-            </ref_airport>
-          </pd_rap_refnextairport>
-          <pd_rcdms_status>
-            <ref_cdmstatus/>
-          </pd_rcdms_status>
-          <pd_rco_concourse xsi:nil="true"/>
-          <pd_rco_refconcourse xsi:nil="true"/>
-          <pd_rctt_countrytype>I
-            <ref_countrytype>
-              <rctt_availableforcountryind>Y</rctt_availableforcountryind>
-              <rctt_code>I</rctt_code>
-              <rctt_createtime>2025-04-18T00:00:00Z</rctt_createtime>
-              <rctt_description>International</rctt_description>
-              <rctt_internalcode>T</rctt_internalcode>
-              <rctt_modtime>2025-04-18T00:00:00Z</rctt_modtime>
-              <rctt_moduser>loaded</rctt_moduser>
-            </ref_countrytype>
-          </pd_rctt_countrytype>
-          <pd_registration>B16340</pd_registration>
-          <pd_rfst_flightstatus>S</pd_rfst_flightstatus>
-          <pd_rfst_refflightstatus>DS
-            <ref_flightstatus>
-              <rfst_arrdepind>D</rfst_arrdepind>
-              <rfst_code>S</rfst_code>
-              <rfst_code3l>PLN</rfst_code3l>
-              <rfst_createtime>2025-04-17T13:14:48Z</rfst_createtime>
-              <rfst_description>Scheduled, initial status after flight was created</rfst_description>
-              <rfst_idcode>DS</rfst_idcode>
-              <rfst_legacystatus>S</rfst_legacystatus>
-              <rfst_minimumturnorder xsi:nil="true"/>
-              <rfst_modtime>2025-04-17T13:14:48Z</rfst_modtime>
-              <rfst_moduser>loaded</rfst_moduser>
-              <rfst_order>0</rfst_order>
-              <rfst_rrmk_refremark xsi:nil="true"/>
-              <rfst_rrmk_remark xsi:nil="true"/>
-              <rfst_timestamp>PdSobt</rfst_timestamp>
-            </ref_flightstatus>
-          </pd_rfst_refflightstatus>
-          <pd_rha_agentbag xsi:nil="true"/>
-          <pd_rha_agentci xsi:nil="true"/>
-          <pd_rha_refagentbag xsi:nil="true"/>
-          <pd_rha_refagentci xsi:nil="true"/>
-          <pd_rmsc_scenario>1</pd_rmsc_scenario>
-          <pd_rnc_naturecode>01</pd_rnc_naturecode>
-          <pd_rnc_refnaturecode>10155</pd_rnc_refnaturecode>
-          <pd_rrmk_refremark xsi:nil="true"/>
-          <pd_rrmk_remark xsi:nil="true"/>
-          <pd_rrwy_refrunway>
-            <ref_runway/>
-          </pd_rrwy_refrunway>
-          <pd_rrwy_runway xsi:nil="true"/>
-          <pd_rsta_refstand>HOLD@1
-            <ref_stand>
-              <rsta_angle xsi:nil="true"/>
-              <rsta_capacity>-1</rsta_capacity>
-              <rsta_cctvstream xsi:nil="true"/>
-              <rsta_code>HOLD</rsta_code>
-              <rsta_createtime>2025-03-30T00:00:00Z</rsta_createtime>
-              <rsta_description>Stand HOLD</rsta_description>
-              <rsta_displaytext xsi:nil="true"/>
-              <rsta_dockingind>N</rsta_dockingind>
-              <rsta_elevatorind xsi:nil="true"/>
-              <rsta_eqconstraint>A</rsta_eqconstraint>
-              <rsta_externalid xsi:nil="true"/>
-              <rsta_fuelpitind xsi:nil="true"/>
-              <rsta_gpuind>N</rsta_gpuind>
-              <rsta_gpuname xsi:nil="true"/>
-              <rsta_idcode>HOLD@1</rsta_idcode>
-              <rsta_latitude xsi:nil="true"/>
-              <rsta_length xsi:nil="true"/>
-              <rsta_longitude xsi:nil="true"/>
-              <rsta_marsind>N</rsta_marsind>
-              <rsta_modtime>2025-03-30T00:00:00Z</rsta_modtime>
-              <rsta_moduser>bkranthi</rsta_moduser>
-              <rsta_owner xsi:nil="true"/>
-              <rsta_pdgs_status xsi:nil="true"/>
-              <rsta_ract_maximumaircrafttype xsi:nil="true"/>
-              <rsta_ral_airline xsi:nil="true"/>
-              <rsta_rco_concourse xsi:nil="true"/>
-              <rsta_rctt_countrytype>A</rsta_rctt_countrytype>
-              <rsta_rgt_gate xsi:nil="true"/>
-              <rsta_rgt_refgate xsi:nil="true"/>
-              <rsta_rmsc_scenario>1</rsta_rmsc_scenario>
-              <rsta_rsna_area xsi:nil="true"/>
-              <rsta_validfrom xsi:nil="true"/>
-              <rsta_validto xsi:nil="true"/>
-              <rsta_width xsi:nil="true"/>
-            </ref_stand>
-          </pd_rsta_refstand>
-          <pd_rsta_stand>HOLD</pd_rsta_stand>
-          <pd_rsta_standardstand xsi:nil="true"/>
-          <pd_rstc_refservicetypecode>J@BKK
-            <ref_servicetypecode>
-              <rstc_arrivalbridgeopind>N</rstc_arrivalbridgeopind>
-              <rstc_arrivalbusind>N</rstc_arrivalbusind>
-              <rstc_arrivalgatetind>Y</rstc_arrivalgatetind>
-              <rstc_arrivaltractorind>N</rstc_arrivaltractorind>
-              <rstc_baggagebeltind>Y</rstc_baggagebeltind>
-              <rstc_checkcgoloadind>N</rstc_checkcgoloadind>
-              <rstc_checkincounterind>Y</rstc_checkincounterind>
-              <rstc_checkmailloadind>N</rstc_checkmailloadind>
-              <rstc_checkpaxloadind>N</rstc_checkpaxloadind>
-              <rstc_code>J</rstc_code>
-              <rstc_comment xsi:nil="true"/>
-              <rstc_createtime>2025-04-17T11:34:16Z</rstc_createtime>
-              <rstc_departurebeltind>N</rstc_departurebeltind>
-              <rstc_departurebridgeopind>N</rstc_departurebridgeopind>
-              <rstc_departurebusind>N</rstc_departurebusind>
-              <rstc_departuregatetind>Y</rstc_departuregatetind>
-              <rstc_departureloungeind>N</rstc_departureloungeind>
-              <rstc_departuresecurityind>N</rstc_departuresecurityind>
-              <rstc_departuretractorind>N</rstc_departuretractorind>
-              <rstc_description>Passenger Scheduled</rstc_description>
-              <rstc_displaycode>P</rstc_displaycode>
-              <rstc_exempt xsi:nil="true"/>
-              <rstc_iatadefault>N</rstc_iatadefault>
-              <rstc_ignorestatisticsind>Y</rstc_ignorestatisticsind>
-              <rstc_infoserviceind>N</rstc_infoserviceind>
-              <rstc_modtime>2025-05-08T15:34:27Z</rstc_modtime>
-              <rstc_moduser>sfis</rstc_moduser>
-              <rstc_ristc_iatacode>J</rstc_ristc_iatacode>
-              <rstc_standind>Y</rstc_standind>
-              <rstc_statisticcode xsi:nil="true"/>
-            </ref_servicetypecode>
-          </pd_rstc_refservicetypecode>
-          <pd_rstc_servicetypecode>J</pd_rstc_servicetypecode>
-          <pd_rtot xsi:nil="true"/>
-          <pd_rtrm_terminal>1</pd_rtrm_terminal>
-          <pd_runwayoccupancytime xsi:nil="true"/>
-          <pd_safeind>Y</pd_safeind>
-          <pd_salt_cdmalarm xsi:nil="true"/>
-          <pd_salt_refcdmalarm xsi:nil="true"/>
-          <pd_seats xsi:nil="true"/>
-          <pd_secondcall xsi:nil="true"/>
-          <pd_sequencerprio xsi:nil="true"/>
-          <pd_sid xsi:nil="true"/>
-          <pd_slotmsg xsi:nil="true"/>
-          <pd_sobt>2025-06-27T07:50:00Z</pd_sobt>
-          <pd_standchangecnt>0</pd_standchangecnt>
-          <pd_standnote xsi:nil="true"/>
-          <pd_stb xsi:nil="true"/>
-          <pd_ste xsi:nil="true"/>
-          <pd_stot xsi:nil="true"/>
-          <pd_sts xsi:nil="true"/>
-          <pd_susind xsi:nil="true"/>
-          <pd_tariffcode>BL</pd_tariffcode>
-          <pd_taxitime>10</pd_taxitime>
-          <pd_tobt xsi:nil="true"/>
-          <pd_tobtchanges>0</pd_tobtchanges>
-          <pd_tobtconfirmationtime xsi:nil="true"/>
-          <pd_tobtstatus xsi:nil="true"/>
-          <pd_totalcrew xsi:nil="true"/>
-          <pd_totalextracrew xsi:nil="true"/>
-          <pd_totalpax>0</pd_totalpax>
-          <pd_transferpax xsi:nil="true"/>
-          <pd_transitpax xsi:nil="true"/>
-          <pd_tsat xsi:nil="true"/>
-          <pd_tsatreason xsi:nil="true"/>
-          <pd_ttot xsi:nil="true"/>
-          <pd_ttotsent xsi:nil="true"/>
-          <pd_vipcomment xsi:nil="true"/>
-          <pd_vipind>N</pd_vipind>
-          <pd_zerofreightind>N</pd_zerofreightind>
-          <pd_zeromailind>N</pd_zeromailind>
-          <pd_zeropaxind>N</pd_zeropaxind>
-          <pd_zerototalweightind>N</pd_zerototalweightind>
-          <pl_atcdeparture_list/>
-          <pl_cdmstatus_list/>
-          <pl_containerinfo_list/>
-          <pl_delayreason_list/>
-          <pl_departure_list/>
-          <pl_departureaddinfo_list/>
-          <pl_departurebelt_list/>
-          <pl_departuregate_list>
-            <pl_departuregate>
-              <pdg_idseq>1002009299</pdg_idseq>
-              <pdg_airbridgeind>N</pdg_airbridgeind>
-              <pdg_beginactual xsi:nil="true"/>
-              <pdg_begingateactual xsi:nil="true"/>
-              <pdg_begingateplan>2025-06-27T07:10:00Z</pdg_begingateplan>
-              <pdg_beginplan>2025-06-27T07:10:00Z</pdg_beginplan>
-              <pdg_createtime>2025-06-27T03:15:16Z</pdg_createtime>
-              <pdg_displaycode>I</pdg_displaycode>
-              <pdg_endactual xsi:nil="true"/>
-              <pdg_endplan>2025-06-27T07:50:00Z</pdg_endplan>
-              <pdg_lockind>N</pdg_lockind>
-              <pdg_modtime>2025-06-27T03:15:16Z</pdg_modtime>
-              <pdg_moduser>sfis</pdg_moduser>
-              <pdg_note xsi:nil="true"/>
-              <pdg_pd_departure>1006805148</pdg_pd_departure>
-              <pdg_pd_flightnumber>BR3333</pdg_pd_flightnumber>
-              <pdg_publiccomment xsi:nil="true"/>
-              <pdg_rdo_displayobject xsi:nil="true"/>
-              <pdg_rdt_displaytext xsi:nil="true"/>
-              <pdg_rgt_gate>HOLD</pdg_rgt_gate>
-              <pdg_rgt_lastgate xsi:nil="true"/>
-              <pdg_rgt_refgate>HOLD@1
-                <ref_gate>
-                  <rgt_arrdepind>B</rgt_arrdepind>
-                  <rgt_capacity>-1</rgt_capacity>
-                  <rgt_cctvstream xsi:nil="true"/>
-                  <rgt_code>HOLD</rgt_code>
-                  <rgt_createtime>2025-03-30T00:00:00Z</rgt_createtime>
-                  <rgt_description>Gate HOLD</rgt_description>
-                  <rgt_displaytext xsi:nil="true"/>
-                  <rgt_egateavailableind>N</rgt_egateavailableind>
-                  <rgt_gatetype>T</rgt_gatetype>
-                  <rgt_idcode>HOLD@1</rgt_idcode>
-                  <rgt_modtime>2025-03-30T00:00:00Z</rgt_modtime>
-                  <rgt_moduser>bkranthi</rgt_moduser>
-                  <rgt_paxloadingbridgeind>N</rgt_paxloadingbridgeind>
-                  <rgt_ral_airline xsi:nil="true"/>
-                  <rgt_rco_concourse xsi:nil="true"/>
-                  <rgt_rco_refconcourse xsi:nil="true"/>
-                  <rgt_rcpa_areabordercontrol xsi:nil="true"/>
-                  <rgt_rcpa_areasecurity xsi:nil="true"/>
-                  <rgt_rctt_countrytype>A</rgt_rctt_countrytype>
-                  <rgt_rdlg_refdeparturelounge xsi:nil="true"/>
-                  <rgt_rmsc_scenario>1</rgt_rmsc_scenario>
-                  <rgt_validfrom xsi:nil="true"/>
-                  <rgt_validto xsi:nil="true"/>
-                </ref_gate>
-              </pdg_rgt_refgate>
-              <pdg_rgt_standardgate xsi:nil="true"/>
-              <pdg_rmsc_scenario>1</pdg_rmsc_scenario>
-              <pdg_seqno>1</pdg_seqno>
-              <pdg_status>S</pdg_status>
-            </pl_departuregate>
-          </pl_departuregate_list>
-          <pl_desk_list>
-            <pl_desk>
-              <pdk_idseq>1004064260</pdk_idseq>
-              <pdk_beginactual xsi:nil="true"/>
-              <pdk_beginplan>2025-06-27T04:50:00Z</pdk_beginplan>
-              <pdk_cciind>N</pdk_cciind>
-              <pdk_checkinclassid>W</pdk_checkinclassid>
-              <pdk_checkintype>R</pdk_checkintype>
-              <pdk_createtime>2025-06-27T03:15:16Z</pdk_createtime>
-              <pdk_displaycode>P</pdk_displaycode>
-              <pdk_endactual xsi:nil="true"/>
-              <pdk_endplan>2025-06-27T07:10:00Z</pdk_endplan>
-              <pdk_lockind>N</pdk_lockind>
-              <pdk_modtime>2025-06-27T03:21:46Z</pdk_modtime>
-              <pdk_moduser>sfis</pdk_moduser>
-              <pdk_note xsi:nil="true"/>
-              <pdk_pd_departure>1006805148</pdk_pd_departure>
-              <pdk_pd_flightnumber>BR3333</pdk_pd_flightnumber>
-              <pdk_pday_day xsi:nil="true"/>
-              <pdk_publiccomment xsi:nil="true"/>
-              <pdk_rcnt_counter>H20</pdk_rcnt_counter>
-              <pdk_rcnt_lastcounter xsi:nil="true"/>
-              <pdk_rcnt_mastercci xsi:nil="true"/>
-              <pdk_rcnt_refcounter>H20@1
-                <ref_counter>
-                  <rcnt_baggagebeltind>N</rcnt_baggagebeltind>
-                  <rcnt_baggagebeltlocation xsi:nil="true"/>
-                  <rcnt_baggagetagprinterind>N</rcnt_baggagetagprinterind>
-                  <rcnt_capacity xsi:nil="true"/>
-                  <rcnt_ccialternatetext xsi:nil="true"/>
-                  <rcnt_cctvstream xsi:nil="true"/>
-                  <rcnt_code>H20</rcnt_code>
-                  <rcnt_countergroup xsi:nil="true"/>
-                  <rcnt_createtime>2025-04-16T10:32:28Z</rcnt_createtime>
-                  <rcnt_cuteequipmentind>N</rcnt_cuteequipmentind>
-                  <rcnt_description>Counter/Desk H20</rcnt_description>
-                  <rcnt_displaytext xsi:nil="true"/>
-                  <rcnt_externalcode xsi:nil="true"/>
-                  <rcnt_idcode>H20@1</rcnt_idcode>
-                  <rcnt_leasedind>N</rcnt_leasedind>
-                  <rcnt_modtime>2025-04-16T10:32:28Z</rcnt_modtime>
-                  <rcnt_moduser>loaded</rcnt_moduser>
-                  <rcnt_ownerofcheckinset xsi:nil="true"/>
-                  <rcnt_phone xsi:nil="true"/>
-                  <rcnt_publiccomment xsi:nil="true"/>
-                  <rcnt_ral_airline xsi:nil="true"/>
-                  <rcnt_rbhs_area xsi:nil="true"/>
-                  <rcnt_rcna_area xsi:nil="true"/>
-                  <rcnt_rco_concourse xsi:nil="true"/>
-                  <rcnt_rco_refconcourse xsi:nil="true"/>
-                  <rcnt_rcpa_areasecurity xsi:nil="true"/>
-                  <rcnt_rctt_countrytype>A</rcnt_rctt_countrytype>
-                  <rcnt_renter xsi:nil="true"/>
-                  <rcnt_rmsc_scenario>1</rcnt_rmsc_scenario>
-                  <rcnt_schedulecharterind xsi:nil="true"/>
-                  <rcnt_ticketprinterind>N</rcnt_ticketprinterind>
-                  <rcnt_type>R</rcnt_type>
-                  <rcnt_validfrom xsi:nil="true"/>
-                  <rcnt_validto xsi:nil="true"/>
-                </ref_counter>
-              </pdk_rcnt_refcounter>
-              <pdk_rcnt_refmastercci xsi:nil="true"/>
-              <pdk_rdo_displayobject>
-                <ref_displayobject/>
-              </pdk_rdo_displayobject>
-              <pdk_rdt_displaytext xsi:nil="true"/>
-              <pdk_rmsc_scenario>1</pdk_rmsc_scenario>
-              <pdk_seqno>2</pdk_seqno>
-              <pdk_status>S</pdk_status>
-            </pl_desk>
-            <pl_desk>
-              <pdk_idseq>1004064261</pdk_idseq>
-              <pdk_beginactual xsi:nil="true"/>
-              <pdk_beginplan>2025-06-27T04:50:00Z</pdk_beginplan>
-              <pdk_cciind>N</pdk_cciind>
-              <pdk_checkinclassid>F</pdk_checkinclassid>
-              <pdk_checkintype>R</pdk_checkintype>
-              <pdk_createtime>2025-06-27T03:15:16Z</pdk_createtime>
-              <pdk_displaycode>P</pdk_displaycode>
-              <pdk_endactual xsi:nil="true"/>
-              <pdk_endplan>2025-06-27T07:10:00Z</pdk_endplan>
-              <pdk_lockind>N</pdk_lockind>
-              <pdk_modtime>2025-06-27T03:21:43Z</pdk_modtime>
-              <pdk_moduser>sfis</pdk_moduser>
-              <pdk_note xsi:nil="true"/>
-              <pdk_pd_departure>1006805148</pdk_pd_departure>
-              <pdk_pd_flightnumber>BR3333</pdk_pd_flightnumber>
-              <pdk_pday_day xsi:nil="true"/>
-              <pdk_publiccomment xsi:nil="true"/>
-              <pdk_rcnt_counter>H22</pdk_rcnt_counter>
-              <pdk_rcnt_lastcounter xsi:nil="true"/>
-              <pdk_rcnt_mastercci xsi:nil="true"/>
-              <pdk_rcnt_refcounter>H22@1
-                <ref_counter>
-                  <rcnt_baggagebeltind>N</rcnt_baggagebeltind>
-                  <rcnt_baggagebeltlocation xsi:nil="true"/>
-                  <rcnt_baggagetagprinterind>N</rcnt_baggagetagprinterind>
-                  <rcnt_capacity xsi:nil="true"/>
-                  <rcnt_ccialternatetext xsi:nil="true"/>
-                  <rcnt_cctvstream xsi:nil="true"/>
-                  <rcnt_code>H22</rcnt_code>
-                  <rcnt_countergroup xsi:nil="true"/>
-                  <rcnt_createtime>2025-04-16T10:32:28Z</rcnt_createtime>
-                  <rcnt_cuteequipmentind>N</rcnt_cuteequipmentind>
-                  <rcnt_description>Counter/Desk H22</rcnt_description>
-                  <rcnt_displaytext xsi:nil="true"/>
-                  <rcnt_externalcode xsi:nil="true"/>
-                  <rcnt_idcode>H22@1</rcnt_idcode>
-                  <rcnt_leasedind>N</rcnt_leasedind>
-                  <rcnt_modtime>2025-04-16T10:32:28Z</rcnt_modtime>
-                  <rcnt_moduser>loaded</rcnt_moduser>
-                  <rcnt_ownerofcheckinset xsi:nil="true"/>
-                  <rcnt_phone xsi:nil="true"/>
-                  <rcnt_publiccomment xsi:nil="true"/>
-                  <rcnt_ral_airline xsi:nil="true"/>
-                  <rcnt_rbhs_area xsi:nil="true"/>
-                  <rcnt_rcna_area xsi:nil="true"/>
-                  <rcnt_rco_concourse xsi:nil="true"/>
-                  <rcnt_rco_refconcourse xsi:nil="true"/>
-                  <rcnt_rcpa_areasecurity xsi:nil="true"/>
-                  <rcnt_rctt_countrytype>A</rcnt_rctt_countrytype>
-                  <rcnt_renter xsi:nil="true"/>
-                  <rcnt_rmsc_scenario>1</rcnt_rmsc_scenario>
-                  <rcnt_schedulecharterind xsi:nil="true"/>
-                  <rcnt_ticketprinterind>N</rcnt_ticketprinterind>
-                  <rcnt_type>R</rcnt_type>
-                  <rcnt_validfrom xsi:nil="true"/>
-                  <rcnt_validto xsi:nil="true"/>
-                </ref_counter>
-              </pdk_rcnt_refcounter>
-              <pdk_rcnt_refmastercci xsi:nil="true"/>
-              <pdk_rdo_displayobject>
-                <ref_displayobject/>
-              </pdk_rdo_displayobject>
-              <pdk_rdt_displaytext xsi:nil="true"/>
-              <pdk_rmsc_scenario>1</pdk_rmsc_scenario>
-              <pdk_seqno>3</pdk_seqno>
-              <pdk_status>S</pdk_status>
-            </pl_desk>
-            <pl_desk>
-              <pdk_idseq>1004064259</pdk_idseq>
-              <pdk_beginactual xsi:nil="true"/>
-              <pdk_beginplan>2025-06-27T04:50:00Z</pdk_beginplan>
-              <pdk_cciind>N</pdk_cciind>
-              <pdk_checkinclassid>Y</pdk_checkinclassid>
-              <pdk_checkintype>R</pdk_checkintype>
-              <pdk_createtime>2025-06-27T03:15:16Z</pdk_createtime>
-              <pdk_displaycode>P</pdk_displaycode>
-              <pdk_endactual xsi:nil="true"/>
-              <pdk_endplan>2025-06-27T07:10:00Z</pdk_endplan>
-              <pdk_lockind>N</pdk_lockind>
-              <pdk_modtime>2025-06-27T03:21:53Z</pdk_modtime>
-              <pdk_moduser>sfis</pdk_moduser>
-              <pdk_note xsi:nil="true"/>
-              <pdk_pd_departure>1006805148</pdk_pd_departure>
-              <pdk_pd_flightnumber>BR3333</pdk_pd_flightnumber>
-              <pdk_pday_day xsi:nil="true"/>
-              <pdk_publiccomment xsi:nil="true"/>
-              <pdk_rcnt_counter>J11</pdk_rcnt_counter>
-              <pdk_rcnt_lastcounter xsi:nil="true"/>
-              <pdk_rcnt_mastercci xsi:nil="true"/>
-              <pdk_rcnt_refcounter>J11@1
-                <ref_counter>
-                  <rcnt_baggagebeltind>N</rcnt_baggagebeltind>
-                  <rcnt_baggagebeltlocation xsi:nil="true"/>
-                  <rcnt_baggagetagprinterind>N</rcnt_baggagetagprinterind>
-                  <rcnt_capacity xsi:nil="true"/>
-                  <rcnt_ccialternatetext xsi:nil="true"/>
-                  <rcnt_cctvstream xsi:nil="true"/>
-                  <rcnt_code>J11</rcnt_code>
-                  <rcnt_countergroup xsi:nil="true"/>
-                  <rcnt_createtime>2025-04-16T10:32:28Z</rcnt_createtime>
-                  <rcnt_cuteequipmentind>N</rcnt_cuteequipmentind>
-                  <rcnt_description>Counter/Desk J11</rcnt_description>
-                  <rcnt_displaytext xsi:nil="true"/>
-                  <rcnt_externalcode xsi:nil="true"/>
-                  <rcnt_idcode>J11@1</rcnt_idcode>
-                  <rcnt_leasedind>N</rcnt_leasedind>
-                  <rcnt_modtime>2025-04-16T10:32:28Z</rcnt_modtime>
-                  <rcnt_moduser>loaded</rcnt_moduser>
-                  <rcnt_ownerofcheckinset xsi:nil="true"/>
-                  <rcnt_phone xsi:nil="true"/>
-                  <rcnt_publiccomment xsi:nil="true"/>
-                  <rcnt_ral_airline xsi:nil="true"/>
-                  <rcnt_rbhs_area xsi:nil="true"/>
-                  <rcnt_rcna_area xsi:nil="true"/>
-                  <rcnt_rco_concourse xsi:nil="true"/>
-                  <rcnt_rco_refconcourse xsi:nil="true"/>
-                  <rcnt_rcpa_areasecurity xsi:nil="true"/>
-                  <rcnt_rctt_countrytype>A</rcnt_rctt_countrytype>
-                  <rcnt_renter xsi:nil="true"/>
-                  <rcnt_rmsc_scenario>1</rcnt_rmsc_scenario>
-                  <rcnt_schedulecharterind xsi:nil="true"/>
-                  <rcnt_ticketprinterind>N</rcnt_ticketprinterind>
-                  <rcnt_type>R</rcnt_type>
-                  <rcnt_validfrom xsi:nil="true"/>
-                  <rcnt_validto xsi:nil="true"/>
-                </ref_counter>
-              </pdk_rcnt_refcounter>
-              <pdk_rcnt_refmastercci xsi:nil="true"/>
-              <pdk_rdo_displayobject>
-                <ref_displayobject/>
-              </pdk_rdo_displayobject>
-              <pdk_rdt_displaytext xsi:nil="true"/>
-              <pdk_rmsc_scenario>1</pdk_rmsc_scenario>
-              <pdk_seqno>1</pdk_seqno>
-              <pdk_status>S</pdk_status>
-            </pl_desk>
-          </pl_desk_list>
-          <pl_dpi_list/>
-          <pl_genericdepartureres_list/>
-          <pl_handlingagent_list/>
-          <pl_routing_list>
-            <pl_routing>
-              <prt_idseq>1004418149</prt_idseq>
-              <prt_createtime>2025-06-27T03:15:16Z</prt_createtime>
-              <prt_displaycode>P</prt_displaycode>
-              <prt_modtime>2025-06-27T03:15:16Z</prt_modtime>
-              <prt_moduser>sfis</prt_moduser>
-              <prt_numberinleg>99</prt_numberinleg>
-              <prt_pa_arrival xsi:nil="true"/>
-              <prt_pd_departure>1006805148</prt_pd_departure>
-              <prt_rap_airport>CDG</prt_rap_airport>
-              <prt_rap_refairport>CDG
-                <ref_airport>
-                  <rap_additionalinfo xsi:nil="true"/>
-                  <rap_city xsi:nil="true"/>
-                  <rap_city3lc xsi:nil="true"/>
-                  <rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
-                  <rap_distance xsi:nil="true"/>
-                  <rap_federalstate xsi:nil="true"/>
-                  <rap_iata3lc>CDG</rap_iata3lc>
-                  <rap_iataregion xsi:nil="true"/>
-                  <rap_icao4lc>LFPG</rap_icao4lc>
-                  <rap_internalcode>CDG</rap_internalcode>
-                  <rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
-                  <rap_moduser>loaded</rap_moduser>
-                  <rap_name1>PARIS CHARLES DE GAULLE</rap_name1>
-                  <rap_name2>PARIS</rap_name2>
-                  <rap_name3>DOC7910 168/AP</rap_name3>
-                  <rap_name4 xsi:nil="true"/>
-                  <rap_name5 xsi:nil="true"/>
-                  <rap_opscreatedind>N</rap_opscreatedind>
-                  <rap_rctr_country>FR</rap_rctr_country>
-                  <rap_rctt_countrytype>I</rap_rctt_countrytype>
-                  <rap_safeind>Y</rap_safeind>
-                  <rap_slg_additionallanguage xsi:nil="true"/>
-                  <rap_timezone xsi:nil="true"/>
-                </ref_airport>
-              </prt_rap_refairport>
-              <prt_rtr_trafficrestriction xsi:nil="true"/>
-              <prt_stastation xsi:nil="true"/>
-              <prt_stdstation xsi:nil="true"/>
-            </pl_routing>
-            <pl_routing>
-              <prt_idseq>1004418150</prt_idseq>
-              <prt_createtime>2025-06-27T03:15:16Z</prt_createtime>
-              <prt_displaycode>P</prt_displaycode>
-              <prt_modtime>2025-06-27T03:15:16Z</prt_modtime>
-              <prt_moduser>sfis</prt_moduser>
-              <prt_numberinleg>1</prt_numberinleg>
-              <prt_pa_arrival xsi:nil="true"/>
-              <prt_pd_departure>1006805148</prt_pd_departure>
-              <prt_rap_airport>HKG</prt_rap_airport>
-              <prt_rap_refairport>HKG
-                <ref_airport>
-                  <rap_additionalinfo xsi:nil="true"/>
-                  <rap_city xsi:nil="true"/>
-                  <rap_city3lc xsi:nil="true"/>
-                  <rap_createtime>2025-04-16T09:14:41Z</rap_createtime>
-                  <rap_distance xsi:nil="true"/>
-                  <rap_federalstate xsi:nil="true"/>
-                  <rap_iata3lc>HKG</rap_iata3lc>
-                  <rap_iataregion xsi:nil="true"/>
-                  <rap_icao4lc>VHHH</rap_icao4lc>
-                  <rap_internalcode>HKG</rap_internalcode>
-                  <rap_modtime>2025-04-16T09:14:41Z</rap_modtime>
-                  <rap_moduser>loaded</rap_moduser>
-                  <rap_name1>HONG KONG INTERNATIONAL</rap_name1>
-                  <rap_name2>HONG KONG</rap_name2>
-                  <rap_name3>DOC7910 168/ANNE</rap_name3>
-                  <rap_name4 xsi:nil="true"/>
-                  <rap_name5 xsi:nil="true"/>
-                  <rap_opscreatedind>N</rap_opscreatedind>
-                  <rap_rctr_country>HK</rap_rctr_country>
-                  <rap_rctt_countrytype>I</rap_rctt_countrytype>
-                  <rap_safeind>Y</rap_safeind>
-                  <rap_slg_additionallanguage xsi:nil="true"/>
-                  <rap_timezone xsi:nil="true"/>
-                </ref_airport>
-              </prt_rap_refairport>
-              <prt_rtr_trafficrestriction xsi:nil="true"/>
-              <prt_stastation xsi:nil="true"/>
-              <prt_stdstation xsi:nil="true"/>
-            </pl_routing>
-          </pl_routing_list>
-          <pl_specialservice_list/>
-          <pl_transferpax_list/>
-        </pl_departure>
-      </pt_pd_departure>
-      <pt_refuelingind>N</pt_refuelingind>
-      <pt_rmsc_scenario>1</pt_rmsc_scenario>
-      <pt_routing>CDG-HKG-BKK-HKG-CDG</pt_routing>
-      <pt_routingiata3lc>CDG-HKG-BKK-HKG-CDG</pt_routingiata3lc>
-      <pt_rsta_currentstand xsi:nil="true"/>
-      <pt_rsta_refcurrentstand>
-        <ref_stand/>
-      </pt_rsta_refcurrentstand>
-      <pt_sibt>2025-06-27T04:00:00Z</pt_sibt>
-      <pt_sobt>2025-06-27T07:50:00Z</pt_sobt>
-    </pl_turn>
-  </soap-env:Body>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:aodb="urn:com.tsystems.ac.aodb" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soap-env:Header>
+		<aodb:control>
+			<aodb:message-id>appintegration:32681ca1:1a01394615b:-19a5</aodb:message-id>
+			<aodb:message-version>1.4</aodb:message-version>
+			<aodb:message-type>UPDATE</aodb:message-type>
+			<aodb:originator>GUI[admin]</aodb:originator>
+			<aodb:timestamp>2026-08-19T04:54:05.543</aodb:timestamp>
+			<aodb:sender>aodb</aodb:sender>
+			<aodb:station>BKK</aodb:station>
+		</aodb:control>
+	</soap-env:Header>
+	<soap-env:Body>
+		<pl_turn id="1006106871" action="update">
+			<pt_idseq>1006106871</pt_idseq>
+			<pl_stand_list>
+				<pl_stand>
+					<pst_idseq>1004226402</pst_idseq>
+					<pst_beginactual>2026-08-19T03:55:00Z</pst_beginactual>
+					<pst_beginplan>2026-08-19T03:48:00Z</pst_beginplan>
+					<pst_comments xsi:nil="true"/>
+					<pst_createtime>2026-08-17T16:48:08Z</pst_createtime>
+					<pst_displaycode>I</pst_displaycode>
+					<pst_endactual>2026-08-19T04:45:00Z</pst_endactual>
+					<pst_endplan>2026-08-19T04:45:00Z</pst_endplan>
+					<pst_extraindicator xsi:nil="true"/>
+					<pst_gpuunits xsi:nil="true"/>
+					<pst_lockind>N</pst_lockind>
+					<pst_modtime>2026-08-19T04:45:42Z</pst_modtime>
+					<pst_moduser>auto</pst_moduser>
+					<pst_note xsi:nil="true"/>
+					<pst_order>0</pst_order>
+					<pst_pt_turn>1006106871</pst_pt_turn>
+					<pst_rmsc_scenario>1</pst_rmsc_scenario>
+					<pst_rsta_laststand xsi:nil="true"/>
+					<pst_rsta_refstand>F2@1</pst_rsta_refstand>
+					<pst_rsta_reftowstand xsi:nil="true"/>
+					<pst_rsta_stand>F2</pst_rsta_stand>
+					<pst_towbarind xsi:nil="true"/>
+					<pst_towbeginactual xsi:nil="true"/>
+					<pst_towbeginearliest xsi:nil="true"/>
+					<pst_towbeginlatest xsi:nil="true"/>
+					<pst_towbeginplan xsi:nil="true"/>
+					<pst_towbeginproposed xsi:nil="true"/>
+					<pst_towcallsign xsi:nil="true"/>
+					<pst_towflightnumber xsi:nil="true"/>
+					<pst_towindicator xsi:nil="true"/>
+					<pst_towrequesttime xsi:nil="true"/>
+					<pst_towrestriction xsi:nil="true"/>
+				</pl_stand>
+			</pl_stand_list>
+			<pt_createtime>2026-08-17T16:48:08Z</pt_createtime>
+			<pt_modtime action="update" old="2026-08-19T04:45:42Z">2026-08-19T04:54:04Z</pt_modtime>
+			<pt_moduser action="update" old="auto">admin</pt_moduser>
+			<pt_mttt>1</pt_mttt>
+			<pt_overallmodtime action="update" old="2026-08-19T04:45:42Z">2026-08-19T04:54:05Z</pt_overallmodtime>
+			<pt_pa_arrival action="insert">1007707348<pl_arrival action="insert">
+					<pa_idseq>1007707348</pa_idseq>
+					<pa_additionalinfo xsi:nil="true"/>
+					<pa_aibt>2026-08-19T03:55:00Z</pa_aibt>
+					<pa_airbridges>F2</pa_airbridges>
+					<pa_airtraffic xsi:nil="true"/>
+					<pa_aldt>2026-08-19T03:38:00Z</pa_aldt>
+					<pa_arrivalgates>F2</pa_arrivalgates>
+					<pa_assistingpax xsi:nil="true"/>
+					<pa_atccomment xsi:nil="true"/>
+					<pa_atcfplstatus>N</pa_atcfplstatus>
+					<pa_atotoutstation>2026-08-19T01:40:00Z</pa_atotoutstation>
+					<pa_baggagebelts>16</pa_baggagebelts>
+					<pa_baggagecarousels>16</pa_baggagecarousels>
+					<pa_bibt>2026-08-19T03:55:00Z</pa_bibt>
+					<pa_bibtsent xsi:nil="true"/>
+					<pa_billingcomments xsi:nil="true"/>
+					<pa_billingstatus>I</pa_billingstatus>
+					<pa_busind>N</pa_busind>
+					<pa_callsign>AAR743</pa_callsign>
+					<pa_cancellationtime xsi:nil="true"/>
+					<pa_cashamount xsi:nil="true"/>
+					<pa_cashind>N</pa_cashind>
+					<pa_cashlodgements xsi:nil="true"/>
+					<pa_cbpind>N</pa_cbpind>
+					<pa_chargeableexempt xsi:nil="true"/>
+					<pa_chargeablepermit xsi:nil="true"/>
+					<pa_chargeformno>0</pa_chargeformno>
+					<pa_checkpointprofile xsi:nil="true"/>
+					<pa_codeshareflightnumbers xsi:nil="true"/>
+					<pa_createreason>create day process</pa_createreason>
+					<pa_createtime>2026-08-17T16:48:08Z</pa_createtime>
+					<pa_delayreasons xsi:nil="true"/>
+					<pa_displaycode>P</pa_displaycode>
+					<pa_diversiontime xsi:nil="true"/>
+					<pa_dooropentime xsi:nil="true"/>
+					<pa_doublegatewayind>N</pa_doublegatewayind>
+					<pa_eflt xsi:nil="true"/>
+					<pa_eibt>2026-08-19T03:48:00Z</pa_eibt>
+					<pa_eldt>2026-08-19T03:28:00Z</pa_eldt>
+					<pa_enrc xsi:nil="true"/>
+					<pa_etotoutstation xsi:nil="true"/>
+					<pa_exit>10</pa_exit>
+					<pa_exitsent xsi:nil="true"/>
+					<pa_externalflightnumber>OZ743</pa_externalflightnumber>
+					<pa_externalsystemid xsi:nil="true"/>
+					<pa_failediatamessages>0</pa_failediatamessages>
+					<pa_firstbag xsi:nil="true"/>
+					<pa_firt>2026-08-19T02:58:00Z</pa_firt>
+					<pa_flightnumber>OZ743</pa_flightnumber>
+					<pa_fnlt>2026-08-19T03:18:00Z</pa_fnlt>
+					<pa_fplactivationtime xsi:nil="true"/>
+					<pa_fuelrequired xsi:nil="true"/>
+					<pa_gpu xsi:nil="true"/>
+					<pa_gpuid>Y</pa_gpuid>
+					<pa_iatapriority xsi:nil="true"/>
+					<pa_ifplid xsi:nil="true"/>
+					<pa_indicatorfield>------------</pa_indicatorfield>
+					<pa_lastbag xsi:nil="true"/>
+					<pa_lockind>N</pa_lockind>
+					<pa_milestoneindstring>______</pa_milestoneindstring>
+					<pa_modtime>2026-08-19T03:48:42Z</pa_modtime>
+					<pa_moduser>auto</pa_moduser>
+					<pa_nextinfotime xsi:nil="true"/>
+					<pa_onbridge xsi:nil="true"/>
+					<pa_operator>AAR</pa_operator>
+					<pa_operatorflightnumber>OZ743</pa_operatorflightnumber>
+					<pa_opscomment xsi:nil="true"/>
+					<pa_pa_mainflight xsi:nil="true"/>
+					<pa_paymentmode>I</pa_paymentmode>
+					<pa_paymentreference xsi:nil="true"/>
+					<pa_pibt>2026-08-19T03:40:00Z</pa_pibt>
+					<pa_prioind>N</pa_prioind>
+					<pa_priorityfield xsi:nil="true"/>
+					<pa_prmlevypax xsi:nil="true"/>
+					<pa_prmpax xsi:nil="true"/>
+					<pa_publiccomment xsi:nil="true"/>
+					<pa_rac_aircraft>
+						<ref_aircraft/>
+					</pa_rac_aircraft>
+					<pa_ract_aircrafttype>333<ref_aircrafttype>
+							<ract_accessheight xsi:nil="true"/>
+							<ract_averageseatcapacity xsi:nil="true"/>
+							<ract_bonus>N</ract_bonus>
+							<ract_bridgerequiredind>Y</ract_bridgerequiredind>
+							<ract_createtime>2025-04-25T13:52:21Z</ract_createtime>
+							<ract_description>Airbus A330-300</ract_description>
+							<ract_firstbag xsi:nil="true"/>
+							<ract_height>1679</ract_height>
+							<ract_iatatype>333</ract_iatatype>
+							<ract_icaotype>A333</ract_icaotype>
+							<ract_internalcode>333</ract_internalcode>
+							<ract_landingweight xsi:nil="true"/>
+							<ract_length>6366</ract_length>
+							<ract_manufacturer xsi:nil="true"/>
+							<ract_model xsi:nil="true"/>
+							<ract_modtime>2025-04-27T15:12:08Z</ract_modtime>
+							<ract_moduser>admin</ract_moduser>
+							<ract_mtow xsi:nil="true"/>
+							<ract_mtta xsi:nil="true"/>
+							<ract_mttd xsi:nil="true"/>
+							<ract_mttt xsi:nil="true"/>
+							<ract_opscreatedind>N</ract_opscreatedind>
+							<ract_payload xsi:nil="true"/>
+							<ract_piercompatibleind xsi:nil="true"/>
+							<ract_propulsion xsi:nil="true"/>
+							<ract_rnca_noisecategory xsi:nil="true"/>
+							<ract_shadow xsi:nil="true"/>
+							<ract_sizecategory>E</ract_sizecategory>
+							<ract_symbolname xsi:nil="true"/>
+							<ract_taxifuelperminute xsi:nil="true"/>
+							<ract_widebodyind>Y</ract_widebodyind>
+							<ract_width xsi:nil="true"/>
+						</ref_aircrafttype>
+					</pa_ract_aircrafttype>
+					<pa_ract_plannedact>333</pa_ract_plannedact>
+					<pa_ral_airline>OZ<ref_airline>
+							<ral_2lc>OZ</ral_2lc>
+							<ral_3lc>AAR</ral_3lc>
+							<ral_alliance xsi:nil="true"/>
+							<ral_callsign>ASIANA</ral_callsign>
+							<ral_category xsi:nil="true"/>
+							<ral_createtime>2025-04-16T09:19:45Z</ral_createtime>
+							<ral_description>DOC8585 EDT185/RT</ral_description>
+							<ral_formatflightnumberind>Y</ral_formatflightnumberind>
+							<ral_ignorecreatedayind>N</ral_ignorecreatedayind>
+							<ral_ignorestatisticsind>N</ral_ignorestatisticsind>
+							<ral_internal>OZ</ral_internal>
+							<ral_lpccode>&#13;</ral_lpccode>
+							<ral_modtime>2025-04-16T09:19:45Z</ral_modtime>
+							<ral_moduser>loaded</ral_moduser>
+							<ral_name>ASIANA AIRLINES</ral_name>
+							<ral_opscreatedind>N</ral_opscreatedind>
+							<ral_paymentmode>I</ral_paymentmode>
+							<ral_rctr_country>KR</ral_rctr_country>
+							<ral_registrationcopyind>Y</ral_registrationcopyind>
+							<ral_rha_agentbag xsi:nil="true"/>
+							<ral_rha_agentci xsi:nil="true"/>
+							<ral_rtrm_terminal xsi:nil="true"/>
+						</ref_airline>
+					</pa_ral_airline>
+					<pa_ramphandlingagent xsi:nil="true"/>
+					<pa_rap_diversionairport xsi:nil="true"/>
+					<pa_rap_originairport>ICN</pa_rap_originairport>
+					<pa_rap_previousairport>ICN</pa_rap_previousairport>
+					<pa_rap_refdiversionairport>
+						<ref_airport/>
+					</pa_rap_refdiversionairport>
+					<pa_rap_reforiginairport>ICN<ref_airport>
+							<rap_city xsi:nil="true"/>
+							<rap_city3lc xsi:nil="true"/>
+							<rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
+							<rap_distance xsi:nil="true"/>
+							<rap_iata3lc>ICN</rap_iata3lc>
+							<rap_iataregion xsi:nil="true"/>
+							<rap_icao4lc>RKSI</rap_icao4lc>
+							<rap_internalcode>ICN</rap_internalcode>
+							<rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
+							<rap_moduser>loaded</rap_moduser>
+							<rap_name1>INCHEON INTL</rap_name1>
+							<rap_name2>SEOUL</rap_name2>
+							<rap_name3>DOC7910 168/AP</rap_name3>
+							<rap_name4 xsi:nil="true"/>
+							<rap_name5 xsi:nil="true"/>
+							<rap_rctr_country>KR</rap_rctr_country>
+							<rap_rctt_countrytype>I</rap_rctt_countrytype>
+							<rap_safeind>Y</rap_safeind>
+							<rap_slg_additionallanguage xsi:nil="true"/>
+							<rap_syst_station xsi:nil="true"/>
+							<rap_timezone xsi:nil="true"/>
+							<ref_airportversion_list/>
+						</ref_airport>
+					</pa_rap_reforiginairport>
+					<pa_rap_refpreviousairport>ICN<ref_airport>
+							<rap_city xsi:nil="true"/>
+							<rap_city3lc xsi:nil="true"/>
+							<rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
+							<rap_defaultarrivalroutepoint xsi:nil="true"/>
+							<rap_defaultdepartureroutepoint xsi:nil="true"/>
+							<rap_distance xsi:nil="true"/>
+							<rap_iata3lc>ICN</rap_iata3lc>
+							<rap_iataregion xsi:nil="true"/>
+							<rap_icao4lc>RKSI</rap_icao4lc>
+							<rap_internalcode>ICN</rap_internalcode>
+							<rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
+							<rap_moduser>loaded</rap_moduser>
+							<rap_name1>INCHEON INTL</rap_name1>
+							<rap_name2>SEOUL</rap_name2>
+							<rap_name3>DOC7910 168/AP</rap_name3>
+							<rap_name4 xsi:nil="true"/>
+							<rap_name5 xsi:nil="true"/>
+							<rap_rctr_country>KR</rap_rctr_country>
+							<rap_rctt_countrytype>I</rap_rctt_countrytype>
+							<rap_safeind>Y</rap_safeind>
+							<rap_slg_additionallanguage xsi:nil="true"/>
+							<rap_syst_station xsi:nil="true"/>
+							<rap_timezone xsi:nil="true"/>
+							<ref_airportversion_list/>
+						</ref_airport>
+					</pa_rap_refpreviousairport>
+					<pa_rcdms_status>
+						<ref_cdmstatus/>
+					</pa_rcdms_status>
+					<pa_rco_concourse>1</pa_rco_concourse>
+					<pa_rco_refconcourse>1@1</pa_rco_refconcourse>
+					<pa_rctt_countrytype>I<ref_countrytype>
+							<rctt_availableforcountryind>Y</rctt_availableforcountryind>
+							<rctt_code>I</rctt_code>
+							<rctt_createtime>2025-04-18T00:00:00Z</rctt_createtime>
+							<rctt_description>International</rctt_description>
+							<rctt_internalcode>T</rctt_internalcode>
+							<rctt_modtime>2025-04-18T00:00:00Z</rctt_modtime>
+							<rctt_moduser>loaded</rctt_moduser>
+						</ref_countrytype>
+					</pa_rctt_countrytype>
+					<pa_registration xsi:nil="true"/>
+					<pa_rfst_flightstatus>N</pa_rfst_flightstatus>
+					<pa_rfst_refflightstatus>AN<ref_flightstatus>
+							<rfst_arrdepind>A</rfst_arrdepind>
+							<rfst_code>N</rfst_code>
+							<rfst_code3l>IBK</rfst_code3l>
+							<rfst_createtime>2025-04-17T13:14:48Z</rfst_createtime>
+							<rfst_description>On-Block</rfst_description>
+							<rfst_idcode>AN</rfst_idcode>
+							<rfst_legacystatus>A</rfst_legacystatus>
+							<rfst_minimumturnorder xsi:nil="true"/>
+							<rfst_modtime>2025-04-17T13:14:48Z</rfst_modtime>
+							<rfst_moduser>loaded</rfst_moduser>
+							<rfst_order>39</rfst_order>
+							<rfst_rrmk_refremark xsi:nil="true"/>
+							<rfst_rrmk_remark xsi:nil="true"/>
+							<rfst_timestamp>PaAibt</rfst_timestamp>
+						</ref_flightstatus>
+					</pa_rfst_refflightstatus>
+					<pa_rha_agentbag xsi:nil="true"/>
+					<pa_rmsc_scenario>1</pa_rmsc_scenario>
+					<pa_rnc_naturecode>01</pa_rnc_naturecode>
+					<pa_rnc_refnaturecode xsi:nil="true"/>
+					<pa_rrmk_refremark xsi:nil="true"/>
+					<pa_rrmk_remark xsi:nil="true"/>
+					<pa_rrwy_refrunway>01@BKK<ref_runway>
+							<rrwy_activeind>Y</rrwy_activeind>
+							<rrwy_code>01</rrwy_code>
+							<rrwy_comment>Runway 01</rrwy_comment>
+							<rrwy_createtime>2025-05-03T11:49:02Z</rrwy_createtime>
+							<rrwy_description>Runway 01</rrwy_description>
+							<rrwy_idcode>01@BKK</rrwy_idcode>
+							<rrwy_length xsi:nil="true"/>
+							<rrwy_modtime>2025-05-03T12:04:55Z</rrwy_modtime>
+							<rrwy_moduser>admin</rrwy_moduser>
+							<rrwy_restriction xsi:nil="true"/>
+							<rrwy_rrwy_refrunwaysystem xsi:nil="true"/>
+							<rrwy_rrwy_runwaysystem xsi:nil="true"/>
+							<rrwy_runwaytract xsi:nil="true"/>
+							<rrwy_rwytype>R</rrwy_rwytype>
+							<rrwy_syst_station>BKK</rrwy_syst_station>
+							<rrwy_width xsi:nil="true"/>
+						</ref_runway>
+					</pa_rrwy_refrunway>
+					<pa_rrwy_runway>01</pa_rrwy_runway>
+					<pa_rsta_refstand>F2@1<ref_stand>
+							<rsta_angle xsi:nil="true"/>
+							<rsta_capacity>1</rsta_capacity>
+							<rsta_cctvstream xsi:nil="true"/>
+							<rsta_code>F2</rsta_code>
+							<rsta_createtime>2025-04-16T13:32:56Z</rsta_createtime>
+							<rsta_description>Stand F2</rsta_description>
+							<rsta_displaytext xsi:nil="true"/>
+							<rsta_dockingind>Y</rsta_dockingind>
+							<rsta_elevatorind xsi:nil="true"/>
+							<rsta_eqconstraint>L</rsta_eqconstraint>
+							<rsta_externalid xsi:nil="true"/>
+							<rsta_fuelpitind>Y</rsta_fuelpitind>
+							<rsta_gpuind>Y</rsta_gpuind>
+							<rsta_gpuname xsi:nil="true"/>
+							<rsta_idcode>F2@1</rsta_idcode>
+							<rsta_latitude xsi:nil="true"/>
+							<rsta_length xsi:nil="true"/>
+							<rsta_longitude xsi:nil="true"/>
+							<rsta_marsind>N</rsta_marsind>
+							<rsta_modtime>2026-02-25T06:22:19Z</rsta_modtime>
+							<rsta_moduser>admin</rsta_moduser>
+							<rsta_owner xsi:nil="true"/>
+							<rsta_pdgs_status xsi:nil="true"/>
+							<rsta_ract_maximumaircrafttype>MD11</rsta_ract_maximumaircrafttype>
+							<rsta_ral_airline xsi:nil="true"/>
+							<rsta_rco_concourse>F</rsta_rco_concourse>
+							<rsta_rctt_countrytype>I</rsta_rctt_countrytype>
+							<rsta_rgt_gate>F2</rsta_rgt_gate>
+							<rsta_rgt_refgate>F2@1</rsta_rgt_refgate>
+							<rsta_rmsc_scenario>1</rsta_rmsc_scenario>
+							<rsta_rsna_area xsi:nil="true"/>
+							<rsta_validfrom>2020-05-01T00:00:00Z</rsta_validfrom>
+							<rsta_validto xsi:nil="true"/>
+							<rsta_width xsi:nil="true"/>
+						</ref_stand>
+					</pa_rsta_refstand>
+					<pa_rsta_stand>F2</pa_rsta_stand>
+					<pa_rsta_standardstand xsi:nil="true"/>
+					<pa_rstc_refservicetypecode>J@BKK<ref_servicetypecode>
+							<rstc_arrivalbridgeopind>N</rstc_arrivalbridgeopind>
+							<rstc_arrivalbusind>N</rstc_arrivalbusind>
+							<rstc_arrivalgatetind>Y</rstc_arrivalgatetind>
+							<rstc_arrivaltractorind>N</rstc_arrivaltractorind>
+							<rstc_baggagebeltind>Y</rstc_baggagebeltind>
+							<rstc_checkcgoloadind>N</rstc_checkcgoloadind>
+							<rstc_checkincounterind>Y</rstc_checkincounterind>
+							<rstc_checkmailloadind>N</rstc_checkmailloadind>
+							<rstc_checkpaxloadind>N</rstc_checkpaxloadind>
+							<rstc_code>J</rstc_code>
+							<rstc_comment xsi:nil="true"/>
+							<rstc_createtime>2025-04-17T11:34:16Z</rstc_createtime>
+							<rstc_departurebeltind>N</rstc_departurebeltind>
+							<rstc_departurebridgeopind>N</rstc_departurebridgeopind>
+							<rstc_departurebusind>N</rstc_departurebusind>
+							<rstc_departuregatetind>Y</rstc_departuregatetind>
+							<rstc_departureloungeind>N</rstc_departureloungeind>
+							<rstc_departuresecurityind>N</rstc_departuresecurityind>
+							<rstc_departuretractorind>N</rstc_departuretractorind>
+							<rstc_description>Passenger Scheduled</rstc_description>
+							<rstc_displaycode>P</rstc_displaycode>
+							<rstc_exempt xsi:nil="true"/>
+							<rstc_iatadefault>Y</rstc_iatadefault>
+							<rstc_ignorestatisticsind>Y</rstc_ignorestatisticsind>
+							<rstc_infoserviceind>N</rstc_infoserviceind>
+							<rstc_modtime>2026-03-14T09:00:54Z</rstc_modtime>
+							<rstc_moduser>admin</rstc_moduser>
+							<rstc_ristc_iatacode>J</rstc_ristc_iatacode>
+							<rstc_standind>Y</rstc_standind>
+							<rstc_statisticcode xsi:nil="true"/>
+						</ref_servicetypecode>
+					</pa_rstc_refservicetypecode>
+					<pa_rstc_servicetypecode>J</pa_rstc_servicetypecode>
+					<pa_rtrm_refterminal>1@1<ref_terminal>
+							<rtrm_closedind>N</rtrm_closedind>
+							<rtrm_closurereason xsi:nil="true"/>
+							<rtrm_code>1</rtrm_code>
+							<rtrm_comment>Terminal 1</rtrm_comment>
+							<rtrm_createtime>2025-04-29T13:50:36Z</rtrm_createtime>
+							<rtrm_description>Terminal 1</rtrm_description>
+							<rtrm_idcode>1@1</rtrm_idcode>
+							<rtrm_modtime>2025-04-29T13:50:36Z</rtrm_modtime>
+							<rtrm_moduser>admin</rtrm_moduser>
+							<rtrm_rmsc_scenario>1</rtrm_rmsc_scenario>
+						</ref_terminal>
+					</pa_rtrm_refterminal>
+					<pa_rtrm_terminal>1</pa_rtrm_terminal>
+					<pa_runwayexittime xsi:nil="true"/>
+					<pa_runwayoccupancytime xsi:nil="true"/>
+					<pa_safeind>Y</pa_safeind>
+					<pa_salt_refcdmalarm xsi:nil="true"/>
+					<pa_seats xsi:nil="true"/>
+					<pa_sflt xsi:nil="true"/>
+					<pa_sibt>2026-08-19T03:40:00Z</pa_sibt>
+					<pa_standchangecnt>0</pa_standchangecnt>
+					<pa_standnote xsi:nil="true"/>
+					<pa_star xsi:nil="true"/>
+					<pa_stotoutstation xsi:nil="true"/>
+					<pa_tariffcode>BL</pa_tariffcode>
+					<pa_tldt xsi:nil="true"/>
+					<pa_totalbag xsi:nil="true"/>
+					<pa_totalcrew xsi:nil="true"/>
+					<pa_totalextracrew xsi:nil="true"/>
+					<pa_totalpax>0</pa_totalpax>
+					<pa_transferpax xsi:nil="true"/>
+					<pa_transitpax xsi:nil="true"/>
+					<pa_vipcomment xsi:nil="true"/>
+					<pa_vipind>N</pa_vipind>
+					<pa_zerofreightind>N</pa_zerofreightind>
+					<pa_zeromailind>N</pa_zeromailind>
+					<pa_zeropaxind>N</pa_zeropaxind>
+					<pa_zerototalweightind>N</pa_zerototalweightind>
+					<pl_api_list/>
+					<pl_arrival_list/>
+					<pl_arrivalgate_list>
+						<pl_arrivalgate>
+							<pag_idseq>1001599064</pag_idseq>
+							<pag_airbridgeind>Y</pag_airbridgeind>
+							<pag_beginactual>2026-08-19T03:55:00Z</pag_beginactual>
+							<pag_beginplan>2026-08-19T03:55:00Z</pag_beginplan>
+							<pag_createtime>2026-08-17T16:48:08Z</pag_createtime>
+							<pag_displaycode>I</pag_displaycode>
+							<pag_endactual>2026-08-19T04:15:00Z</pag_endactual>
+							<pag_endplan>2026-08-19T04:15:00Z</pag_endplan>
+							<pag_lockind>N</pag_lockind>
+							<pag_modtime>2026-08-19T04:16:01Z</pag_modtime>
+							<pag_moduser>auto</pag_moduser>
+							<pag_note xsi:nil="true"/>
+							<pag_pa_arrival>1007707348</pag_pa_arrival>
+							<pag_pa_flightnumber>OZ743</pag_pa_flightnumber>
+							<pag_publiccomment xsi:nil="true"/>
+							<pag_rgt_gate>F2</pag_rgt_gate>
+							<pag_rgt_lastgate xsi:nil="true"/>
+							<pag_rgt_refgate>F2@1<ref_gate>
+									<rgt_arrdepind>B</rgt_arrdepind>
+									<rgt_capacity>1</rgt_capacity>
+									<rgt_cctvstream xsi:nil="true"/>
+									<rgt_code>F2</rgt_code>
+									<rgt_createtime>2025-04-16T12:36:08Z</rgt_createtime>
+									<rgt_description>Gate F2</rgt_description>
+									<rgt_displaytext xsi:nil="true"/>
+									<rgt_egateavailableind>N</rgt_egateavailableind>
+									<rgt_gatetype>T</rgt_gatetype>
+									<rgt_idcode>F2@1</rgt_idcode>
+									<rgt_modtime>2025-07-16T04:21:03Z</rgt_modtime>
+									<rgt_moduser>sfis</rgt_moduser>
+									<rgt_paxloadingbridgeind>Y</rgt_paxloadingbridgeind>
+									<rgt_ral_airline xsi:nil="true"/>
+									<rgt_rco_concourse>F</rgt_rco_concourse>
+									<rgt_rco_refconcourse>F@1</rgt_rco_refconcourse>
+									<rgt_rcpa_areabordercontrol xsi:nil="true"/>
+									<rgt_rcpa_areasecurity xsi:nil="true"/>
+									<rgt_rctt_countrytype>I</rgt_rctt_countrytype>
+									<rgt_rdlg_refdeparturelounge>1@1</rgt_rdlg_refdeparturelounge>
+									<rgt_rmsc_scenario>1</rgt_rmsc_scenario>
+									<rgt_validfrom>2025-06-30T17:00:00Z</rgt_validfrom>
+									<rgt_validto xsi:nil="true"/>
+								</ref_gate>
+							</pag_rgt_refgate>
+							<pag_rgt_standardgate xsi:nil="true"/>
+							<pag_rmsc_scenario>1</pag_rmsc_scenario>
+							<pag_seqno>1</pag_seqno>
+							<pag_status>E</pag_status>
+						</pl_arrivalgate>
+					</pl_arrivalgate_list>
+					<pl_atcarrival_list/>
+					<pl_baggagebelt_list>
+						<pl_baggagebelt action="insert">
+							<pbb_idseq action="insert">1002496635</pbb_idseq>
+							<pbb_beginactual xsi:nil="true"/>
+							<pbb_beginplan action="insert">2026-08-19T05:04:00Z</pbb_beginplan>
+							<pbb_checkinclassid xsi:nil="true"/>
+							<pbb_createtime action="insert">2026-08-19T04:54:04Z</pbb_createtime>
+							<pbb_displaycode action="insert">P</pbb_displaycode>
+							<pbb_endactual xsi:nil="true"/>
+							<pbb_endplan action="insert">2026-08-19T05:34:00Z</pbb_endplan>
+							<pbb_firstbag xsi:nil="true"/>
+							<pbb_lastbag xsi:nil="true"/>
+							<pbb_loadstatus action="insert">S</pbb_loadstatus>
+							<pbb_lockind action="insert">N</pbb_lockind>
+							<pbb_modtime action="insert">2026-08-19T04:54:04Z</pbb_modtime>
+							<pbb_moduser action="insert">admin</pbb_moduser>
+							<pbb_note xsi:nil="true"/>
+							<pbb_pa_arrival action="insert">1007717987</pbb_pa_arrival>
+							<pbb_pa_flightnumber action="insert">OZ744T</pbb_pa_flightnumber>
+							<pbb_publiccomment xsi:nil="true"/>
+							<pbb_rbb_baggagebelt action="insert">HOLD</pbb_rbb_baggagebelt>
+							<pbb_rbb_lastbaggagebelt xsi:nil="true"/>
+							<pbb_rbb_refbaggagebelt action="insert">HOLD@1<ref_baggagebelt action="update">
+									<rbb_bcishostname xsi:nil="true"/>
+									<rbb_capacity action="update" old="">-1</rbb_capacity>
+									<rbb_carousel xsi:nil="true"/>
+									<rbb_cctvstream xsi:nil="true"/>
+									<rbb_code action="update" old="">HOLD</rbb_code>
+									<rbb_createtime action="update" old="">2025-03-30T00:00:00Z</rbb_createtime>
+									<rbb_description action="update" old="">Baggage Bay HOLD</rbb_description>
+									<rbb_displaytext xsi:nil="true"/>
+									<rbb_idcode action="update" old="">HOLD@1</rbb_idcode>
+									<rbb_modtime action="update" old="">2025-03-30T00:00:00Z</rbb_modtime>
+									<rbb_moduser action="update" old="">bkranthi</rbb_moduser>
+									<rbb_ral_airline xsi:nil="true"/>
+									<rbb_rbbc_carousel xsi:nil="true"/>
+									<rbb_rco_concourse xsi:nil="true"/>
+									<rbb_rco_refconcourse xsi:nil="true"/>
+									<rbb_rcpa_areacustoms xsi:nil="true"/>
+									<rbb_rctt_countrytype action="update" old="">A</rbb_rctt_countrytype>
+									<rbb_rmsc_scenario action="update" old="">1</rbb_rmsc_scenario>
+									<rbb_validfrom xsi:nil="true"/>
+									<rbb_validto xsi:nil="true"/>
+								</ref_baggagebelt>
+							</pbb_rbb_refbaggagebelt>
+							<pbb_rbb_standardbelt xsi:nil="true"/>
+							<pbb_rdt_displaytext xsi:nil="true"/>
+							<pbb_rmsc_scenario action="insert">1</pbb_rmsc_scenario>
+							<pbb_seqno action="insert">1</pbb_seqno>
+							<pbb_status action="insert">S</pbb_status>
+						</pl_baggagebelt>
+					</pl_baggagebelt_list>
+					<pl_cdmstatus_list/>
+					<pl_containerinfo_list/>
+					<pl_delayreason_list/>
+					<pl_genericarrivalres_list>
+						<pl_genericarrivalres>
+							<pgra_idseq>1001849631</pgra_idseq>
+							<pgra_beginactual xsi:nil="true"/>
+							<pgra_beginplan>2026-08-19T03:50:00Z</pgra_beginplan>
+							<pgra_createtime>2026-08-17T16:48:08Z</pgra_createtime>
+							<pgra_displaycode>P</pgra_displaycode>
+							<pgra_endactual xsi:nil="true"/>
+							<pgra_endplan>2026-08-19T04:20:00Z</pgra_endplan>
+							<pgra_instructed>2026-08-19T03:50:00Z</pgra_instructed>
+							<pgra_lockind>N</pgra_lockind>
+							<pgra_modtime>2026-08-19T03:35:04Z</pgra_modtime>
+							<pgra_moduser>auto</pgra_moduser>
+							<pgra_note xsi:nil="true"/>
+							<pgra_pa_arrival>1007707348</pgra_pa_arrival>
+							<pgra_pa_flightnumber>OZ743</pgra_pa_flightnumber>
+							<pgra_rgr_lastresource xsi:nil="true"/>
+							<pgra_rgr_refresource>HOLD@1<ref_genericresource>
+									<rgr_capacity>-1</rgr_capacity>
+									<rgr_cctvstream xsi:nil="true"/>
+									<rgr_code>HOLD</rgr_code>
+									<rgr_connectionstatus xsi:nil="true"/>
+									<rgr_createtime>2025-03-30T00:00:00Z</rgr_createtime>
+									<rgr_description xsi:nil="true"/>
+									<rgr_displaytext xsi:nil="true"/>
+									<rgr_hostname xsi:nil="true"/>
+									<rgr_idcode>HOLD@1</rgr_idcode>
+									<rgr_modtime>2025-03-30T00:00:00Z</rgr_modtime>
+									<rgr_moduser>bkranthi</rgr_moduser>
+									<rgr_registereduser xsi:nil="true"/>
+									<rgr_rgrt_type xsi:nil="true"/>
+									<rgr_rmsc_scenario>1</rgr_rmsc_scenario>
+									<rgr_status>1</rgr_status>
+									<rgr_validfrom xsi:nil="true"/>
+									<rgr_validto xsi:nil="true"/>
+								</ref_genericresource>
+							</pgra_rgr_refresource>
+							<pgra_rgr_resource>HOLD</pgra_rgr_resource>
+							<pgra_rgr_standardresource xsi:nil="true"/>
+							<pgra_rgrt_type>EXIT<ref_genericresourcetype>
+									<rgrt_arrdepind>A</rgrt_arrdepind>
+									<rgrt_code>EXIT</rgrt_code>
+									<rgrt_createtime>2026-06-12T02:14:04Z</rgrt_createtime>
+									<rgrt_description>EXITS</rgrt_description>
+									<rgrt_mobileind>N</rgrt_mobileind>
+									<rgrt_modtime>2026-06-12T02:14:04Z</rgrt_modtime>
+									<rgrt_moduser>admin</rgrt_moduser>
+								</ref_genericresourcetype>
+							</pgra_rgrt_type>
+							<pgra_rmsc_scenario>1</pgra_rmsc_scenario>
+							<pgra_seqno>1</pgra_seqno>
+							<pgra_status>A</pgra_status>
+						</pl_genericarrivalres>
+					</pl_genericarrivalres_list>
+					<pl_handlingagent_list/>
+					<pl_routing_list>
+						<pl_routing>
+							<prt_idseq>1005338349</prt_idseq>
+							<prt_createtime>2026-08-17T16:48:08Z</prt_createtime>
+							<prt_displaycode>P</prt_displaycode>
+							<prt_modtime>2026-08-17T16:48:08Z</prt_modtime>
+							<prt_moduser>day</prt_moduser>
+							<prt_numberinleg>1</prt_numberinleg>
+							<prt_pa_arrival>1007707348</prt_pa_arrival>
+							<prt_pd_departure xsi:nil="true"/>
+							<prt_rap_airport>ICN</prt_rap_airport>
+							<prt_rap_refairport>ICN<ref_airport>
+									<rap_additionalinfo xsi:nil="true"/>
+									<rap_city xsi:nil="true"/>
+									<rap_city3lc xsi:nil="true"/>
+									<rap_createtime>2025-04-16T09:14:42Z</rap_createtime>
+									<rap_distance xsi:nil="true"/>
+									<rap_federalstate xsi:nil="true"/>
+									<rap_iata3lc>ICN</rap_iata3lc>
+									<rap_iataregion xsi:nil="true"/>
+									<rap_icao4lc>RKSI</rap_icao4lc>
+									<rap_internalcode>ICN</rap_internalcode>
+									<rap_modtime>2025-04-16T09:14:42Z</rap_modtime>
+									<rap_moduser>loaded</rap_moduser>
+									<rap_name1>INCHEON INTL</rap_name1>
+									<rap_name2>SEOUL</rap_name2>
+									<rap_name3>DOC7910 168/AP</rap_name3>
+									<rap_name4 xsi:nil="true"/>
+									<rap_name5 xsi:nil="true"/>
+									<rap_opscreatedind>N</rap_opscreatedind>
+									<rap_rctr_country>KR</rap_rctr_country>
+									<rap_rctt_countrytype>I</rap_rctt_countrytype>
+									<rap_safeind>Y</rap_safeind>
+									<rap_slg_additionallanguage xsi:nil="true"/>
+									<rap_timezone xsi:nil="true"/>
+								</ref_airport>
+							</prt_rap_refairport>
+							<prt_rtr_trafficrestriction xsi:nil="true"/>
+							<prt_stastation xsi:nil="true"/>
+							<prt_stdstation xsi:nil="true"/>
+						</pl_routing>
+					</pl_routing_list>
+					<pl_specialservice_list/>
+					<pl_transferpax_list/>
+				</pl_arrival>
+			</pt_pa_arrival>
+			<pt_pd_departure action="update" old="1007707349">1007717986<pl_departure action="update">
+					<pd_idseq action="insert">1007717986</pd_idseq>
+					<pd_acgt xsi:nil="true"/>
+					<pd_aczt xsi:nil="true"/>
+					<pd_adc xsi:nil="true"/>
+					<pd_additionalinfo xsi:nil="true"/>
+					<pd_aebt action="insert">2026-08-19T04:45:00Z</pd_aebt>
+					<pd_aegt xsi:nil="true"/>
+					<pd_aezt xsi:nil="true"/>
+					<pd_aght xsi:nil="true"/>
+					<pd_airbridges action="insert">F2</pd_airbridges>
+					<pd_airtraffic xsi:nil="true"/>
+					<pd_aldtnext xsi:nil="true"/>
+					<pd_aobt action="insert">2026-08-19T04:45:00Z</pd_aobt>
+					<pd_ardt action="insert">2026-08-19T04:45:00Z</pd_ardt>
+					<pd_arzt xsi:nil="true"/>
+					<pd_asat action="insert">2026-08-19T04:45:00Z</pd_asat>
+					<pd_asbt action="insert">2026-08-19T04:15:00Z</pd_asbt>
+					<pd_asrt action="insert">2026-08-19T04:45:00Z</pd_asrt>
+					<pd_assistingpax xsi:nil="true"/>
+					<pd_atccomment xsi:nil="true"/>
+					<pd_atcfplstatus action="insert">N</pd_atcfplstatus>
+					<pd_atot xsi:nil="true"/>
+					<pd_billingcomments xsi:nil="true"/>
+					<pd_billingstatus action="insert">I</pd_billingstatus>
+					<pd_blockedind action="insert">N</pd_blockedind>
+					<pd_bobt action="insert">2026-08-19T04:45:00Z</pd_bobt>
+					<pd_busind action="insert">N</pd_busind>
+					<pd_callsign action="insert">AAR744T</pd_callsign>
+					<pd_cancellationtime xsi:nil="true"/>
+					<pd_cashamount xsi:nil="true"/>
+					<pd_cashind action="insert">N</pd_cashind>
+					<pd_cashlodgements xsi:nil="true"/>
+					<pd_cbpind action="insert">N</pd_cbpind>
+					<pd_chareablepermit xsi:nil="true"/>
+					<pd_chargeableexempt xsi:nil="true"/>
+					<pd_chargeformno xsi:nil="true"/>
+					<pd_checkpointprofile xsi:nil="true"/>
+					<pd_codeshareflightnumbers xsi:nil="true"/>
+					<pd_counterareas xsi:nil="true"/>
+					<pd_counters>A01,A02</pd_counters>
+					<pd_createreason xsi:nil="true"/>
+					<pd_createtime action="insert">2026-08-19T04:54:04Z</pd_createtime>
+					<pd_ctot xsi:nil="true"/>
+					<pd_deicingcounter xsi:nil="true"/>
+					<pd_delay xsi:nil="true"/>
+					<pd_delayreasons xsi:nil="true"/>
+					<pd_departurebelts xsi:nil="true"/>
+					<pd_departuregates action="insert">F2</pd_departuregates>
+					<pd_dir xsi:nil="true"/>
+					<pd_displaycode action="insert">I</pd_displaycode>
+					<pd_doorclosetime xsi:nil="true"/>
+					<pd_doublegatewayind action="insert">N</pd_doublegatewayind>
+					<pd_dpistatus xsi:nil="true"/>
+					<pd_dpitime xsi:nil="true"/>
+					<pd_eczt xsi:nil="true"/>
+					<pd_edit xsi:nil="true"/>
+					<pd_eezt xsi:nil="true"/>
+					<pd_egateind action="insert">N</pd_egateind>
+					<pd_enrc xsi:nil="true"/>
+					<pd_eobt action="insert">2026-08-19T04:45:00Z</pd_eobt>
+					<pd_eobtatc xsi:nil="true"/>
+					<pd_eobtatcchangecnt xsi:nil="true"/>
+					<pd_eobtlocal action="insert">2026-08-19T04:40:00Z</pd_eobtlocal>
+					<pd_erzt xsi:nil="true"/>
+					<pd_estimateddoorclosetime xsi:nil="true"/>
+					<pd_etot xsi:nil="true"/>
+					<pd_exot action="insert">10</pd_exot>
+					<pd_exotpad xsi:nil="true"/>
+					<pd_externalflightnumber xsi:nil="true"/>
+					<pd_externalsystemid xsi:nil="true"/>
+					<pd_failediatamessages action="insert">0</pd_failediatamessages>
+					<pd_fic xsi:nil="true"/>
+					<pd_flightnumber action="insert">OZ744T</pd_flightnumber>
+					<pd_flightrule xsi:nil="true"/>
+					<pd_fplactivationtime xsi:nil="true"/>
+					<pd_freezeind xsi:nil="true"/>
+					<pd_fuelrequired xsi:nil="true"/>
+					<pd_gatedisplaycode xsi:nil="true"/>
+					<pd_gatesuspendind xsi:nil="true"/>
+					<pd_gotogate action="insert">2026-08-19T03:30:00Z</pd_gotogate>
+					<pd_gpu xsi:nil="true"/>
+					<pd_gpuind action="insert">Y</pd_gpuind>
+					<pd_iatapriority xsi:nil="true"/>
+					<pd_ifplid xsi:nil="true"/>
+					<pd_indicatorfield action="insert">------------</pd_indicatorfield>
+					<pd_lineuptime xsi:nil="true"/>
+					<pd_lockind action="insert">N</pd_lockind>
+					<pd_milestoneindstring action="insert">____________</pd_milestoneindstring>
+					<pd_modtime action="insert">2026-08-19T04:54:04Z</pd_modtime>
+					<pd_moduser action="insert">admin</pd_moduser>
+					<pd_nextinfotime xsi:nil="true"/>
+					<pd_offbridge xsi:nil="true"/>
+					<pd_operator action="insert">AAR</pd_operator>
+					<pd_operatorflightnumber action="insert">OZ744T</pd_operatorflightnumber>
+					<pd_opscomment xsi:nil="true"/>
+					<pd_paymentmode action="insert">I</pd_paymentmode>
+					<pd_paymentreference xsi:nil="true"/>
+					<pd_pd_mainflight xsi:nil="true"/>
+					<pd_pobt action="insert">2026-08-19T04:45:00Z</pd_pobt>
+					<pd_prioind action="insert">N</pd_prioind>
+					<pd_priorityfield action="insert">PdRrmkRemark,U,99;PdAobt,U,99;PdEobtlocal,U,99;</pd_priorityfield>
+					<pd_prmlevypax xsi:nil="true"/>
+					<pd_prmpax xsi:nil="true"/>
+					<pd_profile xsi:nil="true"/>
+					<pd_publiccomment xsi:nil="true"/>
+					<pd_pushbacknecessaryind action="insert">N</pd_pushbacknecessaryind>
+					<pd_rac_aircraft>
+						<ref_aircraft/>
+					</pd_rac_aircraft>
+					<pd_ract_aircrafttype action="insert">333<ref_aircrafttype action="update">
+							<ract_accessheight xsi:nil="true"/>
+							<ract_averageseatcapacity xsi:nil="true"/>
+							<ract_bonus action="update" old="">N</ract_bonus>
+							<ract_bridgerequiredind action="update" old="">Y</ract_bridgerequiredind>
+							<ract_createtime action="update" old="">2025-04-25T13:52:21Z</ract_createtime>
+							<ract_description action="update" old="">Airbus A330-300</ract_description>
+							<ract_firstbag xsi:nil="true"/>
+							<ract_height action="update" old="">1679</ract_height>
+							<ract_iatatype action="update" old="">333</ract_iatatype>
+							<ract_icaotype action="update" old="">A333</ract_icaotype>
+							<ract_internalcode action="update" old="">333</ract_internalcode>
+							<ract_landingweight xsi:nil="true"/>
+							<ract_length action="update" old="">6366</ract_length>
+							<ract_manufacturer xsi:nil="true"/>
+							<ract_model xsi:nil="true"/>
+							<ract_modtime action="update" old="">2025-04-27T15:12:08Z</ract_modtime>
+							<ract_moduser action="update" old="">admin</ract_moduser>
+							<ract_mtow xsi:nil="true"/>
+							<ract_mtta xsi:nil="true"/>
+							<ract_mttd xsi:nil="true"/>
+							<ract_mttt xsi:nil="true"/>
+							<ract_opscreatedind action="update" old="">N</ract_opscreatedind>
+							<ract_payload xsi:nil="true"/>
+							<ract_piercompatibleind xsi:nil="true"/>
+							<ract_propulsion xsi:nil="true"/>
+							<ract_rnca_noisecategory xsi:nil="true"/>
+							<ract_shadow xsi:nil="true"/>
+							<ract_sizecategory action="update" old="">E</ract_sizecategory>
+							<ract_symbolname xsi:nil="true"/>
+							<ract_taxifuelperminute xsi:nil="true"/>
+							<ract_widebodyind action="update" old="">Y</ract_widebodyind>
+							<ract_width xsi:nil="true"/>
+						</ref_aircrafttype>
+					</pd_ract_aircrafttype>
+					<pd_ract_plannedact xsi:nil="true"/>
+					<pd_ral_airline action="insert">OZ<ref_airline action="update">
+							<ral_2lc action="update" old="">OZ</ral_2lc>
+							<ral_3lc action="update" old="">AAR</ral_3lc>
+							<ral_alliance xsi:nil="true"/>
+							<ral_callsign action="update" old="">ASIANA</ral_callsign>
+							<ral_category xsi:nil="true"/>
+							<ral_createtime action="update" old="">2025-04-16T09:19:45Z</ral_createtime>
+							<ral_description action="update" old="">DOC8585 EDT185/RT</ral_description>
+							<ral_formatflightnumberind action="update" old="">Y</ral_formatflightnumberind>
+							<ral_ignorecreatedayind action="update" old="">N</ral_ignorecreatedayind>
+							<ral_ignorestatisticsind action="update" old="">N</ral_ignorestatisticsind>
+							<ral_internal action="update" old="">OZ</ral_internal>
+							<ral_lpccode action="update" old="">&#13;</ral_lpccode>
+							<ral_modtime action="update" old="">2025-04-16T09:19:45Z</ral_modtime>
+							<ral_moduser action="update" old="">loaded</ral_moduser>
+							<ral_name action="update" old="">ASIANA AIRLINES</ral_name>
+							<ral_opscreatedind action="update" old="">N</ral_opscreatedind>
+							<ral_paymentmode action="update" old="">I</ral_paymentmode>
+							<ral_rctr_country action="update" old="">KR</ral_rctr_country>
+							<ral_registrationcopyind action="update" old="">Y</ral_registrationcopyind>
+							<ral_rha_agentbag xsi:nil="true"/>
+							<ral_rha_agentci xsi:nil="true"/>
+							<ral_rtrm_terminal xsi:nil="true"/>
+						</ref_airline>
+					</pd_ral_airline>
+					<pd_ramp_handlingagent xsi:nil="true"/>
+					<pd_rap_destinationairport action="insert">BKK</pd_rap_destinationairport>
+					<pd_rap_nextairport action="insert">BKK</pd_rap_nextairport>
+					<pd_rap_refdestinationairport action="insert">BKK<ref_airport action="update">
+							<rap_city xsi:nil="true"/>
+							<rap_city3lc xsi:nil="true"/>
+							<rap_createtime action="update" old="">2025-04-16T09:14:41Z</rap_createtime>
+							<rap_distance xsi:nil="true"/>
+							<rap_iata3lc action="update" old="">BKK</rap_iata3lc>
+							<rap_iataregion xsi:nil="true"/>
+							<rap_icao4lc action="update" old="">VTBS</rap_icao4lc>
+							<rap_internalcode action="update" old="">BKK</rap_internalcode>
+							<rap_modtime action="update" old="">2025-04-16T09:14:41Z</rap_modtime>
+							<rap_moduser action="update" old="">loaded</rap_moduser>
+							<rap_name1 action="update" old="">SUVARNABHUMI INTL</rap_name1>
+							<rap_name2 action="update" old="">SUVARNABHUMI</rap_name2>
+							<rap_name3 action="update" old="">DOC7910 EDT168/RT</rap_name3>
+							<rap_name4 xsi:nil="true"/>
+							<rap_name5 xsi:nil="true"/>
+							<rap_rctr_country action="update" old="">TH</rap_rctr_country>
+							<rap_rctt_countrytype action="update" old="">D</rap_rctt_countrytype>
+							<rap_safeind action="update" old="">Y</rap_safeind>
+							<rap_slg_additionallanguage xsi:nil="true"/>
+							<rap_syst_station xsi:nil="true"/>
+							<rap_timezone xsi:nil="true"/>
+							<ref_airportversion_list/>
+						</ref_airport>
+					</pd_rap_refdestinationairport>
+					<pd_rap_refnextairport action="insert">BKK<ref_airport action="update">
+							<rap_city xsi:nil="true"/>
+							<rap_city3lc xsi:nil="true"/>
+							<rap_createtime action="update" old="">2025-04-16T09:14:41Z</rap_createtime>
+							<rap_defaultarrivalroutepoint xsi:nil="true"/>
+							<rap_defaultdepartureroutepoint xsi:nil="true"/>
+							<rap_distance xsi:nil="true"/>
+							<rap_iata3lc action="update" old="">BKK</rap_iata3lc>
+							<rap_iataregion xsi:nil="true"/>
+							<rap_icao4lc action="update" old="">VTBS</rap_icao4lc>
+							<rap_internalcode action="update" old="">BKK</rap_internalcode>
+							<rap_modtime action="update" old="">2025-04-16T09:14:41Z</rap_modtime>
+							<rap_moduser action="update" old="">loaded</rap_moduser>
+							<rap_name1 action="update" old="">SUVARNABHUMI INTL</rap_name1>
+							<rap_name2 action="update" old="">SUVARNABHUMI</rap_name2>
+							<rap_name3 action="update" old="">DOC7910 EDT168/RT</rap_name3>
+							<rap_name4 xsi:nil="true"/>
+							<rap_name5 xsi:nil="true"/>
+							<rap_rctr_country action="update" old="">TH</rap_rctr_country>
+							<rap_rctt_countrytype action="update" old="">D</rap_rctt_countrytype>
+							<rap_safeind action="update" old="">Y</rap_safeind>
+							<rap_slg_additionallanguage xsi:nil="true"/>
+							<rap_syst_station xsi:nil="true"/>
+							<rap_timezone xsi:nil="true"/>
+							<ref_airportversion_list/>
+						</ref_airport>
+					</pd_rap_refnextairport>
+					<pd_rcdms_status>
+						<ref_cdmstatus/>
+					</pd_rcdms_status>
+					<pd_rco_concourse action="insert">1</pd_rco_concourse>
+					<pd_rco_refconcourse action="insert">1@1</pd_rco_refconcourse>
+					<pd_rctt_countrytype action="insert">D<ref_countrytype action="update">
+							<rctt_availableforcountryind action="update" old="">Y</rctt_availableforcountryind>
+							<rctt_code action="update" old="">D</rctt_code>
+							<rctt_createtime action="update" old="">2025-04-18T00:00:00Z</rctt_createtime>
+							<rctt_description action="update" old="">Domestic</rctt_description>
+							<rctt_internalcode action="update" old="">D</rctt_internalcode>
+							<rctt_modtime action="update" old="">2025-04-18T00:00:00Z</rctt_modtime>
+							<rctt_moduser action="update" old="">loaded</rctt_moduser>
+						</ref_countrytype>
+					</pd_rctt_countrytype>
+					<pd_registration xsi:nil="true"/>
+					<pd_rfst_flightstatus action="insert">F</pd_rfst_flightstatus>
+					<pd_rfst_refflightstatus action="insert">DF<ref_flightstatus action="update">
+							<rfst_arrdepind action="update" old="">D</rfst_arrdepind>
+							<rfst_code action="update" old="">F</rfst_code>
+							<rfst_code3l action="update" old="">OBK</rfst_code3l>
+							<rfst_createtime action="update" old="">2025-04-17T13:14:48Z</rfst_createtime>
+							<rfst_description action="update" old="">Off-Block</rfst_description>
+							<rfst_idcode action="update" old="">DF</rfst_idcode>
+							<rfst_legacystatus action="update" old="">D</rfst_legacystatus>
+							<rfst_minimumturnorder xsi:nil="true"/>
+							<rfst_modtime action="update" old="">2025-04-17T13:14:48Z</rfst_modtime>
+							<rfst_moduser action="update" old="">loaded</rfst_moduser>
+							<rfst_order action="update" old="">75</rfst_order>
+							<rfst_rrmk_refremark xsi:nil="true"/>
+							<rfst_rrmk_remark xsi:nil="true"/>
+							<rfst_timestamp action="update" old="">PdAobt</rfst_timestamp>
+						</ref_flightstatus>
+					</pd_rfst_refflightstatus>
+					<pd_rha_agentbag xsi:nil="true"/>
+					<pd_rha_agentci xsi:nil="true"/>
+					<pd_rha_refagentbag xsi:nil="true"/>
+					<pd_rha_refagentci xsi:nil="true"/>
+					<pd_rmsc_scenario action="insert">1</pd_rmsc_scenario>
+					<pd_rnc_naturecode xsi:nil="true"/>
+					<pd_rnc_refnaturecode xsi:nil="true"/>
+					<pd_rrmk_refremark action="insert">RFT@BKK</pd_rrmk_refremark>
+					<pd_rrmk_remark action="insert">RFT</pd_rrmk_remark>
+					<pd_rrwy_refrunway action="insert">19@BKK<ref_runway action="update">
+							<rrwy_activeind action="update" old="">Y</rrwy_activeind>
+							<rrwy_code action="update" old="">19</rrwy_code>
+							<rrwy_comment action="update" old="">Runway 19</rrwy_comment>
+							<rrwy_createtime action="update" old="">2025-04-17T12:23:22Z</rrwy_createtime>
+							<rrwy_description action="update" old="">Runway 19</rrwy_description>
+							<rrwy_idcode action="update" old="">19@BKK</rrwy_idcode>
+							<rrwy_length xsi:nil="true"/>
+							<rrwy_modtime action="update" old="">2025-05-03T11:48:35Z</rrwy_modtime>
+							<rrwy_moduser action="update" old="">admin</rrwy_moduser>
+							<rrwy_restriction xsi:nil="true"/>
+							<rrwy_rrwy_refrunwaysystem xsi:nil="true"/>
+							<rrwy_rrwy_runwaysystem xsi:nil="true"/>
+							<rrwy_runwaytract xsi:nil="true"/>
+							<rrwy_rwytype action="update" old="">R</rrwy_rwytype>
+							<rrwy_syst_station action="update" old="">BKK</rrwy_syst_station>
+							<rrwy_width xsi:nil="true"/>
+						</ref_runway>
+					</pd_rrwy_refrunway>
+					<pd_rrwy_runway action="insert">19</pd_rrwy_runway>
+					<pd_rsta_refstand action="insert">F2@1<ref_stand action="update">
+							<rsta_angle xsi:nil="true"/>
+							<rsta_capacity action="update" old="">1</rsta_capacity>
+							<rsta_cctvstream xsi:nil="true"/>
+							<rsta_code action="update" old="">F2</rsta_code>
+							<rsta_createtime action="update" old="">2025-04-16T13:32:56Z</rsta_createtime>
+							<rsta_description action="update" old="">Stand F2</rsta_description>
+							<rsta_displaytext xsi:nil="true"/>
+							<rsta_dockingind action="update" old="">Y</rsta_dockingind>
+							<rsta_elevatorind xsi:nil="true"/>
+							<rsta_eqconstraint action="update" old="">L</rsta_eqconstraint>
+							<rsta_externalid xsi:nil="true"/>
+							<rsta_fuelpitind action="update" old="">Y</rsta_fuelpitind>
+							<rsta_gpuind action="update" old="">Y</rsta_gpuind>
+							<rsta_gpuname xsi:nil="true"/>
+							<rsta_idcode action="update" old="">F2@1</rsta_idcode>
+							<rsta_latitude xsi:nil="true"/>
+							<rsta_length xsi:nil="true"/>
+							<rsta_longitude xsi:nil="true"/>
+							<rsta_marsind action="update" old="">N</rsta_marsind>
+							<rsta_modtime action="update" old="">2026-02-25T06:22:19Z</rsta_modtime>
+							<rsta_moduser action="update" old="">admin</rsta_moduser>
+							<rsta_owner xsi:nil="true"/>
+							<rsta_pdgs_status xsi:nil="true"/>
+							<rsta_ract_maximumaircrafttype action="update" old="">MD11</rsta_ract_maximumaircrafttype>
+							<rsta_ral_airline xsi:nil="true"/>
+							<rsta_rco_concourse action="update" old="">F</rsta_rco_concourse>
+							<rsta_rctt_countrytype action="update" old="">I</rsta_rctt_countrytype>
+							<rsta_rgt_gate action="update" old="">F2</rsta_rgt_gate>
+							<rsta_rgt_refgate action="update" old="">F2@1</rsta_rgt_refgate>
+							<rsta_rmsc_scenario action="update" old="">1</rsta_rmsc_scenario>
+							<rsta_rsna_area xsi:nil="true"/>
+							<rsta_validfrom action="update" old="">2020-05-01T00:00:00Z</rsta_validfrom>
+							<rsta_validto xsi:nil="true"/>
+							<rsta_width xsi:nil="true"/>
+						</ref_stand>
+					</pd_rsta_refstand>
+					<pd_rsta_stand action="insert">F2</pd_rsta_stand>
+					<pd_rsta_standardstand xsi:nil="true"/>
+					<pd_rstc_refservicetypecode action="insert">J@BKK<ref_servicetypecode action="update">
+							<rstc_arrivalbridgeopind action="update" old="">N</rstc_arrivalbridgeopind>
+							<rstc_arrivalbusind action="update" old="">N</rstc_arrivalbusind>
+							<rstc_arrivalgatetind action="update" old="">Y</rstc_arrivalgatetind>
+							<rstc_arrivaltractorind action="update" old="">N</rstc_arrivaltractorind>
+							<rstc_baggagebeltind action="update" old="">Y</rstc_baggagebeltind>
+							<rstc_checkcgoloadind action="update" old="">N</rstc_checkcgoloadind>
+							<rstc_checkincounterind action="update" old="">Y</rstc_checkincounterind>
+							<rstc_checkmailloadind action="update" old="">N</rstc_checkmailloadind>
+							<rstc_checkpaxloadind action="update" old="">N</rstc_checkpaxloadind>
+							<rstc_code action="update" old="">J</rstc_code>
+							<rstc_comment xsi:nil="true"/>
+							<rstc_createtime action="update" old="">2025-04-17T11:34:16Z</rstc_createtime>
+							<rstc_departurebeltind action="update" old="">N</rstc_departurebeltind>
+							<rstc_departurebridgeopind action="update" old="">N</rstc_departurebridgeopind>
+							<rstc_departurebusind action="update" old="">N</rstc_departurebusind>
+							<rstc_departuregatetind action="update" old="">Y</rstc_departuregatetind>
+							<rstc_departureloungeind action="update" old="">N</rstc_departureloungeind>
+							<rstc_departuresecurityind action="update" old="">N</rstc_departuresecurityind>
+							<rstc_departuretractorind action="update" old="">N</rstc_departuretractorind>
+							<rstc_description action="update" old="">Passenger Scheduled</rstc_description>
+							<rstc_displaycode action="update" old="">P</rstc_displaycode>
+							<rstc_exempt xsi:nil="true"/>
+							<rstc_iatadefault action="update" old="">Y</rstc_iatadefault>
+							<rstc_ignorestatisticsind action="update" old="">Y</rstc_ignorestatisticsind>
+							<rstc_infoserviceind action="update" old="">N</rstc_infoserviceind>
+							<rstc_modtime action="update" old="">2026-03-14T09:00:54Z</rstc_modtime>
+							<rstc_moduser action="update" old="">admin</rstc_moduser>
+							<rstc_ristc_iatacode action="update" old="">J</rstc_ristc_iatacode>
+							<rstc_standind action="update" old="">Y</rstc_standind>
+							<rstc_statisticcode xsi:nil="true"/>
+						</ref_servicetypecode>
+					</pd_rstc_refservicetypecode>
+					<pd_rstc_servicetypecode action="insert">J</pd_rstc_servicetypecode>
+					<pd_rtot xsi:nil="true"/>
+					<pd_rtrm_terminal action="insert">1</pd_rtrm_terminal>
+					<pd_runwayoccupancytime xsi:nil="true"/>
+					<pd_safeind action="insert">Y</pd_safeind>
+					<pd_salt_cdmalarm xsi:nil="true"/>
+					<pd_salt_refcdmalarm xsi:nil="true"/>
+					<pd_seats xsi:nil="true"/>
+					<pd_secondcall action="insert">2026-08-19T04:45:00Z</pd_secondcall>
+					<pd_sequencerprio xsi:nil="true"/>
+					<pd_sid xsi:nil="true"/>
+					<pd_slotmsg xsi:nil="true"/>
+					<pd_sobt action="insert">2026-08-19T04:45:00Z</pd_sobt>
+					<pd_standchangecnt action="insert">0</pd_standchangecnt>
+					<pd_standnote xsi:nil="true"/>
+					<pd_stb xsi:nil="true"/>
+					<pd_ste xsi:nil="true"/>
+					<pd_stot xsi:nil="true"/>
+					<pd_sts xsi:nil="true"/>
+					<pd_susind xsi:nil="true"/>
+					<pd_tariffcode action="insert">BL</pd_tariffcode>
+					<pd_taxitime action="insert">10</pd_taxitime>
+					<pd_tobt xsi:nil="true"/>
+					<pd_tobtchanges action="insert">0</pd_tobtchanges>
+					<pd_tobtconfirmationtime xsi:nil="true"/>
+					<pd_tobtstatus xsi:nil="true"/>
+					<pd_totalcrew xsi:nil="true"/>
+					<pd_totalextracrew xsi:nil="true"/>
+					<pd_totalpax action="insert">0</pd_totalpax>
+					<pd_transferpax xsi:nil="true"/>
+					<pd_transitpax xsi:nil="true"/>
+					<pd_tsat xsi:nil="true"/>
+					<pd_tsatreason xsi:nil="true"/>
+					<pd_ttot action="insert">2026-08-19T04:55:00Z</pd_ttot>
+					<pd_ttotsent xsi:nil="true"/>
+					<pd_vipcomment xsi:nil="true"/>
+					<pd_vipind action="insert">N</pd_vipind>
+					<pd_zerofreightind action="insert">N</pd_zerofreightind>
+					<pd_zeromailind action="insert">N</pd_zeromailind>
+					<pd_zeropaxind action="insert">N</pd_zeropaxind>
+					<pd_zerototalweightind action="insert">N</pd_zerototalweightind>
+					<pl_atcdeparture_list/>
+					<pl_cdmstatus_list/>
+					<pl_containerinfo_list/>
+					<pl_delayreason_list/>
+					<pl_departure_list/>
+					<pl_departureaddinfo_list/>
+					<pl_departurebelt_list/>
+					<pl_departuregate_list>
+						<pl_departuregate action="insert">
+							<pdg_idseq action="insert">1002393881</pdg_idseq>
+							<pdg_airbridgeind action="insert">Y</pdg_airbridgeind>
+							<pdg_beginactual action="insert">2026-08-19T03:30:00Z</pdg_beginactual>
+							<pdg_begingateactual action="insert">2026-08-19T04:15:00Z</pdg_begingateactual>
+							<pdg_begingateplan action="insert">2026-08-19T03:30:00Z</pdg_begingateplan>
+							<pdg_beginplan action="insert">2026-08-19T03:30:00Z</pdg_beginplan>
+							<pdg_createtime action="insert">2026-08-19T04:54:04Z</pdg_createtime>
+							<pdg_displaycode action="insert">I</pdg_displaycode>
+							<pdg_endactual action="insert">2026-08-19T04:45:00Z</pdg_endactual>
+							<pdg_endplan action="insert">2026-08-19T04:45:00Z</pdg_endplan>
+							<pdg_lockind action="insert">N</pdg_lockind>
+							<pdg_modtime action="insert">2026-08-19T04:54:04Z</pdg_modtime>
+							<pdg_moduser action="insert">admin</pdg_moduser>
+							<pdg_note xsi:nil="true"/>
+							<pdg_pd_departure action="insert">1007717986</pdg_pd_departure>
+							<pdg_pd_flightnumber action="insert">OZ744T</pdg_pd_flightnumber>
+							<pdg_publiccomment xsi:nil="true"/>
+							<pdg_rdo_displayobject xsi:nil="true"/>
+							<pdg_rdt_displaytext xsi:nil="true"/>
+							<pdg_rgt_gate action="insert">F2</pdg_rgt_gate>
+							<pdg_rgt_lastgate xsi:nil="true"/>
+							<pdg_rgt_refgate action="insert">F2@1<ref_gate action="update">
+									<rgt_arrdepind action="update" old="">B</rgt_arrdepind>
+									<rgt_capacity action="update" old="">1</rgt_capacity>
+									<rgt_cctvstream xsi:nil="true"/>
+									<rgt_code action="update" old="">F2</rgt_code>
+									<rgt_createtime action="update" old="">2025-04-16T12:36:08Z</rgt_createtime>
+									<rgt_description action="update" old="">Gate F2</rgt_description>
+									<rgt_displaytext xsi:nil="true"/>
+									<rgt_egateavailableind action="update" old="">N</rgt_egateavailableind>
+									<rgt_gatetype action="update" old="">T</rgt_gatetype>
+									<rgt_idcode action="update" old="">F2@1</rgt_idcode>
+									<rgt_modtime action="update" old="">2025-07-16T04:21:03Z</rgt_modtime>
+									<rgt_moduser action="update" old="">sfis</rgt_moduser>
+									<rgt_paxloadingbridgeind action="update" old="">Y</rgt_paxloadingbridgeind>
+									<rgt_ral_airline xsi:nil="true"/>
+									<rgt_rco_concourse action="update" old="">F</rgt_rco_concourse>
+									<rgt_rco_refconcourse action="update" old="">F@1</rgt_rco_refconcourse>
+									<rgt_rcpa_areabordercontrol xsi:nil="true"/>
+									<rgt_rcpa_areasecurity xsi:nil="true"/>
+									<rgt_rctt_countrytype action="update" old="">I</rgt_rctt_countrytype>
+									<rgt_rdlg_refdeparturelounge action="update" old="">1@1</rgt_rdlg_refdeparturelounge>
+									<rgt_rmsc_scenario action="update" old="">1</rgt_rmsc_scenario>
+									<rgt_validfrom action="update" old="">2025-06-30T17:00:00Z</rgt_validfrom>
+									<rgt_validto xsi:nil="true"/>
+								</ref_gate>
+							</pdg_rgt_refgate>
+							<pdg_rgt_standardgate xsi:nil="true"/>
+							<pdg_rmsc_scenario action="insert">1</pdg_rmsc_scenario>
+							<pdg_seqno action="insert">1</pdg_seqno>
+							<pdg_status action="insert">E</pdg_status>
+						</pl_departuregate>
+					</pl_departuregate_list>
+					<pl_desk_list>
+						<pl_desk action="insert">
+							<pdk_idseq action="insert">1004969741</pdk_idseq>
+							<pdk_beginactual xsi:nil="true"/>
+							<pdk_beginplan action="insert">2026-08-22T12:00:00Z</pdk_beginplan>
+							<pdk_cciind action="insert">N</pdk_cciind>
+							<pdk_checkinclassid xsi:nil="true"/>
+							<pdk_checkintype action="insert">R</pdk_checkintype>
+							<pdk_createtime action="insert">2026-08-19T09:00:25Z</pdk_createtime>
+							<pdk_displaycode action="insert">P</pdk_displaycode>
+							<pdk_endactual xsi:nil="true"/>
+							<pdk_endplan action="insert">2026-08-22T14:20:00Z</pdk_endplan>
+							<pdk_lockind action="insert">N</pdk_lockind>
+							<pdk_modtime action="insert">2026-08-19T09:00:25Z</pdk_modtime>
+							<pdk_moduser action="insert">admins</pdk_moduser>
+							<pdk_note xsi:nil="true"/>
+							<pdk_pd_departure action="insert">1007718027</pdk_pd_departure>
+							<pdk_pd_flightnumber action="insert">FD002</pdk_pd_flightnumber>
+							<pdk_pday_day xsi:nil="true"/>
+							<pdk_publiccomment xsi:nil="true"/>
+							<pdk_rcnt_counter action="insert">FD_COMMON</pdk_rcnt_counter>
+							<pdk_rcnt_lastcounter xsi:nil="true"/>
+							<pdk_rcnt_mastercci xsi:nil="true"/>
+							<pdk_rcnt_refcounter action="insert">FD_COMMON@1<ref_counter action="update">
+									<rcnt_baggagebeltind action="update" old="">N</rcnt_baggagebeltind>
+									<rcnt_baggagebeltlocation xsi:nil="true"/>
+									<rcnt_baggagetagprinterind action="update" old="">N</rcnt_baggagetagprinterind>
+									<rcnt_capacity action="update" old="">20</rcnt_capacity>
+									<rcnt_ccialternatetext xsi:nil="true"/>
+									<rcnt_cctvstream xsi:nil="true"/>
+									<rcnt_code action="update" old="">FD_COMMON</rcnt_code>
+									<rcnt_countergroup xsi:nil="true"/>
+									<rcnt_createtime action="update" old="">2025-06-02T16:41:16Z</rcnt_createtime>
+									<rcnt_cuteequipmentind action="update" old="">N</rcnt_cuteequipmentind>
+									<rcnt_description action="update" old="">Counter/Desk FD_COMMON</rcnt_description>
+									<rcnt_displaytext xsi:nil="true"/>
+									<rcnt_externalcode xsi:nil="true"/>
+									<rcnt_idcode action="update" old="">FD_COMMON@1</rcnt_idcode>
+									<rcnt_leasedind action="update" old="">N</rcnt_leasedind>
+									<rcnt_modtime action="update" old="">2025-06-02T16:41:16Z</rcnt_modtime>
+									<rcnt_moduser action="update" old="">admin</rcnt_moduser>
+									<rcnt_ownerofcheckinset xsi:nil="true"/>
+									<rcnt_phone xsi:nil="true"/>
+									<rcnt_publiccomment xsi:nil="true"/>
+									<rcnt_ral_airline action="update" old="">FD</rcnt_ral_airline>
+									<rcnt_rbhs_area xsi:nil="true"/>
+									<rcnt_rcna_area xsi:nil="true"/>
+									<rcnt_rco_concourse action="update" old="">1A</rcnt_rco_concourse>
+									<rcnt_rco_refconcourse xsi:nil="true"/>
+									<rcnt_rcpa_areasecurity xsi:nil="true"/>
+									<rcnt_rctt_countrytype action="update" old="">A</rcnt_rctt_countrytype>
+									<rcnt_renter xsi:nil="true"/>
+									<rcnt_rmsc_scenario action="update" old="">1</rcnt_rmsc_scenario>
+									<rcnt_schedulecharterind xsi:nil="true"/>
+									<rcnt_ticketprinterind action="update" old="">N</rcnt_ticketprinterind>
+									<rcnt_type action="update" old="">C</rcnt_type>
+									<rcnt_validfrom action="update" old="">2022-01-01T00:00:00Z</rcnt_validfrom>
+									<rcnt_validto xsi:nil="true"/>
+								</ref_counter>
+							</pdk_rcnt_refcounter>
+							<pdk_rcnt_refmastercci xsi:nil="true"/>
+							<pdk_rdo_displayobject>
+								<ref_displayobject/>
+							</pdk_rdo_displayobject>
+							<pdk_rdt_displaytext xsi:nil="true"/>
+							<pdk_rmsc_scenario action="insert">1</pdk_rmsc_scenario>
+							<pdk_seqno action="insert">1</pdk_seqno>
+							<pdk_status action="insert">S</pdk_status>
+						</pl_desk>
+					</pl_desk_list>
+					<pl_dpi_list/>
+					<pl_genericdepartureres_list/>
+					<pl_handlingagent_list/>
+					<pl_routing_list>
+						<pl_routing action="insert">
+							<prt_idseq action="insert">1005349200</prt_idseq>
+							<prt_createtime action="insert">2026-08-19T04:54:04Z</prt_createtime>
+							<prt_displaycode action="insert">P</prt_displaycode>
+							<prt_modtime action="insert">2026-08-19T04:54:04Z</prt_modtime>
+							<prt_moduser action="insert">admin</prt_moduser>
+							<prt_numberinleg action="insert">99</prt_numberinleg>
+							<prt_pa_arrival xsi:nil="true"/>
+							<prt_pd_departure action="insert">1007717986</prt_pd_departure>
+							<prt_rap_airport action="insert">BKK</prt_rap_airport>
+							<prt_rap_refairport action="insert">BKK<ref_airport action="update">
+									<rap_additionalinfo xsi:nil="true"/>
+									<rap_city xsi:nil="true"/>
+									<rap_city3lc xsi:nil="true"/>
+									<rap_createtime action="update" old="">2025-04-16T09:14:41Z</rap_createtime>
+									<rap_distance xsi:nil="true"/>
+									<rap_federalstate xsi:nil="true"/>
+									<rap_iata3lc action="update" old="">BKK</rap_iata3lc>
+									<rap_iataregion xsi:nil="true"/>
+									<rap_icao4lc action="update" old="">VTBS</rap_icao4lc>
+									<rap_internalcode action="update" old="">BKK</rap_internalcode>
+									<rap_modtime action="update" old="">2025-04-16T09:14:41Z</rap_modtime>
+									<rap_moduser action="update" old="">loaded</rap_moduser>
+									<rap_name1 action="update" old="">SUVARNABHUMI INTL</rap_name1>
+									<rap_name2 action="update" old="">SUVARNABHUMI</rap_name2>
+									<rap_name3 action="update" old="">DOC7910 EDT168/RT</rap_name3>
+									<rap_name4 xsi:nil="true"/>
+									<rap_name5 xsi:nil="true"/>
+									<rap_opscreatedind action="update" old="">N</rap_opscreatedind>
+									<rap_rctr_country action="update" old="">TH</rap_rctr_country>
+									<rap_rctt_countrytype action="update" old="">D</rap_rctt_countrytype>
+									<rap_safeind action="update" old="">Y</rap_safeind>
+									<rap_slg_additionallanguage xsi:nil="true"/>
+									<rap_timezone xsi:nil="true"/>
+								</ref_airport>
+							</prt_rap_refairport>
+							<prt_rtr_trafficrestriction xsi:nil="true"/>
+							<prt_stastation xsi:nil="true"/>
+							<prt_stdstation xsi:nil="true"/>
+						</pl_routing>
+					</pl_routing_list>
+					<pl_specialservice_list/>
+					<pl_transferpax_list/>
+				</pl_departure>
+			</pt_pd_departure>
+			<pt_refuelingind>N</pt_refuelingind>
+			<pt_rmsc_scenario>1</pt_rmsc_scenario>
+			<pt_routing action="update" old="ICN-BKK-ICN">ICN-BKK-BKK</pt_routing>
+			<pt_routingiata3lc action="update" old="ICN-BKK-ICN">ICN-BKK-BKK</pt_routingiata3lc>
+			<pt_rsta_currentstand xsi:nil="true"/>
+			<pt_rsta_refcurrentstand>
+				<ref_stand/>
+			</pt_rsta_refcurrentstand>
+			<pt_sibt>2026-08-19T03:40:00Z</pt_sibt>
+			<pt_sobt>2026-08-19T04:45:00Z</pt_sobt>
+		</pl_turn>
+	</soap-env:Body>
 </soap-env:Envelope>
