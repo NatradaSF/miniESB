@@ -14,15 +14,15 @@
 		<pl_turn id="1006106871" action="update">
 			<pt_idseq>1006106871</pt_idseq>
 			<pl_stand_list>
-				<pl_stand>
-					<pst_idseq>1004226402</pst_idseq>
-					<pst_beginactual>2026-08-19T03:55:00Z</pst_beginactual>
-					<pst_beginplan>2026-08-19T03:48:00Z</pst_beginplan>
+				<pl_stand action="update">
+					<pst_idseq action="update">1004226402</pst_idseq>
+					<pst_beginactual action="update">2026-08-19T03:55:00Z</pst_beginactual>
+					<pst_beginplan action="update">2026-08-19T03:48:00Z</pst_beginplan>
 					<pst_comments xsi:nil="true"/>
 					<pst_createtime>2026-08-17T16:48:08Z</pst_createtime>
 					<pst_displaycode>I</pst_displaycode>
-					<pst_endactual>2026-08-19T04:45:00Z</pst_endactual>
-					<pst_endplan>2026-08-19T04:45:00Z</pst_endplan>
+					<pst_endactual action="update">2026-08-19T04:45:00Z</pst_endactual>
+					<pst_endplan action="update">2026-08-19T04:45:00Z</pst_endplan>
 					<pst_extraindicator xsi:nil="true"/>
 					<pst_gpuunits xsi:nil="true"/>
 					<pst_lockind>N</pst_lockind>
@@ -35,7 +35,7 @@
 					<pst_rsta_laststand xsi:nil="true"/>
 					<pst_rsta_refstand>F2@1</pst_rsta_refstand>
 					<pst_rsta_reftowstand xsi:nil="true"/>
-					<pst_rsta_stand>F2</pst_rsta_stand>
+					<pst_rsta_stand action="update">F2</pst_rsta_stand>
 					<pst_towbarind xsi:nil="true"/>
 					<pst_towbeginactual xsi:nil="true"/>
 					<pst_towbeginearliest xsi:nil="true"/>
@@ -481,55 +481,55 @@
 					</pl_arrivalgate_list>
 					<pl_atcarrival_list/>
 					<pl_baggagebelt_list>
-						<pl_baggagebelt action="insert">
-							<pbb_idseq action="insert">1002496635</pbb_idseq>
+						<pl_baggagebelt action="update">
+							<pbb_idseq>1002494758</pbb_idseq>
 							<pbb_beginactual xsi:nil="true"/>
-							<pbb_beginplan action="insert">2026-08-19T05:04:00Z</pbb_beginplan>
+							<pbb_beginplan action="update" old="2026-08-20T06:44:00Z">2026-08-20T06:45:00Z</pbb_beginplan>
 							<pbb_checkinclassid xsi:nil="true"/>
-							<pbb_createtime action="insert">2026-08-19T04:54:04Z</pbb_createtime>
-							<pbb_displaycode action="insert">P</pbb_displaycode>
+							<pbb_createtime>2026-08-18T16:43:54Z</pbb_createtime>
+							<pbb_displaycode>P</pbb_displaycode>
 							<pbb_endactual xsi:nil="true"/>
-							<pbb_endplan action="insert">2026-08-19T05:34:00Z</pbb_endplan>
+							<pbb_endplan action="update" old="2026-08-20T07:14:00Z">2026-08-20T07:15:00Z</pbb_endplan>
 							<pbb_firstbag xsi:nil="true"/>
 							<pbb_lastbag xsi:nil="true"/>
-							<pbb_loadstatus action="insert">S</pbb_loadstatus>
-							<pbb_lockind action="insert">N</pbb_lockind>
-							<pbb_modtime action="insert">2026-08-19T04:54:04Z</pbb_modtime>
-							<pbb_moduser action="insert">admin</pbb_moduser>
+							<pbb_loadstatus>S</pbb_loadstatus>
+							<pbb_lockind>N</pbb_lockind>
+							<pbb_modtime action="update" old="2026-08-20T06:34:26Z">2026-08-20T06:44:55Z</pbb_modtime>
+							<pbb_moduser>auto</pbb_moduser>
 							<pbb_note xsi:nil="true"/>
-							<pbb_pa_arrival action="insert">1007717987</pbb_pa_arrival>
-							<pbb_pa_flightnumber action="insert">OZ744T</pbb_pa_flightnumber>
+							<pbb_pa_arrival>1007713792</pbb_pa_arrival>
+							<pbb_pa_flightnumber>FD4232</pbb_pa_flightnumber>
 							<pbb_publiccomment xsi:nil="true"/>
-							<pbb_rbb_baggagebelt action="insert">HOLD</pbb_rbb_baggagebelt>
+							<pbb_rbb_baggagebelt>02</pbb_rbb_baggagebelt>
 							<pbb_rbb_lastbaggagebelt xsi:nil="true"/>
-							<pbb_rbb_refbaggagebelt action="insert">HOLD@1<ref_baggagebelt action="update">
+							<pbb_rbb_refbaggagebelt>02@1<ref_baggagebelt>
 									<rbb_bcishostname xsi:nil="true"/>
-									<rbb_capacity action="update" old="">-1</rbb_capacity>
-									<rbb_carousel xsi:nil="true"/>
+									<rbb_capacity>3</rbb_capacity>
+									<rbb_carousel>02</rbb_carousel>
 									<rbb_cctvstream xsi:nil="true"/>
-									<rbb_code action="update" old="">HOLD</rbb_code>
-									<rbb_createtime action="update" old="">2025-03-30T00:00:00Z</rbb_createtime>
-									<rbb_description action="update" old="">Baggage Bay HOLD</rbb_description>
-									<rbb_displaytext xsi:nil="true"/>
-									<rbb_idcode action="update" old="">HOLD@1</rbb_idcode>
-									<rbb_modtime action="update" old="">2025-03-30T00:00:00Z</rbb_modtime>
-									<rbb_moduser action="update" old="">bkranthi</rbb_moduser>
+									<rbb_code>02</rbb_code>
+									<rbb_createtime>2025-04-16T10:04:05Z</rbb_createtime>
+									<rbb_description>Baggage Bay 02</rbb_description>
+									<rbb_displaytext>&#13;</rbb_displaytext>
+									<rbb_idcode>02@1</rbb_idcode>
+									<rbb_modtime>2026-08-19T08:45:31Z</rbb_modtime>
+									<rbb_moduser>admins</rbb_moduser>
 									<rbb_ral_airline xsi:nil="true"/>
-									<rbb_rbbc_carousel xsi:nil="true"/>
-									<rbb_rco_concourse xsi:nil="true"/>
-									<rbb_rco_refconcourse xsi:nil="true"/>
+									<rbb_rbbc_carousel>02@1</rbb_rbbc_carousel>
+									<rbb_rco_concourse>1</rbb_rco_concourse>
+									<rbb_rco_refconcourse>1@1</rbb_rco_refconcourse>
 									<rbb_rcpa_areacustoms xsi:nil="true"/>
-									<rbb_rctt_countrytype action="update" old="">A</rbb_rctt_countrytype>
-									<rbb_rmsc_scenario action="update" old="">1</rbb_rmsc_scenario>
-									<rbb_validfrom xsi:nil="true"/>
+									<rbb_rctt_countrytype>D</rbb_rctt_countrytype>
+									<rbb_rmsc_scenario>1</rbb_rmsc_scenario>
+									<rbb_validfrom>2025-05-31T17:00:00Z</rbb_validfrom>
 									<rbb_validto xsi:nil="true"/>
 								</ref_baggagebelt>
 							</pbb_rbb_refbaggagebelt>
 							<pbb_rbb_standardbelt xsi:nil="true"/>
 							<pbb_rdt_displaytext xsi:nil="true"/>
-							<pbb_rmsc_scenario action="insert">1</pbb_rmsc_scenario>
-							<pbb_seqno action="insert">1</pbb_seqno>
-							<pbb_status action="insert">S</pbb_status>
+							<pbb_rmsc_scenario>1</pbb_rmsc_scenario>
+							<pbb_seqno>1</pbb_seqno>
+							<pbb_status>S</pbb_status>
 						</pl_baggagebelt>
 					</pl_baggagebelt_list>
 					<pl_cdmstatus_list/>
@@ -1046,58 +1046,58 @@
 					<pl_departureaddinfo_list/>
 					<pl_departurebelt_list/>
 					<pl_departuregate_list>
-						<pl_departuregate action="insert">
-							<pdg_idseq action="insert">1002393881</pdg_idseq>
-							<pdg_airbridgeind action="insert">Y</pdg_airbridgeind>
-							<pdg_beginactual action="insert">2026-08-19T03:30:00Z</pdg_beginactual>
-							<pdg_begingateactual action="insert">2026-08-19T04:15:00Z</pdg_begingateactual>
-							<pdg_begingateplan action="insert">2026-08-19T03:30:00Z</pdg_begingateplan>
-							<pdg_beginplan action="insert">2026-08-19T03:30:00Z</pdg_beginplan>
-							<pdg_createtime action="insert">2026-08-19T04:54:04Z</pdg_createtime>
-							<pdg_displaycode action="insert">I</pdg_displaycode>
-							<pdg_endactual action="insert">2026-08-19T04:45:00Z</pdg_endactual>
-							<pdg_endplan action="insert">2026-08-19T04:45:00Z</pdg_endplan>
-							<pdg_lockind action="insert">N</pdg_lockind>
-							<pdg_modtime action="insert">2026-08-19T04:54:04Z</pdg_modtime>
-							<pdg_moduser action="insert">admin</pdg_moduser>
+						<pl_departuregate action="update">
+							<pdg_idseq>1002391793</pdg_idseq>
+							<pdg_airbridgeind>N</pdg_airbridgeind>
+							<pdg_beginactual action="update" old="">2026-08-20T07:18:00Z</pdg_beginactual>
+							<pdg_begingateactual action="update" old="">2026-08-20T07:18:00Z</pdg_begingateactual>
+							<pdg_begingateplan>2026-08-20T07:18:00Z</pdg_begingateplan>
+							<pdg_beginplan>2026-08-20T07:18:00Z</pdg_beginplan>
+							<pdg_createtime>2026-08-18T16:44:17Z</pdg_createtime>
+							<pdg_displaycode>I</pdg_displaycode>
+							<pdg_endactual xsi:nil="true"/>
+							<pdg_endplan>2026-08-20T08:33:00Z</pdg_endplan>
+							<pdg_lockind>N</pdg_lockind>
+							<pdg_modtime action="update" old="2026-08-20T06:30:16Z">2026-08-20T07:18:33Z</pdg_modtime>
+							<pdg_moduser>auto</pdg_moduser>
 							<pdg_note xsi:nil="true"/>
-							<pdg_pd_departure action="insert">1007717986</pdg_pd_departure>
-							<pdg_pd_flightnumber action="insert">OZ744T</pdg_pd_flightnumber>
+							<pdg_pd_departure>1007714110</pdg_pd_departure>
+							<pdg_pd_flightnumber>SQ709</pdg_pd_flightnumber>
 							<pdg_publiccomment xsi:nil="true"/>
 							<pdg_rdo_displayobject xsi:nil="true"/>
 							<pdg_rdt_displaytext xsi:nil="true"/>
-							<pdg_rgt_gate action="insert">F2</pdg_rgt_gate>
+							<pdg_rgt_gate>HOLD</pdg_rgt_gate>
 							<pdg_rgt_lastgate xsi:nil="true"/>
-							<pdg_rgt_refgate action="insert">F2@1<ref_gate action="update">
-									<rgt_arrdepind action="update" old="">B</rgt_arrdepind>
-									<rgt_capacity action="update" old="">1</rgt_capacity>
+							<pdg_rgt_refgate>HOLD@1<ref_gate>
+									<rgt_arrdepind>B</rgt_arrdepind>
+									<rgt_capacity>-1</rgt_capacity>
 									<rgt_cctvstream xsi:nil="true"/>
-									<rgt_code action="update" old="">F2</rgt_code>
-									<rgt_createtime action="update" old="">2025-04-16T12:36:08Z</rgt_createtime>
-									<rgt_description action="update" old="">Gate F2</rgt_description>
+									<rgt_code>HOLD</rgt_code>
+									<rgt_createtime>2025-03-30T00:00:00Z</rgt_createtime>
+									<rgt_description>Gate HOLD</rgt_description>
 									<rgt_displaytext xsi:nil="true"/>
-									<rgt_egateavailableind action="update" old="">N</rgt_egateavailableind>
-									<rgt_gatetype action="update" old="">T</rgt_gatetype>
-									<rgt_idcode action="update" old="">F2@1</rgt_idcode>
-									<rgt_modtime action="update" old="">2025-07-16T04:21:03Z</rgt_modtime>
-									<rgt_moduser action="update" old="">sfis</rgt_moduser>
-									<rgt_paxloadingbridgeind action="update" old="">Y</rgt_paxloadingbridgeind>
+									<rgt_egateavailableind>N</rgt_egateavailableind>
+									<rgt_gatetype>T</rgt_gatetype>
+									<rgt_idcode>HOLD@1</rgt_idcode>
+									<rgt_modtime>2026-08-14T03:00:26Z</rgt_modtime>
+									<rgt_moduser>admin</rgt_moduser>
+									<rgt_paxloadingbridgeind>N</rgt_paxloadingbridgeind>
 									<rgt_ral_airline xsi:nil="true"/>
-									<rgt_rco_concourse action="update" old="">F</rgt_rco_concourse>
-									<rgt_rco_refconcourse action="update" old="">F@1</rgt_rco_refconcourse>
+									<rgt_rco_concourse>1</rgt_rco_concourse>
+									<rgt_rco_refconcourse>1@1</rgt_rco_refconcourse>
 									<rgt_rcpa_areabordercontrol xsi:nil="true"/>
 									<rgt_rcpa_areasecurity xsi:nil="true"/>
-									<rgt_rctt_countrytype action="update" old="">I</rgt_rctt_countrytype>
-									<rgt_rdlg_refdeparturelounge action="update" old="">1@1</rgt_rdlg_refdeparturelounge>
-									<rgt_rmsc_scenario action="update" old="">1</rgt_rmsc_scenario>
-									<rgt_validfrom action="update" old="">2025-06-30T17:00:00Z</rgt_validfrom>
+									<rgt_rctt_countrytype>A</rgt_rctt_countrytype>
+									<rgt_rdlg_refdeparturelounge>1@1</rgt_rdlg_refdeparturelounge>
+									<rgt_rmsc_scenario>1</rgt_rmsc_scenario>
+									<rgt_validfrom>2023-08-12T17:00:00Z</rgt_validfrom>
 									<rgt_validto xsi:nil="true"/>
 								</ref_gate>
 							</pdg_rgt_refgate>
 							<pdg_rgt_standardgate xsi:nil="true"/>
-							<pdg_rmsc_scenario action="insert">1</pdg_rmsc_scenario>
-							<pdg_seqno action="insert">1</pdg_seqno>
-							<pdg_status action="insert">E</pdg_status>
+							<pdg_rmsc_scenario>1</pdg_rmsc_scenario>
+							<pdg_seqno>1</pdg_seqno>
+							<pdg_status action="update" old="S">B</pdg_status>
 						</pl_departuregate>
 					</pl_departuregate_list>
 					<pl_desk_list>

@@ -553,8 +553,7 @@ public class ESBResponseService {
 
 		MSG.MSGSTREAMOUT.INFOBJGENERIC generic = buildOutboundGeneric("UFISPOSUD", updateTime, fidsAfttab);
 
-		// --- INFOBJ_ACPOSITION: เลือก arr/dep ตาม ADID, field ค่าว่าง "" (รอ backend
-		// map) ---
+		// --- INFOBJ_ACPOSITION: เลือก arr/dep ตาม ADID
 		MSG.MSGSTREAMOUT.INFOBJACPOSITION pos = new INFOBJACPOSITION();
 		if (generic.getADID() == ADID.A) {
 			INFOBJACPOSITION.ACPOSITIONARR arr = new INFOBJACPOSITION.ACPOSITIONARR();

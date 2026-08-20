@@ -629,7 +629,7 @@
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="'toid'"/>
 					<xsl:with-param name="node">
-						<field action="{$lastStand/@action}">
+						<field action="{$lastStand/pst_idseq/@action}">
 							<xsl:value-of select="$lastStand/pst_idseq"/>
 						</field>
 					</xsl:with-param>
@@ -638,7 +638,7 @@
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat('pst', $m)"/>
 					<xsl:with-param name="node">
-						<field action="{$lastStand/@action}">
+						<field action="{$lastStand/pst_rsta_stand/@action}">
 							<xsl:value-of select="$lastStand/pst_rsta_stand"/>
 						</field>
 					</xsl:with-param>
@@ -647,7 +647,7 @@
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat('p', $m, 'bs')"/>
 					<xsl:with-param name="node">
-						<field action="{$lastStand/@action}">
+						<field action="{$lastStand/pst_beginplan/@action}">
 							<xsl:value-of select="custom:convertDate($lastStand/pst_beginplan)"/>
 						</field>
 					</xsl:with-param>
@@ -656,7 +656,7 @@
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat('p', $m, 'es')"/>
 					<xsl:with-param name="node">
-						<field action="{$lastStand/@action}">
+						<field action="{$lastStand/pst_endplan/@action}">
 							<xsl:value-of select="custom:convertDate($lastStand/pst_endplan)"/>
 						</field>
 					</xsl:with-param>
@@ -665,7 +665,7 @@
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat('p', $m, 'ba')"/>
 					<xsl:with-param name="node">
-						<field action="{$lastStand/@action}">
+						<field action="{$lastStand/pst_beginactual/@action}">
 							<xsl:value-of select="custom:convertDate($lastStand/pst_beginactual)"/>
 						</field>
 					</xsl:with-param>
@@ -674,7 +674,7 @@
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat('p', $m, 'ea')"/>
 					<xsl:with-param name="node">
-						<field action="{$lastStand/@action}">
+						<field action="{$lastStand/pst_endactual/@action}">
 							<xsl:value-of select="custom:convertDate($lastStand/pst_endactual)"/>
 						</field>
 					</xsl:with-param>
@@ -691,51 +691,56 @@
 				<xsl:variable name="prefix2" select="if ($adidMode = 'A') then 'ga' else 'gd'"/>
 
 				<!-- 1. Gate Name -->
+				<xsl:variable name="gtdNode" select="if ($adidMode = 'A') then pag_rgt_gate else pdg_rgt_gate"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat($prefix1, $pos)"/>
 					<xsl:with-param name="node">
-						<field action="{@action}">
-							<xsl:value-of select="if ($adidMode = 'A') then pag_rgt_gate else pdg_rgt_gate"/>
+						<field action="{$gtdNode/@action}">
+							<xsl:value-of select="$gtdNode"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
 
 				<!-- 2. Begin Plan (b) -->
+				<xsl:variable name="beginPlanNode" select="if ($adidMode = 'A') then pag_beginplan else pdg_beginplan"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'b')"/>
 					<xsl:with-param name="node">
-						<field action="{@action}">
-							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pag_beginplan else pdg_beginplan)"/>
+						<field action="{$beginPlanNode/@action}">
+							<xsl:value-of select="custom:convertDate($beginPlanNode)"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
 
 				<!-- 3. End Plan (e) -->
+				<xsl:variable name="endPlanNode" select="if ($adidMode = 'A') then pag_endplan else pdg_endplan"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'e')"/>
 					<xsl:with-param name="node">
-						<field action="{@action}">
-							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pag_endplan else pdg_endplan)"/>
+						<field action="{$endPlanNode/@action}">
+							<xsl:value-of select="custom:convertDate($endPlanNode)"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
 
 				<!-- 4. Begin Actual (x) -->
+				<xsl:variable name="beginActualNode" select="if ($adidMode = 'A') then pag_beginactual else pdg_beginactual"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'x')"/>
 					<xsl:with-param name="node">
-						<field action="{@action}">
-							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pag_beginactual else pdg_beginactual)"/>
+						<field action="{$beginActualNode/@action}">
+							<xsl:value-of select="custom:convertDate($beginActualNode)"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
 
 				<!-- 5. End Actual (y) -->
+				<xsl:variable name="endActualNode" select="if ($adidMode = 'A') then pag_endactual else pdg_endactual"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat($prefix2, $pos, 'y')"/>
 					<xsl:with-param name="node">
-						<field action="{@action}">
-							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pag_endactual else pdg_endactual)"/>
+						<field action="{$endActualNode/@action}">
+							<xsl:value-of select="custom:convertDate($endActualNode)"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
@@ -748,51 +753,56 @@
 				<xsl:variable name="pos" select="position()"/>
 				
 				<!-- 1. Belt Name -->
+				<xsl:variable name="bltNode" select="if ($adidMode = 'A') then pbb_rbb_baggagebelt else pdb_rdb_departurebelt"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat('blt', $pos)"/>
 					<xsl:with-param name="node">
-						<field action="{@action}">
-							<xsl:value-of select="if ($adidMode = 'A') then pbb_rbb_baggagebelt else pdb_rdb_departurebelt"/>
+						<field action="{$bltNode/@action}">
+							<xsl:value-of select="$bltNode"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
 
 				<!-- 2. Begin Plan (bs) -->
+				<xsl:variable name="beginPlanBeltNode" select="if ($adidMode = 'A') then pbb_beginplan else pdb_beginplan"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat('b', $pos, 'bs')"/>
 					<xsl:with-param name="node">
-						<field action="{@action}">
-							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pbb_beginplan else pdb_beginplan)"/>
+						<field action="{$beginPlanBeltNode/@action}">
+							<xsl:value-of select="custom:convertDate($beginPlanBeltNode)"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
 
 				<!-- 3. End Plan (be) -->
+				<xsl:variable name="endPlanBeltNode" select="if ($adidMode = 'A') then pbb_endplan else pdb_endplan"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat('b', $pos, 'es')"/>
 					<xsl:with-param name="node">
-						<field action="{@action}">
-							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pbb_endplan else pdb_endplan)"/>
+						<field action="$endPlanBeltNode/{@action}">
+							<xsl:value-of select="custom:convertDate($endPlanBeltNode)"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
 
 				<!-- 4. Begin Actual (ba) -->
+				<xsl:variable name="beginActualBeltNode" select="if ($adidMode = 'A') then pbb_beginactual else pdb_beginactual"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat('b', $pos, 'ba')"/>
 					<xsl:with-param name="node">
-						<field action="{@action}">
-							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pbb_beginactual else pdb_beginactual)"/>
+						<field action="{$beginActualBeltNode/@action}">
+							<xsl:value-of select="custom:convertDate($beginActualBeltNode)"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
 
 				<!-- 5. End Actual (ea) -->
+				<xsl:variable name="endActualBeltNode" select="if ($adidMode = 'A') then pbb_endactual else pdb_endactual"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="concat('b', $pos, 'ea')"/>
 					<xsl:with-param name="node">
-						<field action="{@action}">
-							<xsl:value-of select="custom:convertDate(if ($adidMode = 'A') then pbb_endactual else pdb_endactual)"/>
+						<field action="{$endActualBeltNode/@action}">
+							<xsl:value-of select="custom:convertDate($endActualBeltNode)"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
