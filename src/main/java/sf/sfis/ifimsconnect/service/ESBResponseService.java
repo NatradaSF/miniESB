@@ -151,9 +151,10 @@ public class ESBResponseService {
 			}
 
 			if (type.equalsIgnoreCase("UPDATE")) {// Send update fields to ESB by Web service.
-				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "A", originator);
-				if (fidsAfttab != null) {
-					String xmlEsb = convertFidsAfftabtoEsb(timestamp, originator, fidsAfttab);
+				// Arrival
+				FidsAfttab arrivalAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "A", originator);
+				if (arrivalAfttab != null) {
+					String xmlEsb = convertFidsAfftabtoEsb(timestamp, originator, arrivalAfttab);
 					if (xmlEsb != null) {
 						log.info("Update arrival flight to ESB...");
 						// log.info(xmlEsb);
@@ -161,10 +162,21 @@ public class ESBResponseService {
 					} else {
 						log.info("No data found for ESB update.");
 					}
+
+					//Send counter to Outbound UFIS_COUNTER_OUT
+					sendCounter(timestamp, arrivalAfttab);
+					//Send gate to Outbound UFIS_GATE_OUT
+					sendGate(timestamp, arrivalAfttab);
+					//Send belt to Outbound UFIS_BELT_OUT
+					sendBelt(timestamp, arrivalAfttab);
+					//Send acposition to Outbound UFIS_ACPOSITION_OUT
+					sendAcposition(timestamp, arrivalAfttab);
 				}
-				fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "D", originator);
-				if (fidsAfttab != null) {
-					String xmlEsb = convertFidsAfftabtoEsb(timestamp, originator, fidsAfttab);
+
+				//Departure
+				FidsAfttab departureAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), type, hopo, "D", originator);
+				if (departureAfttab != null) {
+					String xmlEsb = convertFidsAfftabtoEsb(timestamp, originator, departureAfttab);
 					if (xmlEsb != null) {
 						log.info("Update departure flight to ESB...");
 						// log.info(xmlEsb);
@@ -172,16 +184,16 @@ public class ESBResponseService {
 					} else {
 						log.info("No data found for ESB update.");
 					}
-				}
 
-				//Send counter to Outbound UFIS_COUNTER_OUT
-				sendCounter(timestamp, fidsAfttab);
-				//Send gate to Outbound UFIS_GATE_OUT
-				sendGate(timestamp, fidsAfttab);
-				//Send belt to Outbound UFIS_BELT_OUT
-				sendBelt(timestamp, fidsAfttab);
-				//Send acposition to Outbound UFIS_ACPOSITION_OUT
-				sendAcposition(timestamp, fidsAfttab);
+					//Send counter to Outbound UFIS_COUNTER_OUT
+					sendCounter(timestamp, departureAfttab);
+					//Send gate to Outbound UFIS_GATE_OUT
+					sendGate(timestamp, departureAfttab);
+					//Send belt to Outbound UFIS_BELT_OUT
+					sendBelt(timestamp, departureAfttab);
+					//Send acposition to Outbound UFIS_ACPOSITION_OUT
+					sendAcposition(timestamp, departureAfttab);
+				}
 				
 				// Save data to Redis.
 				redisController.saveData(hopo);

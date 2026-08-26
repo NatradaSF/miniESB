@@ -15,13 +15,13 @@
 			<pt_idseq>1006106871</pt_idseq>
 			<pl_stand_list>
 				<pl_stand action="update">
-					<pst_idseq action="update">1004226402</pst_idseq>
-					<pst_beginactual action="update">2026-08-19T03:55:00Z</pst_beginactual>
-					<pst_beginplan action="update">2026-08-19T03:48:00Z</pst_beginplan>
+					<pst_idseq>1004226402</pst_idseq>
+					<pst_beginactual>2026-08-19T03:55:00Z</pst_beginactual>
+					<pst_beginplan>2026-08-19T03:48:00Z</pst_beginplan>
 					<pst_comments xsi:nil="true"/>
 					<pst_createtime>2026-08-17T16:48:08Z</pst_createtime>
 					<pst_displaycode>I</pst_displaycode>
-					<pst_endactual action="update">2026-08-19T04:45:00Z</pst_endactual>
+					<pst_endactual>2026-08-19T04:45:00Z</pst_endactual>
 					<pst_endplan action="update">2026-08-19T04:45:00Z</pst_endplan>
 					<pst_extraindicator xsi:nil="true"/>
 					<pst_gpuunits xsi:nil="true"/>
@@ -35,7 +35,7 @@
 					<pst_rsta_laststand xsi:nil="true"/>
 					<pst_rsta_refstand>F2@1</pst_rsta_refstand>
 					<pst_rsta_reftowstand xsi:nil="true"/>
-					<pst_rsta_stand action="update">F2</pst_rsta_stand>
+					<pst_rsta_stand>F2</pst_rsta_stand>
 					<pst_towbarind xsi:nil="true"/>
 					<pst_towbeginactual xsi:nil="true"/>
 					<pst_towbeginearliest xsi:nil="true"/>
@@ -432,7 +432,7 @@
 						<pl_arrivalgate>
 							<pag_idseq>1001599064</pag_idseq>
 							<pag_airbridgeind>Y</pag_airbridgeind>
-							<pag_beginactual>2026-08-19T03:55:00Z</pag_beginactual>
+							<pag_beginactual action="update">2026-08-19T03:55:00Z</pag_beginactual>
 							<pag_beginplan>2026-08-19T03:55:00Z</pag_beginplan>
 							<pag_createtime>2026-08-17T16:48:08Z</pag_createtime>
 							<pag_displaycode>I</pag_displaycode>
@@ -481,55 +481,55 @@
 					</pl_arrivalgate_list>
 					<pl_atcarrival_list/>
 					<pl_baggagebelt_list>
-						<pl_baggagebelt action="update">
-							<pbb_idseq>1002494758</pbb_idseq>
+						<pl_baggagebelt action="insert">
+							<pbb_idseq action="insert">1002498898</pbb_idseq>
 							<pbb_beginactual xsi:nil="true"/>
-							<pbb_beginplan action="update" old="2026-08-20T06:44:00Z">2026-08-20T06:45:00Z</pbb_beginplan>
+							<pbb_beginplan action="insert">2026-08-22T08:35:00Z</pbb_beginplan>
 							<pbb_checkinclassid xsi:nil="true"/>
-							<pbb_createtime>2026-08-18T16:43:54Z</pbb_createtime>
-							<pbb_displaycode>P</pbb_displaycode>
+							<pbb_createtime action="insert">2026-08-20T16:42:45Z</pbb_createtime>
+							<pbb_displaycode action="insert">P</pbb_displaycode>
 							<pbb_endactual xsi:nil="true"/>
-							<pbb_endplan action="update" old="2026-08-20T07:14:00Z">2026-08-20T07:15:00Z</pbb_endplan>
+							<pbb_endplan action="insert">2026-08-22T09:20:00Z</pbb_endplan>
 							<pbb_firstbag xsi:nil="true"/>
 							<pbb_lastbag xsi:nil="true"/>
-							<pbb_loadstatus>S</pbb_loadstatus>
-							<pbb_lockind>N</pbb_lockind>
-							<pbb_modtime action="update" old="2026-08-20T06:34:26Z">2026-08-20T06:44:55Z</pbb_modtime>
-							<pbb_moduser>auto</pbb_moduser>
+							<pbb_loadstatus action="insert">S</pbb_loadstatus>
+							<pbb_lockind action="insert">N</pbb_lockind>
+							<pbb_modtime action="insert">2026-08-20T16:42:45Z</pbb_modtime>
+							<pbb_moduser action="insert">day</pbb_moduser>
 							<pbb_note xsi:nil="true"/>
-							<pbb_pa_arrival>1007713792</pbb_pa_arrival>
-							<pbb_pa_flightnumber>FD4232</pbb_pa_flightnumber>
+							<pbb_pa_arrival action="insert">1007722724</pbb_pa_arrival>
+							<pbb_pa_flightnumber action="insert">RJ182</pbb_pa_flightnumber>
 							<pbb_publiccomment xsi:nil="true"/>
-							<pbb_rbb_baggagebelt>02</pbb_rbb_baggagebelt>
+							<pbb_rbb_baggagebelt action="insert">08</pbb_rbb_baggagebelt>
 							<pbb_rbb_lastbaggagebelt xsi:nil="true"/>
-							<pbb_rbb_refbaggagebelt>02@1<ref_baggagebelt>
+							<pbb_rbb_refbaggagebelt action="insert">08@1<ref_baggagebelt action="update">
 									<rbb_bcishostname xsi:nil="true"/>
-									<rbb_capacity>3</rbb_capacity>
-									<rbb_carousel>02</rbb_carousel>
+									<rbb_capacity action="update" old="">3</rbb_capacity>
+									<rbb_carousel action="update" old="">08</rbb_carousel>
 									<rbb_cctvstream xsi:nil="true"/>
-									<rbb_code>02</rbb_code>
-									<rbb_createtime>2025-04-16T10:04:05Z</rbb_createtime>
-									<rbb_description>Baggage Bay 02</rbb_description>
-									<rbb_displaytext>&#13;</rbb_displaytext>
-									<rbb_idcode>02@1</rbb_idcode>
-									<rbb_modtime>2026-08-19T08:45:31Z</rbb_modtime>
-									<rbb_moduser>admins</rbb_moduser>
+									<rbb_code action="update" old="">08</rbb_code>
+									<rbb_createtime action="update" old="">2025-04-16T10:04:05Z</rbb_createtime>
+									<rbb_description action="update" old="">Baggage Bay 08</rbb_description>
+									<rbb_displaytext action="update" old="">&#13;</rbb_displaytext>
+									<rbb_idcode action="update" old="">08@1</rbb_idcode>
+									<rbb_modtime action="update" old="">2025-07-16T08:39:06Z</rbb_modtime>
+									<rbb_moduser action="update" old="">sfis</rbb_moduser>
 									<rbb_ral_airline xsi:nil="true"/>
-									<rbb_rbbc_carousel>02@1</rbb_rbbc_carousel>
-									<rbb_rco_concourse>1</rbb_rco_concourse>
-									<rbb_rco_refconcourse>1@1</rbb_rco_refconcourse>
+									<rbb_rbbc_carousel action="update" old="">08@1</rbb_rbbc_carousel>
+									<rbb_rco_concourse action="update" old="">1</rbb_rco_concourse>
+									<rbb_rco_refconcourse action="update" old="">1@1</rbb_rco_refconcourse>
 									<rbb_rcpa_areacustoms xsi:nil="true"/>
-									<rbb_rctt_countrytype>D</rbb_rctt_countrytype>
-									<rbb_rmsc_scenario>1</rbb_rmsc_scenario>
-									<rbb_validfrom>2025-05-31T17:00:00Z</rbb_validfrom>
+									<rbb_rctt_countrytype action="update" old="">I</rbb_rctt_countrytype>
+									<rbb_rmsc_scenario action="update" old="">1</rbb_rmsc_scenario>
+									<rbb_validfrom action="update" old="">2025-05-31T17:00:00Z</rbb_validfrom>
 									<rbb_validto xsi:nil="true"/>
 								</ref_baggagebelt>
 							</pbb_rbb_refbaggagebelt>
-							<pbb_rbb_standardbelt xsi:nil="true"/>
+							<pbb_rbb_standardbelt action="insert">08</pbb_rbb_standardbelt>
 							<pbb_rdt_displaytext xsi:nil="true"/>
-							<pbb_rmsc_scenario>1</pbb_rmsc_scenario>
-							<pbb_seqno>1</pbb_seqno>
-							<pbb_status>S</pbb_status>
+							<pbb_rmsc_scenario action="insert">1</pbb_rmsc_scenario>
+							<pbb_seqno action="insert">1</pbb_seqno>
+							<pbb_status action="insert">S</pbb_status>
 						</pl_baggagebelt>
 					</pl_baggagebelt_list>
 					<pl_cdmstatus_list/>

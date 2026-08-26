@@ -72,6 +72,33 @@ class ESBResponseServiceTest {
 		assertThat(xmlResult).doesNotMatch(".*<(GTD1|GTD2|GD1E)>\\s*</\\1>.*");
 	}
 
+	@Test
+	void convertBelttoEsb_ShouldReturnValidXml_WhenBeltDataIsPresent() {
+		// 1. Arrange: เตรียมวัตถุ FidsAfttab และกำหนดค่า Belt
+		FidsAfttab fidsAfttab = new FidsAfttab();
+		fidsAfttab.setAction("UPDATE");             // ป้องกัน NPE
+		fidsAfttab.setAdid("A");
+		fidsAfttab.setBlt1("B01");                  // กำหนดค่า Belt 1
+		fidsAfttab.setB1bs("20260821090000");        // กำหนดเวลาเริ่ม Plan
+
+		// ⚠️ สำคัญ: ต้องระบุชื่อฟิลด์ใน fieldsNotNull เพื่อให้ copyMatchingFields ทำงานได้
+		fidsAfttab.setFieldsNotNull(Arrays.asList("blt1", "b1bs"));
+
+		// 2. Act: เรียกใช้ Method
+		String xmlResult = service.convertBelttoEsb("2026-08-21T09:00:00Z", fidsAfttab);
+
+		// 3. Assert: เช็กผลลัพธ์
+		// 3.1 ผลลัพธ์ต้องไม่เป็น null (แปลว่าผ่านเงื่อนไข hasAnyData และ marshal สำเร็จ)
+		assertThat(xmlResult).isNotNull();
+
+		// 3.2 ต้องมี Tag ข้อมูลของ BELT ปรากฏใน XML ผลลัพธ์
+		assertThat(xmlResult).contains("<BLT1>B01</BLT1>");
+		assertThat(xmlResult).contains("<B1BS>20260821090000</B1BS>");
+
+		// 3.3 Print ดู XML ออกมาที่ Console เพื่อตรวจสอบด้วยสายตา (Optional)
+		System.out.println("Generated XML Result:\n" + xmlResult);
+	}
+
 	/* @Test
 	@DisplayName("convertCountertoEsb fills INFOBJ_GENERIC from FidsAfttab, empty INFOBJ_COUNTER")
 	void buildsCounterFromFidsAfttab() {
