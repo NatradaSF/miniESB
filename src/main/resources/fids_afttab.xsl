@@ -217,18 +217,6 @@
 				</xsl:with-param>
 			</xsl:call-template>
 
-			<xsl:variable name="ftypNode" select="
-				if ($adidMode = 'A') then //pl_arrival/pa_rfst_flightstatus 
-				else //pl_departure/pd_rfst_flightstatus"/>
-			<xsl:call-template name="getValue">
-				<xsl:with-param name="tagName" select="'ftyp'"/>
-				<xsl:with-param name="node">
-					<field action="{$ftypNode/@action}">
-						<xsl:value-of select="$ftypNode"/>
-					</field>
-				</xsl:with-param>
-			</xsl:call-template>
-
 			<xsl:variable name="stypNode" select="
 				if ($adidMode = 'A') then //pl_arrival/pa_rstc_servicetypecode 
 				else //pl_departure/pd_rstc_servicetypecode"/>
@@ -313,18 +301,6 @@
 				</xsl:with-param>
 			</xsl:call-template>
 
-			<xsl:variable name="rempNode" select="
-				if ($adidMode = 'A') then //pl_arrival/pa_rfst_refflightstatus 
-				else //pl_departure/pd_rfst_refflightstatus"/>
-			<xsl:call-template name="getValue">
-				<xsl:with-param name="tagName" select="'remp'"/>
-				<xsl:with-param name="node">
-					<field action="{$rempNode/@action}">
-						<xsl:value-of select="$rempNode/ref_flightstatus/rfst_code3l"/>
-					</field>
-				</xsl:with-param>
-			</xsl:call-template>
-
 			<xsl:variable name="rem1Node" select="
 				if ($adidMode = 'A') then //pl_arrival/pa_rrmk_remark 
 				else //pl_departure/pd_rrmk_remark"/>
@@ -333,6 +309,83 @@
 				<xsl:with-param name="node">
 					<field action="{$rem1Node/@action}">
 						<xsl:value-of select="$rem1Node"/>
+					</field>
+				</xsl:with-param>
+			</xsl:call-template>
+
+			<xsl:variable name="lastStand" select="//pl_turn/pl_stand_list/pl_stand[last()]"/>
+			<!-- 🛑 ดักเงื่อนไข: ทำงานเฉพาะเมื่อมีข้อมูล และ pst_rsta_stand ไม่เท่ากับ 'HOLD' -->
+			<xsl:if test="$lastStand and upper-case(normalize-space($lastStand/pst_rsta_stand)) != 'HOLD'">
+				<xsl:variable name="standAction" select="$lastStand/*/@action"/>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'toid'"/>
+					<xsl:with-param name="node">
+						<field action="{$lastStand/pst_idseq/@action}">
+							<xsl:value-of select="$lastStand/pst_idseq"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+				<xsl:variable name="m" select="if ($adidMode = 'D') then 'd' else 'a'"/>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat('pst', $m)"/>
+					<xsl:with-param name="node">
+						<field action="{$standAction[1]}">
+							<xsl:value-of select="$lastStand/pst_rsta_stand"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat('p', $m, 'bs')"/>
+					<xsl:with-param name="node">
+						<field action="{$lastStand/pst_beginplan/@action}">
+							<xsl:value-of select="custom:convertDate($lastStand/pst_beginplan)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat('p', $m, 'es')"/>
+					<xsl:with-param name="node">
+						<field action="{$lastStand/pst_endplan/@action}">
+							<xsl:value-of select="custom:convertDate($lastStand/pst_endplan)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat('p', $m, 'ba')"/>
+					<xsl:with-param name="node">
+						<field action="{$lastStand/pst_beginactual/@action}">
+							<xsl:value-of select="custom:convertDate($lastStand/pst_beginactual)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="concat('p', $m, 'ea')"/>
+					<xsl:with-param name="node">
+						<field action="{$lastStand/pst_endactual/@action}">
+							<xsl:value-of select="custom:convertDate($lastStand/pst_endactual)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:if>
+			
+			<xsl:variable name="pstOrderNode" select="$lastStand/pst_order"/>
+			<xsl:variable name="pstOrder" select="normalize-space($pstOrderNode)"/>
+			<xsl:variable name="ftypValue">
+				<xsl:choose>
+					<!-- ดึงข้อมูล Towing ก่อน ที่เหลือไปเช็คใน Java -->
+					<xsl:when test="($pstOrder = '1' or $pstOrder = '50' or $pstOrder = '99')">T</xsl:when>
+					<xsl:otherwise></xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:call-template name="getValue">
+				<xsl:with-param name="tagName" select="'ftyp'"/>
+				<xsl:with-param name="node">
+					<field action="{$pstOrderNode/@action}">
+						<xsl:value-of select="$ftypValue"/>
 					</field>
 				</xsl:with-param>
 			</xsl:call-template>
@@ -597,7 +650,10 @@
 				<xsl:with-param name="tagName" select="'trkn'"/>
 				<xsl:with-param name="node">
 					<field action="{$trknNode/@action}">
-						<xsl:value-of select="$trknNode"/>
+						<xsl:value-of select="
+							if (string-length($trknNode) > 4) 
+							then substring($trknNode, 3) 
+							else $trknNode"/>
 					</field>
 				</xsl:with-param>
 			</xsl:call-template>
@@ -623,66 +679,7 @@
 					</field>
 				</xsl:with-param>
 			</xsl:call-template>
-
-			<xsl:variable name="lastStand" select="//pl_turn/pl_stand_list/pl_stand[last()]"/>
-			<!-- 🛑 ดักเงื่อนไข: ทำงานเฉพาะเมื่อมีข้อมูล และ pst_rsta_stand ไม่เท่ากับ 'HOLD' -->
-			<xsl:if test="$lastStand and upper-case(normalize-space($lastStand/pst_rsta_stand)) != 'HOLD'">
-				<xsl:variable name="standAction" select="$lastStand/*/@action"/>
-				<xsl:call-template name="getValue">
-					<xsl:with-param name="tagName" select="'toid'"/>
-					<xsl:with-param name="node">
-						<field action="{$lastStand/pst_idseq/@action}">
-							<xsl:value-of select="$lastStand/pst_idseq"/>
-						</field>
-					</xsl:with-param>
-				</xsl:call-template>
-				<xsl:variable name="m" select="if ($adidMode = 'D') then 'd' else 'a'"/>
-				<xsl:call-template name="getValue">
-					<xsl:with-param name="tagName" select="concat('pst', $m)"/>
-					<xsl:with-param name="node">
-						<field action="{$standAction[1]}">
-							<xsl:value-of select="$lastStand/pst_rsta_stand"/>
-						</field>
-					</xsl:with-param>
-				</xsl:call-template>
-
-				<xsl:call-template name="getValue">
-					<xsl:with-param name="tagName" select="concat('p', $m, 'bs')"/>
-					<xsl:with-param name="node">
-						<field action="{$lastStand/pst_beginplan/@action}">
-							<xsl:value-of select="custom:convertDate($lastStand/pst_beginplan)"/>
-						</field>
-					</xsl:with-param>
-				</xsl:call-template>
-
-				<xsl:call-template name="getValue">
-					<xsl:with-param name="tagName" select="concat('p', $m, 'es')"/>
-					<xsl:with-param name="node">
-						<field action="{$lastStand/pst_endplan/@action}">
-							<xsl:value-of select="custom:convertDate($lastStand/pst_endplan)"/>
-						</field>
-					</xsl:with-param>
-				</xsl:call-template>
-
-				<xsl:call-template name="getValue">
-					<xsl:with-param name="tagName" select="concat('p', $m, 'ba')"/>
-					<xsl:with-param name="node">
-						<field action="{$lastStand/pst_beginactual/@action}">
-							<xsl:value-of select="custom:convertDate($lastStand/pst_beginactual)"/>
-						</field>
-					</xsl:with-param>
-				</xsl:call-template>
-
-				<xsl:call-template name="getValue">
-					<xsl:with-param name="tagName" select="concat('p', $m, 'ea')"/>
-					<xsl:with-param name="node">
-						<field action="{$lastStand/pst_endactual/@action}">
-							<xsl:value-of select="custom:convertDate($lastStand/pst_endactual)"/>
-						</field>
-					</xsl:with-param>
-				</xsl:call-template>
-			</xsl:if>
-
+			
 			<!-- Gates -->
 			<xsl:for-each select="
 				if ($adidMode = 'A') then //pl_arrivalgate_list/pl_arrivalgate 
@@ -788,7 +785,7 @@
 					<xsl:call-template name="getValue">
 						<xsl:with-param name="tagName" select="concat('b', $pos, 'es')"/>
 						<xsl:with-param name="node">
-							<field action="$endPlanBeltNode/{@action}">
+							<field action="{$endPlanBeltNode/@action}">
 								<xsl:value-of select="custom:convertDate($endPlanBeltNode)"/>
 							</field>
 						</xsl:with-param>
@@ -922,6 +919,14 @@
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'onbl'"/>
+					<xsl:with-param name="node">
+						<field action="{$aibtNode/@action}">
+							<xsl:value-of select="custom:convertDate($aibtNode)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
 				
 				<xsl:variable name="aldtNode" select="//pl_arrival/pa_aldt"/>
 				<xsl:call-template name="getValue">
@@ -932,8 +937,19 @@
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'land'"/>
+					<xsl:with-param name="node">
+						<field action="{$aldtNode/@action}">
+							<xsl:value-of select="custom:convertDate($aldtNode)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
 				
-				<xsl:variable name="eibtNode" select="//pl_arrival/pa_pibt"/>
+				<xsl:variable name="eibtOriginalNode" select="//pl_arrival/pa_pibt"/>
+				<xsl:variable name="hasAldt" select="normalize-space($aldtNode) != ''"/>
+				<xsl:variable name="hasEibt" select="normalize-space($eibtOriginalNode) != ''"/>
+				<xsl:variable name="eibtNode" select="if ($hasAldt) then $aldtNode else $eibtOriginalNode"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="'eibt'"/>
 					<xsl:with-param name="node">
@@ -942,6 +958,34 @@
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'etai'"/>
+					<xsl:with-param name="node">
+						<field action="{$eibtNode/@action}">
+							<xsl:value-of select="custom:convertDate($eibtNode)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'etoa'"/>
+					<xsl:with-param name="node">
+						<field action="{$eibtNode/@action}">
+							<xsl:value-of select="custom:convertDate($eibtNode)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<xsl:if test="not($hasAldt and $hasEibt)">
+					<xsl:variable name="arrRempNode" select="//pl_arrival/pa_rfst_refflightstatus"/>
+					<xsl:call-template name="getValue">
+						<xsl:with-param name="tagName" select="'remp'"/>
+						<xsl:with-param name="node">
+							<field action="{$arrRempNode/@action}">
+								<xsl:value-of select="$arrRempNode/ref_flightstatus/rfst_code3l"/>
+							</field>
+						</xsl:with-param>
+					</xsl:call-template>
+				</xsl:if>
 
 				<xsl:variable name="eldtNode" select="//pl_arrival/pa_eldt"/>
 				<xsl:call-template name="getValue">
@@ -959,6 +1003,14 @@
 					<xsl:with-param name="node">
 						<field action="{$exitNode/@action}">
 							<xsl:value-of select="$exitNode"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'axit'"/>
+					<xsl:with-param name="node">
+						<field action="{$exitNode/@action}">
+							<xsl:value-of select="custom:convertDate($exitNode)"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
@@ -1118,10 +1170,26 @@
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'ofbl'"/>
+					<xsl:with-param name="node">
+						<field action="{$aobtNode/@action}">
+							<xsl:value-of select="custom:convertDate($aobtNode)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
 				
 				<xsl:variable name="atotNode" select="//pl_departure/pd_atot"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="'atot'"/>
+					<xsl:with-param name="node">
+						<field action="{$atotNode/@action}">
+							<xsl:value-of select="custom:convertDate($atotNode)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'airb'"/>
 					<xsl:with-param name="node">
 						<field action="{$atotNode/@action}">
 							<xsl:value-of select="custom:convertDate($atotNode)"/>
@@ -1138,6 +1206,32 @@
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'etdi'"/>
+					<xsl:with-param name="node">
+						<field action="{$eobtNode/@action}">
+							<xsl:value-of select="custom:convertDate($eobtNode)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'etod'"/>
+					<xsl:with-param name="node">
+						<field action="{$eobtNode/@action}">
+							<xsl:value-of select="custom:convertDate($eobtNode)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<xsl:variable name="depRempNode" select="//pl_departure/pd_rfst_refflightstatus"/>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'remp'"/>
+					<xsl:with-param name="node">
+						<field action="{$depRempNode/@action}">
+							<xsl:value-of select="$depRempNode/ref_flightstatus/rfst_code3l"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
 
 				<xsl:variable name="exotNode" select="//pl_departure/pd_exot"/>
 				<xsl:call-template name="getValue">
@@ -1145,6 +1239,14 @@
 					<xsl:with-param name="node">
 						<field action="{$exotNode/@action}">
 							<xsl:value-of select="$exotNode"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'axot'"/>
+					<xsl:with-param name="node">
+						<field action="{$exotNode/@action}">
+							<xsl:value-of select="custom:convertDate($exotNode)"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
@@ -1395,27 +1497,30 @@
 			<xsl:variable name="terminal" select="//pl_departure/pd_rtrm_terminal"/>
 			<lstFidsCcatab>
 				<xsl:for-each select="//pl_desk">
-					<fidsCcatab>
-						<action><xsl:value-of select="@action"/></action>
-						<flnu><xsl:value-of select="pdk_idseq"/></flnu>
-						<ckic><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_code"/></ckic>
-						<ckbs><xsl:value-of select="custom:convertDate(pdk_beginplan)"/></ckbs>
-						<ckes><xsl:value-of select="custom:convertDate(pdk_endplan)"/></ckes>
-						<ckba><xsl:value-of select="custom:convertDate(pdk_beginactual)"/></ckba>
-						<ckea><xsl:value-of select="custom:convertDate(pdk_endactual)"/></ckea>
-						<ctyp>
-							<xsl:value-of select="if (pdk_rcnt_refcounter/ref_counter/rcnt_type = 'C') then 'C' else 'D'"/>
-						</ctyp>
-						<ckit><xsl:value-of select="$terminal"/></ckit>
-						<disp><xsl:value-of select="pdk_checkinclassid"/></disp>
-						<act3><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_ral_airline"/></act3>
-						<flno>
-							<!-- กรณี Common จะเป็น Y -->
-							<xsl:value-of select="if (pdk_rcnt_refcounter/ref_counter/rcnt_type = 'C') 
-								then pdk_rcnt_refcounter/ref_counter/rcnt_ral_airline 
-								else pdk_pd_flightnumber"/>
-						</flno>
-					</fidsCcatab>
+					<xsl:variable name="ckicCode" select="pdk_rcnt_refcounter/ref_counter/rcnt_code"/>
+					<xsl:if test="upper-case(normalize-space($ckicCode)) != 'HOLD'">
+						<fidsCcatab>
+							<action><xsl:value-of select="@action"/></action>
+							<flnu><xsl:value-of select="pdk_idseq"/></flnu>
+							<ckic><xsl:value-of select="$ckicCode"/></ckic>
+							<ckbs><xsl:value-of select="custom:convertDate(pdk_beginplan)"/></ckbs>
+							<ckes><xsl:value-of select="custom:convertDate(pdk_endplan)"/></ckes>
+							<ckba><xsl:value-of select="custom:convertDate(pdk_beginactual)"/></ckba>
+							<ckea><xsl:value-of select="custom:convertDate(pdk_endactual)"/></ckea>
+							<ctyp>
+								<xsl:value-of select="if (pdk_rcnt_refcounter/ref_counter/rcnt_type = 'C') then 'C' else 'D'"/>
+							</ctyp>
+							<ckit><xsl:value-of select="$terminal"/></ckit>
+							<disp><xsl:value-of select="pdk_checkinclassid"/></disp>
+							<act3><xsl:value-of select="pdk_rcnt_refcounter/ref_counter/rcnt_ral_airline"/></act3>
+							<flno>
+								<!-- กรณี Common จะเป็น Y -->
+								<xsl:value-of select="if (pdk_rcnt_refcounter/ref_counter/rcnt_type = 'C') 
+									then pdk_rcnt_refcounter/ref_counter/rcnt_ral_airline 
+									else pdk_pd_flightnumber"/>
+							</flno>
+						</fidsCcatab>
+					</xsl:if>
 				</xsl:for-each>
 			</lstFidsCcatab>
 		</FidsAfttab>

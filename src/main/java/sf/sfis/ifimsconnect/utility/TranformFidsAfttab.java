@@ -154,14 +154,7 @@ public class TranformFidsAfttab {
 		f.setAdid(adid);
 		f.setAction(action);
 
-		// 2. Derived time fields (EIBT/ETAI/ETOA/LAND/AIRB/AXIT/AXOT/ONBL/OFBL/REMP)
-		applyDerivedTimes(f);
-
-		// 3. VIA from routing
-		// applyVial(f, xpath, doc, flightElement, hopo, isArrival, actionType);
-		applyVial(f, hopo, isArrival, actionType);
-
-		// 4. fieldsNotNull — captured before unconditional fixed paths so that
+		// 2. fieldsNotNull — captured before unconditional fixed paths so that
 		// URNO/RKEY/SIBT/SOBT/FLNO/CSGN/FLTI/ALC2/ALC3 are only tracked when
 		// they were set via the action-filtered XSL pass (matches legacy behaviour).
 		if ("UPDATE".equalsIgnoreCase(actionType) || "INSERT".equalsIgnoreCase(actionType)) {
@@ -228,29 +221,23 @@ public class TranformFidsAfttab {
 			}
 		}
 
-		// 5. Unconditional fixed identity fields (set even when action attribute did
-		// not change)
-		// applyFixedPaths(f, doc, xpath, isArrival);
+		// 3. Derived time fields (EIBT/ETAI/ETOA/LAND/AIRB/AXIT/AXOT/ONBL/OFBL/REMP)
+		//applyDerivedTimes(f); ทำใน XSL
 
-		// IDEP: เก็บ TSAT (departure) แบบไม่สนใจ action filter — XSL โหมด UPDATE จะข้าม
-		// pd_tsat
-		// ถ้าไม่มี @action ทำให้ tsat ว่าง จึงอ่านดิบจาก XML ตรงๆ เพื่อให้ส่งต่อ ESB
-		// ได้เสมอ
-		/*
-		 * if ("IDEP".equalsIgnoreCase(originator) && !isArrival) {
-		 * evaluateRawText(doc, xpath, "/pl_departure/pd_tsat")
-		 * .ifPresent(v -> f.setTsat(convertDateStringIfNeeded(v)));
-		 * }
-		 */
+		// 4. VIA from routing
+		// applyVial(f, xpath, doc, flightElement, hopo, isArrival, actionType);
+		applyVial(f, hopo, isArrival, actionType);
 
-		// 6. Business derivations on fixed paths
 		applyFlightNumber(f);
 		applyFtyp(f);
-		applyTrkn(f);
+		//applyTrkn(f); ทำใน XSL
 
 		// 7. Indexed nested structures
 		// applyBeltDetails(f, flightElement, isArrival);
-		f.setB1ba(f.getAibt());
+
+		//ต้องดูว่ายังจะใส่ค่าทับ XSL อยู่มั้ย
+		//f.setB1ba(f.getAibt()); 
+		
 		// applyGateDetails(f, flightElement, isArrival);
 		// applyDelayReasons(f, flightElement);
 
@@ -424,21 +411,11 @@ public class TranformFidsAfttab {
 
 	// ─── DERIVED BUSINESS LOGIC ────────────────────────────────────────────
 	private void applyDerivedTimes(FidsAfttab f) {
-		if (f.getAldt() != null) {
+		/* if (f.getAldt() != null) {
 			f.setEibt(f.getAldt());
 		} else {
 			f.setRemp(f.getEibt() != null ? "    " : f.getRemp());
-		}
-		f.setEtai(f.getEibt());
-		f.setEtoa(f.getEibt());
-		f.setEtdi(f.getEobt());
-		f.setEtod(f.getEobt());
-		f.setLand(f.getAldt());
-		f.setAirb(f.getAtot());
-		f.setAxit(f.getExit());
-		f.setAxot(f.getExot());
-		f.setOnbl(f.getAibt());
-		f.setOfbl(f.getAobt());
+		} */
 	}
 
 	private void applyFlightNumber(FidsAfttab f) {
@@ -446,41 +423,84 @@ public class TranformFidsAfttab {
 		if (flno == null || flno.isEmpty())
 			return;
 
-		Map<String, String> parts = parseFlightNumber(flno);
-		if (parts.isEmpty()) {
-			f.setFlns("");
-		} else {
-			f.setFlno(toFlno(parts));
-			f.setFlns(parts.get("suffix") != null ? parts.get("suffix") : "");
-			f.setFltn(parts.get("number"));
+		if (flno != null && !flno.isEmpty()) {
+			Map<String, String> parts = parseFlightNumber(flno);
+			if (parts.isEmpty()) {
+				f.setFlns("");
+			} else {
+				f.setFlno(toFlno(parts));
+				f.setFlns(parts.get("suffix") != null ? parts.get("suffix") : "");
+				f.setFltn(parts.get("number"));
+			}
+			if (f.getCsgn() != null && f.getFlns() != null) {
+				f.setCsgn(f.getCsgn() + f.getFlns().trim());
+			}
 		}
-		if (f.getJfno() != null) {
+
+		String jfno = f.getJfno();
+		if (jfno != null && !jfno.isEmpty()) {
 			JfnoResult result = processJfno(f.getJfno());
 			f.setJcnt(result.count());
 			f.setJfno(result.formattedJfno());
 		}
-		if (f.getCsgn() != null && f.getFlns() != null) {
-			f.setCsgn(f.getCsgn() + f.getFlns().trim());
+
+		List<String> updatedFields = f.getFieldsNotNull(); // รายชื่อแท็กที่มี action UPDATE/INSERT จริง
+		if (updatedFields == null) {
+			updatedFields = new ArrayList<>();
+        	f.setFieldsNotNull(updatedFields);
+		}
+
+		if (updatedFields.contains("flno")) {
+			updatedFields.add("flns");
+			updatedFields.add("fltn");
+			updatedFields.add("csgn");
+		}
+
+		if (updatedFields.contains("jfno")) {
+			updatedFields.add("jcnt");
 		}
 	}
 
 	private void applyFtyp(FidsAfttab f) {
-		String ftyp = f.getFtyp();
-		if (ftyp == null)
-			return;
-		if (ftyp.equalsIgnoreCase("V")) {
-			f.setFtyp("D");
-		} else if (!ftyp.equalsIgnoreCase("X")) {
-			f.setFtyp("O");
+		List<String> updatedFields = f.getFieldsNotNull(); // รายชื่อแท็กที่มี action UPDATE/INSERT จริง
+		if (updatedFields == null) {
+			updatedFields = new ArrayList<>();
+        	f.setFieldsNotNull(updatedFields);
 		}
+
+		String ftyp = f.getFtyp();
+		if ("T".equalsIgnoreCase(ftyp) && updatedFields.contains("ftyp")) {
+			return;
+		}
+
+		if (updatedFields.contains("rem1") && f.getRem1() != null) {
+			if ("RFT".equalsIgnoreCase(f.getRem1())){
+				f.setFtyp("B");
+				updatedFields.add("ftyp");
+				return;
+			}
+		} 
+		
+		if (updatedFields.contains("remp") && f.getRemp() != null) {
+			if ("PLN".equalsIgnoreCase(f.getRemp())){
+				f.setFtyp("S");
+				updatedFields.add("ftyp");
+				return;
+			}else if ("IBK".equalsIgnoreCase(f.getRemp()) || "OBK".equalsIgnoreCase(f.getRemp())) {
+				f.setFtyp("O");
+				updatedFields.add("ftyp");
+				return;
+			}
+		}
+		f.setFtyp(null);
 	}
 
-	private void applyTrkn(FidsAfttab f) {
+	/* private void applyTrkn(FidsAfttab f) {
 		String trkn = f.getTrkn();
 		if (trkn != null && !trkn.isEmpty() && trkn.length() > 4) {
 			f.setTrkn(trkn.substring(2));
 		}
-	}
+	} */
 
 	private void applyMtow(FidsAfttab f) {
 		String mtow = f.getMtow();
@@ -548,6 +568,14 @@ public class TranformFidsAfttab {
 		f.setVia4(iataToIcao.getOrDefault(adjacent, ""));
 		f.setVial(vial.toString());
 		f.setVian(String.valueOf(vias.size()));
+
+		List<String> updatedFields = f.getFieldsNotNull(); // รายชื่อแท็กที่มี action UPDATE/INSERT จริง
+		if (updatedFields == null) {
+			updatedFields = new ArrayList<>();
+        	f.setFieldsNotNull(updatedFields);
+		}
+		updatedFields.add("vial");
+		updatedFields.add("vian");
 	}
 	/*
 	 * void applyVial(FidsAfttab f, XPath xpath, Document doc, Element
@@ -804,14 +832,14 @@ public class TranformFidsAfttab {
 		for (FidsCcatab item : lstFidsCcatab) {
 			String action = item.getAction();
 
-			// 1. เช็ก action: ถ้าไม่มี action หรือไม่ใช่ DATASET/UPDATE/INSERT ให้ข้าม
-			if (!isDataset && !"UPDATE".equalsIgnoreCase(action) && !"INSERT".equalsIgnoreCase(action)) {
+			// 2. เช็ก HOLD
+			String ckic = item.getCkic();
+			if (ckic != null && "HOLD".equalsIgnoreCase(ckic.trim())) {
 				continue;
 			}
 
-			// 2. เช็ก HOLD
-			String ckic = item.getCkic();
-			if ("HOLD".equals(ckic)) {
+			// 1. เช็ก action: ถ้าไม่มี action หรือไม่ใช่ DATASET/UPDATE/INSERT ให้ข้าม
+			if (!isDataset && !"UPDATE".equalsIgnoreCase(action) && !"INSERT".equalsIgnoreCase(action)) {
 				continue;
 			}
 
