@@ -237,7 +237,7 @@ public class TranformFidsAfttab {
 
 		//ต้องดูว่ายังจะใส่ค่าทับ XSL อยู่มั้ย
 		//f.setB1ba(f.getAibt()); 
-		
+
 		// applyGateDetails(f, flightElement, isArrival);
 		// applyDelayReasons(f, flightElement);
 
@@ -671,12 +671,6 @@ public class TranformFidsAfttab {
 	}
 
 	private void applySharedDerivations(FidsAfttab f, boolean isArrival) {
-		if (f.getRkey() != null) {
-			f.setAurn(f.getRkey().toString());
-		}
-		f.setStoa(f.getSibt());
-		f.setStod(f.getSobt());
-
 		// FLDA from SIBT (arrival) or SOBT (departure)
 		String src = isArrival ? f.getSibt() : f.getSobt();
 		if (src != null && src.length() >= 14 && !src.trim().isEmpty()) {
@@ -696,10 +690,8 @@ public class TranformFidsAfttab {
 			} catch (Exception e) {
 				log.error("DOOA parse error for STOA=" + f.getStoa(), e);
 			}
-		} else {
-			f.setSibt(" ");
-			f.setStoa(" ");
-		}
+		} 
+
 		if (f.getStod() != null) {
 			try {
 				LocalDateTime ld = LocalDateTime.parse(f.getStod(), YMD_HMS);
@@ -708,9 +700,6 @@ public class TranformFidsAfttab {
 			} catch (Exception e) {
 				log.error("DOOD parse error for STOD=" + f.getStod(), e);
 			}
-		} else {
-			f.setSobt(" ");
-			f.setStod(" ");
 		}
 	}
 

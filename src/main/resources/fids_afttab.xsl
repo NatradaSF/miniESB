@@ -113,6 +113,14 @@
 					</field>
 				</xsl:with-param>
 			</xsl:call-template>
+			<xsl:call-template name="getValue">
+				<xsl:with-param name="tagName" select="'aurn'"/>
+				<xsl:with-param name="node">
+					<field action="{$rkeyNode/@action}">
+						<xsl:value-of select="custom:convertDate($rkeyNode)"/>
+					</field>
+				</xsl:with-param>
+			</xsl:call-template>
 
 			<xsl:variable name="flnoNode" select="
 				if ($adidMode = 'A') then //pl_arrival/pa_flightnumber 
@@ -183,17 +191,27 @@
 				if ($adidMode = 'A') then //pl_arrival/pa_sibt
 				else if ($adidMode = 'D') then //pl_departure/pd_sobt
 				else ()"/>
-			<xsl:variable name="tagName" select="
-				if ($adidMode = 'A') then 'sibt'
-				else if ($adidMode = 'D') then 'sobt'
-				else ''"/>
 			<xsl:if test="exists($sibtSobtNode)">
+				<xsl:variable name="formattedDate" select="custom:convertDate($sibtSobtNode)"/>
+    			<xsl:variable name="actionAttr" select="$sibtSobtNode/@action"/>
+				<!-- 1. sibt หรือ sobt -->
 				<xsl:call-template name="getValue">
-					<xsl:with-param name="tagName" select="$tagName"/>
+					<xsl:with-param name="tagName" select="if ($adidMode = 'A') then 'sibt' else 'sobt'"/>
 					<xsl:with-param name="forceEmit" select="true()"/>
 					<xsl:with-param name="node">
-						<field action="{$sibtSobtNode/@action}">
-							<xsl:value-of select="custom:convertDate($sibtSobtNode)"/>
+						<field action="{$actionAttr}">
+							<xsl:value-of select="$formattedDate"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+
+				<!-- 2. stoa หรือ stod -->
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="if ($adidMode = 'A') then 'stoa' else 'stod'"/>
+					<xsl:with-param name="forceEmit" select="true()"/>
+					<xsl:with-param name="node">
+						<field action="{$actionAttr}">
+							<xsl:value-of select="$formattedDate"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
@@ -913,6 +931,14 @@
 				<xsl:variable name="aibtNode" select="//pl_arrival/pa_aibt"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="'aibt'"/>
+					<xsl:with-param name="node">
+						<field action="{$aibtNode/@action}">
+							<xsl:value-of select="custom:convertDate($aibtNode)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'onbl'"/>
 					<xsl:with-param name="node">
 						<field action="{$aibtNode/@action}">
 							<xsl:value-of select="custom:convertDate($aibtNode)"/>
