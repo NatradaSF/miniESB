@@ -309,7 +309,7 @@ public class ESBResponseService {
 			infobjflight.setFLTN(infobjflight.getFLTN() != null ? infobjflight.getFLTN().trim() : null);
 
 			// Different field between FIDS and ESB
-			infobjflight.setSLOT(fidsAfttab.getCtot());
+			//infobjflight.setSLOT(fidsAfttab.getCtot()); ทำใน XSL
 
 			msgstreamout.setINFOBJGENERIC(infobjgeneric);
 			msgstreamout.setINFOBJFLIGHT(infobjflight);

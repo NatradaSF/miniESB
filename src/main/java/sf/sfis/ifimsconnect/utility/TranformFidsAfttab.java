@@ -259,7 +259,7 @@ public class TranformFidsAfttab {
 		} else if (hasArrival || hasDeparture) {
 			f.setRtyp("S");
 		}
-		applyMtow(f);
+		//applyMtow(f); ทำใน XSL
 
 		return f;
 	}
@@ -495,24 +495,6 @@ public class TranformFidsAfttab {
 		f.setFtyp(null);
 	}
 
-	/* private void applyTrkn(FidsAfttab f) {
-		String trkn = f.getTrkn();
-		if (trkn != null && !trkn.isEmpty() && trkn.length() > 4) {
-			f.setTrkn(trkn.substring(2));
-		}
-	} */
-
-	private void applyMtow(FidsAfttab f) {
-		String mtow = f.getMtow();
-		if (mtow == null || mtow.trim().isEmpty())
-			return;
-		try {
-			int n = Integer.parseInt(mtow.trim());
-			f.setMtow(Integer.toString((int) Math.ceil(n / 1000.0)));
-		} catch (NumberFormatException ignored) {
-		}
-	}
-
 	private void applyAirportLookup(FidsAfttab f, String hopo, boolean isArrival) {
 		String apc4 = fidsAirportRepository.findById(hopo)
 				.map(FidsAirport::getApc4)
@@ -525,6 +507,24 @@ public class TranformFidsAfttab {
 			f.setOrg4(apc4);
 		}
 	}
+
+	/* private void applyTrkn(FidsAfttab f) {
+		String trkn = f.getTrkn();
+		if (trkn != null && !trkn.isEmpty() && trkn.length() > 4) {
+			f.setTrkn(trkn.substring(2));
+		}
+	} */
+
+	/* private void applyMtow(FidsAfttab f) {
+		String mtow = f.getMtow();
+		if (mtow == null || mtow.trim().isEmpty())
+			return;
+		try {
+			int n = Integer.parseInt(mtow.trim());
+			f.setMtow(Integer.toString((int) Math.ceil(n / 1000.0)));
+		} catch (NumberFormatException ignored) {
+		}
+	} */
 
 	// package-private เพื่อให้ unit test เรียกตรงได้ (โฟกัสเฉพาะ logic VIA
 	// ไม่ต้องผ่าน XSL ทั้งชุด)

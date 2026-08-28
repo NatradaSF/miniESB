@@ -310,11 +310,15 @@
 			<xsl:variable name="mtowNode" select="
 				if ($adidMode = 'A') then //pl_arrival/pa_ract_aircrafttype 
 				else //pl_departure/pd_ract_aircrafttype"/>
+			<xsl:variable name="rawMtow" select="$mtowNode/ref_aircrafttype/rac_mtow"/>
 			<xsl:call-template name="getValue">
 				<xsl:with-param name="tagName" select="'mtow'"/>
 				<xsl:with-param name="node">
 					<field action="{$mtowNode/@action}">
-						<xsl:value-of select="$mtowNode/ref_aircrafttype/rac_mtow"/>
+						<xsl:value-of select="
+							if (normalize-space($rawMtow) castable as xs:decimal) 
+							then ceiling(xs:decimal(normalize-space($rawMtow)) div 1000) 
+							else $rawMtow"/>
 					</field>
 				</xsl:with-param>
 			</xsl:call-template>
@@ -1119,6 +1123,14 @@
 				<xsl:variable name="ctotNode" select="//pl_departure/pd_ctot"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="'ctot'"/>
+					<xsl:with-param name="node">
+						<field action="{$ctotNode/@action}">
+							<xsl:value-of select="custom:convertDate($ctotNode)"/>
+						</field>
+					</xsl:with-param>
+				</xsl:call-template>
+				<xsl:call-template name="getValue">
+					<xsl:with-param name="tagName" select="'slot'"/>
 					<xsl:with-param name="node">
 						<field action="{$ctotNode/@action}">
 							<xsl:value-of select="custom:convertDate($ctotNode)"/>
