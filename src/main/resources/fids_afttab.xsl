@@ -1006,12 +1006,12 @@
 				</xsl:call-template>
 
 				<xsl:if test="not($hasAldt and $hasEibt)">
-					<xsl:variable name="arrRempNode" select="//pl_arrival/pa_rfst_refflightstatus"/>
+					<xsl:variable name="arrRempNode" select="//pl_arrival/pa_rfst_refflightstatus/ref_flightstatus/rfst_code3l"/>
 					<xsl:call-template name="getValue">
 						<xsl:with-param name="tagName" select="'remp'"/>
 						<xsl:with-param name="node">
 							<field action="{$arrRempNode/@action}">
-								<xsl:value-of select="$arrRempNode/ref_flightstatus/rfst_code3l"/>
+								<xsl:value-of select="$arrRempNode"/>
 							</field>
 						</xsl:with-param>
 					</xsl:call-template>
@@ -1261,12 +1261,12 @@
 					</xsl:with-param>
 				</xsl:call-template>
 
-				<xsl:variable name="depRempNode" select="//pl_departure/pd_rfst_refflightstatus"/>
+				<xsl:variable name="depRempNode" select="//pl_departure/pd_rfst_refflightstatus/ref_flightstatus/rfst_code3l"/>
 				<xsl:call-template name="getValue">
 					<xsl:with-param name="tagName" select="'remp'"/>
 					<xsl:with-param name="node">
 						<field action="{$depRempNode/@action}">
-							<xsl:value-of select="$depRempNode/ref_flightstatus/rfst_code3l"/>
+							<xsl:value-of select="$depRempNode"/>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
