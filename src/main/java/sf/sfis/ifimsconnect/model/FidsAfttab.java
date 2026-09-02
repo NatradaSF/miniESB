@@ -2019,7 +2019,7 @@ public class FidsAfttab implements Serializable {
 	@Transient
 	private String toid;
 	
-	public void setRemp(String remp) {
+	/* public void setRemp(String remp) {
 		if(remp!=null) {
 			if(remp.equalsIgnoreCase("BRD")) {
 				this.remp = "BOA";
@@ -2031,5 +2031,5 @@ public class FidsAfttab implements Serializable {
 		}else {
 			this.remp = remp;
 		}
-	}
+	} */
 }

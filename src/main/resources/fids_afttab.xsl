@@ -394,7 +394,7 @@
 				</xsl:call-template>
 			</xsl:if>
 			
-			<xsl:variable name="pstOrderNode" select="$lastStand/pst_order"/>
+			<xsl:variable name="pstOrderNode" select="$lastStand/pst_towindicator"/>
 			<xsl:variable name="pstOrder" select="normalize-space($pstOrderNode)"/>
 			<xsl:variable name="ftypValue">
 				<xsl:choose>
@@ -1011,7 +1011,9 @@
 						<xsl:with-param name="tagName" select="'remp'"/>
 						<xsl:with-param name="node">
 							<field action="{$arrRempNode/@action}">
-								<xsl:value-of select="$arrRempNode"/>
+								<xsl:call-template name="transformRempValue">
+									<xsl:with-param name="val" select="$arrRempNode"/>
+								</xsl:call-template>
 							</field>
 						</xsl:with-param>
 					</xsl:call-template>
@@ -1266,7 +1268,9 @@
 					<xsl:with-param name="tagName" select="'remp'"/>
 					<xsl:with-param name="node">
 						<field action="{$depRempNode/@action}">
-							<xsl:value-of select="$depRempNode"/>
+							<xsl:call-template name="transformRempValue">
+								<xsl:with-param name="val" select="$depRempNode"/>
+							</xsl:call-template>
 						</field>
 					</xsl:with-param>
 				</xsl:call-template>
@@ -1562,5 +1566,14 @@
 				</xsl:for-each>
 			</lstFidsCcatab>
 		</FidsAfttab>
+	</xsl:template>
+	<xsl:template name="transformRempValue">
+		<xsl:param name="val"/>
+		<xsl:choose>
+			<!-- ต้องใส่ $val = 'BRD' -->
+			<xsl:when test="$val = 'BRD'">BOA</xsl:when>
+			<xsl:when test="$val = '2ND'">FNC</xsl:when>
+			<xsl:otherwise><xsl:value-of select="$val"/></xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>

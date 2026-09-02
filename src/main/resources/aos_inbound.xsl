@@ -37,7 +37,7 @@
     <xsl:variable name="iso" select="concat(substring($t,1,4),'-',substring($t,5,2),'-',substring($t,7,2),
                                             'T',substring($t,9,2),':',substring($t,11,2),':',substring($t,13,2))"/>
     <xsl:variable name="dt" select="xs:dateTime($iso) + xs:dayTimeDuration('PT7H')"/>
-    <xsl:value-of select="format-dateTime($dt, '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01].000')"/>
+    <xsl:value-of select="format-dateTime($dt, '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]')"/>
   </xsl:template>
 
   <!-- flight/vdgs time: 14 หลัก → yyyy-MM-ddTHH:mm:ssZ (ว่างถ้า input ว่าง) -->

@@ -305,7 +305,7 @@ public class ESBResponseService {
 			infobjflight.setRKEY(fidsAfttab.getRkey().toString());
 			infobjflight.setRTYP(fidsAfttab.getRtyp());
 
-			infobjflight.setFLNO(infobjflight.getFLNO() != null ? infobjflight.getFLNO().trim() : null);
+			//infobjflight.setFLNO(infobjflight.getFLNO() != null ? infobjflight.getFLNO().trim() : null);
 			infobjflight.setFLTN(infobjflight.getFLTN() != null ? infobjflight.getFLTN().trim() : null);
 
 			// Different field between FIDS and ESB

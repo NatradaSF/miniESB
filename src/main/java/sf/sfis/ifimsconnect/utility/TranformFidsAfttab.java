@@ -242,7 +242,7 @@ public class TranformFidsAfttab {
 		// applyDelayReasons(f, flightElement);
 
 		if (!isArrival) {
-			f.setLstFidsCcatab(getCounters(f.getLstFidsCcatab(), f.getCounter(), actionType));
+			f.setLstFidsCcatab(getCounters(f.getLstFidsCcatab(), f.getCounter(), f.getFlno(), actionType));
 		}
 
 		// 8. Shared derivations (AURN, BAGS, DCD2, STOA, STOD, FLDA, DTD2, DOOA, DOOD)
@@ -810,7 +810,7 @@ public class TranformFidsAfttab {
 	 * }
 	 */
 
-	private List<FidsCcatab> getCounters(List<FidsCcatab> lstFidsCcatab, String counter, String actionType) {
+	private List<FidsCcatab> getCounters(List<FidsCcatab> lstFidsCcatab, String counter, String flno, String actionType) {
 		if (lstFidsCcatab == null || lstFidsCcatab.isEmpty()) {
 			return new ArrayList<>();
 		}
@@ -833,6 +833,10 @@ public class TranformFidsAfttab {
 			}
 
 			// 3. จัด Format เติมช่องว่างให้ครบ 9 ตัวอักษร
+			if (item.getFlno() == null || item.getFlno().trim().isEmpty()) {
+				item.setFlno(flno); // ดึง flno จาก flight หลักมาใช้แทน
+			}
+
 			if (item.getFlno() != null) {
 				item.setFlno(String.format("%-9s", item.getFlno()));
 			}

@@ -6,7 +6,7 @@
             <aodb:message-type>UPDATE</aodb:message-type>
             <aodb:confirm-type>NACK</aodb:confirm-type>
             <aodb:originator>SITA</aodb:originator>
-            <aodb:timestamp>2026-06-15T10:43:20.000</aodb:timestamp>
+            <aodb:timestamp>2026-06-15T10:43:20</aodb:timestamp>
             <aodb:sender>IFIMS</aodb:sender>
             <aodb:receiver>AOS</aodb:receiver>
             <aodb:station>BKK</aodb:station>

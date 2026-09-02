@@ -3902,7 +3902,7 @@ public class MSG {
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
             "adid",
-            "flno",
+            //"flno",
             "jfno",
             "alc2",
             "alc3",
@@ -3910,7 +3910,7 @@ public class MSG {
             "flns",
             "flti",
             "fcls",
-            "csgn",
+            //"csgn",
             "stoa",
             "etoa",
             "etai",
@@ -3978,8 +3978,8 @@ public class MSG {
             @XmlElement(name = "ADID")
             @XmlSchemaType(name = "string")
             protected ADID adid;
-            @XmlElement(name = "FLNO")
-            protected String flno;
+            /* @XmlElement(name = "FLNO")
+            protected String flno; */
             @XmlElement(name = "JFNO")
             protected String jfno;
             @XmlElement(name = "ALC2")
@@ -3995,8 +3995,8 @@ public class MSG {
             protected FLTI flti;
             @XmlElement(name = "FCLS")
             protected String fcls;
-            @XmlElement(name = "CSGN")
-            protected String csgn;
+            /* @XmlElement(name = "CSGN")
+            protected String csgn; */
             @XmlElement(name = "STOA")
             protected String stoa;
             @XmlElement(name = "ETOA")
@@ -4152,9 +4152,9 @@ public class MSG {
              *     {@link String }
              *     
              */
-            public String getFLNO() {
+            /* public String getFLNO() {
                 return flno;
-            }
+            } */
 
             /**
              * Sets the value of the flno property.
@@ -4164,9 +4164,9 @@ public class MSG {
              *     {@link String }
              *     
              */
-            public void setFLNO(String value) {
+            /* public void setFLNO(String value) {
                 this.flno = value;
-            }
+            } */
 
             /**
              * Gets the value of the jfno property.
@@ -4344,9 +4344,9 @@ public class MSG {
              *     {@link String }
              *     
              */
-            public String getCSGN() {
+            /* public String getCSGN() {
                 return csgn;
-            }
+            } */
 
             /**
              * Sets the value of the csgn property.
@@ -4356,9 +4356,9 @@ public class MSG {
              *     {@link String }
              *     
              */
-            public void setCSGN(String value) {
+            /* public void setCSGN(String value) {
                 this.csgn = value;
-            }
+            } */
 
             /**
              * Gets the value of the stoa property.
