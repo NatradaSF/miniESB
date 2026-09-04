@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
@@ -136,7 +137,6 @@ public class ESBResponseService {
 			}
 			fidsAfttab = tranformFidsAfttab.convertPlTurntoAfftab(writer.toString(), "DATASET", hopo, "D");
 			if (fidsAfttab != null) {
-				;
 				fidsCcatabService.updateCcatab(fidsAfttab);
 				if (fidsAfttab.getUrno() != null) {
 					fidsAfttab = fidsAfttabService.saveFidsAfttab(fidsAfttab);
@@ -308,6 +308,21 @@ public class ESBResponseService {
 			//infobjflight.setFLNO(infobjflight.getFLNO() != null ? infobjflight.getFLNO().trim() : null);
 			infobjflight.setFLTN(infobjflight.getFLTN() != null ? infobjflight.getFLTN().trim() : null);
 
+			if(!"D".equals(fidsAfttab.getFtyp())){
+				infobjflight.setFLNS(null);
+				String flno = fidsAfttab.getFlno().trim();
+				if (flno != null && !flno.isEmpty()) {
+					Map<String, String> parts = tranformFidsAfttab.parseFlightNumber(flno);
+					String newFlno = tranformFidsAfttab.toFlnoNonSuffix(parts).trim();
+					infobjgeneric.setFLNO(newFlno);
+					if(!flno.equals(newFlno)){
+						String csgn = infobjgeneric.getCSGN();
+						if(csgn != null && csgn.length() > 0){
+							infobjgeneric.setCSGN(csgn.substring(0, csgn.length() - 1));
+						}
+					}
+				}
+			}
 			// Different field between FIDS and ESB
 			//infobjflight.setSLOT(fidsAfttab.getCtot()); ทำใน XSL
 

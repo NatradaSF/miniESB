@@ -222,21 +222,21 @@ public class TranformFidsAfttab {
 		}
 
 		// 3. Derived time fields (EIBT/ETAI/ETOA/LAND/AIRB/AXIT/AXOT/ONBL/OFBL/REMP)
-		//applyDerivedTimes(f); ทำใน XSL
+		// applyDerivedTimes(f); ทำใน XSL
 
 		// 4. VIA from routing
 		// applyVial(f, xpath, doc, flightElement, hopo, isArrival, actionType);
 		applyVial(f, hopo, isArrival, actionType);
 
+		applyFtyp(f, actionType);
 		applyFlightNumber(f);
-		applyFtyp(f);
-		//applyTrkn(f); ทำใน XSL
+		// applyTrkn(f); ทำใน XSL
 
 		// 7. Indexed nested structures
 		// applyBeltDetails(f, flightElement, isArrival);
 
-		//ต้องดูว่ายังจะใส่ค่าทับ XSL อยู่มั้ย
-		//f.setB1ba(f.getAibt()); 
+		// ต้องดูว่ายังจะใส่ค่าทับ XSL อยู่มั้ย
+		// f.setB1ba(f.getAibt());
 
 		// applyGateDetails(f, flightElement, isArrival);
 		// applyDelayReasons(f, flightElement);
@@ -259,7 +259,7 @@ public class TranformFidsAfttab {
 		} else if (hasArrival || hasDeparture) {
 			f.setRtyp("S");
 		}
-		//applyMtow(f); ทำใน XSL
+		// applyMtow(f); ทำใน XSL
 
 		return f;
 	}
@@ -411,11 +411,13 @@ public class TranformFidsAfttab {
 
 	// ─── DERIVED BUSINESS LOGIC ────────────────────────────────────────────
 	private void applyDerivedTimes(FidsAfttab f) {
-		/* if (f.getAldt() != null) {
-			f.setEibt(f.getAldt());
-		} else {
-			f.setRemp(f.getEibt() != null ? "    " : f.getRemp());
-		} */
+		/*
+		 * if (f.getAldt() != null) {
+		 * f.setEibt(f.getAldt());
+		 * } else {
+		 * f.setRemp(f.getEibt() != null ? "    " : f.getRemp());
+		 * }
+		 */
 	}
 
 	private void applyFlightNumber(FidsAfttab f) {
@@ -433,7 +435,8 @@ public class TranformFidsAfttab {
 				f.setFltn(parts.get("number"));
 			}
 			if (f.getCsgn() != null && f.getFlns() != null) {
-				f.setCsgn(f.getCsgn() + f.getFlns().trim());
+				//f.setCsgn(f.getCsgn() + f.getFlns().trim());
+				f.setCsgn(f.getCsgn());
 			}
 		}
 
@@ -447,7 +450,7 @@ public class TranformFidsAfttab {
 		List<String> updatedFields = f.getFieldsNotNull(); // รายชื่อแท็กที่มี action UPDATE/INSERT จริง
 		if (updatedFields == null) {
 			updatedFields = new ArrayList<>();
-        	f.setFieldsNotNull(updatedFields);
+			f.setFieldsNotNull(updatedFields);
 		}
 
 		if (updatedFields.contains("flno")) {
@@ -461,38 +464,45 @@ public class TranformFidsAfttab {
 		}
 	}
 
-	private void applyFtyp(FidsAfttab f) {
+	private void applyFtyp(FidsAfttab f, String actionType) {
 		List<String> updatedFields = f.getFieldsNotNull(); // รายชื่อแท็กที่มี action UPDATE/INSERT จริง
 		if (updatedFields == null) {
 			updatedFields = new ArrayList<>();
-        	f.setFieldsNotNull(updatedFields);
+			f.setFieldsNotNull(updatedFields);
 		}
 
+		boolean isDataset = "DATASET".equalsIgnoreCase(actionType);
 		String ftyp = f.getFtyp();
-		if ("T".equalsIgnoreCase(ftyp) && updatedFields.contains("ftyp")) {
+		//ถ้าเป็น Towing FTYP=T 
+		if ("T".equalsIgnoreCase(ftyp) && (isDataset || updatedFields.contains("ftyp"))) {
 			return;
 		}
 
-		if (updatedFields.contains("rem1") && f.getRem1() != null) {
-			if ("RFT".equalsIgnoreCase(f.getRem1())){
+		//ถ้าไม่เป็น Towing เช็ค REM1 ถ้าเป็น RFT FTYP=B
+		if ((isDataset || updatedFields.contains("rem1")) && f.getRem1() != null) {
+			if ("RFT".equalsIgnoreCase(f.getRem1())) {
 				f.setFtyp("B");
 				updatedFields.add("ftyp");
 				return;
+			}else if ("RFA".equalsIgnoreCase(f.getRem1())) {
+				f.setFtyp("Z");
+				updatedFields.add("ftyp");
+				return;
 			}
-		} 
-		
-		if (updatedFields.contains("remp") && f.getRemp() != null) {
-			if ("PLN".equalsIgnoreCase(f.getRemp())){
+		}
+
+		//ถ้าไม่เป็น return flight,return taxi,cancel flight,divert flight เช็ค REMP
+		if ((isDataset || updatedFields.contains("remp")) && f.getRemp() != null) {
+			if ("PLN".equalsIgnoreCase(f.getRemp())) {
 				f.setFtyp("S");
 				updatedFields.add("ftyp");
 				return;
-			}else if ("IBK".equalsIgnoreCase(f.getRemp()) || "OBK".equalsIgnoreCase(f.getRemp())) {
+			} else { //IBK,OBK,RDY,FNL,ARR,DEP,GHS
 				f.setFtyp("O");
 				updatedFields.add("ftyp");
 				return;
 			}
 		}
-		f.setFtyp(null);
 	}
 
 	private void applyAirportLookup(FidsAfttab f, String hopo, boolean isArrival) {
@@ -508,23 +518,27 @@ public class TranformFidsAfttab {
 		}
 	}
 
-	/* private void applyTrkn(FidsAfttab f) {
-		String trkn = f.getTrkn();
-		if (trkn != null && !trkn.isEmpty() && trkn.length() > 4) {
-			f.setTrkn(trkn.substring(2));
-		}
-	} */
+	/*
+	 * private void applyTrkn(FidsAfttab f) {
+	 * String trkn = f.getTrkn();
+	 * if (trkn != null && !trkn.isEmpty() && trkn.length() > 4) {
+	 * f.setTrkn(trkn.substring(2));
+	 * }
+	 * }
+	 */
 
-	/* private void applyMtow(FidsAfttab f) {
-		String mtow = f.getMtow();
-		if (mtow == null || mtow.trim().isEmpty())
-			return;
-		try {
-			int n = Integer.parseInt(mtow.trim());
-			f.setMtow(Integer.toString((int) Math.ceil(n / 1000.0)));
-		} catch (NumberFormatException ignored) {
-		}
-	} */
+	/*
+	 * private void applyMtow(FidsAfttab f) {
+	 * String mtow = f.getMtow();
+	 * if (mtow == null || mtow.trim().isEmpty())
+	 * return;
+	 * try {
+	 * int n = Integer.parseInt(mtow.trim());
+	 * f.setMtow(Integer.toString((int) Math.ceil(n / 1000.0)));
+	 * } catch (NumberFormatException ignored) {
+	 * }
+	 * }
+	 */
 
 	// package-private เพื่อให้ unit test เรียกตรงได้ (โฟกัสเฉพาะ logic VIA
 	// ไม่ต้องผ่าน XSL ทั้งชุด)
@@ -572,7 +586,7 @@ public class TranformFidsAfttab {
 		List<String> updatedFields = f.getFieldsNotNull(); // รายชื่อแท็กที่มี action UPDATE/INSERT จริง
 		if (updatedFields == null) {
 			updatedFields = new ArrayList<>();
-        	f.setFieldsNotNull(updatedFields);
+			f.setFieldsNotNull(updatedFields);
 		}
 		updatedFields.add("vial");
 		updatedFields.add("vian");
@@ -690,7 +704,7 @@ public class TranformFidsAfttab {
 			} catch (Exception e) {
 				log.error("DOOA parse error for STOA=" + f.getStoa(), e);
 			}
-		} 
+		}
 
 		if (f.getStod() != null) {
 			try {
@@ -810,11 +824,12 @@ public class TranformFidsAfttab {
 	 * }
 	 */
 
-	private List<FidsCcatab> getCounters(List<FidsCcatab> lstFidsCcatab, String counter, String flno, String actionType) {
+	private List<FidsCcatab> getCounters(List<FidsCcatab> lstFidsCcatab, String counter, String flno,
+			String actionType) {
 		if (lstFidsCcatab == null || lstFidsCcatab.isEmpty()) {
 			return new ArrayList<>();
 		}
-		
+
 		List<FidsCcatab> lst = new ArrayList<>();
 		boolean isDataset = "DATASET".equalsIgnoreCase(actionType);
 
@@ -902,7 +917,7 @@ public class TranformFidsAfttab {
 				} else {
 					String flnu = convertDateStringIfNeeded(xp.evaluate("pdk_idseq", n));
 					String flno = convertDateStringIfNeeded(xp.evaluate(
-							"pdk_rcnt_refmastercci/ref_counter/rcnt_ral_airline/ref_airline/ral_2lc", n));
+							"pdk_rcnt_refcounter/ref_counter/rcnt_ral_airline", n));
 					c.setFlnu(new BigDecimal(flnu));
 					c.setFlno(String.format("%-9s", flno));
 					c.setCkic(ckic);
@@ -953,23 +968,24 @@ public class TranformFidsAfttab {
 	 * คืน emptyMap ถ้าแยกไม่ได้ (สั้นกว่า 3 ตัว หรือส่วนหลัง prefix ไม่ใช่ "เลข 1-4
 	 * หลัก + อักษร 0-1 ตัว")
 	 */
-	public static Map<String, String> parseFlightNumber(String flightNumber) {
+	public Map<String, String> parseFlightNumber(String flightNumber) {
+		System.out.println(flightNumber.length());
 		if (flightNumber == null || flightNumber.length() < 3) {
 			return Collections.emptyMap();
 		}
-		// prefix = 2 ตัวแรก + ตัวที่ 3 ถ้าเป็นตัวอักษร
-		int prefixLen = Character.isLetter(flightNumber.charAt(2)) ? 3 : 2;
-		String prefix = flightNumber.substring(0, prefixLen);
-		String rest = flightNumber.substring(prefixLen);
-
-		Matcher m = Pattern.compile("^(\\d{1,4})([A-Z]?)$").matcher(rest);
+		// Regex แยกส่วน: 
+		// Group 1: อักษร/เลข 2 ตัว หรือ อักษร 3 ตัว (เช่น G9, TG, THY)
+		// \\s*   : Space คั่นกลางกี่ตัวก็ได้ (หรือไม่มีเลย)
+		// Group 2: เลขไฟลท์ 1-4 หลัก (เช่น 415, 0123)
+		// Group 3: Suffix ตัวอักษร 0-1 ตัวปิดท้าย (เช่น A, B)
+		Pattern pattern = Pattern.compile("^([A-Za-z0-9]{2}|[A-Za-z]{3})\\s*(\\d{1,5})([A-Za-z]?)$");
+    	Matcher m = pattern.matcher(flightNumber.trim());
 		if (!m.find()) {
 			return Collections.emptyMap();
 		}
-		String number = String.format("%-4s", m.group(1)); // เลขตามต้นฉบับ ชิดซ้าย เว้น space ท้ายจนกว้าง 4
-															// (ไม่เติม/ไม่ตัด 0)
-		String suffix = m.group(2);
-
+		String prefix = m.group(1).toUpperCase();
+		String number = String.format("%-4s", m.group(2)); // เติม space ด้านหลังให้กว้าง 4
+		String suffix = m.group(3).toUpperCase();
 		if (prefix.length() == 2)
 			prefix = prefix + " "; // airline กว้าง 3
 
@@ -987,9 +1003,19 @@ public class TranformFidsAfttab {
 	 * ตามลำดับ)
 	 */
 	public static String toFlno(Map<String, String> parts) {
+		if (parts == null || parts.isEmpty()) {
+			return "";
+		}
 		String suffix = parts.get("suffix");
 		return parts.get("prefix") + parts.get("number") + " "
 				+ (suffix == null || suffix.isEmpty() ? " " : suffix);
+	}
+
+	public String toFlnoNonSuffix(Map<String, String> parts) {
+		if (parts == null || parts.isEmpty()) {
+			return "";
+		}
+		return parts.get("prefix") + parts.get("number");
 	}
 
 	// Data Record หรือ Helper Class สำหรับเก็บผลลัพธ์
@@ -1003,7 +1029,7 @@ public class TranformFidsAfttab {
 	 * ทุก 9 ตัวได้).
 	 * ถ้าตัวไหนแยกไม่ได้ ใช้ค่าเดิม (trim) และข้ามตัวที่ว่าง.
 	 */
-	public static JfnoResult processJfno(String jfno) {
+	public JfnoResult processJfno(String jfno) {
 		if (jfno == null || jfno.isBlank()) {
 			return new JfnoResult(jfno, "0");
 		}
